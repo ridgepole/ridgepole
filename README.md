@@ -3,6 +3,7 @@
 Ridgepole is a tool to DB schema.
 
 It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.html#types-of-schema-dumps), and updates DB schema according to DSL.
+(like Chef/Puppet)
 
 [![Gem Version](https://badge.fury.io/rb/ridgepole.png)](http://badge.fury.io/rb/ridgepole)
 
