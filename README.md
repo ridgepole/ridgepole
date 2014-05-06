@@ -1,6 +1,7 @@
 # Ridgepole
 
-TODO: Write a gem description
+Ridgepole is a tool to DB schema.
+It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.html#types-of-schema-dumps), and updates DB schema according to DSL.
 
 ## Installation
 
@@ -18,12 +19,9 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
-
-## Contributing
-
-1. Fork it ( http://github.com/<my-github-username>/ridgepole/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+```sh
+ridgepole --export -o Schemafile
+vi Schemafile
+ridgepole --apply --dry-run
+ridgepole --apply
+```
