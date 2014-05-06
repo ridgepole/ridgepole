@@ -32,4 +32,4 @@ ridgepole --apply
 
 ## Demo
 
-* https://asciinema.org/a/9349
+* [asciinema.org/a/9349](https://asciinema.org/a/9349)
