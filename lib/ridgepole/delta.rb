@@ -4,6 +4,10 @@ class Ridgepole::Delta
     @config = config
   end
 
+  def migrate
+    ActiveRecord::Schema.new.instance_eval(script)
+  end
+
   def script
     buf = StringIO.new
 
