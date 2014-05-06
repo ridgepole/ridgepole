@@ -71,8 +71,8 @@ class Ridgepole::DSLParser
     end
   end
 
-  def initialize(config = {})
-    @config = config
+  def initialize(options = {})
+    @options = options
   end
 
   def parse(dsl)

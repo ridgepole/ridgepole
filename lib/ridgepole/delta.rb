@@ -1,7 +1,7 @@
 class Ridgepole::Delta
-  def initialize(delta, config = {})
+  def initialize(delta, options = {})
     @delta = delta
-    @config = config
+    @options = options
   end
 
   def migrate
@@ -28,6 +28,10 @@ class Ridgepole::Delta
     end
 
     buf.string.strip
+  end
+
+  def differ?
+    not script.empty?
   end
 
   private
@@ -112,7 +116,7 @@ add_column(#{table_name.inspect}, #{column_name.inspect}, #{type.inspect}, #{opt
 
   def append_rename_column(table_name, to_column_name, from_column_name, buf)
     buf.puts(<<-EOS)
-rename_column(#{from_column_name.inspect}, #{to_column_name.inspect})
+rename_column(#{table_name.inspect}, #{from_column_name.inspect}, #{to_column_name.inspect})
     EOS
   end
 

@@ -1,6 +1,6 @@
 class Ridgepole::Dumper
-  def initialize(config = {})
-    @config = config
+  def initialize(options = {})
+    @options = options
   end
 
   def dump

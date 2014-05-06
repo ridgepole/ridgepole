@@ -1,6 +1,6 @@
 class Ridgepole::Diff
-  def initialize(config = {})
-    @config = config
+  def initialize(options = {})
+    @options = options
   end
 
   def diff(from, to)
@@ -9,7 +9,7 @@ class Ridgepole::Diff
     delta = {}
 
     to.dup.each do |table_name, to_attrs|
-      if (from_table_name = (to_attrs[:options] || {})[:from])
+      if (from_table_name = (to_attrs[:options] || {}).delete(:from))
         next unless from.has_key?(from_table_name)
         delta[:rename] ||= {}
         delta[:rename][table_name] = from_table_name
@@ -32,7 +32,7 @@ class Ridgepole::Diff
       delta[:delete][table_name] = from_attrs
     end
 
-    Ridgepole::Delta.new(delta, @config)
+    Ridgepole::Delta.new(delta, @options)
   end
 
   private
@@ -62,7 +62,7 @@ class Ridgepole::Diff
     definition_delta = {}
 
     to.dup.each do |column_name, to_attrs|
-      if (from_column_name = (to_attrs[:options] || {})[:from])
+      if (from_column_name = (to_attrs[:options] || {}).delete(:from))
         next unless from.has_key?(from_column_name)
         definition_delta[:rename] ||= {}
         definition_delta[:rename][column_name] = from_column_name
@@ -70,6 +70,8 @@ class Ridgepole::Diff
         to.delete(column_name)
       end
     end
+
+    priv_column_name = nil
 
     to.each do |column_name, to_attrs|
       if (from_attrs = from.delete(column_name))
@@ -79,8 +81,18 @@ class Ridgepole::Diff
         end
       else
         definition_delta[:add] ||= {}
+        to_attrs[:options] ||= {}
+
+        if priv_column_name
+          to_attrs[:options][:after] = priv_column_name
+        else
+          to_attrs[:options][:first] = true
+        end
+
         definition_delta[:add][column_name] = to_attrs
       end
+
+      priv_column_name = column_name
     end
 
     from.each do |column_name, from_attrs|

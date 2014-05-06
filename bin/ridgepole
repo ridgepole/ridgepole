@@ -1,0 +1,88 @@
+#!/usr/bin/env ruby
+$: << File.expand_path('../../lib', __FILE__)
+require 'rubygems'
+require 'yaml'
+require 'optparse'
+require 'ridgepole'
+
+Version = Ridgepole::VERSION
+DEFAULT_FILENAME = 'Schemafile'
+
+config = nil
+mode = nil
+file = DEFAULT_FILENAME
+output_file = '-'
+
+options = {
+  :dry_run => false,
+  :debug   => false,
+}
+
+ARGV.options do |opt|
+  begin
+    opt.on('-c', '--config CONF_OR_FILE') {|v| config            = v       }
+    opt.on('-a', '--apply')               {    mode              = :apply  }
+    opt.on('-f', '--file FILE')           {|v| file              = v       }
+    opt.on('',   '--dry-run')             {    options[:dry_run] = true    }
+    opt.on('-e', '--export')              {    mode              = :export }
+    opt.on('-o', '--output FILE')         {|v| output_file       = v       }
+    opt.on(''  , '--debug')               {    options[:debug]   = true    }
+    opt.parse!
+
+    unless config and mode
+      puts opt.help
+      exit 1
+    end
+  rescue => e
+    $stderr.puts("[ERROR] #{e.message}")
+    exit 1
+  end
+end
+
+begin
+  logger = Ridgepole::Logger.instance
+  logger.set_debug(options[:debug])
+
+  config = open(config) {|f| f.read } if File.exist?(config)
+  config = YAML.load(config)
+  client = Ridgepole::Client.new(config, options)
+
+  case mode
+  when :export
+    if output_file == '-'
+      logger.info('# Export Schema')
+      puts client.dump
+    else
+      logger.info("Export Schema to `#{output_file}`")
+      open(output_file, 'wb') {|f| f.puts client.dump }
+    end
+  when :apply
+    unless File.exist?(file)
+      raise "No Schemafile found (looking for: #{file})"
+    end
+
+    msg = "Apply `#{file}`"
+    msg << ' (dry-run)' if options[:dry_run]
+    logger.info(msg)
+
+    dsl = open(file) {|f| f.read }
+    delta = client.diff(dsl)
+
+    if options[:dry_run]
+      puts delta.script if delta.differ?
+    else
+      delta.migrate
+    end
+
+    unless delta.differ?
+      logger.info('No change')
+    end
+  end
+rescue => e
+  if options[:debug]
+    raise e
+  else
+    $stderr.puts("[ERROR] #{e.message}")
+    exit 1
+  end
+end
