@@ -29,3 +29,7 @@ vi Schemafile
 ridgepole --apply --dry-run
 ridgepole --apply
 ```
+
+## Demo
+
+* https://asciinema.org/a/9349
