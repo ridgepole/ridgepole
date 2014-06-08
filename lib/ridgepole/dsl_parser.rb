@@ -39,12 +39,13 @@ class Ridgepole::DSLParser
 
     attr_reader :__definition
 
-    def initialize
+    def initialize(opts = {})
+      @__working_dir = File.expand_path(opts[:path] ? File.dirname(opts[:path]) : Dir.pwd)
       @__definition = {}
     end
 
-    def self.eval(dsl)
-      ctx = self.new
+    def self.eval(dsl, opts = {})
+      ctx = self.new(opts)
       ctx.instance_eval(dsl)
       ctx.__definition
     end
@@ -69,13 +70,25 @@ class Ridgepole::DSLParser
         :options => options,
       }
     end
+
+    def require(file)
+      schemafile = File.join(@__working_dir, file)
+
+      if File.exist?(schemafile)
+        instance_eval(File.read(schemafile))
+      elsif File.exist?(schemafile + '.rb')
+        instance_eval(File.read(schemafile + '.rb'))
+      else
+        Kernel.require(file)
+      end
+    end
   end
 
   def initialize(options = {})
     @options = options
   end
 
-  def parse(dsl)
-    Context.eval(dsl)
+  def parse(dsl, opts = {})
+    Context.eval(dsl, opts)
   end
 end

@@ -12,8 +12,8 @@ class Ridgepole::Client
     @dumper.dump
   end
 
-  def diff(dsl)
-    expected_definition = @parser.parse(dsl)
+  def diff(dsl, opts = {})
+    expected_definition = @parser.parse(dsl, opts)
     current_definition = @parser.parse(@dumper.dump)
     @diff.diff(current_definition, expected_definition)
   end
