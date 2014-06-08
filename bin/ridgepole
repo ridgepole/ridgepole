@@ -12,6 +12,7 @@ config = nil
 mode = nil
 file = DEFAULT_FILENAME
 output_file = '-'
+split = false
 
 options = {
   :dry_run => false,
@@ -25,6 +26,7 @@ ARGV.options do |opt|
     opt.on('-f', '--file FILE')           {|v| file              = v       }
     opt.on('',   '--dry-run')             {    options[:dry_run] = true    }
     opt.on('-e', '--export')              {    mode              = :export }
+    opt.on('',   '--split')               {|v| split             = true    }
     opt.on('-o', '--output FILE')         {|v| output_file       = v       }
     opt.on(''  , '--debug')               {    options[:debug]   = true    }
     opt.parse!
@@ -49,12 +51,37 @@ begin
 
   case mode
   when :export
-    if output_file == '-'
-      logger.info('# Export Schema')
-      puts client.dump
+    if split
+      logger.info('Export Schema')
+
+      output_file = DEFAULT_FILENAME if output_file == '-'
+      requires = []
+
+      client.dump do |name, definition|
+        schema_file = File.join(File.dirname(output_file), "#{name}.schema")
+        requires << schema_file
+        logger.info("  write `#{schema_file}`")
+
+        open(schema_file, 'wb') do |f|
+          f.puts definition
+        end
+      end
+
+      logger.info("  write `#{output_file}`")
+
+      open(output_file, 'wb') do |f|
+        requires.each do |schema_file|
+          f.puts "require '#{File.basename schema_file}'"
+        end
+      end
     else
-      logger.info("Export Schema to `#{output_file}`")
-      open(output_file, 'wb') {|f| f.puts client.dump }
+      if output_file == '-'
+        logger.info('# Export Schema')
+        puts client.dump
+      else
+        logger.info("Export Schema to `#{output_file}`")
+        open(output_file, 'wb') {|f| f.puts client.dump }
+      end
     end
   when :apply
     unless File.exist?(file)

@@ -8,8 +8,8 @@ class Ridgepole::Client
     @diff = Ridgepole::Diff.new(@options)
   end
 
-  def dump
-    @dumper.dump
+  def dump(&block)
+    @dumper.dump(&block)
   end
 
   def diff(dsl, opts = {})
