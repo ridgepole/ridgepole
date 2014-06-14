@@ -27,9 +27,11 @@ class Ridgepole::Diff
       end
     end
 
-    from.each do |table_name, from_attrs|
-      delta[:delete] ||= {}
-      delta[:delete][table_name] = from_attrs
+    unless @options[:merge]
+      from.each do |table_name, from_attrs|
+        delta[:delete] ||= {}
+        delta[:delete][table_name] = from_attrs
+      end
     end
 
     Ridgepole::Delta.new(delta, @options)
@@ -95,9 +97,11 @@ class Ridgepole::Diff
       priv_column_name = column_name
     end
 
-    from.each do |column_name, from_attrs|
-      definition_delta[:delete] ||= {}
-      definition_delta[:delete][column_name] = from_attrs
+    unless @options[:merge]
+      from.each do |column_name, from_attrs|
+        definition_delta[:delete] ||= {}
+        definition_delta[:delete][column_name] = from_attrs
+      end
     end
 
     unless definition_delta.empty?
@@ -114,9 +118,12 @@ class Ridgepole::Diff
       if (from_attrs = from.delete(index_name))
         if from_attrs != to_attrs
           indices_delta[:add] ||= {}
-          indices_delta[:delete] ||= {}
           indices_delta[:add][index_name] = to_attrs
-          indices_delta[:delete][index_name] = from_attrs
+
+          unless @options[:merge]
+            indices_delta[:delete] ||= {}
+            indices_delta[:delete][index_name] = from_attrs
+          end
         end
       else
         indices_delta[:add] ||= {}
@@ -124,9 +131,11 @@ class Ridgepole::Diff
       end
     end
 
-    from.each do |index_name, from_attrs|
-      indices_delta[:delete] ||= {}
-      indices_delta[:delete][index_name] = from_attrs
+    unless @options[:merge]
+      from.each do |index_name, from_attrs|
+        indices_delta[:delete] ||= {}
+        indices_delta[:delete][index_name] = from_attrs
+      end
     end
 
     unless indices_delta.empty?
