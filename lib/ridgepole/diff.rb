@@ -9,6 +9,8 @@ class Ridgepole::Diff
     delta = {}
 
     to.dup.each do |table_name, to_attrs|
+      next unless target?(table_name)
+
       if (from_table_name = (to_attrs[:options] || {}).delete(:from))
         next unless from.has_key?(from_table_name)
         delta[:rename] ||= {}
@@ -19,6 +21,8 @@ class Ridgepole::Diff
     end
 
     to.each do |table_name, to_attrs|
+      next unless target?(table_name)
+
       if (from_attrs = from.delete(table_name))
         scan_change(table_name, from_attrs, to_attrs, delta)
       else
@@ -29,6 +33,8 @@ class Ridgepole::Diff
 
     unless @options[:merge]
       from.each do |table_name, from_attrs|
+        next unless target?(table_name)
+
         delta[:delete] ||= {}
         delta[:delete][table_name] = from_attrs
       end
@@ -141,5 +147,9 @@ class Ridgepole::Diff
     unless indices_delta.empty?
       table_delta[:indices] = indices_delta
     end
+  end
+
+  def target?(table_name)
+    not @options[:tables] or @options[:tables].include?(table_name)
   end
 end

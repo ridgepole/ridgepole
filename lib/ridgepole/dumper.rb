@@ -16,7 +16,7 @@ class Ridgepole::Dumper
     definitions = []
 
     each_table(dsl) do |name, definition|
-      if not @options[:tables] or @options[:tables].include?(name)
+      if target?(name)
         definitions << definition
         yield(name, definition) if block_given?
       end
@@ -50,5 +50,9 @@ class Ridgepole::Dumper
     end
 
     pass.call
+  end
+
+  def target?(table_name)
+    not @options[:tables] or @options[:tables].include?(table_name)
   end
 end
