@@ -3,7 +3,7 @@ class Ridgepole::Dumper
     @options = options
   end
 
-  def dump(&block)
+  def dump
     stream = StringIO.new
     ActiveRecord::SchemaDumper.dump(ActiveRecord::Base.connection, stream)
 
@@ -13,20 +13,27 @@ class Ridgepole::Dumper
       line !~ /\Aend/
     }.join.undent.strip
 
-    each_table(dsl, &block) if block
+    definitions = []
 
-    dsl
+    each_table(dsl) do |name, definition|
+      if not @options[:tables] or @options[:tables].include?(name)
+        definitions << definition
+        yield(name, definition) if block_given?
+      end
+    end
+
+    definitions.join("\n\n")
   end
 
   private
 
-  def each_table(dsl, &block)
+  def each_table(dsl)
     name = nil
     definition = []
 
     pass = proc do
       if name
-        block.call(name, definition.join.strip)
+        yield(name, definition.join.strip)
         name = nil
         definition = []
       end

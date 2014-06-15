@@ -21,15 +21,16 @@ options = {
 
 ARGV.options do |opt|
   begin
-    opt.on('-c', '--config CONF_OR_FILE') {|v| config            = v                 }
-    opt.on('-a', '--apply')               {    mode              = :apply            }
-    opt.on('-m', '--merge')               {    mode = :apply; options[:merge] = true }
-    opt.on('-f', '--file FILE')           {|v| file              = v                 }
-    opt.on('',   '--dry-run')             {    options[:dry_run] = true              }
-    opt.on('-e', '--export')              {    mode              = :export           }
-    opt.on('',   '--split')               {|v| split             = true              }
-    opt.on('-o', '--output FILE')         {|v| output_file       = v                 }
-    opt.on(''  , '--debug')               {    options[:debug]   = true              }
+    opt.on('-c', '--config CONF_OR_FILE')  {|v| config            = v                 }
+    opt.on('-a', '--apply')                {    mode              = :apply            }
+    opt.on('-m', '--merge')                {    mode = :apply; options[:merge] = true }
+    opt.on('-f', '--file FILE')            {|v| file              = v                 }
+    opt.on('',   '--dry-run')              {    options[:dry_run] = true              }
+    opt.on('-e', '--export')               {    mode              = :export           }
+    opt.on('',   '--split')                {|v| split             = true              }
+    opt.on('-o', '--output FILE')          {|v| output_file       = v                 }
+    opt.on('-t', '--tables TABLES', Array) {|v| options[:tables]  = v                 }
+    opt.on(''  , '--debug')                {    options[:debug]   = true              }
     opt.parse!
 
     unless config and mode
