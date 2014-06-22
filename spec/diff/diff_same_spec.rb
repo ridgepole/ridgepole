@@ -1,10 +1,10 @@
-describe 'Ridgepole::Client#dump' do
-  context 'when there is a tables' do
+describe 'Ridgepole::Client#diff' do
+  context 'when database and definition are the same' do
     before { restore_tables }
     subject { client }
 
     it {
-      expect(subject.dump).to be_same_str_as(<<-RUBY)
+      delta = subject.diff((<<-RUBY).chomp.undent)
         create_table "departments", primary_key: "dept_no", force: true do |t|
           t.string "dept_name", limit: 40, null: false
         end
@@ -57,6 +57,8 @@ describe 'Ridgepole::Client#dump' do
 
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
       RUBY
+
+      expect(delta.differ?).to be_false
     }
   end
 end
