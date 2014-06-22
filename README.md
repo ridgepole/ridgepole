@@ -6,6 +6,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 (like Chef/Puppet)
 
 [![Gem Version](https://badge.fury.io/rb/ridgepole.png)](http://badge.fury.io/rb/ridgepole)
+[![Build Status](https://drone.io/bitbucket.org/winebarrel/ridgepole/status.png)](https://drone.io/bitbucket.org/winebarrel/ridgepole/latest)
 
 ## Installation
 
