@@ -3,6 +3,7 @@ require 'singleton'
 require 'stringio'
 
 require 'active_record'
+require 'activerecord-mysql-unsigned'
 
 module Ridgepole; end
 require 'ridgepole/client'

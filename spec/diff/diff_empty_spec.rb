@@ -4,6 +4,12 @@ describe 'Ridgepole::Client#diff' do
 
     it {
       delta = subject.diff(<<-RUBY)
+        create_table "clubs", force: true do |t|
+          t.string "name", default: "", null: false
+        end
+
+        add_index "clubs", ["name"], name: "idx_name", unique: true, using: :btree
+
         create_table "departments", primary_key: "dept_no", force: true do |t|
           t.string "dept_name", limit: 40, null: false
         end
@@ -29,6 +35,13 @@ describe 'Ridgepole::Client#diff' do
 
         add_index "dept_manager", ["dept_no"], name: "dept_no", using: :btree
         add_index "dept_manager", ["emp_no"], name: "emp_no", using: :btree
+
+        create_table "employee_clubs", force: true do |t|
+          t.integer "emp_no",  unsigned: true, null: false
+          t.integer "club_id", unsigned: true, null: false
+        end
+
+        add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_emp_no_club_id", using: :btree
 
         create_table "employees", primary_key: "emp_no", force: true do |t|
           t.date   "birth_date",            null: false
@@ -59,6 +72,11 @@ describe 'Ridgepole::Client#diff' do
 
       expect(delta.differ?).to be_true
       expect(delta.script).to be_same_str_as(<<-RUBY)
+        create_table("clubs", {}) do |t|
+          t.string("name", {:default=>"", :null=>false})
+        end
+        add_index("clubs", ["name"], {:name=>"idx_name", :unique=>true, :using=>:btree})
+
         create_table("departments", {:primary_key=>"dept_no"}) do |t|
           t.string("dept_name", {:limit=>40, :null=>false})
         end
@@ -81,6 +99,12 @@ describe 'Ridgepole::Client#diff' do
         end
         add_index("dept_manager", ["dept_no"], {:name=>"dept_no", :using=>:btree})
         add_index("dept_manager", ["emp_no"], {:name=>"emp_no", :using=>:btree})
+
+        create_table("employee_clubs", {}) do |t|
+          t.integer("emp_no", {:unsigned=>true, :null=>false})
+          t.integer("club_id", {:unsigned=>true, :null=>false})
+        end
+        add_index("employee_clubs", ["emp_no", "club_id"], {:name=>"idx_emp_no_club_id", :using=>:btree})
 
         create_table("employees", {:primary_key=>"emp_no"}) do |t|
           t.date("birth_date", {:null=>false})
