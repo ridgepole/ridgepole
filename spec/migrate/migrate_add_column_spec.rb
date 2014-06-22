@@ -1,5 +1,5 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when database and definition are same' do
+  context 'when add column' do
     let(:dsl) {
       <<-RUBY
         create_table "clubs", force: true do |t|
@@ -69,14 +69,26 @@ describe 'Ridgepole::Client#diff -> migrate' do
       RUBY
     }
 
-    before { restore_tables }
+    let(:actual_dsl) { dsl }
+
+    let(:expected_dsl) {
+      dsl.gsub_surely(
+        't.integer "club_id", unsigned: true, null: false',
+        %!
+          t.integer "club_id",    unsigned: true, null: false
+          t.string  "any_column", null: false
+        !)
+    }
+
+    before { subject.diff(actual_dsl).migrate }
     subject { client }
 
     it {
-      delta = subject.diff(dsl)
-      expect(subject.dump).to be_same_str_as(dsl)
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_false
+      expect(subject.dump).to be_same_str_as(actual_dsl)
       delta.migrate
-      expect(subject.dump).to be_same_str_as(dsl)
+      expect(subject.dump).to be_same_str_as(expected_dsl)
     }
   end
 end

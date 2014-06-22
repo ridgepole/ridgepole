@@ -1,5 +1,5 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when drop tables' do
+  context 'when drop table' do
     let(:dsl) {
       <<-RUBY
         create_table "clubs", force: true do |t|

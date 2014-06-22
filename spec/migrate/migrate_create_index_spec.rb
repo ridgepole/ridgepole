@@ -1,5 +1,5 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when create indexes' do
+  context 'when create index' do
     let(:dsl) {
       <<-RUBY
         create_table "clubs", force: true do |t|
