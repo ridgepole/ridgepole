@@ -18,7 +18,7 @@ def restore_tables
   system("mysql -uroot < #{sql_file}")
 end
 
-def client(config = {}, options = {})
+def client(options = {}, config = {})
   config = {
     adapter: 'mysql2',
     database: 'ridgepole_test',
