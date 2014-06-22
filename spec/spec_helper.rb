@@ -18,7 +18,7 @@ def restore_tables
   system("mysql -uroot < #{sql_file}")
 end
 
-def test_client(config = {}, options = {})
+def client(config = {}, options = {})
   config = {
     adapter: 'mysql2',
     database: 'ridgepole_test',
@@ -27,7 +27,5 @@ def test_client(config = {}, options = {})
   options = {
   }.merge(options)
 
-  client = Ridgepole::Client.new(config, options)
-
-  yield(client)
+  Ridgepole::Client.new(config, options)
 end
