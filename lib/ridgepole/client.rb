@@ -6,6 +6,10 @@ class Ridgepole::Client
     @dumper = Ridgepole::Dumper.new(@options)
     @parser = Ridgepole::DSLParser.new(@options)
     @diff = Ridgepole::Diff.new(@options)
+
+    unless @options[:disable_mysql_unsigned]
+      require 'activerecord-mysql-unsigned'
+    end
   end
 
   def dump(&block)
