@@ -1,5 +1,5 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when add column' do
+  context 'when rename column' do
     let(:actual_dsl) {
       <<-RUBY
         create_table "clubs", force: true do |t|

@@ -1,5 +1,5 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when change column' do
+  context 'when rename table' do
     let(:actual_dsl) {
       <<-RUBY
         create_table "clubs", force: true do |t|
@@ -105,17 +105,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         create_table "employee_clubs", force: true do |t|
           t.integer "emp_no",  unsigned: true, null: false
-          t.integer "club_id", unsigned: false, null: true
+          t.integer "club_id", unsigned: true, null: false
         end
 
         add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_emp_no_club_id", using: :btree
 
-        create_table "employees", primary_key: "emp_no", force: true do |t|
-          t.date   "birth_date",                            null: false
-          t.string "first_name", limit: 14,                 null: false
-          t.string "last_name",  limit: 20, default: "XXX", null: false
-          t.string "gender",     limit: 2,                  null: false
-          t.date   "hire_date",                             null: false
+        create_table "employees2", primary_key: "emp_no", force: true, rename_from: 'employees' do |t|
+          t.date   "birth_date",            null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name",  limit: 16, null: false
+          t.string "gender",     limit: 1,  null: false
+          t.date   "hire_date",             null: false
         end
 
         create_table "salaries", id: false, force: true do |t|
@@ -146,7 +146,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_true
       expect(subject.dump).to eq actual_dsl.undent.strip
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.undent.strip.gsub(/(\s*,\s*unsigned: false)?\s*,\s*null: true/, '')
+      expect(subject.dump).to eq expected_dsl.undent.strip.gsub(/, rename_from: 'employees'/, '')
     }
   end
 end
