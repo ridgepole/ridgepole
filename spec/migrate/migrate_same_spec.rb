@@ -1,7 +1,6 @@
-describe 'Ridgepole::Client#diff' do
-  context 'when database is empty' do
-    let(:actual_dsl) { '' }
-    let(:expected_dsl) {
+describe 'Ridgepole::Client#diff -> migrate' do
+  context 'when database and definition are the same' do
+    let(:dsl) {
       <<-RUBY
         create_table "clubs", force: true do |t|
           t.string "name", default: "", null: false
@@ -70,14 +69,14 @@ describe 'Ridgepole::Client#diff' do
       RUBY
     }
 
+    before { restore_tables }
     subject { client }
 
     it {
-      delta = subject.diff(expected_dsl)
-      expect(delta.differ?).to be_true
-      expect(subject.dump).to be_same_str_as(actual_dsl)
+      delta = subject.diff(dsl)
+      expect(subject.dump).to be_same_str_as(dsl)
       delta.migrate
-      expect(subject.dump).to be_same_str_as(expected_dsl)
+      expect(subject.dump).to be_same_str_as(dsl)
     }
   end
 end

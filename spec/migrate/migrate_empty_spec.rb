@@ -1,10 +1,8 @@
-describe 'Ridgepole::Client#diff' do
-  context 'when database and definition are the same' do
-    before { restore_tables }
-    subject { client }
-
-    it {
-      delta = subject.diff((<<-RUBY).chomp.undent)
+describe 'Ridgepole::Client#diff -> migrate' do
+  context 'when database is empty' do
+    let(:actual_dsl) { '' }
+    let(:expected_dsl) {
+      <<-RUBY
         create_table "clubs", force: true do |t|
           t.string "name", default: "", null: false
         end
@@ -70,8 +68,16 @@ describe 'Ridgepole::Client#diff' do
 
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
       RUBY
+    }
 
-      expect(delta.differ?).to be_false
+    subject { client }
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_true
+      expect(subject.dump).to be_same_str_as(actual_dsl)
+      delta.migrate
+      expect(subject.dump).to be_same_str_as(expected_dsl)
     }
   end
 end
