@@ -1,5 +1,5 @@
 describe 'Ridgepole::Client#dump' do
-  context 'when database is empty' do
+  context 'when there is a tables' do
     before { restore_tables }
     subject { client }
 
