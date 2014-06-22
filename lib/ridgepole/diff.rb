@@ -83,6 +83,9 @@ class Ridgepole::Diff
 
     to.each do |column_name, to_attrs|
       if (from_attrs = from.delete(column_name))
+        normalize_column_options!(from_attrs[:options])
+        normalize_column_options!(to_attrs[:options])
+
         if from_attrs != to_attrs
           definition_delta[:change] ||= {}
           definition_delta[:change][column_name] = to_attrs
@@ -151,5 +154,11 @@ class Ridgepole::Diff
 
   def target?(table_name)
     not @options[:tables] or @options[:tables].include?(table_name)
+  end
+
+  def normalize_column_options!(opts)
+    unless opts.has_key?(:null)
+      opts[:null] = true
+    end
   end
 end
