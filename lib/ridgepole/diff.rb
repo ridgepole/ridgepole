@@ -11,7 +11,7 @@ class Ridgepole::Diff
     to.dup.each do |table_name, to_attrs|
       next unless target?(table_name)
 
-      if (from_table_name = (to_attrs[:options] || {}).delete(:from))
+      if (from_table_name = (to_attrs[:options] || {}).delete(:rename_from))
         next unless from.has_key?(from_table_name)
         delta[:rename] ||= {}
         delta[:rename][table_name] = from_table_name
@@ -70,7 +70,7 @@ class Ridgepole::Diff
     definition_delta = {}
 
     to.dup.each do |column_name, to_attrs|
-      if (from_column_name = (to_attrs[:options] || {}).delete(:from))
+      if (from_column_name = (to_attrs[:options] || {}).delete(:rename_from))
         next unless from.has_key?(from_column_name)
         definition_delta[:rename] ||= {}
         definition_delta[:rename][column_name] = from_column_name
