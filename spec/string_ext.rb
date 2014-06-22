@@ -8,4 +8,38 @@ class String
       self
     end
   end
+
+  def delete_create_table(name)
+    new_def = []
+    in_block = false
+
+    self.each_line do |line|
+      if line =~ /\A\s*create_table\s+"#{name}"/
+        in_block = true
+      elsif in_block and line =~ /\A\s*end\s*\Z/
+        in_block = false
+      elsif not in_block
+        new_def << line
+      end
+    end
+
+    new_def = new_def.join
+    raise 'must not happen' if new_def =~ /^\s*create_table\s+"#{name}"/m
+    new_def.delete_add_index(name)
+  end
+
+  def delete_add_index(name)
+    new_def = []
+    in_block = false
+
+    self.each_line do |line|
+      if line !~ /\A\s*add_index\s+"#{name}"/
+        new_def << line
+      end
+    end
+
+    new_def = new_def.join
+    raise 'must not happen' if new_def =~ /^\s*add_index\s+"#{name}"/m
+    new_def
+  end
 end

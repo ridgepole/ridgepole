@@ -11,7 +11,9 @@ end
 RSpec::Matchers.define :be_same_str_as do |expected|
   match do |actual|
     normalize = proc do |str|
-      str.undent.strip
+      str.undent.strip.each_line.select {|line|
+        line !~ /\A\s*\Z/
+      }.join
     end
 
     normalize[actual] == normalize[expected]

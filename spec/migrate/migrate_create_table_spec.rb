@@ -1,54 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when database is empty' do
-    let(:actual_dsl) {
-      <<-RUBY
-        create_table "departments", primary_key: "dept_no", force: true do |t|
-          t.string "dept_name", limit: 40, null: false
-        end
-
-        add_index "departments", ["dept_name"], name: "dept_name", unique: true, using: :btree
-
-        create_table "dept_emp", id: false, force: true do |t|
-          t.integer "emp_no",              null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
-        end
-
-        add_index "dept_emp", ["dept_no"], name: "dept_no", using: :btree
-        add_index "dept_emp", ["emp_no"], name: "emp_no", using: :btree
-
-        create_table "dept_manager", id: false, force: true do |t|
-          t.string  "dept_no",   limit: 4, null: false
-          t.integer "emp_no",              null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
-        end
-
-        add_index "dept_manager", ["dept_no"], name: "dept_no", using: :btree
-        add_index "dept_manager", ["emp_no"], name: "emp_no", using: :btree
-
-        create_table "salaries", id: false, force: true do |t|
-          t.integer "emp_no",    null: false
-          t.integer "salary",    null: false
-          t.date    "from_date", null: false
-          t.date    "to_date",   null: false
-        end
-
-        add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
-
-        create_table "titles", id: false, force: true do |t|
-          t.integer "emp_no",               null: false
-          t.string  "title",     limit: 50, null: false
-          t.date    "from_date",            null: false
-          t.date    "to_date"
-        end
-
-        add_index "titles", ["emp_no"], name: "emp_no", using: :btree
-      RUBY
-    }
-
-    let(:expected_dsl) {
+    let(:dsl) {
       <<-RUBY
         create_table "clubs", force: true do |t|
           t.string "name", default: "", null: false
@@ -116,6 +68,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
       RUBY
     }
+
+    let(:actual_dsl) {
+      dsl.delete_create_table('clubs')
+         .delete_create_table('employee_clubs')
+         .delete_create_table('employees')
+    }
+
+    let(:expected_dsl) { dsl }
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
