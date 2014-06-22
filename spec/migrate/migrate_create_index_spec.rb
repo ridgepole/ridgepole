@@ -1,59 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when database is empty' do
-    let(:actual_dsl) {
-      <<-RUBY
-        create_table "clubs", force: true do |t|
-          t.string "name", default: "", null: false
-        end
-
-        create_table "departments", primary_key: "dept_no", force: true do |t|
-          t.string "dept_name", limit: 40, null: false
-        end
-
-        create_table "dept_emp", id: false, force: true do |t|
-          t.integer "emp_no",              null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
-        end
-
-        create_table "dept_manager", id: false, force: true do |t|
-          t.string  "dept_no",   limit: 4, null: false
-          t.integer "emp_no",              null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
-        end
-
-        create_table "employee_clubs", force: true do |t|
-          t.integer "emp_no",  unsigned: true, null: false
-          t.integer "club_id", unsigned: true, null: false
-        end
-
-        create_table "employees", primary_key: "emp_no", force: true do |t|
-          t.date   "birth_date",            null: false
-          t.string "first_name", limit: 14, null: false
-          t.string "last_name",  limit: 16, null: false
-          t.string "gender",     limit: 1,  null: false
-          t.date   "hire_date",             null: false
-        end
-
-        create_table "salaries", id: false, force: true do |t|
-          t.integer "emp_no",    null: false
-          t.integer "salary",    null: false
-          t.date    "from_date", null: false
-          t.date    "to_date",   null: false
-        end
-
-        create_table "titles", id: false, force: true do |t|
-          t.integer "emp_no",               null: false
-          t.string  "title",     limit: 50, null: false
-          t.date    "from_date",            null: false
-          t.date    "to_date"
-        end
-      RUBY
-    }
-
-    let(:expected_dsl) {
+  context 'when create indexes' do
+    let(:dsl) {
       <<-RUBY
         create_table "clubs", force: true do |t|
           t.string "name", default: "", null: false
@@ -121,6 +68,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
       RUBY
     }
+
+    let(:actual_dsl) {
+      dsl.delete_add_index('clubs', ['name']).
+          delete_add_index('employee_clubs', ['emp_no', 'club_id']).
+          delete_add_index('titles', ['emp_no'])
+    }
+
+    let(:expected_dsl) { dsl }
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }

@@ -28,18 +28,21 @@ class String
     new_def.delete_add_index(name)
   end
 
-  def delete_add_index(name)
+  def delete_add_index(name, columns = nil)
     new_def = []
     in_block = false
 
+    args = name.inspect
+    args << ',\\s*\\[' + columns.map {|i| i.inspect }.join(',\\s*') + '\\]' if columns
+
     self.each_line do |line|
-      if line !~ /\A\s*add_index\s+"#{name}"/
+      if line !~ /\A\s*add_index\s+#{args}/
         new_def << line
       end
     end
 
     new_def = new_def.join
-    raise 'must not happen' if new_def =~ /^\s*add_index\s+"#{name}"/m
+    raise 'must not happen' if new_def =~ /^\s*add_index\s+#{args}/m
     new_def
   end
 end
