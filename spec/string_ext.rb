@@ -52,4 +52,10 @@ class String
     raise 'must not happen' if old_str == new_str
     new_str
   end
+
+  def delete_empty_lines
+    self.each_line.select {|line|
+      line !~ /\A\s*\Z/
+    }.join
+  end
 end

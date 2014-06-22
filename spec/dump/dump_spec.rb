@@ -4,7 +4,7 @@ describe 'Ridgepole::Client#dump' do
     subject { client }
 
     it {
-      expect(subject.dump).to be_same_str_as(<<-RUBY)
+      expect(subject.dump).to eq (<<-RUBY).undent.strip
         create_table "clubs", force: true do |t|
           t.string "name", default: "", null: false
         end
