@@ -157,8 +157,10 @@ class Ridgepole::Diff
   end
 
   def normalize_column_options!(opts)
-    unless opts.has_key?(:null)
-      opts[:null] = true
+    opts[:null] = true unless opts.has_key?(:null)
+
+    unless @options[:disable_mysql_unsigned]
+      opts[:unsigned] = false unless opts.has_key?(:unsigned)
     end
   end
 end
