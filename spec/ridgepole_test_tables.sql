@@ -1,6 +1,3 @@
-DROP DATABASE IF EXISTS `ridgepole_test`;
-CREATE DATABASE `ridgepole_test` DEFAULT CHARACTER SET utf8;
-
 USE `ridgepole_test`;
 
 DROP TABLE IF EXISTS `departments`;
