@@ -6,11 +6,11 @@ class Ridgepole::Dumper
   def dump
     stream = StringIO.new
     conn = ActiveRecord::Base.connection
-    include_tables = @options.fetch(:tables, [])
+    target_tables = @options.fetch(:tables, [])
 
-    unless include_tables.empty?
+    unless target_tables.empty?
       conn.tables.each do |tbl|
-        next if include_tables.include?(tbl)
+        next if target_tables.include?(tbl)
         ActiveRecord::SchemaDumper.ignore_tables << tbl
       end
     end
