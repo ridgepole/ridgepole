@@ -5,7 +5,17 @@ class Ridgepole::Dumper
 
   def dump
     stream = StringIO.new
-    ActiveRecord::SchemaDumper.dump(ActiveRecord::Base.connection, stream)
+    conn = ActiveRecord::Base.connection
+    target_tables = @options.fetch(:tables, [])
+
+    unless target_tables.empty?
+      conn.tables.each do |tbl|
+        next if target_tables.include?(tbl)
+        ActiveRecord::SchemaDumper.ignore_tables << tbl
+      end
+    end
+
+    ActiveRecord::SchemaDumper.dump(conn, stream)
 
     dsl = stream.string.lines.select {|line|
       line !~ /\A#/ &&
