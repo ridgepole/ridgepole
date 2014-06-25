@@ -94,10 +94,12 @@ class Ridgepole::Diff
         definition_delta[:add] ||= {}
         to_attrs[:options] ||= {}
 
-        if priv_column_name
-          to_attrs[:options][:after] = priv_column_name
-        else
-          to_attrs[:options][:first] = true
+        unless @options[:merge]
+          if priv_column_name
+            to_attrs[:options][:after] = priv_column_name
+          else
+            to_attrs[:options][:first] = true
+          end
         end
 
         definition_delta[:add][column_name] = to_attrs
