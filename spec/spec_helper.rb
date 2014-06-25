@@ -2,6 +2,8 @@ $: << File.expand_path('..', __FILE__)
 require 'ridgepole'
 require 'string_ext'
 
+ActiveRecord::Migration.verbose = false
+
 RSpec.configure do |config|
   config.before(:each) do
     restore_database
