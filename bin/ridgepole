@@ -3,6 +3,7 @@ $: << File.expand_path('../../lib', __FILE__)
 require 'rubygems'
 require 'yaml'
 require 'optparse'
+require 'fileutils'
 require 'ridgepole'
 
 Version = Ridgepole::VERSION
@@ -33,6 +34,7 @@ ARGV.options do |opt|
     opt.on('',   '--dry-run')                {    options[:dry_run] = true                 }
     opt.on('-e', '--export')                 {    set_mode[:export]                        }
     opt.on('',   '--split')                  {|v| split = true                             }
+    opt.on('',   '--split-with-dir')         {|v| split = :with_dir                        }
     opt.on('-o', '--output FILE')            {|v| output_file = v                          }
     opt.on('-t', '--tables TABLES', Array)   {|v| options[:tables] = v                     }
     opt.on('',   '--disable-mysql-unsigned') {    options[:disable_mysql_unsigned] = true  }
@@ -66,9 +68,15 @@ begin
       requires = []
 
       client.dump do |name, definition|
-        schema_file = File.join(File.dirname(output_file), "#{name}.schema")
-        requires << schema_file
+        schema_dir = File.dirname(output_file)
+        schema_dir = File.join(schema_dir, name) if split == :with_dir
+        schema_file = File.join(schema_dir, "#{name}.schema")
+
+        require_path = (split == :with_dir) ? File.join(name, name) : name
+        requires << require_path
+
         logger.info("  write `#{schema_file}`")
+        FileUtils.mkdir_p(schema_dir)
 
         open(schema_file, 'wb') do |f|
           f.puts definition
@@ -78,8 +86,8 @@ begin
       logger.info("  write `#{output_file}`")
 
       open(output_file, 'wb') do |f|
-        requires.each do |schema_file|
-          f.puts "require '#{File.basename schema_file}'"
+        requires.each do |require_path|
+          f.puts "require '#{require_path}'"
         end
       end
     else
