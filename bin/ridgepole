@@ -72,7 +72,8 @@ begin
         schema_dir = File.join(schema_dir, name) if split == :with_dir
         schema_file = File.join(schema_dir, "#{name}.schema")
 
-        require_path = (split == :with_dir) ? File.join(name, name) : name
+        require_path = File.basename(schema_file)
+        require_path = File.join(name, require_path) if split == :with_dir
         requires << require_path
 
         logger.info("  write `#{schema_file}`")
