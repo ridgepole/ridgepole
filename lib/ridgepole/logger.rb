@@ -1,5 +1,6 @@
 class Ridgepole::Logger < ::Logger
   include Singleton
+  cattr_accessor :verbose
 
   def initialize
     super($stdout)
@@ -9,6 +10,10 @@ class Ridgepole::Logger < ::Logger
     end
 
     self.level = Logger::INFO
+  end
+
+  def verbose_info(msg)
+    info(msg) if verbose
   end
 
   def set_debug(value)

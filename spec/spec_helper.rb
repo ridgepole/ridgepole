@@ -3,6 +3,7 @@ require 'ridgepole'
 require 'string_ext'
 
 ActiveRecord::Migration.verbose = false
+Ridgepole::Logger.instance.level = ::Logger::ERROR
 
 RSpec.configure do |config|
   config.before(:each) do
