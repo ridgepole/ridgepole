@@ -13,12 +13,19 @@ class Ridgepole::Client
   end
 
   def dump(&block)
+    logger = Ridgepole::Logger.instance
+    logger.verbose_info('# Load tables')
     @dumper.dump(&block)
   end
 
   def diff(dsl, opts = {})
+    logger = Ridgepole::Logger.instance
+
+    logger.verbose_info('# Parse DSL')
     expected_definition = @parser.parse(dsl, opts)
+    logger.verbose_info('# Load tables')
     current_definition = @parser.parse(@dumper.dump)
+    logger.verbose_info('# Compare definitions')
     @diff.diff(current_definition, expected_definition)
   end
 end

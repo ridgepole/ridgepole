@@ -38,6 +38,7 @@ ARGV.options do |opt|
     opt.on('-o', '--output FILE')            {|v| output_file = v                          }
     opt.on('-t', '--tables TABLES', Array)   {|v| options[:tables] = v                     }
     opt.on('',   '--disable-mysql-unsigned') {    options[:disable_mysql_unsigned] = true  }
+    opt.on(''  , '--verbose')                {    Ridgepole::Logger.verbose = true         }
     opt.on(''  , '--debug')                  {    options[:debug] = true                   }
     opt.parse!
 
@@ -115,6 +116,7 @@ begin
     if options[:dry_run]
       puts delta.script if delta.differ?
     else
+      logger.verbose_info('# Update schema')
       delta.migrate
     end
 
