@@ -6,6 +6,9 @@ require 'optparse'
 require 'fileutils'
 require 'ridgepole'
 
+$stdout.sync = true
+$stderr.sync = true
+
 Version = Ridgepole::VERSION
 DEFAULT_FILENAME = 'Schemafile'
 
