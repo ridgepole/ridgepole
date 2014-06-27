@@ -155,7 +155,13 @@ class Ridgepole::Diff
   end
 
   def target?(table_name)
-    not @options[:tables] or @options[:tables].include?(table_name)
+    if @options[:ignore_tables] and @options[:ignore_tables].any? {|i| i =~ table_name }
+      false
+    elsif @options[:tables] and not @options[:tables].include?(table_name)
+      false
+    else
+      true
+    end
   end
 
   def normalize_column_options!(opts)
