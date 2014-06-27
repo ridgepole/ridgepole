@@ -30,19 +30,20 @@ end
 
 ARGV.options do |opt|
   begin
-    opt.on('-c', '--config CONF_OR_FILE')    {|v| config = v                               }
-    opt.on('-a', '--apply')                  {    set_mode[:apply]                         }
-    opt.on('-m', '--merge')                  {    set_mode[:apply]; options[:merge] = true }
-    opt.on('-f', '--file FILE')              {|v| file = v                                 }
-    opt.on('',   '--dry-run')                {    options[:dry_run] = true                 }
-    opt.on('-e', '--export')                 {    set_mode[:export]                        }
-    opt.on('',   '--split')                  {|v| split = true                             }
-    opt.on('',   '--split-with-dir')         {|v| split = :with_dir                        }
-    opt.on('-o', '--output FILE')            {|v| output_file = v                          }
-    opt.on('-t', '--tables TABLES', Array)   {|v| options[:tables] = v                     }
-    opt.on('',   '--disable-mysql-unsigned') {    options[:disable_mysql_unsigned] = true  }
-    opt.on(''  , '--verbose')                {    Ridgepole::Logger.verbose = true         }
-    opt.on(''  , '--debug')                  {    options[:debug] = true                   }
+    opt.on('-c', '--config CONF_OR_FILE')         {|v| config = v                                           }
+    opt.on('-a', '--apply')                       {    set_mode[:apply]                                     }
+    opt.on('-m', '--merge')                       {    set_mode[:apply]; options[:merge] = true             }
+    opt.on('-f', '--file FILE')                   {|v| file = v                                             }
+    opt.on('',   '--dry-run')                     {    options[:dry_run] = true                             }
+    opt.on('-e', '--export')                      {    set_mode[:export]                                    }
+    opt.on('',   '--split')                       {|v| split = true                                         }
+    opt.on('',   '--split-with-dir')              {|v| split = :with_dir                                    }
+    opt.on('-o', '--output FILE')                 {|v| output_file = v                                      }
+    opt.on('-t', '--tables TABLES', Array)        {|v| options[:tables] = v                                 }
+    opt.on('',   '--ignore-tables TABLES', Array) {|v| options[:ignore_tables] = v.map {|i| Regexp.new(i) } }
+    opt.on('',   '--disable-mysql-unsigned')      {    options[:disable_mysql_unsigned] = true              }
+    opt.on(''  , '--verbose')                     {    Ridgepole::Logger.verbose = true                     }
+    opt.on(''  , '--debug')                       {    options[:debug] = true                               }
     opt.parse!
 
     unless config and mode
