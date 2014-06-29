@@ -34,3 +34,9 @@ ridgepole --apply
 ## Demo
 
 * [asciinema.org/a/9349](https://asciinema.org/a/9349)
+
+## Example project
+
+* https://github.com/winebarrel/ridgepole-example
+  * https://github.com/winebarrel/ridgepole-example/pull/1
+  * https://github.com/winebarrel/ridgepole-example/pull/2
