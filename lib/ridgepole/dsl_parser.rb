@@ -51,20 +51,28 @@ class Ridgepole::DSLParser
     end
 
     def create_table(table_name, options = {})
-      # XXX: Add exist check
       table_definition = TableDefinition.new
       yield(table_definition)
       @__definition[table_name] ||= {}
+
+      if @__definition[table_name][:definition]
+        raise "Table `#{table_name}` already defined"
+      end
+
       @__definition[table_name][:definition] = table_definition.__definition
       options.delete(:force)
       @__definition[table_name][:options] = options
     end
 
     def add_index(table_name, column_name, options = {})
-      # XXX: Add exist check
       @__definition[table_name] ||= {}
       @__definition[table_name][:indices] ||= {}
       idx = options[:name] || column_name
+
+      if @__definition[table_name][:indices][idx]
+        raise "Index `#{table_name}(#{idx})` already defined"
+      end
+
       @__definition[table_name][:indices][idx] = {
         :column_name => column_name,
         :options => options,

@@ -61,7 +61,7 @@ class Ridgepole::Diff
   end
 
   def scan_options_change(from, to, table_delta)
-    # XXX: Warn differences of options
+    Ridgepole::Logger.instance.warn('[WARNING] Table options cannot be changed')
   end
 
   def scan_definition_change(from, to, table_delta)
