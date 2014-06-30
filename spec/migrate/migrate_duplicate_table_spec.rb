@@ -1,5 +1,5 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when add column' do
+  context 'when table already defined' do
     let(:dsl) {
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: true do |t|

@@ -1,5 +1,5 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when add column' do
+  context 'when index already defined' do
     let(:dsl) {
       <<-RUBY
         create_table "salaries", id: false, force: true do |t|
