@@ -149,4 +149,27 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to eq expected_dsl.undent.strip.gsub(/, rename_from: 'employees'/, '')
     }
   end
+
+  context 'when rename table (not found)' do
+    before { restore_tables }
+    subject { client }
+
+    let(:dsl) {
+      <<-RUBY
+        create_table "employees", primary_key: "emp_no", force: true, rename_from: 'not_employees' do |t|
+          t.date   "birth_date",            null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name",  limit: 16, null: false
+          t.string "gender",     limit: 1,  null: false
+          t.date   "hire_date",             null: false
+        end
+      RUBY
+    }
+
+    it {
+      expect {
+        subject.diff(dsl)
+      }.to raise_error('Table `not_employees` not found')
+    }
+  end
 end

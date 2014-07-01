@@ -12,7 +12,10 @@ class Ridgepole::Diff
       next unless target?(table_name)
 
       if (from_table_name = (to_attrs[:options] || {}).delete(:rename_from))
-        next unless from.has_key?(from_table_name)
+        unless from.has_key?(from_table_name)
+          raise "Table `#{from_table_name}` not found"
+        end
+
         delta[:rename] ||= {}
         delta[:rename][table_name] = from_table_name
         from.delete(from_table_name)
@@ -50,7 +53,7 @@ class Ridgepole::Diff
     to = (to || {}).dup
     table_delta = {}
 
-    scan_options_change(from[:options], to[:options], table_delta)
+    scan_options_change(table_name, from[:options], to[:options], table_delta)
     scan_definition_change(from[:definition], to[:definition], table_delta)
     scan_indices_change(from[:indices], to[:indices], table_delta)
 
@@ -60,8 +63,10 @@ class Ridgepole::Diff
     end
   end
 
-  def scan_options_change(from, to, table_delta)
-    Ridgepole::Logger.instance.warn('[WARNING] Table options cannot be changed')
+  def scan_options_change(table_name, from, to, table_delta)
+    unless from == to
+      Ridgepole::Logger.instance.warn("[WARNING] Table `#{table_name}` options cannot be changed")
+    end
   end
 
   def scan_definition_change(from, to, table_delta)
@@ -71,7 +76,10 @@ class Ridgepole::Diff
 
     to.dup.each do |column_name, to_attrs|
       if (from_column_name = (to_attrs[:options] || {}).delete(:rename_from))
-        next unless from.has_key?(from_column_name)
+        unless from.has_key?(from_column_name)
+          raise "Column `#{from_column_name}` not found"
+        end
+
         definition_delta[:rename] ||= {}
         definition_delta[:rename][column_name] = from_column_name
         from.delete(from_column_name)
