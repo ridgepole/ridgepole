@@ -5,7 +5,15 @@ class Ridgepole::Delta
   end
 
   def migrate
-    ActiveRecord::Schema.new.instance_eval(script)
+    if log_file = @options[:log_file]
+      result = ActiveRecord::Migration.record_time do
+        migrate0
+      end
+
+      open(log_file, 'wb') {|f| f.puts JSON.pretty_generate(result) }
+    else
+      migrate0
+    end
   end
 
   def script
@@ -35,6 +43,10 @@ class Ridgepole::Delta
   end
 
   private
+
+  def migrate0
+    ActiveRecord::Schema.new.instance_eval(script)
+  end
 
   def append_create_table(table_name, attrs, buf)
     options = attrs[:options] || {}
