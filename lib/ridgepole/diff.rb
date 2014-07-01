@@ -12,7 +12,10 @@ class Ridgepole::Diff
       next unless target?(table_name)
 
       if (from_table_name = (to_attrs[:options] || {}).delete(:rename_from))
-        next unless from.has_key?(from_table_name)
+        unless from.has_key?(from_table_name)
+          raise "Table `#{from_table_name}` not found"
+        end
+
         delta[:rename] ||= {}
         delta[:rename][table_name] = from_table_name
         from.delete(from_table_name)
@@ -71,7 +74,10 @@ class Ridgepole::Diff
 
     to.dup.each do |column_name, to_attrs|
       if (from_column_name = (to_attrs[:options] || {}).delete(:rename_from))
-        next unless from.has_key?(from_column_name)
+        unless from.has_key?(from_column_name)
+          raise "Column `#{from_column_name}` not found"
+        end
+
         definition_delta[:rename] ||= {}
         definition_delta[:rename][column_name] = from_column_name
         from.delete(from_column_name)
