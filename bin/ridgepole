@@ -18,6 +18,7 @@ file = DEFAULT_FILENAME
 output_file = '-'
 split = false
 diff_files = nil
+diff_with_apply = false
 exit_code = 0
 
 options = {
@@ -53,7 +54,7 @@ ARGV.options do |opt|
       diff_files = [diff_arg1, diff_arg2]
     }
     opt.on('',   '--reverse')                     {    options[:reverse] = true                             }
-    opt.on('',   '--with-apply')                  {    options[:with_apply] = true                          }
+    opt.on('',   '--with-apply')                  {    diff_with_apply = true                               }
     opt.on('-o', '--output FILE')                 {|v| output_file = v                                      }
     opt.on('-t', '--tables TABLES', Array)        {|v| options[:tables] = v                                 }
     opt.on('',   '--ignore-tables TABLES', Array) {|v| options[:ignore_tables] = v.map {|i| Regexp.new(i) } }
@@ -158,9 +159,14 @@ begin
 
     delta = Ridgepole::Client.diff(*diff_files, options)
 
-    if options[:with_apply]
+    if diff_with_apply
       logger.verbose_info('# Update schema')
-      delta.migrate
+
+      if delta.differ?
+        delta.migrate
+      else
+        logger.info('No change')
+      end
     elsif delta.differ?
       puts delta.script
       exit_code = 1
