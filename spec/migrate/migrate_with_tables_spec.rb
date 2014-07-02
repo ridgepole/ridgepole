@@ -134,7 +134,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     before { subject.diff(current_schema).migrate }
-    subject { client(tables: ['employees'] ) }
+    subject { client(tables: ['employees']) }
 
     it {
       delta = subject.diff(dsl)
@@ -142,6 +142,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to eq before_dsl.undent.strip
       delta.migrate
       expect(subject.dump).to eq after_dsl.undent.strip
+    }
+
+    it {
+      delta = Ridgepole::Client.diff(current_schema, dsl, tables: ['employees'], reverse: true)
+      expect(delta.differ?).to be_true
+      expect(delta.script).to eq (<<-RUBY).undent.strip
+        change_column("employees", "first_name", :string, {:limit=>14, :null=>false, :unsigned=>false})
+      RUBY
     }
   end
 end

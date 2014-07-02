@@ -85,7 +85,19 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_true
       expect(subject.dump).to eq actual_dsl.undent.strip
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.undent.strip
+      expect(subject.dump.each_line.select {|i| i !~ /\A\Z/ }.join).to eq expected_dsl.undent.strip.each_line.select {|i| i !~ /\A\Z/ }.join
+    }
+
+    it {
+      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
+      expect(delta.differ?).to be_true
+      expect(delta.script).to eq (<<-RUBY).undent.strip
+        add_index("clubs", ["name"], {:name=>"idx_name", :unique=>true, :using=>:btree})
+
+        add_index("employee_clubs", ["emp_no", "club_id"], {:name=>"idx_emp_no_club_id", :using=>:btree})
+
+        add_index("titles", ["emp_no"], {:name=>"emp_no", :using=>:btree})
+      RUBY
     }
   end
 end

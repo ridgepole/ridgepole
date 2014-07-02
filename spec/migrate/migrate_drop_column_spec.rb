@@ -141,5 +141,21 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to eq expected_dsl.undent.strip
     }
+
+    it {
+      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
+      expect(delta.differ?).to be_true
+      expect(delta.script).to eq (<<-RUBY).undent.strip
+        add_column("dept_emp", "from_date", :date, {:null=>false, :after=>"dept_no"})
+        add_column("dept_emp", "to_date", :date, {:null=>false, :after=>"from_date"})
+
+        add_column("dept_manager", "from_date", :date, {:null=>false, :after=>"emp_no"})
+        add_column("dept_manager", "to_date", :date, {:null=>false, :after=>"from_date"})
+
+        add_column("employees", "last_name", :string, {:limit=>16, :null=>false, :after=>"first_name"})
+        add_column("employees", "gender", :string, {:limit=>1, :null=>false, :after=>"last_name"})
+        add_column("employees", "hire_date", :date, {:null=>false, :after=>"gender"})
+      RUBY
+    }
   end
 end

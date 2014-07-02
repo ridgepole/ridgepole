@@ -85,7 +85,32 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_true
       expect(subject.dump).to eq actual_dsl.undent.strip
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.undent.strip
+      expect(subject.dump.each_line.select {|i| i !~ /\A\Z/ }.join).to eq expected_dsl.undent.strip.each_line.select {|i| i !~ /\A\Z/ }.join
+    }
+
+    it {
+      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
+      expect(delta.differ?).to be_true
+      expect(delta.script).to eq (<<-RUBY).undent.strip
+        create_table("clubs", {}) do |t|
+          t.string("name", {:default=>"", :null=>false})
+        end
+        add_index("clubs", ["name"], {:name=>"idx_name", :unique=>true, :using=>:btree})
+
+        create_table("employee_clubs", {}) do |t|
+          t.integer("emp_no", {:unsigned=>true, :null=>false})
+          t.integer("club_id", {:unsigned=>true, :null=>false})
+        end
+        add_index("employee_clubs", ["emp_no", "club_id"], {:name=>"idx_emp_no_club_id", :using=>:btree})
+
+        create_table("employees", {:primary_key=>"emp_no"}) do |t|
+          t.date("birth_date", {:null=>false})
+          t.string("first_name", {:limit=>14, :null=>false})
+          t.string("last_name", {:limit=>16, :null=>false})
+          t.string("gender", {:limit=>1, :null=>false})
+          t.date("hire_date", {:null=>false})
+        end
+      RUBY
     }
   end
 end

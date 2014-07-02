@@ -153,5 +153,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
       # `clubs` table is not deleted
       expect(subject.dump).to eq expected_dsl.undent.strip
     }
+
+    it {
+      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, merge: true, reverse: true)
+      expect(delta.differ?).to be_false
+    }
   end
 end
