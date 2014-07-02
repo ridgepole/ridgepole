@@ -87,5 +87,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump.delete_empty_lines).to eq expected_dsl.undent.strip.delete_empty_lines
     }
+
+    it {
+      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
+      expect(delta.differ?).to be_true
+      expect(delta.script).to eq (<<-RUBY).undent.strip
+       remove_index("clubs", {:name=>"idx_name"})
+
+       remove_index("employee_clubs", {:name=>"idx_emp_no_club_id"})
+
+       remove_index("titles", {:name=>"emp_no"})
+      RUBY
+    }
   end
 end

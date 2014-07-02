@@ -148,5 +148,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to eq expected_dsl.undent.strip.gsub(/(\s*,\s*unsigned: false)?\s*,\s*null: true/, '')
     }
+
+    it {
+      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
+      expect(delta.differ?).to be_true
+      expect(delta.script).to eq (<<-RUBY).undent.strip
+        change_column("employee_clubs", "club_id", :integer, {:unsigned=>true, :null=>false})
+
+        change_column("employees", "last_name", :string, {:limit=>16, :null=>false, :unsigned=>false})
+        change_column("employees", "gender", :string, {:limit=>1, :null=>false, :unsigned=>false})
+      RUBY
+    }
   end
 end

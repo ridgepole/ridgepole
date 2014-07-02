@@ -87,5 +87,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump.delete_empty_lines).to eq expected_dsl.undent.strip.delete_empty_lines
     }
+
+    it {
+      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
+      expect(delta.differ?).to be_true
+      expect(delta.script).to eq (<<-RUBY).undent.strip
+        drop_table("clubs")
+
+        drop_table("employee_clubs")
+
+        drop_table("employees")
+      RUBY
+    }
   end
 end
