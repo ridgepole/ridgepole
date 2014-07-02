@@ -46,7 +46,7 @@ create_table "articles", force: true do |t|
 end
 
 $ git add .
-$  git commit -m 'first commit'  -a
+$ git commit -m 'first commit'  -a
 [master (root-commit) a6c2d31] first commit
  2 files changed, 10 insertions(+)
  create mode 100644 Schemafile
