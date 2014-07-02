@@ -22,6 +22,29 @@ Or install it yourself as:
 
     $ gem install ridgepole
 
+## Help
+```
+Usage: ridgepole [options]
+    -c, --config CONF_OR_FILE
+    -a, --apply
+    -m, --merge
+    -f, --file FILE
+        --dry-run
+    -e, --export
+        --split
+        --split-with-dir
+    -d, --diff DSL1 DSL2
+        --reverse
+        --with-apply
+    -o, --output FILE
+    -t, --tables TABLES
+        --ignore-tables TABLES
+        --disable-mysql-unsigned
+        --log-file LOG_FILE
+        --verbose
+        --debug
+```
+
 ## Usage
 
 ```sh
