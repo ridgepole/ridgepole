@@ -28,4 +28,32 @@ class Ridgepole::Client
     logger.verbose_info('# Compare definitions')
     @diff.diff(current_definition, expected_definition)
   end
+
+  class << self
+    def diff(dsl_or_config1, dsl_or_config2, options = {})
+      logger = Ridgepole::Logger.instance
+
+      logger.verbose_info('# Parse DSL1')
+      definition1 = load_definition(dsl_or_config1)
+      logger.verbose_info('# Parse DSL2')
+      definition2 = load_definition(dsl_or_config2)
+
+      logger.verbose_info('# Compare definitions')
+      diff = Ridgepole::Diff.new(options)
+      diff.diff(definition1, definition2)
+    end
+
+    def dump(conn_spec, options = {}, &block)
+      client = self.new(conn_spec, options)
+      client.dump(&block)
+    end
+
+    private
+
+    def load_definition(dsl_or_config, options = {})
+      dsl_or_config = dump(dsl_or_config, options) if dsl_or_config.kind_of?(Hash)
+      parser = Ridgepole::DSLParser.new(options)
+      parser.parse(dsl_or_config)
+    end
+  end # of class methods
 end

@@ -1,5 +1,5 @@
-describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when add column' do
+describe 'Ridgepole::Client.diff' do
+  context 'when change column' do
     let(:actual_dsl) {
       <<-RUBY
         create_table "clubs", force: true do |t|
@@ -105,20 +105,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         create_table "employee_clubs", force: true do |t|
           t.integer "emp_no",  unsigned: true, null: false
-          t.integer "club_id", unsigned: true, null: false
-          t.string  "any_col",                 null: false
+          t.integer "club_id", unsigned: false, null: true
         end
 
         add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_emp_no_club_id", using: :btree
 
         create_table "employees", primary_key: "emp_no", force: true do |t|
-          t.date    "birth_date",                            null: false
-          t.string  "first_name", limit: 14,                 null: false
-          t.string  "last_name",  limit: 16,                 null: false
-          t.string  "gender",     limit: 1,                  null: false
-          t.date    "hire_date",                             null: false
-          t.integer "age",                   unsigned: true, null: false
-          t.date    "updated_at"
+          t.date   "birth_date",                            null: false
+          t.string "first_name", limit: 14,                 null: false
+          t.string "last_name",  limit: 20, default: "XXX", null: false
+          t.string "gender",     limit: 2,                  null: false
+          t.date   "hire_date",                             null: false
         end
 
         create_table "salaries", id: false, force: true do |t|
@@ -141,25 +138,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
       RUBY
     }
 
-    before { subject.diff(actual_dsl).migrate }
-    subject { client }
+    subject { Ridgepole::Client }
 
     it {
-      delta = subject.diff(expected_dsl)
-      expect(delta.differ?).to be_true
-      expect(subject.dump).to eq actual_dsl.undent.strip
-      delta.migrate
-      expect(subject.dump).to eq expected_dsl.undent.strip
-    }
-
-    it {
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
+      delta = subject.diff(actual_dsl, expected_dsl)
       expect(delta.differ?).to be_true
       expect(delta.script).to eq (<<-RUBY).undent.strip
-        remove_column("employee_clubs", "any_col")
+        change_column("employee_clubs", "club_id", :integer, {:unsigned=>false, :null=>true})
 
-        remove_column("employees", "age")
-        remove_column("employees", "updated_at")
+        change_column("employees", "last_name", :string, {:limit=>20, :default=>"XXX", :null=>false, :unsigned=>false})
+        change_column("employees", "gender", :string, {:limit=>2, :null=>false, :unsigned=>false})
       RUBY
     }
   end

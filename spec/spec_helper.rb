@@ -22,13 +22,17 @@ def restore_tables
 end
 
 def client(options = {}, config = {})
-  config = {
-    adapter: 'mysql2',
-    database: 'ridgepole_test',
-  }.merge(config)
+  config = conn_spec(config)
 
   options = {
   }.merge(options)
 
   Ridgepole::Client.new(config, options)
+end
+
+def conn_spec(config = {})
+  {
+    adapter: 'mysql2',
+    database: 'ridgepole_test',
+  }.merge(config)
 end

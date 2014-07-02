@@ -25,10 +25,101 @@ Or install it yourself as:
 ## Usage
 
 ```sh
-ridgepole --export -o Schemafile
-vi Schemafile
-ridgepole --apply --dry-run
-ridgepole --apply
+$ git init
+Initialized empty Git repository in ...
+
+$ cat config.yml
+adapter: mysql2
+encoding: utf8
+database: blog
+username: root
+
+$ ridgepole -c config.yml --export -o Schemafile # or `ridgepole -c '{adapter: mysql2, database: blog}' ...`
+Export Schema to `Schemafile`
+
+$ cat Schemafile
+create_table "articles", force: true do |t|
+  t.string   "title"
+  t.text     "text"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+end
+
+$ git add .
+$ git commit -m 'first commit'  -a
+[master (root-commit) a6c2d31] first commit
+ 2 files changed, 10 insertions(+)
+ create mode 100644 Schemafile
+ create mode 100644 config.yml
+
+$ vi Schemafile
+$ git diff
+diff --git a/Schemafile b/Schemafile
+index f5848b9..c266fed 100644
+--- a/Schemafile
++++ b/Schemafile
+@@ -1,6 +1,7 @@
+ create_table "articles", force: true do |t|
+   t.string   "title"
+   t.text     "text"
++  t.text     "author"
+   t.datetime "created_at"
+   t.datetime "updated_at"
+ end
+
+$ ridgepole -c config.yml --apply --dry-run
+Apply `Schemafile` (dry-run)
+add_column("articles", "author", :text, {:after=>"text"})
+
+$ ridgepole -c config.yml --apply
+Apply `Schemafile`
+-- add_column("articles", "author", :text, {:after=>"text"})
+   -> 0.0202s
+```
+
+## Diff
+```sh
+$ ridgepole --diff file1.schema file2.schema
+add_column("articles", "author", :text, {:after=>"title"})
+rename_column("articles", "text", "desc")
+
+# You can apply to the database the difference:
+# $ ridgepole -c config.yml --diff file1.schema file2.schema --with-apply
+```
+
+You can also compare databases and files.
+
+```sh
+$ ridgepole --diff config.yml file1.schema
+remove_column("articles", "author")
+```
+
+### Reverse diff
+```sh
+$ cat file1.schema
+create_table "articles", force: true do |t|
+  t.string   "title"
+  t.text     "text"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+end
+
+$ cat file2.schema
+create_table "articles", force: true do |t|
+  t.string   "title"
+  t.text     "desc", rename_from: "text"
+  t.text     "author"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+end
+
+$ ridgepole --diff file1.schema file2.schema
+add_column("articles", "author", :text, {:after=>"title"})
+rename_column("articles", "text", "desc")
+
+$ ridgepole --diff file1.schema file2.schema --reverse
+rename_column("articles", "desc", "text")
+remove_column("articles", "author")
 ```
 
 ## Demo

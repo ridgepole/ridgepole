@@ -148,6 +148,18 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to eq expected_dsl.undent.strip.gsub(/\s*,\s*rename_from:.*$/, '')
     }
+
+    it {
+      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
+      expect(delta.differ?).to be_true
+      expect(delta.script).to eq (<<-RUBY).undent.strip
+       rename_column("dept_emp", "from_date2", "from_date")
+
+       rename_column("dept_manager", "to_date2", "to_date")
+
+       rename_column("employees", "gender2", "gender")
+      RUBY
+    }
   end
 
   context 'when rename column (not found)' do

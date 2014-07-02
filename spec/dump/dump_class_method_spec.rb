@@ -1,8 +1,10 @@
-describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when database is empty' do
-    let(:actual_dsl) { '' }
-    let(:expected_dsl) {
-      <<-RUBY
+describe 'Ridgepole::Client.dump' do
+  context 'when there is a tables' do
+    before { restore_tables }
+    subject { Ridgepole::Client }
+
+    it {
+      expect(subject.dump(conn_spec)).to eq (<<-RUBY).undent.strip
         create_table "clubs", force: true do |t|
           t.string "name", default: "", null: false
         end
@@ -67,38 +69,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
-      RUBY
-    }
-
-    subject { client }
-
-    it {
-      delta = subject.diff(expected_dsl)
-      expect(delta.differ?).to be_true
-      expect(subject.dump).to eq actual_dsl.undent.strip
-      delta.migrate
-      expect(subject.dump).to eq expected_dsl.undent.strip
-    }
-
-    it {
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
-      expect(delta.differ?).to be_true
-      expect(delta.script).to eq (<<-RUBY).undent.strip
-        drop_table("clubs")
-
-        drop_table("departments")
-
-        drop_table("dept_emp")
-
-        drop_table("dept_manager")
-
-        drop_table("employee_clubs")
-
-        drop_table("employees")
-
-        drop_table("salaries")
-
-        drop_table("titles")
       RUBY
     }
   end
