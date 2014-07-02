@@ -6,6 +6,11 @@ class Ridgepole::Diff
   def diff(from, to)
     from = (from || {}).dup
     to = (to || {}).dup
+
+    if @options[:reverse]
+      from, to = to, from
+    end
+
     delta = {}
 
     to.dup.each do |table_name, to_attrs|
@@ -20,6 +25,24 @@ class Ridgepole::Diff
         delta[:rename][table_name] = from_table_name
         from.delete(from_table_name)
         to.delete(table_name)
+      end
+    end
+
+
+    # for reverse option
+    from.dup.each do |table_name, from_attrs|
+      if (to_table_name = (from_attrs[:options] || {}).delete(:rename_from))
+        unless to.has_key?(to_table_name)
+          raise "Table `#{from_table_name}` not found"
+        end
+
+        # XXX: Correct?
+        next unless target?(to_table_name)
+
+        delta[:rename] ||= {}
+        delta[:rename][to_table_name] = table_name
+        from.delete(table_name)
+        to.delete(to_table_name)
       end
     end
 
@@ -84,6 +107,20 @@ class Ridgepole::Diff
         definition_delta[:rename][column_name] = from_column_name
         from.delete(from_column_name)
         to.delete(column_name)
+      end
+    end
+
+    # for reverse option
+    from.dup.each do |column_name, from_attrs|
+      if (to_column_name = (from_attrs[:options] || {}).delete(:rename_from))
+        unless to.has_key?(to_column_name)
+          raise "Column `#{to_column_name}` not found"
+        end
+
+        definition_delta[:rename] ||= {}
+        definition_delta[:rename][to_column_name] = column_name
+        from.delete(column_name)
+        to.delete(to_column_name)
       end
     end
 
