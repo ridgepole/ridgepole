@@ -26,7 +26,7 @@ Or install it yourself as:
 
 ```sh
 $ git init
-Initialized empty Git repository in /Users/sugawara/schema/.git/
+Initialized empty Git repository in ...
 
 $ cat config.yml
 adapter: mysql2
