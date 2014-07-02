@@ -150,8 +150,8 @@ begin
   when :diff
     diff_files = diff_files.map do |file|
       if File.exist?(file)
-        ext = File.extname(file)
-        %w(.yml .yaml).include?(ext) ? YAML.load_file(ext) : File.read(file)
+        file_ext = File.extname(file)
+        %w(.yml .yaml).include?(file_ext) ? YAML.load_file(file) : File.read(file)
       else
         YAML.load(file)
       end
