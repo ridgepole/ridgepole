@@ -30,9 +30,15 @@ class Ridgepole::Client
   end
 
   class << self
-    def diff(file_or_config1, file_or_config2, options = {})
-      definition1 = load_definition(file_or_config1)
-      definition2 = load_definition(file_or_config1)
+    def diff(dsl_or_config1, dsl_or_config2, options = {})
+      logger = Ridgepole::Logger.instance
+
+      logger.verbose_info('# Parse DSL1')
+      definition1 = load_definition(dsl_or_config1)
+      logger.verbose_info('# Parse DSL2')
+      definition2 = load_definition(dsl_or_config2)
+
+      logger.verbose_info('# Compare definitions')
       diff = Ridgepole::Diff.new(options)
       diff.diff(definition1, definition2)
     end
@@ -44,10 +50,10 @@ class Ridgepole::Client
 
     private
 
-    def load_definition(file_or_config, options = {})
-      definition = file_or_config.kind_of?(Hash) ? dump(file_or_config, options) : File.read(file)
+    def load_definition(dsl_or_config, options = {})
+      dsl_or_config = dump(dsl_or_config, options) if dsl_or_config.kind_of?(Hash)
       parser = Ridgepole::DSLParser.new(options)
-      parser.parse(dsl)
+      parser.parse(dsl_or_config)
     end
   end # of class methods
 end

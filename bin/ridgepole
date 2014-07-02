@@ -18,6 +18,7 @@ file = DEFAULT_FILENAME
 output_file = '-'
 split = false
 diff_files = nil
+exit_code = 0
 
 options = {
   :dry_run => false,
@@ -77,7 +78,7 @@ begin
   logger.set_debug(options[:debug])
 
   if config
-    config = open(config) {|f| f.read } if File.exist?(config)
+    config = File.read(config) if File.exist?(config)
     config = YAML.load(config)
     client = Ridgepole::Client.new(config, options)
   end
@@ -146,7 +147,24 @@ begin
       logger.info('No change')
     end
   when :diff
-    p diff_files
+    diff_files = diff_files.map do |file|
+      if File.exist?(file)
+        ext = File.extname(file)
+        %w(.yml .yaml).include?(ext) ? YAML.load_file(ext) : File.read(file)
+      else
+        YAML.load(file)
+      end
+    end
+
+    delta = Ridgepole::Client.diff(*diff_files, options)
+
+    if options[:with_apply]
+      logger.verbose_info('# Update schema')
+      delta.migrate
+    elsif delta.differ?
+      puts delta.script
+      exit_code = 1
+    end
   end
 rescue => e
   if options[:debug]
@@ -156,3 +174,5 @@ rescue => e
     exit 1
   end
 end
+
+exit exit_code
