@@ -17,6 +17,7 @@ mode = nil
 file = DEFAULT_FILENAME
 output_file = '-'
 split = false
+diff_files = nil
 
 options = {
   :dry_run => false,
@@ -38,6 +39,20 @@ ARGV.options do |opt|
     opt.on('-e', '--export')                      {    set_mode[:export]                                    }
     opt.on('',   '--split')                       {|v| split = true                                         }
     opt.on('',   '--split-with-dir')              {|v| split = :with_dir                                    }
+    opt.on('-d', '--diff DSL1 DSL2') {|diff_arg1|
+      set_mode[:diff]
+      diff_arg2 = ARGV.first
+
+      if [diff_arg1, diff_arg2].any? {|i| i.nil? or i =~ /\A-/ }
+        puts opt.help
+        exit 1
+      end
+
+      ARGV.shift
+      diff_files = [diff_arg1, diff_arg2]
+    }
+    opt.on('',   '--reverse')                     {    options[:reverse] = true                             }
+    opt.on('',   '--with-apply')                  {    options[:with_apply] = true                          }
     opt.on('-o', '--output FILE')                 {|v| output_file = v                                      }
     opt.on('-t', '--tables TABLES', Array)        {|v| options[:tables] = v                                 }
     opt.on('',   '--ignore-tables TABLES', Array) {|v| options[:ignore_tables] = v.map {|i| Regexp.new(i) } }
@@ -47,7 +62,7 @@ ARGV.options do |opt|
     opt.on(''  , '--debug')                       {    options[:debug] = true                               }
     opt.parse!
 
-    unless config and mode
+    if not mode or ([:apply, :export].include?(mode) and not config) or  (options[:with_apply] and not config)
       puts opt.help
       exit 1
     end
@@ -61,9 +76,11 @@ begin
   logger = Ridgepole::Logger.instance
   logger.set_debug(options[:debug])
 
-  config = open(config) {|f| f.read } if File.exist?(config)
-  config = YAML.load(config)
-  client = Ridgepole::Client.new(config, options)
+  if config
+    config = open(config) {|f| f.read } if File.exist?(config)
+    config = YAML.load(config)
+    client = Ridgepole::Client.new(config, options)
+  end
 
   case mode
   when :export
@@ -115,7 +132,7 @@ begin
     msg << ' (dry-run)' if options[:dry_run]
     logger.info(msg)
 
-    dsl = open(file) {|f| f.read }
+    dsl = File.read(file)
     delta = client.diff(dsl, :path => file)
 
     if options[:dry_run]
@@ -128,6 +145,8 @@ begin
     unless delta.differ?
       logger.info('No change')
     end
+  when :diff
+    p diff_files
   end
 rescue => e
   if options[:debug]
