@@ -78,7 +78,7 @@ Apply `Schemafile`
 ```
 
 ## Diff
-```
+```sh
 $ ridgepole --diff file1.schema file2.schema
 add_column("articles", "author", :text, {:after=>"title"})
 rename_column("articles", "text", "desc")
@@ -89,13 +89,13 @@ rename_column("articles", "text", "desc")
 
 You can also compare databases and files.
 
-```
+```sh
 $ ridgepole --diff config.yml file1.schema
 remove_column("articles", "author")
 ```
 
 ### Reverse diff
-```
+```sh
 $ cat file1.schema
 create_table "articles", force: true do |t|
   t.string   "title"
