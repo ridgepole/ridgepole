@@ -25,10 +25,56 @@ Or install it yourself as:
 ## Usage
 
 ```sh
-ridgepole --export -o Schemafile
-vi Schemafile
-ridgepole --apply --dry-run
-ridgepole --apply
+$ git init
+Initialized empty Git repository in /Users/sugawara/schema/.git/
+
+$ cat config.yml
+adapter: mysql2
+encoding: utf8
+database: blog
+username: root
+
+$ ridgepole -c config.yml --export -o Schemafile # or `ridgepole -c '{adapter: mysql2, database: blog}' ...`
+Export Schema to `Schemafile`
+
+$ cat Schemafile
+create_table "articles", force: true do |t|
+  t.string   "title"
+  t.text     "text"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+end
+
+$ git add .
+$  git commit -m 'first commit'  -a
+[master (root-commit) a6c2d31] first commit
+ 2 files changed, 10 insertions(+)
+ create mode 100644 Schemafile
+ create mode 100644 config.yml
+
+$ vi Schemafile
+$ git diff
+diff --git a/Schemafile b/Schemafile
+index f5848b9..c266fed 100644
+--- a/Schemafile
++++ b/Schemafile
+@@ -1,6 +1,7 @@
+ create_table "articles", force: true do |t|
+   t.string   "title"
+   t.text     "text"
++  t.text     "author"
+   t.datetime "created_at"
+   t.datetime "updated_at"
+ end
+
+$ ridgepole -c config.yml --apply --dry-run
+Apply `Schemafile` (dry-run)
+add_column("articles", "author", :text, {:after=>"text"})
+
+$ ridgepole -c config.yml --apply
+Apply `Schemafile`
+-- add_column("articles", "author", :text, {:after=>"text"})
+   -> 0.0202s
 ```
 
 ## Demo
