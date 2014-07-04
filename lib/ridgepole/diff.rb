@@ -12,9 +12,9 @@ class Ridgepole::Diff
     end
 
     delta = {}
-    scan_table_rename(to, from, delta)
-    # for reverse option
     scan_table_rename(from, to, delta)
+    # for reverse option
+    scan_table_rename(to, from, delta)
 
     to.each do |table_name, to_attrs|
       next unless target?(table_name)
@@ -41,7 +41,7 @@ class Ridgepole::Diff
 
   private
 
-  def scan_table_rename(to, from, delta, options = {})
+  def scan_table_rename(from, to, delta, options = {})
     to.dup.each do |table_name, to_attrs|
       next unless target?(table_name)
 
