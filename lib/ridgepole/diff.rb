@@ -46,6 +46,9 @@ class Ridgepole::Diff
       next unless target?(table_name)
 
       if (from_table_name = (to_attrs[:options] || {}).delete(:rename_from))
+        # Already renamed
+        next if to[from_table_name]
+
         unless from.has_key?(from_table_name)
           raise "Table `#{from_table_name}` not found"
         end
