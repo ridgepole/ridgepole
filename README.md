@@ -100,24 +100,7 @@ Apply `Schemafile`
    -> 0.0202s
 ```
 
-## Diff
-```sh
-$ ridgepole --diff file1.schema file2.schema
-add_column("articles", "author", :text, {:after=>"title"})
-rename_column("articles", "text", "desc")
-
-# You can apply to the database the difference:
-# $ ridgepole -c config.yml --diff file1.schema file2.schema --with-apply
-```
-
-You can also compare databases and files.
-
-```sh
-$ ridgepole --diff config.yml file1.schema
-remove_column("articles", "author")
-```
-
-### Rename
+## Rename
 ```sh
 create_table "articles", force: true do |t|
   t.string   "title"
@@ -134,6 +117,23 @@ create_table "user_comments", force: true, rename_from: "comments" do |t|
   t.datetime "created_at"
   t.datetime "updated_at"
 end
+```
+
+## Diff
+```sh
+$ ridgepole --diff file1.schema file2.schema
+add_column("articles", "author", :text, {:after=>"title"})
+rename_column("articles", "text", "desc")
+
+# You can apply to the database the difference:
+# $ ridgepole -c config.yml --diff file1.schema file2.schema --with-apply
+```
+
+You can also compare databases and files.
+
+```sh
+$ ridgepole --diff config.yml file1.schema
+remove_column("articles", "author")
 ```
 
 ### Reverse diff
