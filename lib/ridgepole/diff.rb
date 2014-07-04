@@ -12,39 +12,9 @@ class Ridgepole::Diff
     end
 
     delta = {}
-
-    to.dup.each do |table_name, to_attrs|
-      next unless target?(table_name)
-
-      if (from_table_name = (to_attrs[:options] || {}).delete(:rename_from))
-        unless from.has_key?(from_table_name)
-          raise "Table `#{from_table_name}` not found"
-        end
-
-        delta[:rename] ||= {}
-        delta[:rename][table_name] = from_table_name
-        from.delete(from_table_name)
-        to.delete(table_name)
-      end
-    end
-
-
+    scan_table_rename(to, from, delta)
     # for reverse option
-    from.dup.each do |table_name, from_attrs|
-      if (to_table_name = (from_attrs[:options] || {}).delete(:rename_from))
-        unless to.has_key?(to_table_name)
-          raise "Table `#{from_table_name}` not found"
-        end
-
-        # XXX: Correct?
-        next unless target?(to_table_name)
-
-        delta[:rename] ||= {}
-        delta[:rename][to_table_name] = table_name
-        from.delete(table_name)
-        to.delete(to_table_name)
-      end
-    end
+    scan_table_rename(from, to, delta)
 
     to.each do |table_name, to_attrs|
       next unless target?(table_name)
@@ -70,6 +40,29 @@ class Ridgepole::Diff
   end
 
   private
+
+  def scan_table_rename(to, from, delta, options = {})
+    to.dup.each do |table_name, to_attrs|
+      next unless target?(table_name)
+
+      if (from_table_name = (to_attrs[:options] || {}).delete(:rename_from))
+        unless from.has_key?(from_table_name)
+          raise "Table `#{from_table_name}` not found"
+        end
+
+        delta[:rename] ||= {}
+
+        if @options[:reverse]
+          delta[:rename][from_table_name] = table_name
+        else
+          delta[:rename][table_name] = from_table_name
+        end
+
+        from.delete(from_table_name)
+        to.delete(table_name)
+      end
+    end
+  end
 
   def scan_change(table_name, from, to, delta)
     from = (from || {}).dup
