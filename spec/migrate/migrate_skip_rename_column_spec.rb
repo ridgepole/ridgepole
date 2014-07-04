@@ -1,5 +1,5 @@
-describe 'Ridgepole::Client.diff' do
-  context 'when change column' do
+describe 'Ridgepole::Client#diff -> migrate' do
+  context 'when rename column' do
     let(:actual_dsl) {
       <<-RUBY
         create_table "clubs", force: true do |t|
@@ -15,10 +15,10 @@ describe 'Ridgepole::Client.diff' do
         add_index "departments", ["dept_name"], name: "dept_name", unique: true, using: :btree
 
         create_table "dept_emp", id: false, force: true do |t|
-          t.integer "emp_no",              null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no",               null: false
+          t.string  "dept_no",    limit: 4, null: false
+          t.date    "from_date2",           null: false
+          t.date    "to_date",              null: false
         end
 
         add_index "dept_emp", ["dept_no"], name: "dept_no", using: :btree
@@ -28,7 +28,7 @@ describe 'Ridgepole::Client.diff' do
           t.string  "dept_no",   limit: 4, null: false
           t.integer "emp_no",              null: false
           t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.date    "to_date2",            null: false
         end
 
         add_index "dept_manager", ["dept_no"], name: "dept_no", using: :btree
@@ -45,7 +45,7 @@ describe 'Ridgepole::Client.diff' do
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
-          t.string "gender",     limit: 1,  null: false
+          t.string "gender2",    limit: 1,  null: false
           t.date   "hire_date",             null: false
         end
 
@@ -84,10 +84,10 @@ describe 'Ridgepole::Client.diff' do
         add_index "departments", ["dept_name"], name: "dept_name", unique: true, using: :btree
 
         create_table "dept_emp", id: false, force: true do |t|
-          t.integer "emp_no",              null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no",               null: false
+          t.string  "dept_no",    limit: 4, null: false
+          t.date    "from_date2",           null: false, rename_from: 'from_date'
+          t.date    "to_date",              null: false
         end
 
         add_index "dept_emp", ["dept_no"], name: "dept_no", using: :btree
@@ -97,7 +97,7 @@ describe 'Ridgepole::Client.diff' do
           t.string  "dept_no",   limit: 4, null: false
           t.integer "emp_no",              null: false
           t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.date    "to_date2",            null: false, rename_from: 'to_date'
         end
 
         add_index "dept_manager", ["dept_no"], name: "dept_no", using: :btree
@@ -105,17 +105,17 @@ describe 'Ridgepole::Client.diff' do
 
         create_table "employee_clubs", force: true do |t|
           t.integer "emp_no",  unsigned: true, null: false
-          t.integer "club_id", unsigned: false, null: true
+          t.integer "club_id", unsigned: true, null: false
         end
 
         add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_emp_no_club_id", using: :btree
 
         create_table "employees", primary_key: "emp_no", force: true do |t|
-          t.date   "birth_date",                            null: false
-          t.string "first_name", limit: 14,                 null: false
-          t.string "last_name",  limit: 20, default: "XXX", null: false
-          t.string "gender",     limit: 2,                  null: false
-          t.date   "hire_date",                             null: false
+          t.date   "birth_date",            null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name",  limit: 16, null: false
+          t.string "gender2",    limit: 1,  null: false, rename_from: 'gender'
+          t.date   "hire_date",             null: false
         end
 
         create_table "salaries", id: false, force: true do |t|
@@ -138,17 +138,20 @@ describe 'Ridgepole::Client.diff' do
       RUBY
     }
 
-    subject { Ridgepole::Client }
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
 
     it {
-      delta = subject.diff(actual_dsl, expected_dsl)
-      expect(delta.differ?).to be_truthy
-      expect(delta.script).to eq (<<-RUBY).undent.strip
-        change_column("employee_clubs", "club_id", :integer, {:unsigned=>false, :null=>true})
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_falsey
+      expect(subject.dump).to eq actual_dsl.undent.strip
+      delta.migrate
+      expect(subject.dump).to eq expected_dsl.undent.strip.gsub(/\s*,\s*rename_from:.*$/, '')
+    }
 
-        change_column("employees", "last_name", :string, {:limit=>20, :default=>"XXX", :null=>false, :unsigned=>false})
-        change_column("employees", "gender", :string, {:limit=>2, :null=>false, :unsigned=>false})
-      RUBY
+    it {
+      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
+      expect(delta.differ?).to be_falsey
     }
   end
 end

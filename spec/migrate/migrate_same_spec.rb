@@ -74,7 +74,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       delta = subject.diff(dsl)
-      expect(delta.differ?).to be_false
+      expect(delta.differ?).to be_falsey
       expect(subject.dump).to eq dsl.undent.strip
       delta.migrate
       expect(subject.dump).to eq dsl.undent.strip

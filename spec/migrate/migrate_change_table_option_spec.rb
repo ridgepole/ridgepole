@@ -31,7 +31,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       expect(Ridgepole::Logger.instance).to receive(:warn).with('[WARNING] Table `employees` options cannot be changed')
       delta = subject.diff(expected_dsl)
-      expect(delta.differ?).to be_false
+      expect(delta.differ?).to be_falsey
       expect(subject.dump).to eq actual_dsl.undent.strip
       delta.migrate
       expect(subject.dump).to eq actual_dsl.undent.strip
@@ -40,7 +40,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       expect(Ridgepole::Logger.instance).to receive(:warn).with('[WARNING] Table `employees` options cannot be changed')
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
-      expect(delta.differ?).to be_false
+      expect(delta.differ?).to be_falsey
     }
   end
 end
