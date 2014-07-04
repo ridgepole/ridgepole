@@ -146,7 +146,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       delta = subject.diff(expected_dsl)
-      expect(delta.differ?).to be_true
+      expect(delta.differ?).to be_truthy
       expect(subject.dump).to eq actual_dsl.undent.strip
       delta.migrate
       expect(subject.dump).to eq expected_dsl.undent.strip
@@ -154,7 +154,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
-      expect(delta.differ?).to be_true
+      expect(delta.differ?).to be_truthy
       expect(delta.script).to eq (<<-RUBY).undent.strip
         remove_column("employee_clubs", "any_col")
 

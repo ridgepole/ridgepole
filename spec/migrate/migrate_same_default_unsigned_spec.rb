@@ -23,7 +23,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       delta = subject.diff(expected_dsl)
-      expect(delta.differ?).to be_false
+      expect(delta.differ?).to be_falsey
       expect(subject.dump).to eq actual_dsl.undent.strip
       delta.migrate
       expect(subject.dump).to eq expected_dsl.undent.strip.gsub('unsigned: false,', '                ')
@@ -54,7 +54,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       delta = subject.diff(expected_dsl)
-      expect(delta.differ?).to be_false
+      expect(delta.differ?).to be_falsey
       expect(subject.dump).to eq actual_dsl.undent.strip.gsub('unsigned: false,', '                ')
       delta.migrate
       expect(subject.dump).to eq expected_dsl.undent.strip

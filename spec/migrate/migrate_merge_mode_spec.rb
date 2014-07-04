@@ -147,7 +147,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       delta = subject.diff(expected_dsl.delete_create_table('clubs'))
-      expect(delta.differ?).to be_true
+      expect(delta.differ?).to be_truthy
       expect(subject.dump).to eq actual_dsl.undent.strip
       delta.migrate
       # `clubs` table is not deleted
@@ -156,7 +156,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, merge: true, reverse: true)
-      expect(delta.differ?).to be_false
+      expect(delta.differ?).to be_falsey
     }
   end
 end
