@@ -1,5 +1,5 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when rename column' do
+  context 'when rename table' do
     let(:actual_dsl) {
       <<-RUBY
         create_table "clubs", force: true do |t|
@@ -41,7 +41,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_emp_no_club_id", using: :btree
 
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees2", primary_key: "emp_no", force: true do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -84,10 +84,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
         add_index "departments", ["dept_name"], name: "dept_name", unique: true, using: :btree
 
         create_table "dept_emp", id: false, force: true do |t|
-          t.integer "emp_no",               null: false
-          t.string  "dept_no",    limit: 4, null: false
-          t.date    "from_date2",           null: false, rename_from: 'from_date'
-          t.date    "to_date",              null: false
+          t.integer "emp_no",              null: false
+          t.string  "dept_no",   limit: 4, null: false
+          t.date    "from_date",           null: false
+          t.date    "to_date",             null: false
         end
 
         add_index "dept_emp", ["dept_no"], name: "dept_no", using: :btree
@@ -97,7 +97,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string  "dept_no",   limit: 4, null: false
           t.integer "emp_no",              null: false
           t.date    "from_date",           null: false
-          t.date    "to_date2",            null: false, rename_from: 'to_date'
+          t.date    "to_date",             null: false
         end
 
         add_index "dept_manager", ["dept_no"], name: "dept_no", using: :btree
@@ -110,11 +110,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_emp_no_club_id", using: :btree
 
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees2", primary_key: "emp_no", force: true, rename_from: 'employees' do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
-          t.string "gender2",    limit: 1,  null: false, rename_from: 'gender'
+          t.string "gender",     limit: 1,  null: false
           t.date   "hire_date",             null: false
         end
 
@@ -143,45 +143,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       delta = subject.diff(expected_dsl)
-      expect(delta.differ?).to be_true
+      expect(delta.differ?).to be_false
       expect(subject.dump).to eq actual_dsl.undent.strip
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.undent.strip.gsub(/\s*,\s*rename_from:.*$/, '')
+      expect(subject.dump).to eq expected_dsl.undent.strip.gsub(/, rename_from: 'employees'/, '')
     }
 
     it {
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
-      expect(delta.differ?).to be_true
-      expect(delta.script).to eq (<<-RUBY).undent.strip
-       rename_column("dept_emp", "from_date2", "from_date")
-
-       rename_column("dept_manager", "to_date2", "to_date")
-
-       rename_column("employees", "gender2", "gender")
-      RUBY
-    }
-  end
-
-  context 'when rename column (not found)' do
-    before { restore_tables }
-    subject { client }
-
-    let(:dsl) {
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
-          t.date   "birth_date",            null: false
-          t.string "first_name", limit: 14, null: false
-          t.string "last_name",  limit: 16, null: false
-          t.string "gender2",    limit: 1,  null: false, rename_from: 'age'
-          t.date   "hire_date",             null: false
-        end
-      RUBY
-    }
-
-    it {
-      expect {
-        subject.diff(dsl)
-      }.to raise_error('Column `age` not found')
+      expect(delta.differ?).to be_false
     }
   end
 end

@@ -15,10 +15,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
         add_index "departments", ["dept_name"], name: "dept_name", unique: true, using: :btree
 
         create_table "dept_emp", id: false, force: true do |t|
-          t.integer "emp_no",              null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no",               null: false
+          t.string  "dept_no",    limit: 4, null: false
+          t.date    "from_date2",           null: false
+          t.date    "to_date",              null: false
         end
 
         add_index "dept_emp", ["dept_no"], name: "dept_no", using: :btree
@@ -28,7 +28,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string  "dept_no",   limit: 4, null: false
           t.integer "emp_no",              null: false
           t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.date    "to_date2",            null: false
         end
 
         add_index "dept_manager", ["dept_no"], name: "dept_no", using: :btree
@@ -45,7 +45,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
-          t.string "gender",     limit: 1,  null: false
+          t.string "gender2",    limit: 1,  null: false
           t.date   "hire_date",             null: false
         end
 
@@ -143,7 +143,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       delta = subject.diff(expected_dsl)
-      expect(delta.differ?).to be_true
+      expect(delta.differ?).to be_false
       expect(subject.dump).to eq actual_dsl.undent.strip
       delta.migrate
       expect(subject.dump).to eq expected_dsl.undent.strip.gsub(/\s*,\s*rename_from:.*$/, '')
@@ -151,37 +151,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
-      expect(delta.differ?).to be_true
-      expect(delta.script).to eq (<<-RUBY).undent.strip
-       rename_column("dept_emp", "from_date2", "from_date")
-
-       rename_column("dept_manager", "to_date2", "to_date")
-
-       rename_column("employees", "gender2", "gender")
-      RUBY
-    }
-  end
-
-  context 'when rename column (not found)' do
-    before { restore_tables }
-    subject { client }
-
-    let(:dsl) {
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
-          t.date   "birth_date",            null: false
-          t.string "first_name", limit: 14, null: false
-          t.string "last_name",  limit: 16, null: false
-          t.string "gender2",    limit: 1,  null: false, rename_from: 'age'
-          t.date   "hire_date",             null: false
-        end
-      RUBY
-    }
-
-    it {
-      expect {
-        subject.diff(dsl)
-      }.to raise_error('Column `age` not found')
+      expect(delta.differ?).to be_false
     }
   end
 end
