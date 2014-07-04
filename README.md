@@ -117,6 +117,25 @@ $ ridgepole --diff config.yml file1.schema
 remove_column("articles", "author")
 ```
 
+### Rename
+```sh
+create_table "articles", force: true do |t|
+  t.string   "title"
+  t.text     "desc", rename_from: "text"
+  t.text     "author"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+end
+
+create_table "user_comments", force: true, rename_from: "comments" do |t|
+  t.string   "commenter"
+  t.text     "body"
+  t.integer  "article_id"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+end
+```
+
 ### Reverse diff
 ```sh
 $ cat file1.schema
