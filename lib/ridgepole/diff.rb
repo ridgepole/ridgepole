@@ -90,32 +90,9 @@ class Ridgepole::Diff
     to = (to || {}).dup
     definition_delta = {}
 
-    to.dup.each do |column_name, to_attrs|
-      if (from_column_name = (to_attrs[:options] || {}).delete(:rename_from))
-        unless from.has_key?(from_column_name)
-          raise "Column `#{from_column_name}` not found"
-        end
-
-        definition_delta[:rename] ||= {}
-        definition_delta[:rename][column_name] = from_column_name
-        from.delete(from_column_name)
-        to.delete(column_name)
-      end
-    end
-
+    scan_column_rename(from, to, definition_delta)
     # for reverse option
-    from.dup.each do |column_name, from_attrs|
-      if (to_column_name = (from_attrs[:options] || {}).delete(:rename_from))
-        unless to.has_key?(to_column_name)
-          raise "Column `#{to_column_name}` not found"
-        end
-
-        definition_delta[:rename] ||= {}
-        definition_delta[:rename][to_column_name] = column_name
-        from.delete(column_name)
-        to.delete(to_column_name)
-      end
-    end
+    scan_column_rename(to, from, definition_delta)
 
     priv_column_name = nil
 
@@ -155,6 +132,27 @@ class Ridgepole::Diff
 
     unless definition_delta.empty?
       table_delta[:definition] = definition_delta
+    end
+  end
+
+  def scan_column_rename(from, to, definition_delta)
+    to.dup.each do |column_name, to_attrs|
+      if (from_column_name = (to_attrs[:options] || {}).delete(:rename_from))
+        unless from.has_key?(from_column_name)
+          raise "Column `#{from_column_name}` not found"
+        end
+
+        definition_delta[:rename] ||= {}
+
+        if @options[:reverse]
+          definition_delta[:rename][from_column_name] = column_name
+        else
+          definition_delta[:rename][column_name] = from_column_name
+        end
+
+        from.delete(from_column_name)
+        to.delete(column_name)
+      end
     end
   end
 
