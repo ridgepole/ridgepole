@@ -144,15 +144,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.undent.strip
+      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.undent.strip.gsub(/\s*,\s*renamed_from:.*$/, '')
+      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip.gsub(/\s*,\s*renamed_from:.*$/, '')
     }
 
     it {
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to eq (<<-RUBY).undent.strip
+      expect(delta.script).to eq (<<-RUBY).strip_heredoc.strip
        rename_column("dept_emp", "from_date2", "from_date")
 
        rename_column("dept_manager", "to_date2", "to_date")
