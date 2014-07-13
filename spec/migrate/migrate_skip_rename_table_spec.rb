@@ -110,7 +110,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_emp_no_club_id", using: :btree
 
-        create_table "employees2", primary_key: "emp_no", force: true, rename_from: 'employees' do |t|
+        create_table "employees2", primary_key: "emp_no", force: true, renamed_from: 'employees' do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -146,7 +146,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_falsey
       expect(subject.dump).to eq actual_dsl.undent.strip
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.undent.strip.gsub(/, rename_from: 'employees'/, '')
+      expect(subject.dump).to eq expected_dsl.undent.strip.gsub(/, renamed_from: 'employees'/, '')
     }
 
     it {
