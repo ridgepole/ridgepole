@@ -34,7 +34,7 @@ class Ridgepole::Dumper
       line !~ /\A#/ &&
       line !~ /\AActiveRecord::Schema\.define/ &&
       line !~ /\Aend/
-    }.join.strip_heredoc.strip
+    }.join.strip_heredoc
 
     definitions = []
 
