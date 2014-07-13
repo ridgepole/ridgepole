@@ -145,7 +145,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to eq (<<-RUBY).strip_heredoc.strip
+      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
         add_column("dept_emp", "from_date", :date, {:null=>false, :after=>"dept_no"})
         add_column("dept_emp", "to_date", :date, {:null=>false, :after=>"from_date"})
 

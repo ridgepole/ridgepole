@@ -4,7 +4,7 @@ describe 'Ridgepole::Client.dump' do
     subject { Ridgepole::Client }
 
     it {
-      expect(subject.dump(conn_spec)).to eq (<<-RUBY).strip_heredoc.strip
+      expect(subject.dump(conn_spec)).to eq <<-RUBY.strip_heredoc.strip
         create_table "clubs", force: true do |t|
           t.string "name", default: "", null: false
         end
