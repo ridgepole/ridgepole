@@ -45,7 +45,7 @@ class Ridgepole::Diff
     to.dup.each do |table_name, to_attrs|
       next unless target?(table_name)
 
-      if (from_table_name = (to_attrs[:options] || {}).delete(:rename_from))
+      if (from_table_name = (to_attrs[:options] || {}).delete(:renamed_from))
         # Already renamed
         next if from[table_name]
 
@@ -140,7 +140,7 @@ class Ridgepole::Diff
 
   def scan_column_rename(from, to, definition_delta)
     to.dup.each do |column_name, to_attrs|
-      if (from_column_name = (to_attrs[:options] || {}).delete(:rename_from))
+      if (from_column_name = (to_attrs[:options] || {}).delete(:renamed_from))
         # Already renamed
         next if from[column_name]
 

@@ -1,5 +1,6 @@
 $: << File.expand_path('..', __FILE__)
 require 'ridgepole'
+require 'active_support/core_ext/string/strip'
 require 'string_ext'
 
 ActiveRecord::Migration.verbose = false

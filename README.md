@@ -104,13 +104,13 @@ Apply `Schemafile`
 ```sh
 create_table "articles", force: true do |t|
   t.string   "title"
-  t.text     "desc", rename_from: "text"
+  t.text     "desc", renamed_from: "text"
   t.text     "author"
   t.datetime "created_at"
   t.datetime "updated_at"
 end
 
-create_table "user_comments", force: true, rename_from: "comments" do |t|
+create_table "user_comments", force: true, renamed_from: "comments" do |t|
   t.string   "commenter"
   t.text     "body"
   t.integer  "article_id"
@@ -149,7 +149,7 @@ end
 $ cat file2.schema
 create_table "articles", force: true do |t|
   t.string   "title"
-  t.text     "desc", rename_from: "text"
+  t.text     "desc", renamed_from: "text"
   t.text     "author"
   t.datetime "created_at"
   t.datetime "updated_at"

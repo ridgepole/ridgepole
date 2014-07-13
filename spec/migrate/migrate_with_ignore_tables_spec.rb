@@ -60,9 +60,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(dsl)
       expect(delta.differ?).to be_falsey
-      expect(subject.dump).to eq expected_dsl.undent.strip
+      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.undent.strip
+      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
     }
   end
 
@@ -139,15 +139,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq before_dsl.undent.strip
+      expect(subject.dump).to eq before_dsl.strip_heredoc.strip
       delta.migrate
-      expect(subject.dump).to eq after_dsl.undent.strip
+      expect(subject.dump).to eq after_dsl.strip_heredoc.strip
     }
 
     it {
       delta = Ridgepole::Client.diff(current_schema, dsl, ignore_tables: [/^salaries$/], reverse: true)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to eq (<<-RUBY).undent.strip
+      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
         change_column("employees", "first_name", :string, {:limit=>14, :null=>false, :unsigned=>false})
       RUBY
     }
