@@ -97,6 +97,18 @@ class Ridgepole::DSLParser
   end
 
   def parse(dsl, opts = {})
-    Context.eval(dsl, opts)
+    parsed = Context.eval(dsl, opts)
+    check_orphan_index(parsed)
+    parsed
+  end
+
+  private
+
+  def check_orphan_index(parsed)
+    parsed.each do |table_name, attrs|
+      if attrs.length == 1 and attrs[:indices]
+        raise "Table `#{table_name}` to create the index is not defined: #{attrs[:indices].keys.join(',')}"
+      end
+    end
   end
 end
