@@ -49,9 +49,10 @@ class Ridgepole::Diff
         # Already renamed
         next if from[table_name]
 
-        unless from.has_key?(from_table_name)
-          raise "Table `#{from_table_name}` not found"
-        end
+        # No existence checking because there is that the table to be read is limited
+        #unless from.has_key?(from_table_name)
+        #  raise "Table `#{from_table_name}` not found"
+        #end
 
         delta[:rename] ||= {}
 
