@@ -94,6 +94,8 @@ $ ridgepole -c config.yml --apply --dry-run
 Apply `Schemafile` (dry-run)
 add_column("articles", "author", :text, {:after=>"text"})
 
+# ALTER TABLE `articles` ADD `author` text AFTER `text`
+
 $ ridgepole -c config.yml --apply
 Apply `Schemafile`
 -- add_column("articles", "author", :text, {:after=>"text"})

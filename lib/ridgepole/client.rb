@@ -2,7 +2,7 @@ class Ridgepole::Client
   def initialize(conn_spec, options = {})
     @options = options
     ActiveRecord::Base.establish_connection(conn_spec)
-
+    Ridgepole::ExecuteExpander.expand_execute(ActiveRecord::Base.connection)
     @dumper = Ridgepole::Dumper.new(@options)
     @parser = Ridgepole::DSLParser.new(@options)
     @diff = Ridgepole::Diff.new(@options)

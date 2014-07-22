@@ -31,6 +31,14 @@ set_mode = proc do |m|
   mode = m
 end
 
+def noop_migrate(delta)
+  puts <<-EOS
+#{delta.script}
+
+#{delta.migrate(:noop => true).each_line.map {|i| "# #{i}"}.join}
+  EOS
+end
+
 ARGV.options do |opt|
   begin
     opt.on('-c', '--config CONF_OR_FILE')         {|v| config = v                                           }
@@ -83,6 +91,8 @@ begin
     config = YAML.load(config)
     client = Ridgepole::Client.new(config, options)
   end
+
+  ActiveRecord::Base.logger = logger
 
   case mode
   when :export
@@ -138,7 +148,9 @@ begin
     delta = client.diff(dsl, :path => file)
 
     if options[:dry_run]
-      puts delta.script if delta.differ?
+      if delta.differ?
+        noop_migrate(delta)
+      end
     else
       logger.verbose_info('# Update schema')
       delta.migrate
@@ -168,7 +180,7 @@ begin
         logger.info('No change')
       end
     elsif delta.differ?
-      puts delta.script
+      noop_migrate(delta)
       exit_code = 1
     end
   end
