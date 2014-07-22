@@ -175,9 +175,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     it {
+      # No existence checking because there is that the table to be read is limited
       expect {
         subject.diff(dsl)
-      }.to raise_error('Table `not_employees` not found')
+      }.to_not raise_error
     }
   end
 end
