@@ -2,10 +2,11 @@ require 'active_record/migration'
 
 class ActiveRecord::Migration
   cattr_accessor :time_recorder
+  cattr_accessor :disable_logging
 
   def write_with_logging(text = '')
     logger = Ridgepole::Logger.instance
-    logger.info(text)
+    logger.info(text) unless self.disable_logging
     parse_text(text)
   end
   alias_method_chain :write, :logging

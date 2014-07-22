@@ -4,15 +4,15 @@ class Ridgepole::Delta
     @options = options
   end
 
-  def migrate
+  def migrate(options = {})
     if log_file = @options[:log_file]
       result = ActiveRecord::Migration.record_time do
-        migrate0
+        migrate0(options)
       end
 
       open(log_file, 'wb') {|f| f.puts JSON.pretty_generate(result) }
     else
-      migrate0
+      migrate0(options)
     end
   end
 
@@ -44,9 +44,28 @@ class Ridgepole::Delta
 
   private
 
-  def migrate0
-    ActiveRecord::Schema.new.instance_eval(script)
+  def migrate0(options = {})
+    if options[:noop]
+      disable_logging_orig = ActiveRecord::Migration.disable_logging
+
+      begin
+        ActiveRecord::Migration.disable_logging = true
+        buf = StringIO.new
+        callback = proc {|sql, name| buf.puts sql }
+
+        Ridgepole::ExecuteExpander.without_operation(callback) do
+          ActiveRecord::Schema.new.instance_eval(script)
+        end
+
+        buf.string.strip
+      ensure
+        ActiveRecord::Migration.disable_logging = disable_logging_orig
+      end
+    else
+      ActiveRecord::Schema.new.instance_eval(script)
+    end
   end
+
 
   def append_create_table(table_name, attrs, buf)
     options = attrs[:options] || {}
