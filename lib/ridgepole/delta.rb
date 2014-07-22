@@ -51,7 +51,10 @@ class Ridgepole::Delta
       begin
         ActiveRecord::Migration.disable_logging = true
         buf = StringIO.new
-        callback = proc {|sql, name| buf.puts sql }
+
+        callback = proc do |sql, name|
+          buf.puts sql if sql =~ /\A(CREATE|ALTER)\b/i
+        end
 
         Ridgepole::ExecuteExpander.without_operation(callback) do
           ActiveRecord::Schema.new.instance_eval(script)

@@ -1,4 +1,10 @@
 class Ridgepole::ExecuteExpander
+  class Stub
+    def method_missing(method_name, *args, &block)
+      # Nothing to do
+    end
+  end
+
   cattr_accessor :noop,     :instance_writer => false, :instance_reader => false
   cattr_accessor :callback, :instance_writer => false, :instance_reader => false
 
@@ -23,6 +29,8 @@ class Ridgepole::ExecuteExpander
             if (callback = Ridgepole::ExecuteExpander.callback)
               callback.call(sql, name)
             end
+
+            Stub.new
           else
             execute_without_noop(sql, name)
           end
