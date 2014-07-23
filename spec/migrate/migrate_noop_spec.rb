@@ -1,5 +1,5 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when database is empty' do
+  context 'when no operation' do
     let(:actual_dsl) { '' }
     let(:expected_dsl) {
       <<-RUBY
