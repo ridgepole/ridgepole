@@ -40,3 +40,25 @@ class Ridgepole::ExecuteExpander
     end
   end # of class methods
 end
+
+require 'active_record/connection_adapters/abstract/schema_statements'
+
+module ActiveRecord::ConnectionAdapters::SchemaStatements
+  def add_index_with_noop(table_name, column_name, options = {})
+    begin
+      add_index_without_noop(table_name, column_name, options)
+    rescue => e
+      raise e unless Ridgepole::ExecuteExpander.noop
+    end
+  end
+  alias_method_chain :add_index, :noop
+
+  def remove_index_with_noop(table_name, options = {})
+    begin
+      remove_index_without_noop(table_name, options)
+    rescue => e
+      raise e unless Ridgepole::ExecuteExpander.noop
+    end
+  end
+  alias_method_chain :remove_index, :noop
+end
