@@ -213,12 +213,12 @@ remove_column(#{table_name.inspect}, #{column_name.inspect})
   end
 
   def append_change_indices(table_name, delta, buf)
-    (delta[:add] || {}).each do |index_name, attrs|
-      append_add_index(table_name, index_name, attrs, buf)
-    end
-
     (delta[:delete] || {}).each do |index_name, attrs|
       append_remove_index(table_name, index_name, attrs, buf)
+    end
+
+    (delta[:add] || {}).each do |index_name, attrs|
+      append_add_index(table_name, index_name, attrs, buf)
     end
   end
 
