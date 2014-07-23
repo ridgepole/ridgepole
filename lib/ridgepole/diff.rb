@@ -74,7 +74,7 @@ class Ridgepole::Diff
     table_delta = {}
 
     scan_options_change(table_name, from[:options], to[:options], table_delta)
-    scan_definition_change(from[:definition], to[:definition], table_delta)
+    scan_definition_change(from[:definition], to[:definition], from[:indices], table_delta)
     scan_indices_change(from[:indices], to[:indices], to[:definition], table_delta)
 
     unless table_delta.empty?
@@ -89,7 +89,7 @@ class Ridgepole::Diff
     end
   end
 
-  def scan_definition_change(from, to, table_delta)
+  def scan_definition_change(from, to, from_indices, table_delta)
     from = (from || {}).dup
     to = (to || {}).dup
     definition_delta = {}
@@ -131,6 +131,16 @@ class Ridgepole::Diff
       from.each do |column_name, from_attrs|
         definition_delta[:delete] ||= {}
         definition_delta[:delete][column_name] = from_attrs
+
+        if from_indices
+          from_indices.each do |name, attrs|
+            attrs[:column_name].delete(column_name)
+          end
+
+          from_indices.reject! do |name, attrs|
+            attrs[:column_name].empty?
+          end
+        end
       end
     end
 
