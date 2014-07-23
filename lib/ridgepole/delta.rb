@@ -1,4 +1,6 @@
 class Ridgepole::Delta
+  SCRIPT_NAME = '<Schema>'
+
   def initialize(delta, options = {})
     @delta = delta
     @options = options
@@ -57,7 +59,7 @@ class Ridgepole::Delta
         end
 
         Ridgepole::ExecuteExpander.without_operation(callback) do
-          ActiveRecord::Schema.new.instance_eval(script)
+          eval_script(script)
         end
 
         buf.string.strip
@@ -65,10 +67,51 @@ class Ridgepole::Delta
         ActiveRecord::Migration.disable_logging = disable_logging_orig
       end
     else
-      ActiveRecord::Schema.new.instance_eval(script)
+      eval_script(script)
     end
   end
 
+  def eval_script(script)
+    begin
+      ActiveRecord::Schema.new.instance_eval(script, SCRIPT_NAME, 1)
+    rescue => e
+      raise_exception(script, e)
+    end
+  end
+
+  def raise_exception(script, org)
+    lines = script.each_line
+    digit_number = (lines.count + 1).to_s.length
+    err_num = detect_error_line(org)
+
+    errmsg = lines.with_index.map {|l, i|
+      line_num = i + 1
+      prefix = (line_num == err_num) ? '* ' : '  '
+      "#{prefix}%*d: #{l}" % [digit_number, line_num]
+    }
+
+    if err_num > 0
+      from = err_num - 6
+      from = 0 if from < 0
+      to = err_num + 4
+      errmsg = errmsg.slice(from..to)
+    end
+
+    e = RuntimeError.new(org.message + "\n" + errmsg.join)
+    e.set_backtrace(org.backtrace)
+    raise e
+  end
+
+  def detect_error_line(e)
+    rgx = /\A#{Regexp.escape(SCRIPT_NAME)}:(\d+):/
+    line = e.backtrace.find {|i| i =~ rgx }
+
+    if line and (m = rgx.match(line))
+      m[1].to_i
+    else
+      0
+    end
+  end
 
   def append_create_table(table_name, attrs, buf)
     options = attrs[:options] || {}
