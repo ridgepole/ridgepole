@@ -189,8 +189,10 @@ class Ridgepole::Diff
 
     unless @options[:merge]
       from.each do |index_name, from_attrs|
-        indices_delta[:delete] ||= {}
-        indices_delta[:delete][index_name] = from_attrs
+        if from_attrs[:column_name].all? {|i| to_columns[i] }
+          indices_delta[:delete] ||= {}
+          indices_delta[:delete][index_name] = from_attrs
+        end
       end
     end
 
