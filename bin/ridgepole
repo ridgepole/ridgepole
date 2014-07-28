@@ -32,11 +32,11 @@ set_mode = proc do |m|
 end
 
 def noop_migrate(delta)
-  puts <<-EOS
-#{delta.script}
+  puts delta.script + "\n"
 
-#{delta.migrate(:noop => true).each_line.map {|i| "# #{i}"}.join}
-  EOS
+  delta.migrate(:noop => true).each_line do |line|
+    puts line.strip.gsub(',', ",\n").each_line.map {|i| "# #{i}"}.join } + "\n"
+  end
 end
 
 ARGV.options do |opt|
