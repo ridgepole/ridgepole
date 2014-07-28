@@ -35,7 +35,7 @@ def noop_migrate(delta)
   puts delta.script + "\n"
 
   delta.migrate(:noop => true).each_line do |line|
-    puts line.strip.gsub(',', ",\n").each_line.map {|i| "# #{i}"}.join } + "\n"
+    puts line.strip.gsub(',', ",\n").each_line.map {|i| "# #{i}"}.join + "\n"
   end
 end
 
