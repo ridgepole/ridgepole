@@ -32,10 +32,10 @@ set_mode = proc do |m|
 end
 
 def noop_migrate(delta)
-  puts delta.script + "\n"
+  puts delta.script + "\n\n"
 
   delta.migrate(:noop => true).each_line do |line|
-    puts line.strip.gsub(/([(),])([^\d])/) { "#{$1}\n#{$2}" ).each_line.map {|i| "# #{i}"}.join + "\n"
+    puts line.strip.gsub(/([^\d])([(),])([^\d])/) { "#{$1}#{$2}\n#{$3}" }.each_line.map {|i| "# #{i.gsub(/^\s+/, '')}"}.join + "\n\n"
   end
 end
 
