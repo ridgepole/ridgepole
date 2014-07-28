@@ -30,6 +30,7 @@ Usage: ridgepole [options]
     -m, --merge
     -f, --file FILE
         --dry-run
+        --table-options
     -e, --export
         --split
         --split-with-dir
