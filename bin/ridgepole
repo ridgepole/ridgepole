@@ -47,7 +47,10 @@ ARGV.options do |opt|
     opt.on('-f', '--file FILE')                   {|v| file = v                                             }
     opt.on('',   '--dry-run')                     {    options[:dry_run] = true                             }
     opt.on('',   '--table-options OPTIONS')       {|v| options[:table_options] = v                          }
-    opt.on('',   '--bulk-change')                 {    options[:bulk_change] = true                         }
+    opt.on('',   '--bulk-change') {
+      raise "Cannot use `bulk-change` in `merge`" if options[:merge]
+      options[:bulk_change] = true
+    }
     opt.on('-e', '--export')                      {    set_mode[:export]                                    }
     opt.on('',   '--split')                       {|v| split = true                                         }
     opt.on('',   '--split-with-dir')              {|v| split = :with_dir                                    }
