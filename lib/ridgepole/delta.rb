@@ -218,7 +218,7 @@ rename_column(#{table_name.inspect}, #{from_column_name.inspect}, #{to_column_na
 
     if @options[:bulk_change]
       buf.puts(<<-EOS)
-  t.change(#{from_column_name.inspect}, #{to_column_name.inspect})
+  t.change(#{column_name.inspect}, #{type.inspect}, #{options.inspect})
       EOS
     else
       buf.puts(<<-EOS)
