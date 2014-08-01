@@ -238,20 +238,20 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump.delete_empty_lines).to eq actual_dsl.strip_heredoc.strip.delete_empty_lines
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
-change_table("dept_emp", {:bulk => true}) do |t|
-  t.remove_index({:name=>"emp_no"})
-  t.index(["from_date"], {:name=>"emp_no", :using=>:btree})
-end
+        change_table("dept_emp", {:bulk => true}) do |t|
+          t.remove_index({:name=>"emp_no"})
+          t.index(["from_date"], {:name=>"emp_no", :using=>:btree})
+        end
 
-change_table("dept_manager", {:bulk => true}) do |t|
-  t.remove_index({:name=>"emp_no"})
-  t.index(["from_date"], {:name=>"emp_no", :using=>:btree})
-end
+        change_table("dept_manager", {:bulk => true}) do |t|
+          t.remove_index({:name=>"emp_no"})
+          t.index(["from_date"], {:name=>"emp_no", :using=>:btree})
+        end
 
-change_table("salaries", {:bulk => true}) do |t|
-  t.remove_index({:name=>"emp_no"})
-  t.index(["from_date"], {:name=>"emp_no", :using=>:btree})
-end
+        change_table("salaries", {:bulk => true}) do |t|
+          t.remove_index({:name=>"emp_no"})
+          t.index(["from_date"], {:name=>"emp_no", :using=>:btree})
+        end
       RUBY
 
       # XXX: Can not add an index of the same name

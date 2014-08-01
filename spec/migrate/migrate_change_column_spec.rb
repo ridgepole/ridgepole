@@ -165,14 +165,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
-change_table("employee_clubs", {:bulk => true}) do |t|
-  t.change("club_id", :integer, {:unsigned=>false, :null=>true})
-end
+        change_table("employee_clubs", {:bulk => true}) do |t|
+          t.change("club_id", :integer, {:unsigned=>false, :null=>true})
+        end
 
-change_table("employees", {:bulk => true}) do |t|
-  t.change("last_name", :string, {:limit=>20, :default=>"XXX", :null=>false, :unsigned=>false})
-  t.change("gender", :string, {:limit=>2, :null=>false, :unsigned=>false})
-end
+        change_table("employees", {:bulk => true}) do |t|
+          t.change("last_name", :string, {:limit=>20, :default=>"XXX", :null=>false, :unsigned=>false})
+          t.change("gender", :string, {:limit=>2, :null=>false, :unsigned=>false})
+        end
       RUBY
       delta.migrate
       expect(subject.dump).to eq expected_dsl.strip_heredoc.strip.gsub(/(\s*,\s*unsigned: false)?\s*,\s*null: true/, '')

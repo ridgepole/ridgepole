@@ -105,17 +105,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump.delete_empty_lines).to eq actual_dsl.strip_heredoc.strip.delete_empty_lines
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
-change_table("clubs", {:bulk => true}) do |t|
-  t.index(["name"], {:name=>"idx_name", :unique=>true, :using=>:btree})
-end
+        change_table("clubs", {:bulk => true}) do |t|
+          t.index(["name"], {:name=>"idx_name", :unique=>true, :using=>:btree})
+        end
 
-change_table("employee_clubs", {:bulk => true}) do |t|
-  t.index(["emp_no", "club_id"], {:name=>"idx_emp_no_club_id", :using=>:btree})
-end
+        change_table("employee_clubs", {:bulk => true}) do |t|
+          t.index(["emp_no", "club_id"], {:name=>"idx_emp_no_club_id", :using=>:btree})
+        end
 
-change_table("titles", {:bulk => true}) do |t|
-  t.index(["emp_no"], {:name=>"emp_no", :using=>:btree})
-end
+        change_table("titles", {:bulk => true}) do |t|
+          t.index(["emp_no"], {:name=>"emp_no", :using=>:btree})
+        end
       RUBY
       delta.migrate
       expect(subject.dump.delete_empty_lines).to eq expected_dsl.strip_heredoc.strip.delete_empty_lines
