@@ -162,5 +162,23 @@ describe 'Ridgepole::Client#diff -> migrate' do
         remove_column("employees", "updated_at")
       RUBY
     }
+
+    it {
+      delta = client(:bulk_change => true).diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
+        change_table("employee_clubs", {:bulk => true}) do |t|
+          t.column("any_col", :string, {:null=>false, :after=>"club_id"})
+        end
+
+        change_table("employees", {:bulk => true}) do |t|
+          t.column("age", :integer, {:unsigned=>true, :null=>false, :after=>"hire_date"})
+          t.column("updated_at", :date, {:after=>"age"})
+        end
+      RUBY
+      delta.migrate
+      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
+    }
   end
 end
