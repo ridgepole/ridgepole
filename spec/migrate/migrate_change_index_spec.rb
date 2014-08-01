@@ -1,5 +1,74 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when add column' do
+  context 'when create index' do
+    let(:dsl) {
+      <<-RUBY
+        create_table "clubs", force: true do |t|
+          t.string "name", default: "", null: false
+        end
+
+        add_index "clubs", ["name"], name: "idx_name", unique: true, using: :btree
+
+        create_table "departments", primary_key: "dept_no", force: true do |t|
+          t.string "dept_name", limit: 40, null: false
+        end
+
+        add_index "departments", ["dept_name"], name: "dept_name", unique: true, using: :btree
+
+        create_table "dept_emp", id: false, force: true do |t|
+          t.integer "emp_no",              null: false
+          t.string  "dept_no",   limit: 4, null: false
+          t.date    "from_date",           null: false
+          t.date    "to_date",             null: false
+        end
+
+        add_index "dept_emp", ["dept_no"], name: "dept_no", using: :btree
+        add_index "dept_emp", ["emp_no"], name: "emp_no", using: :btree
+
+        create_table "dept_manager", id: false, force: true do |t|
+          t.string  "dept_no",   limit: 4, null: false
+          t.integer "emp_no",              null: false
+          t.date    "from_date",           null: false
+          t.date    "to_date",             null: false
+        end
+
+        add_index "dept_manager", ["dept_no"], name: "dept_no", using: :btree
+        add_index "dept_manager", ["emp_no"], name: "emp_no", using: :btree
+
+        create_table "employee_clubs", force: true do |t|
+          t.integer "emp_no",  unsigned: true, null: false
+          t.integer "club_id", unsigned: true, null: false
+        end
+
+        add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_emp_no_club_id", using: :btree
+
+        create_table "employees", primary_key: "emp_no", force: true do |t|
+          t.date   "birth_date",            null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name",  limit: 16, null: false
+          t.string "gender",     limit: 1,  null: false
+          t.date   "hire_date",             null: false
+        end
+
+        create_table "salaries", id: false, force: true do |t|
+          t.integer "emp_no",    null: false
+          t.integer "salary",    null: false
+          t.date    "from_date", null: false
+          t.date    "to_date",   null: false
+        end
+
+        add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
+
+        create_table "titles", id: false, force: true do |t|
+          t.integer "emp_no",               null: false
+          t.string  "title",     limit: 50, null: false
+          t.date    "from_date",            null: false
+          t.date    "to_date"
+        end
+
+        add_index "titles", ["emp_no"], name: "emp_no", using: :btree
+      RUBY
+    }
+
     let(:actual_dsl) {
       <<-RUBY
         create_table "clubs", force: true do |t|
@@ -91,7 +160,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "dept_emp", ["dept_no"], name: "dept_no", using: :btree
-        add_index "dept_emp", ["emp_no"], name: "emp_no", using: :btree
+        add_index "dept_emp", ["from_date"], name: "emp_no", using: :btree
 
         create_table "dept_manager", id: false, force: true do |t|
           t.string  "dept_no",   limit: 4, null: false
@@ -101,24 +170,21 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "dept_manager", ["dept_no"], name: "dept_no", using: :btree
-        add_index "dept_manager", ["emp_no"], name: "emp_no", using: :btree
+        add_index "dept_manager", ["from_date"], name: "emp_no", using: :btree
 
         create_table "employee_clubs", force: true do |t|
           t.integer "emp_no",  unsigned: true, null: false
           t.integer "club_id", unsigned: true, null: false
-          t.string  "any_col",                 null: false
         end
 
         add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_emp_no_club_id", using: :btree
 
         create_table "employees", primary_key: "emp_no", force: true do |t|
-          t.date    "birth_date",                            null: false
-          t.string  "first_name", limit: 14,                 null: false
-          t.string  "last_name",  limit: 16,                 null: false
-          t.string  "gender",     limit: 1,                  null: false
-          t.date    "hire_date",                             null: false
-          t.integer "age",                   unsigned: true, null: false
-          t.date    "updated_at"
+          t.date   "birth_date",            null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name",  limit: 16, null: false
+          t.string "gender",     limit: 1,  null: false
+          t.date   "hire_date",             null: false
         end
 
         create_table "salaries", id: false, force: true do |t|
@@ -128,7 +194,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date",   null: false
         end
 
-        add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
+        add_index "salaries", ["from_date"], name: "emp_no", using: :btree
 
         create_table "titles", id: false, force: true do |t|
           t.integer "emp_no",               null: false
@@ -147,38 +213,51 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump.delete_empty_lines).to eq actual_dsl.strip_heredoc.strip.delete_empty_lines
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
+      expect(subject.dump.delete_empty_lines).to eq expected_dsl.strip_heredoc.strip.delete_empty_lines
     }
 
     it {
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
       expect(delta.differ?).to be_truthy
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
-        remove_column("employee_clubs", "any_col")
+        remove_index("dept_emp", {:name=>"emp_no"})
+        add_index("dept_emp", ["emp_no"], {:name=>"emp_no", :using=>:btree})
 
-        remove_column("employees", "age")
-        remove_column("employees", "updated_at")
+        remove_index("dept_manager", {:name=>"emp_no"})
+        add_index("dept_manager", ["emp_no"], {:name=>"emp_no", :using=>:btree})
+
+        remove_index("salaries", {:name=>"emp_no"})
+        add_index("salaries", ["emp_no"], {:name=>"emp_no", :using=>:btree})
       RUBY
     }
 
     it {
       delta = client(:bulk_change => true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump.delete_empty_lines).to eq actual_dsl.strip_heredoc.strip.delete_empty_lines
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
-        change_table("employee_clubs", {:bulk => true}) do |t|
-          t.column("any_col", :string, {:null=>false, :after=>"club_id"})
+        change_table("dept_emp", {:bulk => true}) do |t|
+          t.remove_index({:name=>"emp_no"})
+          t.index(["from_date"], {:name=>"emp_no", :using=>:btree})
         end
 
-        change_table("employees", {:bulk => true}) do |t|
-          t.column("age", :integer, {:unsigned=>true, :null=>false, :after=>"hire_date"})
-          t.column("updated_at", :date, {:after=>"age"})
+        change_table("dept_manager", {:bulk => true}) do |t|
+          t.remove_index({:name=>"emp_no"})
+          t.index(["from_date"], {:name=>"emp_no", :using=>:btree})
+        end
+
+        change_table("salaries", {:bulk => true}) do |t|
+          t.remove_index({:name=>"emp_no"})
+          t.index(["from_date"], {:name=>"emp_no", :using=>:btree})
         end
       RUBY
-      delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
+
+      # XXX: Can not add an index of the same name
+      expect {
+        delta.migrate
+      }.to raise_error(/Index name 'emp_no' on table 'dept_emp' already exists/)
     }
   end
 end

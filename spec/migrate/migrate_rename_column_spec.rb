@@ -160,6 +160,27 @@ describe 'Ridgepole::Client#diff -> migrate' do
        rename_column("employees", "gender2", "gender")
       RUBY
     }
+
+    it {
+      delta = client(:bulk_change => true).diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
+        change_table("dept_emp", {:bulk => true}) do |t|
+          t.rename("from_date", "from_date2")
+        end
+
+        change_table("dept_manager", {:bulk => true}) do |t|
+          t.rename("to_date", "to_date2")
+        end
+
+        change_table("employees", {:bulk => true}) do |t|
+          t.rename("gender", "gender2")
+        end
+      RUBY
+      delta.migrate
+      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip.gsub(/\s*,\s*renamed_from:.*$/, '')
+    }
   end
 
   context 'when rename column (not found)' do

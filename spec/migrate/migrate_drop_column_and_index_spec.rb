@@ -144,5 +144,36 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate(:noop => true)
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
     }
+
+    it {
+      delta = client(:bulk_change => true).diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
+change_table("dept_emp", {:bulk => true}) do |t|
+  t.remove("emp_no")
+  t.remove("from_date")
+  t.remove("to_date")
+end
+
+change_table("dept_manager", {:bulk => true}) do |t|
+  t.remove("emp_no")
+  t.remove("from_date")
+  t.remove("to_date")
+end
+
+change_table("employee_clubs", {:bulk => true}) do |t|
+  t.remove("club_id")
+end
+
+change_table("employees", {:bulk => true}) do |t|
+  t.remove("last_name")
+  t.remove("gender")
+  t.remove("hire_date")
+end
+      RUBY
+      delta.migrate
+      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
+    }
   end
 end

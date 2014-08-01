@@ -99,5 +99,26 @@ describe 'Ridgepole::Client#diff -> migrate' do
         add_index("titles", ["emp_no"], {:name=>"emp_no", :using=>:btree})
       RUBY
     }
+
+    it {
+      delta = client(:bulk_change => true).diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
+        change_table("clubs", {:bulk => true}) do |t|
+          t.remove_index({:name=>"idx_name"})
+        end
+
+        change_table("employee_clubs", {:bulk => true}) do |t|
+          t.remove_index({:name=>"idx_emp_no_club_id"})
+        end
+
+        change_table("titles", {:bulk => true}) do |t|
+          t.remove_index({:name=>"emp_no"})
+        end
+      RUBY
+      delta.migrate
+      expect(subject.dump.each_line.select {|i| i !~ /\A\Z/ }.join).to eq expected_dsl.strip_heredoc.strip.each_line.select {|i| i !~ /\A\Z/ }.join
+    }
   end
 end
