@@ -136,8 +136,12 @@ create_table(#{table_name.inspect}, #{options.inspect}) do |t|
 end
     EOS
 
-    indices.each do |index_name, index_attrs|
-      append_add_index(table_name, index_name, index_attrs, buf)
+    unless indices.empty?
+      append_change_table(table_name, buf) do
+        indices.each do |index_name, index_attrs|
+          append_add_index(table_name, index_name, index_attrs, buf)
+        end
+      end
     end
 
     buf.puts
@@ -160,11 +164,18 @@ drop_table(#{table_name.inspect})
   end
 
   def append_change(table_name, attrs, buf)
-    buf.puts "change_table(#{table_name.inspect}, {:bulk => true}) do |t|" if @options[:bulk_change]
-    append_change_definition(table_name, attrs[:definition] || {}, buf)
-    append_change_indices(table_name, attrs[:indices] || {}, buf)
-    buf.puts 'end' if @options[:bulk_change]
+    append_change_table(table_name, buf) do
+      append_change_definition(table_name, attrs[:definition] || {}, buf)
+      append_change_indices(table_name, attrs[:indices] || {}, buf)
+    end
+
     buf.puts
+  end
+
+  def append_change_table(table_name, buf)
+    buf.puts "change_table(#{table_name.inspect}, {:bulk => true}) do |t|" if @options[:bulk_change]
+    yield
+    buf.puts 'end' if @options[:bulk_change]
   end
 
   def append_change_definition(table_name, delta, buf)

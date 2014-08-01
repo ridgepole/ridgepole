@@ -100,5 +100,32 @@ describe 'Ridgepole::Client#diff -> migrate' do
         CREATE  INDEX `emp_no` USING btree ON `titles` (`emp_no`)
       SQL
     }
+
+    it {
+      delta = client(:bulk_change => true).diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      sql = delta.migrate(:noop => true)
+      expect(subject.dump).to eq actual_dsl
+
+      sql = sql.each_line.map {|i| i.strip }.join("\n")
+
+      expect(sql).to eq <<-SQL.strip_heredoc.strip
+        CREATE TABLE `clubs` (`id` int(10) unsigned DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255) DEFAULT '' NOT NULL) ENGINE=InnoDB
+        ALTER TABLE `clubs` ADD UNIQUE INDEX idx_name (`name`)
+        CREATE TABLE `departments` (`dept_no` int(10) unsigned DEFAULT NULL auto_increment PRIMARY KEY, `dept_name` varchar(40) NOT NULL) ENGINE=InnoDB
+        ALTER TABLE `departments` ADD UNIQUE INDEX dept_name (`dept_name`)
+        CREATE TABLE `dept_emp` (`emp_no` int(10) NOT NULL, `dept_no` varchar(4) NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) ENGINE=InnoDB
+        ALTER TABLE `dept_emp` ADD  INDEX dept_no (`dept_no`), ADD  INDEX emp_no (`emp_no`)
+        CREATE TABLE `dept_manager` (`dept_no` varchar(4) NOT NULL, `emp_no` int(10) NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) ENGINE=InnoDB
+        ALTER TABLE `dept_manager` ADD  INDEX dept_no (`dept_no`), ADD  INDEX emp_no (`emp_no`)
+        CREATE TABLE `employee_clubs` (`id` int(10) unsigned DEFAULT NULL auto_increment PRIMARY KEY, `emp_no` int(10) unsigned NOT NULL, `club_id` int(10) unsigned NOT NULL) ENGINE=InnoDB
+        ALTER TABLE `employee_clubs` ADD  INDEX idx_emp_no_club_id (`emp_no`, `club_id`)
+        CREATE TABLE `employees` (`emp_no` int(10) unsigned DEFAULT NULL auto_increment PRIMARY KEY, `birth_date` date NOT NULL, `first_name` varchar(14) NOT NULL, `last_name` varchar(16) NOT NULL, `gender` varchar(1) NOT NULL, `hire_date` date NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `salaries` (`emp_no` int(10) NOT NULL, `salary` int(10) NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) ENGINE=InnoDB
+        ALTER TABLE `salaries` ADD  INDEX emp_no (`emp_no`)
+        CREATE TABLE `titles` (`emp_no` int(10) NOT NULL, `title` varchar(50) NOT NULL, `from_date` date NOT NULL, `to_date` date) ENGINE=InnoDB
+        ALTER TABLE `titles` ADD  INDEX emp_no (`emp_no`)
+      SQL
+    }
   end
 end
