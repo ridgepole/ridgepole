@@ -160,7 +160,7 @@ drop_table(#{table_name.inspect})
   end
 
   def append_change(table_name, attrs, buf)
-    buf.puts "change_table((#{table_name.inspect}, {:bulk => true}) do |t|" if @options[:bulk_change]
+    buf.puts "change_table(#{table_name.inspect}, {:bulk => true}) do |t|" if @options[:bulk_change]
     append_change_definition(table_name, attrs[:definition] || {}, buf)
     append_change_indices(table_name, attrs[:indices] || {}, buf)
     buf.puts 'end' if @options[:bulk_change]
