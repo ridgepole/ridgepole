@@ -31,6 +31,7 @@ Usage: ridgepole [options]
     -f, --file FILE
         --dry-run
         --table-options OPTIONS
+        --bulk-change
     -e, --export
         --split
         --split-with-dir
