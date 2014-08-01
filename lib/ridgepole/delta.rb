@@ -160,8 +160,10 @@ drop_table(#{table_name.inspect})
   end
 
   def append_change(table_name, attrs, buf)
+    buf.puts "change_table((#{table_name.inspect}, {:bulk => true}) do |t|" if @options[:bulk_change]
     append_change_definition(table_name, attrs[:definition] || {}, buf)
     append_change_indices(table_name, attrs[:indices] || {}, buf)
+    buf.puts 'end' if @options[:bulk_change]
     buf.puts
   end
 
@@ -187,30 +189,54 @@ drop_table(#{table_name.inspect})
     type = attrs.fetch(:type)
     options = attrs[:options] || {}
 
-    buf.puts(<<-EOS)
+    if @options[:bulk_change]
+      buf.puts(<<-EOS)
+  t.column(#{column_name.inspect}, #{type.inspect}, #{options.inspect})
+      EOS
+    else
+      buf.puts(<<-EOS)
 add_column(#{table_name.inspect}, #{column_name.inspect}, #{type.inspect}, #{options.inspect})
-    EOS
+      EOS
+    end
   end
 
   def append_rename_column(table_name, to_column_name, from_column_name, buf)
-    buf.puts(<<-EOS)
+    if @options[:bulk_change]
+      buf.puts(<<-EOS)
+  t.rename(#{from_column_name.inspect}, #{to_column_name.inspect})
+      EOS
+    else
+      buf.puts(<<-EOS)
 rename_column(#{table_name.inspect}, #{from_column_name.inspect}, #{to_column_name.inspect})
-    EOS
+      EOS
+    end
   end
 
   def append_change_column(table_name, column_name, attrs, buf)
     type = attrs.fetch(:type)
     options = attrs[:options] || {}
 
-    buf.puts(<<-EOS)
+    if @options[:bulk_change]
+      buf.puts(<<-EOS)
+  t.change(#{from_column_name.inspect}, #{to_column_name.inspect})
+      EOS
+    else
+      buf.puts(<<-EOS)
 change_column(#{table_name.inspect}, #{column_name.inspect}, #{type.inspect}, #{options.inspect})
-    EOS
+      EOS
+    end
   end
 
   def append_remove_column(table_name, column_name, attrs, buf)
-    buf.puts(<<-EOS)
+    if @options[:bulk_change]
+      buf.puts(<<-EOS)
+  t.remove(#{column_name.inspect})
+      EOS
+    else
+      buf.puts(<<-EOS)
 remove_column(#{table_name.inspect}, #{column_name.inspect})
-    EOS
+      EOS
+    end
   end
 
   def append_change_indices(table_name, delta, buf)
@@ -227,9 +253,15 @@ remove_column(#{table_name.inspect}, #{column_name.inspect})
     column_name = attrs.fetch(:column_name)
     options = attrs[:options] || {}
 
-    buf.puts(<<-EOS)
+    if @options[:bulk_change]
+      buf.puts(<<-EOS)
+  t.index(#{column_name.inspect}, #{options.inspect})
+      EOS
+    else
+      buf.puts(<<-EOS)
 add_index(#{table_name.inspect}, #{column_name.inspect}, #{options.inspect})
-    EOS
+      EOS
+    end
   end
 
   def append_remove_index(table_name, index_name, attrs, buf)
@@ -237,8 +269,14 @@ add_index(#{table_name.inspect}, #{column_name.inspect}, #{options.inspect})
     options = attrs[:options] || {}
     target = options[:name] ? {:name => options[:name]} : column_name
 
-    buf.puts(<<-EOS)
+    if @options[:bulk_change]
+      buf.puts(<<-EOS)
+  t.remove_index(#{target.inspect})
+      EOS
+    else
+      buf.puts(<<-EOS)
 remove_index(#{table_name.inspect}, #{target.inspect})
-    EOS
+      EOS
+    end
   end
 end
