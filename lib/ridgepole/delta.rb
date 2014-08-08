@@ -59,7 +59,7 @@ class Ridgepole::Delta
         end
 
         Ridgepole::ExecuteExpander.without_operation(callback) do
-          eval_script(script)
+          eval_script(script, buf)
         end
 
         buf.string.strip
@@ -71,12 +71,36 @@ class Ridgepole::Delta
     end
   end
 
-  def eval_script(script)
+  def eval_script(script, out = $stdout)
     begin
-      ActiveRecord::Schema.new.instance_eval(script, SCRIPT_NAME, 1)
+      with_pre_post_query(out) do
+        ActiveRecord::Schema.new.instance_eval(script, SCRIPT_NAME, 1)
+      end
     rescue => e
       raise_exception(script, e)
     end
+  end
+
+  def with_pre_post_query(out = $stdout)
+    if (pre_query = @options[:pre_query])
+      if options[:noop]
+        out.puts(pre_query)
+      else
+        ActiveRecord::Base.connection.execute(pre_query)
+      end
+    end
+
+    retval = yield
+
+    if (post_query = @options[:post_query])
+      if options[:noop]
+        out.puts(post_query)
+      else
+        ActiveRecord::Base.connection.execute(pre_query)
+      end
+    end
+
+    return retval
   end
 
   def raise_exception(script, org)
