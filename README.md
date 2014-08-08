@@ -32,6 +32,8 @@ Usage: ridgepole [options]
         --dry-run
         --table-options OPTIONS
         --bulk-change
+        --pre-query QUERY
+        --post-query QUERY
     -e, --export
         --split
         --split-with-dir
