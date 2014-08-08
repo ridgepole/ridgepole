@@ -83,7 +83,7 @@ class Ridgepole::Delta
 
   def with_pre_post_query(out = $stdout)
     if (pre_query = @options[:pre_query])
-      if options[:noop]
+      if @options[:noop]
         out.puts(pre_query)
       else
         ActiveRecord::Base.connection.execute(pre_query)
@@ -93,10 +93,10 @@ class Ridgepole::Delta
     retval = yield
 
     if (post_query = @options[:post_query])
-      if options[:noop]
+      if @options[:noop]
         out.puts(post_query)
       else
-        ActiveRecord::Base.connection.execute(pre_query)
+        ActiveRecord::Base.connection.execute(post_query)
       end
     end
 
