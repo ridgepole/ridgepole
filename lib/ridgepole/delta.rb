@@ -59,7 +59,7 @@ class Ridgepole::Delta
         end
 
         Ridgepole::ExecuteExpander.without_operation(callback) do
-          eval_script(script, buf)
+          eval_script(script, options.merge(:out => buf))
         end
 
         buf.string.strip
@@ -67,13 +67,13 @@ class Ridgepole::Delta
         ActiveRecord::Migration.disable_logging = disable_logging_orig
       end
     else
-      eval_script(script)
+      eval_script(script, options)
     end
   end
 
-  def eval_script(script, out = $stdout)
+  def eval_script(script, options = {})
     begin
-      with_pre_post_query(out) do
+      with_pre_post_query(options) do
         ActiveRecord::Schema.new.instance_eval(script, SCRIPT_NAME, 1)
       end
     rescue => e
@@ -81,9 +81,11 @@ class Ridgepole::Delta
     end
   end
 
-  def with_pre_post_query(out = $stdout)
+  def with_pre_post_query(options = {})
+    out = options[:out] || $stdout
+
     if (pre_query = @options[:pre_query])
-      if @options[:noop]
+      if options[:noop]
         out.puts(pre_query)
       else
         ActiveRecord::Base.connection.execute(pre_query)
@@ -93,7 +95,7 @@ class Ridgepole::Delta
     retval = yield
 
     if (post_query = @options[:post_query])
-      if @options[:noop]
+      if options[:noop]
         out.puts(post_query)
       else
         ActiveRecord::Base.connection.execute(post_query)
