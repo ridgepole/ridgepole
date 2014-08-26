@@ -46,7 +46,13 @@ class Ridgepole::DSLParser
 
     def self.eval(dsl, opts = {})
       ctx = self.new(opts)
-      ctx.instance_eval(dsl)
+
+      if opts[:path]
+        ctx.instance_eval(dsl, opts[:path])
+      else
+        ctx.instance_eval(dsl)
+      end
+
       ctx.__definition
     end
 
@@ -83,9 +89,9 @@ class Ridgepole::DSLParser
       schemafile = File.join(@__working_dir, file)
 
       if File.exist?(schemafile)
-        instance_eval(File.read(schemafile))
+        instance_eval(File.read(schemafile), schemafile)
       elsif File.exist?(schemafile + '.rb')
-        instance_eval(File.read(schemafile + '.rb'))
+        instance_eval(File.read(schemafile + '.rb'), schemafile + '.rb')
       else
         Kernel.require(file)
       end
