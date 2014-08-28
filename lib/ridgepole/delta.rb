@@ -230,6 +230,10 @@ drop_table(#{table_name.inspect})
     type = attrs.fetch(:type)
     options = attrs[:options] || {}
 
+    if @options[:default_int_limit] and type == :integer
+      options[:limit] ||= @options[:default_int_limit]
+    end
+
     if @options[:bulk_change]
       buf.puts(<<-EOS)
   t.column(#{column_name.inspect}, #{type.inspect}, #{options.inspect})
