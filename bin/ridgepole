@@ -51,6 +51,7 @@ ARGV.options do |opt|
       raise "Cannot use `bulk-change` in `merge`" if options[:merge]
       options[:bulk_change] = true
     }
+    opt.on('',   '--default-int-limit', Integer)  {|v| options[:default_int_limit] = v                      }
     opt.on('',   '--pre-query QUERY')             {|v| options[:pre_query] = v                              }
     opt.on('',   '--post-query QUERY')            {|v| options[:post_query] = v                             }
     opt.on('-e', '--export')                      {    set_mode[:export]                                    }
