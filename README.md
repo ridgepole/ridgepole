@@ -32,6 +32,7 @@ Usage: ridgepole [options]
         --dry-run
         --table-options OPTIONS
         --bulk-change
+        --default-int-limit LIMIT
         --pre-query QUERY
         --post-query QUERY
     -e, --export
