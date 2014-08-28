@@ -71,6 +71,7 @@ class Ridgepole::DSLParser
     end
 
     def add_index(table_name, column_name, options = {})
+      column_name = [column_name].flatten
       @__definition[table_name] ||= {}
       @__definition[table_name][:indices] ||= {}
       idx = options[:name] || column_name
