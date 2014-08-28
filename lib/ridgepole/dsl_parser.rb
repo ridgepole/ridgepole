@@ -61,6 +61,11 @@ class Ridgepole::DSLParser
     def create_table(table_name, options = {})
       table_name = table_name.to_s
       table_definition = TableDefinition.new
+
+      [:primary_key].each do |key|
+        options[key] = options[key].to_s if options[key]
+      end
+
       yield(table_definition)
       @__definition[table_name] ||= {}
 
@@ -76,9 +81,10 @@ class Ridgepole::DSLParser
     def add_index(table_name, column_name, options = {})
       table_name = table_name.to_s
       column_name = [column_name].flatten.map {|i| i.to_s }
+      options[:name] = options[:name].to_s if options[:name]
       @__definition[table_name] ||= {}
       @__definition[table_name][:indices] ||= {}
-      idx = options[:name] ? options[:name].to_s : column_name
+      idx = options[:name] || column_name
 
       if @__definition[table_name][:indices][idx]
         raise "Index `#{table_name}(#{idx})` already defined"
