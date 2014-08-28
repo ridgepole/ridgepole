@@ -153,6 +153,10 @@ create_table(#{table_name.inspect}, #{options.inspect}) do |t|
       column_type = column_attrs.fetch(:type)
       column_options = column_attrs[:options] || {}
 
+      if @options[:default_int_limit] and column_type == :integer
+        column_options[:limit] ||= @options[:default_int_limit]
+      end
+
       buf.puts(<<-EOS)
   t.#{column_type}(#{column_name.inspect}, #{column_options.inspect})
       EOS
@@ -225,6 +229,10 @@ drop_table(#{table_name.inspect})
   def append_add_column(table_name, column_name, attrs, buf)
     type = attrs.fetch(:type)
     options = attrs[:options] || {}
+
+    if @options[:default_int_limit] and type == :integer
+      options[:limit] ||= @options[:default_int_limit]
+    end
 
     if @options[:bulk_change]
       buf.puts(<<-EOS)
