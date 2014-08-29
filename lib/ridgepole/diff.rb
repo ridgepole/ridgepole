@@ -177,7 +177,21 @@ class Ridgepole::Diff
     indices_delta = {}
 
     to.each do |index_name, to_attrs|
-      if (from_attrs = from.delete(index_name))
+      if index_name.kind_of?(Array)
+        from_index_name, from_attrs = from.find {|name, attrs| attrs[:column_name] == index_name }
+
+        if from_attrs
+          from.delete(from_index_name)
+          from_attrs[:options].delete(:name)
+        end
+      else
+        from_attrs = from.delete(index_name)
+      end
+
+      if from_attrs
+        normalize_index_options!(from_attrs[:options])
+        normalize_index_options!(to_attrs[:options])
+
         if from_attrs != to_attrs
           indices_delta[:add] ||= {}
           indices_delta[:add][index_name] = to_attrs
@@ -222,8 +236,14 @@ class Ridgepole::Diff
   def normalize_column_options!(opts)
     opts[:null] = true unless opts.has_key?(:null)
 
+    # XXX: MySQL only?
     unless @options[:disable_mysql_unsigned]
       opts[:unsigned] = false unless opts.has_key?(:unsigned)
     end
+  end
+
+  def normalize_index_options!(opts)
+    # XXX: MySQL only?
+    opts[:using] = :btree unless opts.has_key?(:using)
   end
 end
