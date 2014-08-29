@@ -116,7 +116,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       delta = subject.diff(dsl)
-      puts delta.script
       expect(delta.differ?).to be_truthy
       expect(subject.dump.delete_empty_lines).to eq actual_dsl.strip_heredoc.strip.delete_empty_lines
       delta.migrate
