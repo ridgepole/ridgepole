@@ -80,6 +80,12 @@ ARGV.options do |opt|
     opt.on(''  , '--log-file LOG_FILE')           {|v| options[:log_file] = v                               }
     opt.on(''  , '--verbose')                     {    Ridgepole::Logger.verbose = true                     }
     opt.on(''  , '--debug')                       {    options[:debug] = true                               }
+
+    opt.on('-v', '--version') {
+      puts opt.ver
+      exit
+    }
+
     opt.parse!
 
     if not mode or ([:apply, :export].include?(mode) and not config) or  (options[:with_apply] and not config)
