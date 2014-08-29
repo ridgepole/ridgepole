@@ -174,6 +174,7 @@ remove_column("articles", "author")
 ## Demo
 
 * [asciinema.org/a/9349](https://asciinema.org/a/9349)
+* [asciinema.org/a/11788](https://asciinema.org/a/11788)
 
 ## Example project
 
