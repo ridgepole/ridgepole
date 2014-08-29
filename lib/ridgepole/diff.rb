@@ -236,12 +236,14 @@ class Ridgepole::Diff
   def normalize_column_options!(opts)
     opts[:null] = true unless opts.has_key?(:null)
 
+    # XXX: MySQL only?
     unless @options[:disable_mysql_unsigned]
       opts[:unsigned] = false unless opts.has_key?(:unsigned)
     end
   end
 
   def normalize_index_options!(opts)
-    opts[:using] = :btree unless opts.has_key?(:btree)
+    # XXX: MySQL only?
+    opts[:using] = :btree unless opts.has_key?(:using)
   end
 end
