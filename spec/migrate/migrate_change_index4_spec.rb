@@ -22,12 +22,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date",   null: false
         end
 
-        add_index "salaries", ["salary", "id"], name: "emp_no", using: :hash
+        add_index "salaries", ["salary", "id"], name: "emp_no", using: :btree
       RUBY
     }
 
     before { subject.diff(actual_dsl).migrate }
-    subject { client(:table_options => 'ENGINE=MEMORY') }
+    subject { client }
 
     it {
       delta = subject.diff(expected_dsl)
@@ -61,12 +61,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date",   null: false
         end
 
-        add_index "salaries", ["salary"], name: "emp_no", using: :hash
+        add_index "salaries", ["salary"], name: "emp_no", using: :btree
       RUBY
     }
 
     before { subject.diff(actual_dsl).migrate }
-    subject { client(:table_options => 'ENGINE=MEMORY') }
+    subject { client }
 
     it {
       delta = subject.diff(expected_dsl)
@@ -77,7 +77,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
-  context 'when change index (same name) (2)' do
+  context 'when change index (same name) (3)' do
     let(:actual_dsl) {
       <<-RUBY
         create_table "salaries", primary_key: "emp_no", force: true do |t|
@@ -98,12 +98,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date",   null: false
         end
 
-        add_index "salaries", ["from_date", "emp_no"], name: "emp_no", using: :hash
+        add_index "salaries", ["from_date", "emp_no"], name: "emp_no", using: :btree
       RUBY
     }
 
     before { subject.diff(actual_dsl).migrate }
-    subject { client(:table_options => 'ENGINE=MEMORY') }
+    subject { client }
 
     it {
       delta = subject.diff(expected_dsl)
