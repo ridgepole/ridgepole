@@ -166,7 +166,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
         change_table("employee_clubs", {:bulk => true}) do |t|
-          t.change("club_id", :integer, {:unsigned=>false, :null=>true})
+          t.change("club_id", :integer, {:unsigned=>false, :null=>true, :default=>nil})
         end
 
         change_table("employees", {:bulk => true}) do |t|

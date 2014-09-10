@@ -102,8 +102,8 @@ class Ridgepole::Diff
 
     to.each do |column_name, to_attrs|
       if (from_attrs = from.delete(column_name))
-        normalize_column_options!(from_attrs[:options])
-        normalize_column_options!(to_attrs[:options])
+        normalize_column_options!(from_attrs)
+        normalize_column_options!(to_attrs)
 
         if from_attrs != to_attrs
           definition_delta[:change] ||= {}
@@ -233,8 +233,20 @@ class Ridgepole::Diff
     end
   end
 
-  def normalize_column_options!(opts)
+  def normalize_column_options!(attrs)
+    opts = attrs[:options]
     opts[:null] = true unless opts.has_key?(:null)
+
+    # XXX: MySQL only?
+    case attrs[:type]
+    when :string
+      opts.delete(:limit) if opts[:limit] == 255
+    end
+
+    # XXX: MySQL only?
+    if not opts.has_key?(:default) and opts[:null]
+      opts[:default] = nil
+    end
 
     # XXX: MySQL only?
     unless @options[:disable_mysql_unsigned]

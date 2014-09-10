@@ -144,7 +144,7 @@ describe 'Ridgepole::Client.diff' do
       delta = subject.diff(actual_dsl, expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
-        change_column("employee_clubs", "club_id", :integer, {:unsigned=>false, :null=>true})
+        change_column("employee_clubs", "club_id", :integer, {:unsigned=>false, :null=>true, :default=>nil})
 
         change_column("employees", "last_name", :string, {:limit=>20, :default=>"XXX", :null=>false, :unsigned=>false})
         change_column("employees", "gender", :string, {:limit=>2, :null=>false, :unsigned=>false})
