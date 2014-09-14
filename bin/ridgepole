@@ -13,6 +13,7 @@ Version = Ridgepole::VERSION
 DEFAULT_FILENAME = 'Schemafile'
 
 config = nil
+env = 'development'
 mode = nil
 file = DEFAULT_FILENAME
 output_file = '-'
@@ -42,6 +43,7 @@ end
 ARGV.options do |opt|
   begin
     opt.on('-c', '--config CONF_OR_FILE')         {|v| config = v                                           }
+    opt.on('-E', '--env ENVIRONMENT')             {|v| env = v                                              }
     opt.on('-a', '--apply')                       {    set_mode[:apply]                                     }
     opt.on('-m', '--merge')                       {    set_mode[:apply]; options[:merge] = true             }
     opt.on('-f', '--file FILE')                   {|v| file = v                                             }
@@ -102,11 +104,7 @@ begin
   logger = Ridgepole::Logger.instance
   logger.set_debug(options[:debug])
 
-  if config
-    config = File.read(config) if File.exist?(config)
-    config = YAML.load(config)
-    client = Ridgepole::Client.new(config, options)
-  end
+  client = Ridgepole::Client.new(Ridgepole::Config.load(config, env), options) if config
 
   ActiveRecord::Base.logger = logger
 
