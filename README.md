@@ -26,6 +26,7 @@ Or install it yourself as:
 ```
 Usage: ridgepole [options]
     -c, --config CONF_OR_FILE
+    -E, --env ENVIRONMENT
     -a, --apply
     -m, --merge
     -f, --file FILE
@@ -48,6 +49,7 @@ Usage: ridgepole [options]
         --log-file LOG_FILE
         --verbose
         --debug
+    -v, --version
 ```
 
 ## Usage
