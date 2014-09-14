@@ -1,13 +1,9 @@
 describe Ridgepole::Config do
-  def strip_heredoc(str)
-    indent = str.lines.first.scan(/^ +/)[0].length
-    str.gsub(/^ {#{indent}}/m, '')
-  end
   subject { Ridgepole::Config.load(config, env) }
 
   context 'when passed toplevel yaml' do
     let(:config) {
-      strip_heredoc <<-YAML
+      <<-YAML.strip_heredoc
         adapter: mysql2
         encoding: utf8
         database: blog
@@ -25,7 +21,7 @@ describe Ridgepole::Config do
 
   context 'when passed dynamic yaml' do
     let(:config) {
-      strip_heredoc <<-YAML
+      <<-YAML.strip_heredoc
         adapter: mysql2
         encoding: utf8
         database: blog_<%= 1 + 2 %>
@@ -43,7 +39,7 @@ describe Ridgepole::Config do
 
   context 'when passed rails database.yml style yaml' do
     let(:config) {
-      strip_heredoc <<-YAML
+      <<-YAML.strip_heredoc
         development:
           adapter: sqlite
           database: db/sample.db
