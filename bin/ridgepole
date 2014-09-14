@@ -178,7 +178,12 @@ begin
     diff_files = diff_files.map do |file|
       if File.exist?(file)
         file_ext = File.extname(file)
-        %w(.yml .yaml).include?(file_ext) ? YAML.load_file(file) : File.read(file)
+
+        if %w(.yml .yaml).include?(file_ext)
+          Ridgepole::Config.load(file, env)
+        else
+          File.read(file)
+        end
       else
         YAML.load(file)
       end

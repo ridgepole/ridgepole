@@ -77,7 +77,7 @@ def default_cli_hook
       end
       class << self
         def diff(*args)
-          puts "Ridgepole::Client.diff"
+          puts "Ridgepole::Client.diff(\#{args.inspect})"
           Ridgepole::Delta.new
         end
         def dump(args)
