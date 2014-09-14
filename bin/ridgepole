@@ -5,6 +5,7 @@ require 'yaml'
 require 'optparse'
 require 'fileutils'
 require 'ridgepole'
+require 'ridgepole/cli/config'
 
 $stdout.sync = true
 $stderr.sync = true

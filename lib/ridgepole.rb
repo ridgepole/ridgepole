@@ -7,7 +7,6 @@ require 'active_support'
 require 'active_support/core_ext/string/strip'
 
 module Ridgepole; end
-require 'ridgepole/config'
 require 'ridgepole/client'
 require 'ridgepole/delta'
 require 'ridgepole/diff'
