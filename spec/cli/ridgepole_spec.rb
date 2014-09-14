@@ -116,6 +116,54 @@ describe 'ridgepole' do
       EOS
     end
 
+    it 'apply with conf file' do
+      Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
+        conf_file.puts <<-EOS.strip_heredoc
+          adapter: mysql2
+          database: ridgepole_test_for_conf_file
+        EOS
+        conf_file.flush
+
+        out, status = run_cli(:args => ['-c', conf_file.path, '-a', '--debug'])
+
+        expect(status.success?).to be_truthy
+        expect(out.strip).to eq <<-EOS.strip_heredoc.strip
+          Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, {:dry_run=>false, :debug=>true}])
+          Apply `Schemafile`
+          Ridgepole::Client#diff
+          Ridgepole::Delta#migrate
+          Ridgepole::Delta#differ?
+          No change
+        EOS
+      end
+    end
+
+    it 'apply with conf file (production)' do
+      Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
+        conf_file.puts <<-EOS.strip_heredoc
+          development:
+            adapter: mysql2
+            database: ridgepole_development
+          production:
+            adapter: mysql2
+            database: ridgepole_production
+        EOS
+        conf_file.flush
+
+        out, status = run_cli(:args => ['-c', conf_file.path, '-a', '--debug'])
+
+        expect(status.success?).to be_truthy
+        expect(out.strip).to eq <<-EOS.strip_heredoc.strip
+          Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_development"}, {:dry_run=>false, :debug=>true}])
+          Apply `Schemafile`
+          Ridgepole::Client#diff
+          Ridgepole::Delta#migrate
+          Ridgepole::Delta#differ?
+          No change
+        EOS
+      end
+    end
+
     it 'dry-run' do
       out, status = run_cli(:args => ['-c', conf, '-a', '--dry-run'])
 
