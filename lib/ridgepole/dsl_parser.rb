@@ -56,10 +56,12 @@ class Ridgepole::DSLParser
     end
 
     attr_reader :__definition
+    attr_reader :__execute
 
     def initialize(opts = {})
       @__working_dir = File.expand_path(opts[:path] ? File.dirname(opts[:path]) : Dir.pwd)
       @__definition = {}
+      @__execute = []
     end
 
     def self.eval(dsl, opts = {})
@@ -71,7 +73,7 @@ class Ridgepole::DSLParser
         ctx.instance_eval(dsl)
       end
 
-      ctx.__definition
+      [ctx.__definition, ctx.__execute]
     end
 
     def create_table(table_name, options = {})
@@ -123,6 +125,13 @@ class Ridgepole::DSLParser
         Kernel.require(file)
       end
     end
+
+    def execute(sql, name = nil, &cond)
+      @__execute << {
+        :sql => sql,
+        :condition => cond,
+      }
+    end
   end
 
   def initialize(options = {})
@@ -130,15 +139,15 @@ class Ridgepole::DSLParser
   end
 
   def parse(dsl, opts = {})
-    parsed = Context.eval(dsl, opts)
-    check_orphan_index(parsed)
-    parsed
+    definition, execute = Context.eval(dsl, opts)
+    check_orphan_index(definition)
+    [definition, execute]
   end
 
   private
 
-  def check_orphan_index(parsed)
-    parsed.each do |table_name, attrs|
+  def check_orphan_index(definition)
+    definition.each do |table_name, attrs|
       if attrs.length == 1 and attrs[:indices]
         raise "Table `#{table_name}` to create the index is not defined: #{attrs[:indices].keys.join(',')}"
       end

@@ -3,7 +3,7 @@ class Ridgepole::Diff
     @options = options
   end
 
-  def diff(from, to)
+  def diff(from, to, options = {})
     from = (from || {}).deep_dup
     to = (to || {}).deep_dup
 
@@ -35,6 +35,8 @@ class Ridgepole::Diff
         delta[:delete][table_name] = from_attrs
       end
     end
+
+    delta[:execute] = options[:execute]
 
     Ridgepole::Delta.new(delta, @options)
   end

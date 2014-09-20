@@ -37,6 +37,11 @@ class Ridgepole::Delta
       append_drop_table(table_name, attrs, buf)
     end
 
+    (@delta[:execute] || []).each do |exec|
+      sql, cond = exec.values_at(:sql, :condition)
+      append_execute(sql, cond, buf)
+    end
+
     buf.string.strip
   end
 
@@ -75,9 +80,38 @@ class Ridgepole::Delta
     begin
       with_pre_post_query(options) do
         ActiveRecord::Schema.new.instance_eval(script, SCRIPT_NAME, 1)
+        execute_sqls(options)
       end
     rescue => e
       raise_exception(script, e)
+    end
+  end
+
+  def execute_sqls(options = {})
+    es = @delta[:execute] || []
+    out = options[:out] || $stdout
+
+    es.each do |exec|
+      sql, cond = exec.values_at(:sql, :condition)
+      executable = false
+
+      begin
+        executable = cond.nil? || cond.call(ActiveRecord::Base.connection)
+      rescue => e
+        if options[:debug]
+          Ridgepole::Logger.instance.warn("[WARN] #{e.message}")
+        end
+
+        executable = false
+      end
+
+      next unless executable
+
+      if options[:noop]
+        out.puts(sql)
+      else
+        ActiveRecord::Base.connection.execute(sql)
+      end
     end
   end
 
@@ -323,5 +357,11 @@ add_index(#{table_name.inspect}, #{column_name.inspect}, #{options.inspect})
 remove_index(#{table_name.inspect}, #{target.inspect})
       EOS
     end
+  end
+
+  def append_execute(sql, cond, buf)
+    msg = "# #{sql}"
+    msg << ' /* with conditions */' if cond
+    buf.puts(msg)
   end
 end
