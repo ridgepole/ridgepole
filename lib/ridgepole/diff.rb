@@ -4,8 +4,8 @@ class Ridgepole::Diff
   end
 
   def diff(from, to)
-    from = (from || {}).dup
-    to = (to || {}).dup
+    from = (from || {}).deep_dup
+    to = (to || {}).deep_dup
 
     if @options[:reverse]
       from, to = to, from

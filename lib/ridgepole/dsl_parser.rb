@@ -40,16 +40,16 @@ class Ridgepole::DSLParser
 
       def timestamps(*args)
         options = {:null => false}.merge(args.extract_options!)
-        column(:created_at, :datetime, options.dup)
-        column(:updated_at, :datetime, options.dup)
+        column(:created_at, :datetime, options)
+        column(:updated_at, :datetime, options)
       end
 
       def references(*args)
         options = args.extract_options!
         polymorphic = options.delete(:polymorphic)
         args.each do |col|
-          column("#{col}_id", :integer, options.dup)
-          column("#{col}_type", :string, polymorphic.is_a?(Hash) ? polymorphic : options.dup) unless polymorphic.nil?
+          column("#{col}_id", :integer, options)
+          column("#{col}_type", :string, polymorphic.is_a?(Hash) ? polymorphic : options) unless polymorphic.nil?
         end
       end
       alias :belongs_to :references
