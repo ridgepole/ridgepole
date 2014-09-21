@@ -128,6 +128,25 @@ create_table "user_comments", force: true, renamed_from: "comments" do |t|
 end
 ```
 
+## Execute
+```sh
+create_table "authors", force: true do |t|
+  t.string "name", null: false
+end
+
+create_table "books", force: true do |t|
+  t.string  "title",                     null: false
+  t.integer "author_id", unsigned: true, null: false
+end
+
+add_index "books", ["author_id"], name: "idx_author_id", using: :btree
+
+execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)") do |c|
+  # Execute SQL only if there is no foreign key
+  c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = 'bookshelf' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?
+end
+```
+
 ## Diff
 ```sh
 $ ridgepole --diff file1.schema file2.schema
