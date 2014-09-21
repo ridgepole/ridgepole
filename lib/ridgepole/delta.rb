@@ -106,9 +106,13 @@ class Ridgepole::Delta
       begin
         executable = cond.nil? || cond.call(ActiveRecord::Base.connection)
       rescue => e
-        if options[:debug]
-          Ridgepole::Logger.instance.warn("[WARN] #{e.message}")
+        errmsg = "[WARN] `#{sql}` is not executed: #{e.message}"
+
+        if @options[:debug]
+          errmsg = ([errmsg] + e.backtrace).join("\n\tfrom ")
         end
+
+        Ridgepole::Logger.instance.warn(errmsg)
 
         executable = false
       end
