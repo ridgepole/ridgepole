@@ -34,7 +34,9 @@ set_mode = proc do |m|
 end
 
 def noop_migrate(delta)
-  puts delta.script + "\n\n"
+  unless delta.script.empty?
+    puts delta.script + "\n\n"
+  end
 
   migrated, out = delta.migrate(:noop => true)
 
