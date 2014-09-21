@@ -42,7 +42,11 @@ def noop_migrate(delta)
 
   if migrated
     out.each_line do |line|
-      puts line.strip.gsub(/([^\d])([(),])([^\d])/) { "#{$1}#{$2}\n#{$3}" }.each_line.map {|i| "# #{i.gsub(/^\s+/, '')}"}.join + "\n\n"
+      if line =~ /\A\s+/
+        puts "# #{line}"
+      else
+        puts line.strip.gsub(/([^\d])([(),])([^\d])/) { "#{$1}#{$2}\n#{$3}" }.each_line.map {|i| "# #{i.gsub(/^\s+/, '')}"}.join + "\n"
+      end
     end
   end
 

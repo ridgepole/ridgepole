@@ -203,12 +203,12 @@ describe 'ridgepole' do
           Ridgepole::Client#diff
           Ridgepole::Delta#differ?
           Ridgepole::Delta#script
+          Ridgepole::Delta#script
           create_table :table do
           end
 
           Ridgepole::Delta#migrate
           # create_table :table do
-
           # end
         EOS
       end
@@ -241,12 +241,12 @@ describe 'ridgepole' do
           Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
           Ridgepole::Delta#differ?
           Ridgepole::Delta#script
+          Ridgepole::Delta#script
           create_table :table do
           end
 
           Ridgepole::Delta#migrate
           # create_table :table do
-
           # end
         EOS
       end

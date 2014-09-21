@@ -119,9 +119,9 @@ class Ridgepole::Delta
 
       next unless executable
 
-      if options[:noop]
-        out.puts(sql)
-      else
+      out.puts(sql.strip_heredoc)
+
+      unless options[:noop]
         ActiveRecord::Base.connection.execute(sql)
       end
 
