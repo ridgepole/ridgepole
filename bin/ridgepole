@@ -36,9 +36,15 @@ end
 def noop_migrate(delta)
   puts delta.script + "\n\n"
 
-  delta.migrate(:noop => true).each_line do |line|
-    puts line.strip.gsub(/([^\d])([(),])([^\d])/) { "#{$1}#{$2}\n#{$3}" }.each_line.map {|i| "# #{i.gsub(/^\s+/, '')}"}.join + "\n\n"
+  migrated, out = delta.migrate(:noop => true)
+
+  if migrated
+    out.each_line do |line|
+      puts line.strip.gsub(/([^\d])([(),])([^\d])/) { "#{$1}#{$2}\n#{$3}" }.each_line.map {|i| "# #{i.gsub(/^\s+/, '')}"}.join + "\n\n"
+    end
   end
+
+  return migrated
 end
 
 ARGV.options do |opt|
@@ -161,17 +167,18 @@ begin
 
     dsl = File.read(file)
     delta = client.diff(dsl, :path => file)
+    differ = delta.differ?
 
     if options[:dry_run]
-      if delta.differ?
-        noop_migrate(delta)
+      if differ
+        differ = noop_migrate(delta)
       end
     else
       logger.verbose_info('# Update schema')
-      delta.migrate
+      differ, out = delta.migrate
     end
 
-    unless delta.differ?
+    unless differ
       logger.info('No change')
     end
   when :diff
@@ -193,15 +200,18 @@ begin
 
     if diff_with_apply
       logger.verbose_info('# Update schema')
+      differ = delta.differ?
 
-      if delta.differ?
-        delta.migrate
-      else
+      if differ
+        differ, out = delta.migrate
+      end
+
+      if differ
         logger.info('No change')
       end
     elsif delta.differ?
-      noop_migrate(delta)
-      exit_code = 1
+      differ = noop_migrate(delta)
+      exit_code = 1 if differ
     end
   end
 rescue => e

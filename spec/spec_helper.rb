@@ -51,7 +51,7 @@ def default_cli_hook
       end
       def migrate(*args)
         puts "Ridgepole::Delta#migrate"
-        "create_table :table do\\nend"
+        [#{differ}, "create_table :table do\\nend"]
       end
       def script
         puts "Ridgepole::Delta#script"

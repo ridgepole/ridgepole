@@ -110,8 +110,8 @@ describe 'ridgepole' do
         Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
         Apply `Schemafile`
         Ridgepole::Client#diff
-        Ridgepole::Delta#migrate
         Ridgepole::Delta#differ?
+        Ridgepole::Delta#migrate
         No change
       EOS
     end
@@ -131,8 +131,8 @@ describe 'ridgepole' do
           Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, {:dry_run=>false, :debug=>true}])
           Apply `Schemafile`
           Ridgepole::Client#diff
-          Ridgepole::Delta#migrate
           Ridgepole::Delta#differ?
+          Ridgepole::Delta#migrate
           No change
         EOS
       end
@@ -157,8 +157,8 @@ describe 'ridgepole' do
           Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_development"}, {:dry_run=>false, :debug=>true}])
           Apply `Schemafile`
           Ridgepole::Client#diff
-          Ridgepole::Delta#migrate
           Ridgepole::Delta#differ?
+          Ridgepole::Delta#migrate
           No change
         EOS
       end
@@ -172,7 +172,6 @@ describe 'ridgepole' do
         Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>true, :debug=>false}])
         Apply `Schemafile` (dry-run)
         Ridgepole::Client#diff
-        Ridgepole::Delta#differ?
         Ridgepole::Delta#differ?
         No change
       EOS
@@ -189,8 +188,8 @@ describe 'ridgepole' do
           Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
           Apply `Schemafile`
           Ridgepole::Client#diff
-          Ridgepole::Delta#migrate
           Ridgepole::Delta#differ?
+          Ridgepole::Delta#migrate
         EOS
       end
 
@@ -211,8 +210,6 @@ describe 'ridgepole' do
           # create_table :table do
 
           # end
-
-          Ridgepole::Delta#differ?
         EOS
       end
     end

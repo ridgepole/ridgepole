@@ -37,21 +37,19 @@ class Ridgepole::Delta
       append_drop_table(table_name, attrs, buf)
     end
 
-    (@delta[:execute] || []).each do |exec|
-      sql, cond = exec.values_at(:sql, :condition)
-      append_execute(sql, cond, buf)
-    end
-
     buf.string.strip
   end
 
   def differ?
-    not script.empty?
+    not script.empty? or not delta_execute.empty?
   end
 
   private
 
   def migrate0(options = {})
+    migrated = false
+    out = nil
+
     if options[:noop]
       disable_logging_orig = ActiveRecord::Migration.disable_logging
 
@@ -64,32 +62,42 @@ class Ridgepole::Delta
         end
 
         Ridgepole::ExecuteExpander.without_operation(callback) do
-          eval_script(script, options.merge(:out => buf))
+          migrated = eval_script(script, options.merge(:out => buf))
         end
 
-        buf.string.strip
+        out = buf.string.strip
       ensure
         ActiveRecord::Migration.disable_logging = disable_logging_orig
       end
     else
-      eval_script(script, options)
+      migrated = eval_script(script, options)
     end
+
+    [migrated, out]
   end
 
   def eval_script(script, options = {})
+    execute_count = 0
+
     begin
       with_pre_post_query(options) do
-        ActiveRecord::Schema.new.instance_eval(script, SCRIPT_NAME, 1)
-        execute_sqls(options)
+        unless script.empty?
+          ActiveRecord::Schema.new.instance_eval(script, SCRIPT_NAME, 1)
+        end
+
+        execute_count = execute_sqls(options)
       end
     rescue => e
       raise_exception(script, e)
     end
+
+    not script.empty? or execute_count.nonzero?
   end
 
   def execute_sqls(options = {})
     es = @delta[:execute] || []
     out = options[:out] || $stdout
+    execute_count = 0
 
     es.each do |exec|
       sql, cond = exec.values_at(:sql, :condition)
@@ -112,7 +120,11 @@ class Ridgepole::Delta
       else
         ActiveRecord::Base.connection.execute(sql)
       end
+
+      execute_count += 1
     end
+
+    return execute_count
   end
 
   def with_pre_post_query(options = {})
@@ -359,9 +371,7 @@ remove_index(#{table_name.inspect}, #{target.inspect})
     end
   end
 
-  def append_execute(sql, cond, buf)
-    msg = "# #{sql}"
-    msg << ' /* with conditions */' if cond
-    buf.puts(msg)
+  def delta_execute
+    @delta[:execute] || []
   end
 end
