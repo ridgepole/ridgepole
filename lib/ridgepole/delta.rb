@@ -4,6 +4,7 @@ class Ridgepole::Delta
   def initialize(delta, options = {})
     @delta = delta
     @options = options
+    @logger = Ridgepole::Logger.instance
   end
 
   def migrate(options = {})
@@ -119,9 +120,10 @@ class Ridgepole::Delta
 
       next unless executable
 
-      out.puts(sql.strip_heredoc)
-
-      unless options[:noop]
+      if options[:noop]
+        out.puts(sql.strip_heredoc)
+      else
+        @logger.info(sql.strip_heredoc)
         ActiveRecord::Base.connection.execute(sql)
       end
 
