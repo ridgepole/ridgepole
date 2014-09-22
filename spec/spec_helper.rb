@@ -1,8 +1,13 @@
 $: << File.expand_path('..', __FILE__)
 
 if ENV['TRAVIS']
+  require 'simplecov'
   require 'coveralls'
-  Coveralls.wear!
+
+  SimpleCov.formatter = Coveralls::SimpleCov::Formatter
+  SimpleCov.start do
+    add_filter "spec/"
+  end
 end
 
 require 'ridgepole'
