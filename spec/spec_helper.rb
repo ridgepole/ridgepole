@@ -7,6 +7,11 @@ require 'open3'
 require 'tempfile'
 require 'json'
 
+if ENV['TRAVIS']
+  require 'coveralls'
+  Coveralls.wear!
+end
+
 ActiveRecord::Migration.verbose = false
 Ridgepole::Logger.instance.level = ::Logger::ERROR
 
