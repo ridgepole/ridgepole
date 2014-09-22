@@ -4,7 +4,7 @@ require 'stringio'
 
 require 'active_record'
 require 'active_support'
-require 'active_support/core_ext/string/strip'
+require 'active_support/core_ext'
 
 module Ridgepole; end
 require 'ridgepole/client'

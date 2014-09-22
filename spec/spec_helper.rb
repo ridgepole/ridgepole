@@ -43,6 +43,7 @@ def client(options = {}, config = {})
   config = conn_spec(config)
 
   options = {
+    :enable_mysql_unsigned => true,
   }.merge(options)
 
   Ridgepole::Client.new(config, options)

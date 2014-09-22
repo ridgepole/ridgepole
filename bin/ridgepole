@@ -91,7 +91,7 @@ ARGV.options do |opt|
     opt.on('-o', '--output FILE')                 {|v| output_file = v                                      }
     opt.on('-t', '--tables TABLES', Array)        {|v| options[:tables] = v                                 }
     opt.on('',   '--ignore-tables TABLES', Array) {|v| options[:ignore_tables] = v.map {|i| Regexp.new(i) } }
-    opt.on('',   '--disable-mysql-unsigned')      {    options[:disable_mysql_unsigned] = true              }
+    opt.on('',   '--enable-mysql-unsigned')       {    options[:enable_mysql_unsigned] = true              }
     opt.on(''  , '--log-file LOG_FILE')           {|v| options[:log_file] = v                               }
     opt.on(''  , '--verbose')                     {    Ridgepole::Logger.verbose = true                     }
     opt.on(''  , '--debug')                       {    options[:debug] = true                               }

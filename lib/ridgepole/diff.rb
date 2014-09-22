@@ -251,7 +251,7 @@ class Ridgepole::Diff
     end
 
     # XXX: MySQL only?
-    unless @options[:disable_mysql_unsigned]
+    if @options[:enable_mysql_unsigned]
       opts[:unsigned] = false unless opts.has_key?(:unsigned)
     end
   end

@@ -7,7 +7,7 @@ class Ridgepole::Client
     @parser = Ridgepole::DSLParser.new(@options)
     @diff = Ridgepole::Diff.new(@options)
 
-    unless @options[:disable_mysql_unsigned]
+    if @options[:enable_mysql_unsigned]
       require 'activerecord-mysql-unsigned'
     end
   end

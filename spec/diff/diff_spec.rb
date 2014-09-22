@@ -141,7 +141,7 @@ describe 'Ridgepole::Client.diff' do
     subject { Ridgepole::Client }
 
     it {
-      delta = subject.diff(actual_dsl, expected_dsl)
+      delta = subject.diff(actual_dsl, expected_dsl, enable_mysql_unsigned: true)
       expect(delta.differ?).to be_truthy
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
         change_column("employee_clubs", "club_id", :integer, {:unsigned=>false, :null=>true, :default=>nil})

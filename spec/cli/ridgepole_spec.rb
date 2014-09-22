@@ -29,7 +29,7 @@ describe 'ridgepole' do
         -o, --output FILE
         -t, --tables TABLES
             --ignore-tables TABLES
-            --disable-mysql-unsigned
+            --enable-mysql-unsigned
             --log-file LOG_FILE
             --verbose
             --debug
