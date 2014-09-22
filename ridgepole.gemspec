@@ -25,4 +25,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'mysql2'
   spec.add_development_dependency 'coveralls'
   spec.add_development_dependency 'activerecord-mysql-unsigned', '>= 0.2.0'
+  spec.add_development_dependency 'foreigner'
 end
