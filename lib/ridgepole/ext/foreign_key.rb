@@ -72,11 +72,11 @@ class Ridgepole::ForeignKey
 
       if options[:bulk_change]
         buf.puts(<<-EOS)
-    t.foreign_key(#{to_table.inspect}, #{attrs_options.inspect})
+  t.foreign_key(#{to_table.inspect}, #{attrs_options.inspect})
         EOS
       else
         buf.puts(<<-EOS)
-  add_foreign_key(#{table_name.inspect}, #{to_table.inspect}, #{attrs_options.inspect})
+add_foreign_key(#{table_name.inspect}, #{to_table.inspect}, #{attrs_options.inspect})
         EOS
       end
     end
@@ -87,11 +87,11 @@ class Ridgepole::ForeignKey
 
       if options[:bulk_change]
         buf.puts(<<-EOS)
-    t.remove_foreign_key(#{target.inspect})
+  t.remove_foreign_key(#{target.inspect})
         EOS
       else
         buf.puts(<<-EOS)
-  remove_foreign_key(#{table_name.inspect}, #{target.inspect})
+remove_foreign_key(#{table_name.inspect}, #{target.inspect})
         EOS
       end
     end
