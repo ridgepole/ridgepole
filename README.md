@@ -46,7 +46,8 @@ Usage: ridgepole [options]
     -o, --output FILE
     -t, --tables TABLES
         --ignore-tables TABLES
-        --disable-mysql-unsigned
+        --enable-mysql-unsigned
+        --enable-foreigner
         --log-file LOG_FILE
         --verbose
         --debug
