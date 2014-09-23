@@ -149,4 +149,24 @@ add_foreign_key "child", "parent", dependent: :delete
       }.to raise_error('Foreign key name in `child` is undefined')
     }
   end
+
+  context 'orphan fk' do
+    let(:dsl) {
+      <<-RUBY
+# Define parent before child
+create_table "parent", force: true do |t|
+end
+
+add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
+      RUBY
+    }
+
+    subject { client(enable_foreigner: true) }
+
+    it {
+      expect {
+        subject.diff(dsl)
+      }.to raise_error('Table `child` to create the foreign key is not defined: child_ibfk_1')
+    }
+  end
 end
