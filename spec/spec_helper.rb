@@ -20,8 +20,15 @@ require 'json'
 
 TEST_SCHEMA = 'ridgepole_test'
 
-ActiveRecord::Migration.verbose = false
-Ridgepole::Logger.instance.level = ::Logger::ERROR
+if ENV['DEBUG']
+  ActiveRecord::Migration.verbose = true
+  logger = Ridgepole::Logger.instance
+  logger.level = ::Logger::DEBUG
+  ActiveRecord::Base.logger = logger
+else
+  ActiveRecord::Migration.verbose = false
+  Ridgepole::Logger.instance.level = ::Logger::ERROR
+end
 
 RSpec.configure do |config|
   config.before(:each) do
@@ -44,6 +51,7 @@ def client(options = {}, config = {})
 
   options = {
     :enable_mysql_unsigned => true,
+    :debug => !!ENV['DEBUG'],
   }.merge(options)
 
   Ridgepole::Client.new(config, options)
