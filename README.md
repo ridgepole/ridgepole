@@ -118,7 +118,7 @@ Apply `Schemafile`
 ```
 
 ## Rename
-```sh
+```ruby
 create_table "articles", force: true do |t|
   t.string   "title"
   t.text     "desc", renamed_from: "text"
@@ -136,8 +136,26 @@ create_table "user_comments", force: true, renamed_from: "comments" do |t|
 end
 ```
 
+## Foreign Key
+You can use the foreign key by passing `--enable-foreigner` ([foreigner](https://github.com/matthuhiggins/foreigner) is required)
+
+```ruby
+create_table "parent", force: true do |t|
+end
+
+create_table "child", id: false, force: true do |t|
+  t.integer "id"
+  t.integer "parent_id"
+end
+
+add_index "child", ["parent_id"], name: "par_ind", using: :btree
+
+add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
+```
+
+
 ## Execute
-```sh
+```ruby
 create_table "authors", force: true do |t|
   t.string "name", null: false
 end
