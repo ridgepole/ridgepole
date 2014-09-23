@@ -147,6 +147,11 @@ class Ridgepole::DSLParser
   def parse(dsl, opts = {})
     definition, execute = Context.eval(dsl, opts)
     check_orphan_index(definition)
+
+    if @options[:enable_foreigner]
+      Ridgepole::ForeignKey.check_orphan_foreign_key(definition)
+    end
+
     [definition, execute]
   end
 
@@ -154,7 +159,7 @@ class Ridgepole::DSLParser
 
   def check_orphan_index(definition)
     definition.each do |table_name, attrs|
-      if attrs.length == 1 and attrs[:indices]
+      if attrs[:indices] and not attrs[:definition]
         raise "Table `#{table_name}` to create the index is not defined: #{attrs[:indices].keys.join(',')}"
       end
     end

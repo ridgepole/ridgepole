@@ -79,6 +79,10 @@ class Ridgepole::Diff
     scan_definition_change(from[:definition], to[:definition], from[:indices], table_delta)
     scan_indices_change(from[:indices], to[:indices], to[:definition], table_delta, from[:options], to[:options])
 
+    if @options[:enable_foreigner]
+      Ridgepole::ForeignKey.scan_foreign_keys_change(from[:foreign_keys], to[:foreign_keys], table_delta, @options)
+    end
+
     unless table_delta.empty?
       delta[:change] ||= {}
       delta[:change][table_name] = table_delta

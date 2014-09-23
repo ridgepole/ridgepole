@@ -11,8 +11,9 @@ class Ridgepole::Client
       require 'activerecord-mysql-unsigned'
     end
 
-    # XXX:
-    Ridgepole::DSLParser::Context::ForeignKey.init
+    if @options[:enable_foreigner]
+      Ridgepole::ForeignKey.init
+    end
   end
 
   def dump(&block)

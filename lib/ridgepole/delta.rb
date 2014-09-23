@@ -249,6 +249,10 @@ drop_table(#{table_name.inspect})
     append_change_table(table_name, buf) do
       append_change_definition(table_name, attrs[:definition] || {}, buf)
       append_change_indices(table_name, attrs[:indices] || {}, buf)
+
+      if @options[:enable_foreigner]
+        Ridgepole::ForeignKey.append_change_foreign_keys(table_name, attrs[:foreign_keys] || {}, buf, @options)
+      end
     end
 
     buf.puts
