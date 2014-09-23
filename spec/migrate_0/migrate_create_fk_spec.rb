@@ -96,6 +96,34 @@ add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
     }
   end
 
+  context 'already defined' do
+    let(:dsl) {
+      <<-RUBY
+# Define parent before child
+create_table "parent", force: true do |t|
+end
+
+create_table "child", force: true do |t|
+  t.integer "parent_id", unsigned: true
+end
+
+add_index "child", ["parent_id"], name: "par_ind", using: :btree
+
+add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
+
+add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
+      RUBY
+    }
+
+    subject { client(enable_foreigner: true) }
+
+    it {
+      expect {
+        subject.diff(dsl)
+      }.to raise_error('Foreign Key `child(child_ibfk_1)` already defined')
+    }
+  end
+
   context 'no name' do
     let(:dsl) {
       <<-RUBY
@@ -118,7 +146,7 @@ add_foreign_key "child", "parent", dependent: :delete
     it {
       expect {
         subject.diff(dsl)
-      }.to raise_error("Foreign key name in `child` is undefined")
+      }.to raise_error('Foreign key name in `child` is undefined')
     }
   end
 end
