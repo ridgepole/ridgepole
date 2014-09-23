@@ -56,6 +56,7 @@ add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
   context 'when create fk when create table' do
     let(:dsl) {
       <<-RUBY
+# Define parent before child
 create_table "parent", force: true do |t|
 end
 
