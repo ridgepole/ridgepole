@@ -9,6 +9,12 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 [![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=master)](https://travis-ci.org/winebarrel/ridgepole)
 [![Coverage Status](https://coveralls.io/repos/winebarrel/ridgepole/badge.png?branch=master)](https://coveralls.io/r/winebarrel/ridgepole?branch=master)
 
+**Notice**
+
+* `>= 0.4.8`
+  * `activerecord-mysql-unsigned` is now optional. Please pass `--enable-mysql-unsigned` after you install [activerecord-mysql-unsigned](https://github.com/waka/activerecord-mysql-unsigned) if you want to use.
+  * Please pass `--enable-foreigner` after you install [foreigner](https://github.com/matthuhiggins/foreigner) if you want to use the foreign key.
+
 ## Installation
 
 Add this line to your application's Gemfile:
