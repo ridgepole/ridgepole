@@ -226,6 +226,14 @@ end
       end
     end
 
+    if @options[:enable_foreigner] and not (foreign_keys = attrs[:foreign_keys] || {}).empty?
+      append_change_table(table_name, buf) do
+        foreign_keys.each do |foreign_key_name, foreign_key_attrs|
+          Ridgepole::ForeignKey.append_add_foreign_key(table_name, foreign_key_name, foreign_key_attrs, buf, @options)
+        end
+      end
+    end
+
     buf.puts
   end
 

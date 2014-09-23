@@ -64,8 +64,6 @@ class Ridgepole::ForeignKey
       end
     end
 
-    private
-
     def append_add_foreign_key(table_name, foreign_key_name, attrs, buf, options)
       to_table = attrs.fetch(:to_table)
       attrs_options = attrs[:options] || {}
