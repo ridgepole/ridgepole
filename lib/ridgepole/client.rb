@@ -7,8 +7,12 @@ class Ridgepole::Client
     @parser = Ridgepole::DSLParser.new(@options)
     @diff = Ridgepole::Diff.new(@options)
 
-    unless @options[:disable_mysql_unsigned]
+    if @options[:enable_mysql_unsigned]
       require 'activerecord-mysql-unsigned'
+    end
+
+    if @options[:enable_foreigner]
+      Ridgepole::ForeignKey.init
     end
   end
 
@@ -22,11 +26,11 @@ class Ridgepole::Client
     logger = Ridgepole::Logger.instance
 
     logger.verbose_info('# Parse DSL')
-    expected_definition = @parser.parse(dsl, opts)
+    expected_definition, expected_execute = @parser.parse(dsl, opts)
     logger.verbose_info('# Load tables')
-    current_definition = @parser.parse(@dumper.dump)
+    current_definition, current_execute = @parser.parse(@dumper.dump)
     logger.verbose_info('# Compare definitions')
-    @diff.diff(current_definition, expected_definition)
+    @diff.diff(current_definition, expected_definition, :execute => expected_execute)
   end
 
   class << self
@@ -34,9 +38,9 @@ class Ridgepole::Client
       logger = Ridgepole::Logger.instance
 
       logger.verbose_info('# Parse DSL1')
-      definition1 = load_definition(dsl_or_config1)
+      definition1, execute1 = load_definition(dsl_or_config1)
       logger.verbose_info('# Parse DSL2')
-      definition2 = load_definition(dsl_or_config2)
+      definition2, execute2 = load_definition(dsl_or_config2)
 
       logger.verbose_info('# Compare definitions')
       diff = Ridgepole::Diff.new(options)

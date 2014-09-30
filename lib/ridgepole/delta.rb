@@ -4,6 +4,7 @@ class Ridgepole::Delta
   def initialize(delta, options = {})
     @delta = delta
     @options = options
+    @logger = Ridgepole::Logger.instance
   end
 
   def migrate(options = {})
@@ -41,12 +42,15 @@ class Ridgepole::Delta
   end
 
   def differ?
-    not script.empty?
+    not script.empty? or not delta_execute.empty?
   end
 
   private
 
   def migrate0(options = {})
+    migrated = false
+    out = nil
+
     if options[:noop]
       disable_logging_orig = ActiveRecord::Migration.disable_logging
 
@@ -59,26 +63,74 @@ class Ridgepole::Delta
         end
 
         Ridgepole::ExecuteExpander.without_operation(callback) do
-          eval_script(script, options.merge(:out => buf))
+          migrated = eval_script(script, options.merge(:out => buf))
         end
 
-        buf.string.strip
+        out = buf.string.strip
       ensure
         ActiveRecord::Migration.disable_logging = disable_logging_orig
       end
     else
-      eval_script(script, options)
+      migrated = eval_script(script, options)
     end
+
+    [migrated, out]
   end
 
   def eval_script(script, options = {})
+    execute_count = 0
+
     begin
       with_pre_post_query(options) do
-        ActiveRecord::Schema.new.instance_eval(script, SCRIPT_NAME, 1)
+        unless script.empty?
+          ActiveRecord::Schema.new.instance_eval(script, SCRIPT_NAME, 1)
+        end
+
+        execute_count = execute_sqls(options)
       end
     rescue => e
       raise_exception(script, e)
     end
+
+    not script.empty? or execute_count.nonzero?
+  end
+
+  def execute_sqls(options = {})
+    es = @delta[:execute] || []
+    out = options[:out] || $stdout
+    execute_count = 0
+
+    es.each do |exec|
+      sql, cond = exec.values_at(:sql, :condition)
+      executable = false
+
+      begin
+        executable = cond.nil? || cond.call(ActiveRecord::Base.connection)
+      rescue => e
+        errmsg = "[WARN] `#{sql}` is not executed: #{e.message}"
+
+        if @options[:debug]
+          errmsg = ([errmsg] + e.backtrace).join("\n\tfrom ")
+        end
+
+        Ridgepole::Logger.instance.warn(errmsg)
+
+        executable = false
+      end
+
+      next unless executable
+
+      if options[:noop]
+        out.puts(sql.strip_heredoc)
+      else
+        @logger.info(sql.strip_heredoc)
+        ActiveRecord::Base.connection.execute(sql)
+      end
+
+      execute_count += 1
+    end
+
+    return execute_count
   end
 
   def with_pre_post_query(options = {})
@@ -174,6 +226,14 @@ end
       end
     end
 
+    if @options[:enable_foreigner] and not (foreign_keys = attrs[:foreign_keys] || {}).empty?
+      append_change_table(table_name, buf) do
+        foreign_keys.each do |foreign_key_name, foreign_key_attrs|
+          Ridgepole::ForeignKey.append_add_foreign_key(table_name, foreign_key_name, foreign_key_attrs, buf, @options)
+        end
+      end
+    end
+
     buf.puts
   end
 
@@ -197,6 +257,10 @@ drop_table(#{table_name.inspect})
     append_change_table(table_name, buf) do
       append_change_definition(table_name, attrs[:definition] || {}, buf)
       append_change_indices(table_name, attrs[:indices] || {}, buf)
+
+      if @options[:enable_foreigner]
+        Ridgepole::ForeignKey.append_change_foreign_keys(table_name, attrs[:foreign_keys] || {}, buf, @options)
+      end
     end
 
     buf.puts
@@ -323,5 +387,9 @@ add_index(#{table_name.inspect}, #{column_name.inspect}, #{options.inspect})
 remove_index(#{table_name.inspect}, #{target.inspect})
       EOS
     end
+  end
+
+  def delta_execute
+    @delta[:execute] || []
   end
 end

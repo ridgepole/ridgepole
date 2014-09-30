@@ -145,7 +145,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     it {
-      delta = Ridgepole::Client.diff(current_schema, dsl, tables: ['employees'], reverse: true)
+      delta = Ridgepole::Client.diff(current_schema, dsl, tables: ['employees'], reverse: true, enable_mysql_unsigned: true)
       expect(delta.differ?).to be_truthy
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
         change_column("employees", "first_name", :string, {:limit=>14, :null=>false, :unsigned=>false})

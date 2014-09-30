@@ -3,9 +3,9 @@ class Ridgepole::Diff
     @options = options
   end
 
-  def diff(from, to)
-    from = (from || {}).dup
-    to = (to || {}).dup
+  def diff(from, to, options = {})
+    from = (from || {}).deep_dup
+    to = (to || {}).deep_dup
 
     if @options[:reverse]
       from, to = to, from
@@ -35,6 +35,8 @@ class Ridgepole::Diff
         delta[:delete][table_name] = from_attrs
       end
     end
+
+    delta[:execute] = options[:execute]
 
     Ridgepole::Delta.new(delta, @options)
   end
@@ -76,6 +78,10 @@ class Ridgepole::Diff
     scan_options_change(table_name, from[:options], to[:options], table_delta)
     scan_definition_change(from[:definition], to[:definition], from[:indices], table_delta)
     scan_indices_change(from[:indices], to[:indices], to[:definition], table_delta, from[:options], to[:options])
+
+    if @options[:enable_foreigner]
+      Ridgepole::ForeignKey.scan_foreign_keys_change(from[:foreign_keys], to[:foreign_keys], table_delta, @options)
+    end
 
     unless table_delta.empty?
       delta[:change] ||= {}
@@ -249,7 +255,7 @@ class Ridgepole::Diff
     end
 
     # XXX: MySQL only?
-    unless @options[:disable_mysql_unsigned]
+    if @options[:enable_mysql_unsigned]
       opts[:unsigned] = false unless opts.has_key?(:unsigned)
     end
   end

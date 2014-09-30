@@ -1,5 +1,11 @@
 class Ridgepole::DSLParser
   class Context
+    def self.include_module(mod)
+      unless self.included_modules.include?(mod)
+        include mod
+      end
+    end
+
     class TableDefinition
       attr_reader :__definition
 
@@ -40,26 +46,28 @@ class Ridgepole::DSLParser
 
       def timestamps(*args)
         options = {:null => false}.merge(args.extract_options!)
-        column(:created_at, :datetime, options.dup)
-        column(:updated_at, :datetime, options.dup)
+        column(:created_at, :datetime, options)
+        column(:updated_at, :datetime, options)
       end
 
       def references(*args)
         options = args.extract_options!
         polymorphic = options.delete(:polymorphic)
         args.each do |col|
-          column("#{col}_id", :integer, options.dup)
-          column("#{col}_type", :string, polymorphic.is_a?(Hash) ? polymorphic : options.dup) unless polymorphic.nil?
+          column("#{col}_id", :integer, options)
+          column("#{col}_type", :string, polymorphic.is_a?(Hash) ? polymorphic : options) unless polymorphic.nil?
         end
       end
       alias :belongs_to :references
     end
 
     attr_reader :__definition
+    attr_reader :__execute
 
     def initialize(opts = {})
       @__working_dir = File.expand_path(opts[:path] ? File.dirname(opts[:path]) : Dir.pwd)
       @__definition = {}
+      @__execute = []
     end
 
     def self.eval(dsl, opts = {})
@@ -71,7 +79,7 @@ class Ridgepole::DSLParser
         ctx.instance_eval(dsl)
       end
 
-      ctx.__definition
+      [ctx.__definition, ctx.__execute]
     end
 
     def create_table(table_name, options = {})
@@ -123,6 +131,13 @@ class Ridgepole::DSLParser
         Kernel.require(file)
       end
     end
+
+    def execute(sql, name = nil, &cond)
+      @__execute << {
+        :sql => sql,
+        :condition => cond,
+      }
+    end
   end
 
   def initialize(options = {})
@@ -130,16 +145,21 @@ class Ridgepole::DSLParser
   end
 
   def parse(dsl, opts = {})
-    parsed = Context.eval(dsl, opts)
-    check_orphan_index(parsed)
-    parsed
+    definition, execute = Context.eval(dsl, opts)
+    check_orphan_index(definition)
+
+    if @options[:enable_foreigner]
+      Ridgepole::ForeignKey.check_orphan_foreign_key(definition)
+    end
+
+    [definition, execute]
   end
 
   private
 
-  def check_orphan_index(parsed)
-    parsed.each do |table_name, attrs|
-      if attrs.length == 1 and attrs[:indices]
+  def check_orphan_index(definition)
+    definition.each do |table_name, attrs|
+      if attrs[:indices] and not attrs[:definition]
         raise "Table `#{table_name}` to create the index is not defined: #{attrs[:indices].keys.join(',')}"
       end
     end

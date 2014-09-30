@@ -18,8 +18,17 @@ require 'open3'
 require 'tempfile'
 require 'json'
 
-ActiveRecord::Migration.verbose = false
-Ridgepole::Logger.instance.level = ::Logger::ERROR
+TEST_SCHEMA = 'ridgepole_test'
+
+if ENV['DEBUG']
+  ActiveRecord::Migration.verbose = true
+  logger = Ridgepole::Logger.instance
+  logger.level = ::Logger::DEBUG
+  ActiveRecord::Base.logger = logger
+else
+  ActiveRecord::Migration.verbose = false
+  Ridgepole::Logger.instance.level = ::Logger::ERROR
+end
 
 RSpec.configure do |config|
   config.before(:each) do
@@ -41,6 +50,8 @@ def client(options = {}, config = {})
   config = conn_spec(config)
 
   options = {
+    :enable_mysql_unsigned => true,
+    :debug => !!ENV['DEBUG'],
   }.merge(options)
 
   Ridgepole::Client.new(config, options)
@@ -49,8 +60,13 @@ end
 def conn_spec(config = {})
   {
     adapter: 'mysql2',
-    database: 'ridgepole_test',
+    database: TEST_SCHEMA,
   }.merge(config)
+end
+
+def show_create_table(table_name)
+  raw_conn = ActiveRecord::Base.connection.raw_connection
+  raw_conn.query("SHOW CREATE TABLE `#{table_name}`").first[1]
 end
 
 def default_cli_hook
@@ -62,7 +78,7 @@ def default_cli_hook
       end
       def migrate(*args)
         puts "Ridgepole::Delta#migrate"
-        "create_table :table do\\nend"
+        [#{differ}, "create_table :table do\\nend"]
       end
       def script
         puts "Ridgepole::Delta#script"

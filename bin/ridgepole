@@ -34,11 +34,23 @@ set_mode = proc do |m|
 end
 
 def noop_migrate(delta)
-  puts delta.script + "\n\n"
-
-  delta.migrate(:noop => true).each_line do |line|
-    puts line.strip.gsub(/([^\d])([(),])([^\d])/) { "#{$1}#{$2}\n#{$3}" }.each_line.map {|i| "# #{i.gsub(/^\s+/, '')}"}.join + "\n\n"
+  unless delta.script.empty?
+    puts delta.script + "\n\n"
   end
+
+  migrated, out = delta.migrate(:noop => true)
+
+  if migrated
+    out.each_line do |line|
+      if line =~ /\A\s+/
+        puts "# #{line}"
+      else
+        puts line.strip.gsub(/([^\d])([(),])([^\d])/) { "#{$1}#{$2}\n#{$3}" }.each_line.map {|i| "# #{i.gsub(/^\s+/, '')}"}.join + "\n"
+      end
+    end
+  end
+
+  return migrated
 end
 
 ARGV.options do |opt|
@@ -79,7 +91,8 @@ ARGV.options do |opt|
     opt.on('-o', '--output FILE')                 {|v| output_file = v                                      }
     opt.on('-t', '--tables TABLES', Array)        {|v| options[:tables] = v                                 }
     opt.on('',   '--ignore-tables TABLES', Array) {|v| options[:ignore_tables] = v.map {|i| Regexp.new(i) } }
-    opt.on('',   '--disable-mysql-unsigned')      {    options[:disable_mysql_unsigned] = true              }
+    opt.on('',   '--enable-mysql-unsigned')       {    options[:enable_mysql_unsigned] = true               }
+    opt.on('',   '--enable-foreigner')            {    options[:enable_foreigner] = true                    }
     opt.on(''  , '--log-file LOG_FILE')           {|v| options[:log_file] = v                               }
     opt.on(''  , '--verbose')                     {    Ridgepole::Logger.verbose = true                     }
     opt.on(''  , '--debug')                       {    options[:debug] = true                               }
@@ -161,17 +174,18 @@ begin
 
     dsl = File.read(file)
     delta = client.diff(dsl, :path => file)
+    differ = delta.differ?
 
     if options[:dry_run]
-      if delta.differ?
-        noop_migrate(delta)
+      if differ
+        differ = noop_migrate(delta)
       end
     else
       logger.verbose_info('# Update schema')
-      delta.migrate
+      differ, out = delta.migrate
     end
 
-    unless delta.differ?
+    unless differ
       logger.info('No change')
     end
   when :diff
@@ -193,15 +207,18 @@ begin
 
     if diff_with_apply
       logger.verbose_info('# Update schema')
+      differ = delta.differ?
 
-      if delta.differ?
-        delta.migrate
-      else
+      if differ
+        differ, out = delta.migrate
+      end
+
+      if differ
         logger.info('No change')
       end
     elsif delta.differ?
-      noop_migrate(delta)
-      exit_code = 1
+      differ = noop_migrate(delta)
+      exit_code = 1 if differ
     end
   end
 rescue => e

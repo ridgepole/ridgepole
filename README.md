@@ -9,6 +9,12 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 [![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=master)](https://travis-ci.org/winebarrel/ridgepole)
 [![Coverage Status](https://coveralls.io/repos/winebarrel/ridgepole/badge.png?branch=master)](https://coveralls.io/r/winebarrel/ridgepole?branch=master)
 
+**Notice**
+
+* `>= 0.4.8`
+  * `activerecord-mysql-unsigned` is now optional. Please pass `--enable-mysql-unsigned` after you install [activerecord-mysql-unsigned](https://github.com/waka/activerecord-mysql-unsigned) if you want to use.
+  * Please pass `--enable-foreigner` after you install [foreigner](https://github.com/matthuhiggins/foreigner) if you want to use the foreign key.
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -46,7 +52,8 @@ Usage: ridgepole [options]
     -o, --output FILE
     -t, --tables TABLES
         --ignore-tables TABLES
-        --disable-mysql-unsigned
+        --enable-mysql-unsigned
+        --enable-foreigner
         --log-file LOG_FILE
         --verbose
         --debug
@@ -111,7 +118,7 @@ Apply `Schemafile`
 ```
 
 ## Rename
-```sh
+```ruby
 create_table "articles", force: true do |t|
   t.string   "title"
   t.text     "desc", renamed_from: "text"
@@ -126,6 +133,43 @@ create_table "user_comments", force: true, renamed_from: "comments" do |t|
   t.integer  "article_id"
   t.datetime "created_at"
   t.datetime "updated_at"
+end
+```
+
+## Foreign Key
+You can use the foreign key by passing `--enable-foreigner` ([foreigner](https://github.com/matthuhiggins/foreigner) is required)
+
+```ruby
+create_table "parent", force: true do |t|
+end
+
+create_table "child", id: false, force: true do |t|
+  t.integer "id"
+  t.integer "parent_id"
+end
+
+add_index "child", ["parent_id"], name: "par_ind", using: :btree
+
+add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
+```
+
+
+## Execute
+```ruby
+create_table "authors", force: true do |t|
+  t.string "name", null: false
+end
+
+create_table "books", force: true do |t|
+  t.string  "title",                     null: false
+  t.integer "author_id", unsigned: true, null: false
+end
+
+add_index "books", ["author_id"], name: "idx_author_id", using: :btree
+
+execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)") do |c|
+  # Execute SQL only if there is no foreign key
+  c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = 'bookshelf' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?
 end
 ```
 

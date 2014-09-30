@@ -30,7 +30,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
-      sql = delta.migrate(:noop => true)
+      migrated, sql = delta.migrate(:noop => true)
+      expect(migrated).to be_truthy
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
 
       sql = sql.each_line.map {|i| i.strip }.join("\n")
@@ -69,7 +70,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
-      sql = delta.migrate(:noop => true)
+      migrated, sql = delta.migrate(:noop => true)
+      expect(migrated).to be_truthy
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
 
       sql = sql.each_line.map {|i| i.strip }.join("\n")
@@ -108,7 +110,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
-      sql = delta.migrate(:noop => true)
+      migrated, sql = delta.migrate(:noop => true)
+      expect(migrated).to be_truthy
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
 
       sql = sql.each_line.map {|i| i.strip }.join("\n")
