@@ -8,7 +8,7 @@ class Ridgepole::Client
     @diff = Ridgepole::Diff.new(@options)
 
     if @options[:enable_mysql_unsigned]
-      require 'activerecord-mysql-unsigned'
+      require 'activerecord-mysql-unsigned/base'
     end
 
     if @options[:enable_foreigner]
