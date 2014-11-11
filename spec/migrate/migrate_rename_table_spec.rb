@@ -158,6 +158,47 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
+  context 'when rename table (dry-run)' do
+    let(:actual_dsl) {
+      <<-RUBY
+        create_table "employees", primary_key: "emp_no", force: true do |t|
+          t.date   "birth_date",            null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name",  limit: 16, null: false
+          t.string "gender",     limit: 1,  null: false
+          t.date   "hire_date",             null: false
+        end
+
+        add_index "employees", ["first_name"], name: "first_name", using: :btree
+      RUBY
+    }
+
+    let(:expected_dsl) {
+      <<-RUBY
+        create_table "employees2", primary_key: "emp_no", force: true, renamed_from: 'employees' do |t|
+          t.date   "birth_date",            null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name",  limit: 16, null: false
+          t.string "gender",     limit: 1,  null: false
+          t.date   "hire_date",             null: false
+        end
+
+        add_index "employees2", ["first_name"], name: "first_name", using: :btree
+      RUBY
+    }
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      delta.migrate(noop: true)
+      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+    }
+  end
+
   context 'when rename table (not found)' do
     before { restore_tables }
     subject { client }
