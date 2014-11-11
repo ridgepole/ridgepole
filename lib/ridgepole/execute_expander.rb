@@ -31,7 +31,11 @@ class Ridgepole::ExecuteExpander
             end
 
             if sql =~ /\A(SELECT|SHOW)\b/i
-              execute_without_noop(sql, name)
+              begin
+                execute_without_noop(sql, name)
+              rescue => e
+                Stub.new
+              end
             else
               Stub.new
             end
