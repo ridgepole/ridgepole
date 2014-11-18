@@ -30,6 +30,7 @@ describe 'ridgepole' do
         -t, --tables TABLES
             --ignore-tables TABLES
             --enable-mysql-unsigned
+            --enable-mysql-pkdump
             --enable-foreigner
             --log-file LOG_FILE
             --verbose
