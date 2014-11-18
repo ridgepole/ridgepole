@@ -11,6 +11,10 @@ class Ridgepole::Client
       require 'activerecord-mysql-unsigned/base'
     end
 
+    if @options[:enable_mysql_pkdump]
+      require 'activerecord-mysql-pkdump'
+    end
+
     if @options[:enable_foreigner]
       Ridgepole::ForeignKey.init
     end
