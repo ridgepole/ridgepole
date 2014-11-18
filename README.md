@@ -14,6 +14,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 * `>= 0.4.8`
   * `activerecord-mysql-unsigned` is now optional. Please pass `--enable-mysql-unsigned` after you install [activerecord-mysql-unsigned](https://github.com/waka/activerecord-mysql-unsigned) if you want to use.
   * Please pass `--enable-foreigner` after you install [foreigner](https://github.com/matthuhiggins/foreigner) if you want to use the foreign key.
+* `>= 0.4.11`
+  * Add `--enable-mysql-pkdump` option.
 
 ## Installation
 
