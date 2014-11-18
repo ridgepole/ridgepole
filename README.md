@@ -53,6 +53,7 @@ Usage: ridgepole [options]
     -t, --tables TABLES
         --ignore-tables TABLES
         --enable-mysql-unsigned
+        --enable-mysql-pkdump
         --enable-foreigner
         --log-file LOG_FILE
         --verbose
@@ -153,6 +154,17 @@ add_index "child", ["parent_id"], name: "par_ind", using: :btree
 add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
 ```
 
+## bigint support
+Export of `bigint` PK is enabled by passing `--enable-mysql-pkdump` ([activerecord-mysql-pkdump](https://github.com/winebarrel/activerecord-mysql-pkdump) is required)
+
+```ruby
+create_table "books", id: "bigint(20) PRIMARY KEY auto_increment", force: true do |t|
+  t.string   "title",      null: false
+  t.integer  "author_id",  null: false
+  t.datetime "created_at"
+  t.datetime "updated_at"
+end
+```
 
 ## Execute
 ```ruby
