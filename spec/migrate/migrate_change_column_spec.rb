@@ -35,8 +35,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         add_index "dept_manager", ["emp_no"], name: "emp_no", using: :btree
 
         create_table "employee_clubs", force: true do |t|
-          t.integer "emp_no",  unsigned: true, null: false
-          t.integer "club_id", unsigned: true, null: false
+          t.integer "emp_no",  null: false, unsigned: true
+          t.integer "club_id", null: false, unsigned: true
         end
 
         add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_emp_no_club_id", using: :btree
@@ -104,7 +104,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         add_index "dept_manager", ["emp_no"], name: "emp_no", using: :btree
 
         create_table "employee_clubs", force: true do |t|
-          t.integer "emp_no",  unsigned: true, null: false
+          t.integer "emp_no",  null: false, unsigned: true
           t.integer "club_id", unsigned: false, null: true
         end
 
@@ -153,7 +153,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true, enable_mysql_unsigned: true)
       expect(delta.differ?).to be_truthy
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
-        change_column("employee_clubs", "club_id", :integer, {:unsigned=>true, :null=>false})
+        change_column("employee_clubs", "club_id", :integer, {:null=>false, :unsigned=>true})
 
         change_column("employees", "last_name", :string, {:limit=>16, :null=>false, :unsigned=>false})
         change_column("employees", "gender", :string, {:limit=>1, :null=>false, :unsigned=>false})

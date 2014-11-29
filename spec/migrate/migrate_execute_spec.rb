@@ -7,8 +7,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", force: true do |t|
-          t.string  "title",                     null: false
-          t.integer "author_id", unsigned: true, null: false
+          t.string  "title",     null: false
+          t.integer "author_id", null: false, unsigned: true
         end
 
         add_index "books", ["author_id"], name: "idx_author_id", using: :btree
@@ -76,8 +76,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", force: true do |t|
-          t.string  "title",                     null: false
-          t.integer "author_id", unsigned: true, null: false
+          t.string  "title",     null: false
+          t.integer "author_id", null: false, unsigned: true
         end
 
         add_index "books", ["author_id"], name: "idx_author_id", using: :btree
@@ -147,8 +147,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", force: true do |t|
-          t.string  "title",                     null: false
-          t.integer "author_id", unsigned: true, null: false
+          t.string  "title",     null: false
+          t.integer "author_id", null: false, unsigned: true
         end
 
         add_index "books", ["author_id"], name: "idx_author_id", using: :btree
@@ -218,8 +218,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", force: true do |t|
-          t.string  "title",                     null: false
-          t.integer "author_id", unsigned: true, null: false
+          t.string  "title",     null: false
+          t.integer "author_id", null: false, unsigned: true
         end
 
         add_index "books", ["author_id"], name: "idx_author_id", using: :btree

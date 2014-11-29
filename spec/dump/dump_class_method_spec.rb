@@ -38,8 +38,8 @@ describe 'Ridgepole::Client.dump' do
         add_index "dept_manager", ["emp_no"], name: "emp_no", using: :btree
 
         create_table "employee_clubs", force: true do |t|
-          t.integer "emp_no",  unsigned: true, null: false
-          t.integer "club_id", unsigned: true, null: false
+          t.integer "emp_no",  null: false, unsigned: true
+          t.integer "club_id", null: false, unsigned: true
         end
 
         add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_emp_no_club_id", using: :btree

@@ -35,8 +35,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         add_index "dept_manager", ["emp_no"], name: "emp_no", using: :btree
 
         create_table "employee_clubs", force: true do |t|
-          t.integer "emp_no",  unsigned: true, null: false
-          t.integer "club_id", unsigned: true, null: false
+          t.integer "emp_no",  null: false, unsigned: true
+          t.integer "club_id", null: false, unsigned: true
         end
 
         add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_emp_no_club_id", using: :btree
@@ -104,20 +104,20 @@ describe 'Ridgepole::Client#diff -> migrate' do
         add_index "dept_manager", ["emp_no"], name: "emp_no", using: :btree
 
         create_table "employee_clubs", force: true do |t|
-          t.integer "emp_no",  unsigned: true, null: false
-          t.integer "club_id", unsigned: true, null: false
-          t.string  "any_col",                 null: false
+          t.integer "emp_no",  null: false, unsigned: true
+          t.integer "club_id", null: false, unsigned: true
+          t.string  "any_col", null: false
         end
 
         add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_emp_no_club_id", using: :btree
 
         create_table "employees", primary_key: "emp_no", force: true do |t|
-          t.date    "birth_date",                            null: false
-          t.string  "first_name", limit: 14,                 null: false
-          t.string  "last_name",  limit: 16,                 null: false
-          t.string  "gender",     limit: 1,                  null: false
-          t.date    "hire_date",                             null: false
-          t.integer "age",                   unsigned: true, null: false
+          t.date    "birth_date",            null: false
+          t.string  "first_name", limit: 14, null: false
+          t.string  "last_name",  limit: 16, null: false
+          t.string  "gender",     limit: 1,  null: false
+          t.date    "hire_date",             null: false
+          t.integer "age",                   null: false, unsigned: true
           t.date    "updated_at"
         end
 
@@ -173,7 +173,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         change_table("employees", {:bulk => true}) do |t|
-          t.column("age", :integer, {:unsigned=>true, :null=>false, :after=>"hire_date"})
+          t.column("age", :integer, {:null=>false, :unsigned=>true, :after=>"hire_date"})
           t.column("updated_at", :date, {:after=>"age"})
         end
       RUBY
