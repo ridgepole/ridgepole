@@ -16,6 +16,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Please pass `--enable-foreigner` after you install [foreigner](https://github.com/matthuhiggins/foreigner) if you want to use the foreign key.
 * `>= 0.4.11`
   * Add `--enable-mysql-pkdump` option.
+* `>= 0.4.12`
+  * Fix `activerecord-mysql-unsigned` version: `~> 0.2.0`
 
 ## Installation
 
