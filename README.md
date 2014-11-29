@@ -18,6 +18,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Add `--enable-mysql-pkdump` option.
 * `>= 0.4.12`
   * Fix `activerecord-mysql-unsigned` version: `~> 0.2.0`
+* `>= 0.5.0`
+  * Fix `activerecord-mysql-unsigned` version: `~> 0.3.0`
 
 ## Installation
 
