@@ -27,4 +27,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'activerecord-mysql-unsigned', '~> 0.3.1'
   spec.add_development_dependency 'foreigner'
   spec.add_development_dependency 'activerecord-mysql-pkdump', '>= 0.1.0'
+  spec.add_development_dependency 'migration_comments'
 end

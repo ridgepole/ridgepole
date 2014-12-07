@@ -15,6 +15,10 @@ class Ridgepole::Client
       require 'activerecord-mysql-pkdump'
     end
 
+    if @options[:migration_comments]
+      require 'migration_comments'
+    end
+
     if @options[:enable_foreigner]
       Ridgepole::ForeignKey.init
     end

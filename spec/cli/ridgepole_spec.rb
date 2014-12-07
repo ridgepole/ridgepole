@@ -32,6 +32,7 @@ describe 'ridgepole' do
             --enable-mysql-unsigned
             --enable-mysql-pkdump
             --enable-foreigner
+            --enable-migration-comments
             --log-file LOG_FILE
             --verbose
             --debug
