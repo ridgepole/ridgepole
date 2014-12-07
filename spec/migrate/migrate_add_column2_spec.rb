@@ -35,7 +35,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
 
       sql = sql.each_line.map {|i| i.strip }.join("\n")
-      expect(sql).to eq("ALTER TABLE `dept_emp` ADD `emp_no2` int(4) NOT NULL AFTER `emp_no`")
+      expect(sql).to eq("ALTER TABLE `dept_emp` ADD `emp_no2` int NOT NULL AFTER `emp_no`")
     }
   end
 
@@ -75,7 +75,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
 
       sql = sql.each_line.map {|i| i.strip }.join("\n")
-      expect(sql).to eq("ALTER TABLE `dept_emp` ADD `emp_no2` int(11) NOT NULL AFTER `emp_no`")
+      expect(sql).to eq("ALTER TABLE `dept_emp` ADD `emp_no2` int NOT NULL AFTER `emp_no`")
     }
   end
 
@@ -115,7 +115,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
 
       sql = sql.each_line.map {|i| i.strip }.join("\n")
-      expect(sql).to eq("ALTER TABLE `dept_emp` ADD `emp_no2` int(4) NOT NULL AFTER `emp_no`")
+      expect(sql).to eq("ALTER TABLE `dept_emp` ADD `emp_no2` int NOT NULL AFTER `emp_no`")
     }
   end
 end
