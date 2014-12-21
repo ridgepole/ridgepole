@@ -22,6 +22,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Fix `activerecord-mysql-unsigned` version: `~> 0.3.1`
 * `>= 0.5.1`
   * Add `--enable-migration-comments` option ([migration_comments](https://github.com/pinnymz/migration_comments) is required)
+  * Fix rails version `< 4.2.0`
 
 ## Installation
 
@@ -64,6 +65,7 @@ Usage: ridgepole [options]
         --enable-mysql-pkdump
         --enable-foreigner
         --enable-migration-comments
+        --normalize-mysql-float
         --log-file LOG_FILE
         --verbose
         --debug
