@@ -258,6 +258,10 @@ class Ridgepole::Diff
     if @options[:enable_mysql_unsigned]
       opts[:unsigned] = false unless opts.has_key?(:unsigned)
     end
+
+    if @options[:normalize_mysql_float] and attrs[:type] == :float
+      opts.delete(:limit) if opts[:limit] == 24
+    end
   end
 
   def normalize_index_options!(opts)

@@ -95,6 +95,7 @@ ARGV.options do |opt|
     opt.on('',   '--enable-mysql-pkdump')         {    options[:enable_mysql_pkdump] = true                 }
     opt.on('',   '--enable-foreigner')            {    options[:enable_foreigner] = true                    }
     opt.on('',   '--enable-migration-comments')   {    options[:migration_comments] = true                  }
+    opt.on('',   '--normalize-mysql-float')       {    options[:normalize_mysql_float] = true               }
     opt.on(''  , '--log-file LOG_FILE')           {|v| options[:log_file] = v                               }
     opt.on(''  , '--verbose')                     {    Ridgepole::Logger.verbose = true                     }
     opt.on(''  , '--debug')                       {    options[:debug] = true                               }

@@ -33,6 +33,7 @@ describe 'ridgepole' do
             --enable-mysql-pkdump
             --enable-foreigner
             --enable-migration-comments
+            --normalize-mysql-float
             --log-file LOG_FILE
             --verbose
             --debug
