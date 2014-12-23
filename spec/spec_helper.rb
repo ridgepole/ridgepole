@@ -93,7 +93,7 @@ def default_cli_hook
 
     class Ridgepole::Client
       def initialize(*args)
-        puts "Ridgepole::Client#initialize(\#{args.inspect})"
+        puts "Ridgepole::Client#initialize([\#{args.map {|i| i.kind_of?(File) ? i.path : i.inspect}.join(', ')}])"
       end
       def dump
         puts "Ridgepole::Client#dump"
@@ -104,7 +104,7 @@ def default_cli_hook
       end
       class << self
         def diff(*args)
-          puts "Ridgepole::Client.diff(\#{args.inspect})"
+          puts "Ridgepole::Client.diff([\#{args.map {|i| i.kind_of?(File) ? i.path : i.inspect}.join(', ')}])"
           Ridgepole::Delta.new
         end
         def dump(args)

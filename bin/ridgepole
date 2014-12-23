@@ -199,7 +199,7 @@ begin
         if %w(.yml .yaml).include?(file_ext)
           Ridgepole::Config.load(file, env)
         else
-          File.read(file)
+          File.open(file)
         end
       else
         YAML.load(file)
