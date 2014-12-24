@@ -5,9 +5,9 @@ Ridgepole is a tool to manage DB schema.
 It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.html#types-of-schema-dumps), and updates DB schema according to DSL.
 (like Chef/Puppet)
 
-[![Gem Version](https://badge.fury.io/rb/ridgepole.png)](http://badge.fury.io/rb/ridgepole)
+[![Gem Version](https://badge.fury.io/rb/ridgepole.svg)](http://badge.fury.io/rb/ridgepole)
 [![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=master)](https://travis-ci.org/winebarrel/ridgepole)
-[![Coverage Status](https://coveralls.io/repos/winebarrel/ridgepole/badge.png?branch=master)](https://coveralls.io/r/winebarrel/ridgepole?branch=master)
+[![Coverage Status](https://img.shields.io/coveralls/winebarrel/ridgepole.svg)](https://coveralls.io/r/winebarrel/ridgepole?branch=master)
 
 **Notice**
 
@@ -20,6 +20,9 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Fix `activerecord-mysql-unsigned` version: `~> 0.2.0`
 * `>= 0.5.0`
   * Fix `activerecord-mysql-unsigned` version: `~> 0.3.1`
+* `>= 0.5.1`
+  * Add `--enable-migration-comments` option ([migration_comments](https://github.com/pinnymz/migration_comments) is required)
+  * Fix rails version `< 4.2.0`
 
 ## Installation
 
@@ -61,6 +64,8 @@ Usage: ridgepole [options]
         --enable-mysql-unsigned
         --enable-mysql-pkdump
         --enable-foreigner
+        --enable-migration-comments
+        --normalize-mysql-float
         --log-file LOG_FILE
         --verbose
         --debug
@@ -158,6 +163,18 @@ end
 add_index "child", ["parent_id"], name: "par_ind", using: :btree
 
 add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
+```
+
+## Comment
+You can use the table/column comment by passing `--enable-migration-comments` ([migration_comments](https://github.com/pinnymz/migration_comments) is required)
+
+```ruby
+create_table "articles", force: true, comment: "table comment" do |t|
+  t.string   "title", comment: "column comment"
+  t.text     "text"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+end
 ```
 
 ## bigint support

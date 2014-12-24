@@ -32,6 +32,8 @@ describe 'ridgepole' do
             --enable-mysql-unsigned
             --enable-mysql-pkdump
             --enable-foreigner
+            --enable-migration-comments
+            --normalize-mysql-float
             --log-file LOG_FILE
             --verbose
             --debug
@@ -375,9 +377,9 @@ describe 'ridgepole' do
 
           expect(status.success?).to be_truthy
 
-          expect(out.strip).to eq <<-'EOS'.strip_heredoc.strip
+          expect(out.strip).to eq <<-EOS.strip_heredoc.strip
             Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
-            Ridgepole::Client.diff(["create_table :table do\nend\n", {"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
+            Ridgepole::Client.diff([#{conf_file.path}, {"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
             Ridgepole::Delta#differ?
           EOS
         end

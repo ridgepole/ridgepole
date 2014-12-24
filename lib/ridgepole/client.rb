@@ -15,6 +15,10 @@ class Ridgepole::Client
       require 'activerecord-mysql-pkdump'
     end
 
+    if @options[:migration_comments]
+      require 'migration_comments'
+    end
+
     if @options[:enable_foreigner]
       Ridgepole::ForeignKey.init
     end
@@ -59,9 +63,20 @@ class Ridgepole::Client
     private
 
     def load_definition(dsl_or_config, options = {})
-      dsl_or_config = dump(dsl_or_config, options) if dsl_or_config.kind_of?(Hash)
+      parse_opts = {}
+
+      case dsl_or_config
+      when Hash
+        dsl_or_config = dump(dsl_or_config, options)
+      when File
+        file = dsl_or_config
+        parse_opts[:path] = file.path
+        dsl_or_config = file.read
+        file.close
+      end
+
       parser = Ridgepole::DSLParser.new(options)
-      parser.parse(dsl_or_config)
+      parser.parse(dsl_or_config, parse_opts)
     end
   end # of class methods
 end
