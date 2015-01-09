@@ -27,7 +27,7 @@ describe 'Ridgepole::Client (with pkdump)' do
   end
 
   context 'when create with activerecord-mysql-pkdump' do
-    subject { client(enable_foreigner: true) }
+    subject { client(enable_mysql_pkdump: true) }
 
     it {
       delta = subject.diff(dsl)
@@ -39,7 +39,7 @@ describe 'Ridgepole::Client (with pkdump)' do
   end
 
   context 'update create with activerecord-mysql-pkdump' do
-    subject { client(enable_foreigner: true) }
+    subject { client(enable_mysql_pkdump: true) }
 
     before { subject.diff(dsl).migrate }
 

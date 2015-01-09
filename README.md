@@ -23,6 +23,9 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 * `>= 0.5.1`
   * Add `--enable-migration-comments` option ([migration_comments](https://github.com/pinnymz/migration_comments) is required)
   * Fix rails version `< 4.2.0`
+* `>= 0.5.2`
+  * Add `--enable-mysql-awesome` option ([activerecord-mysql-awesome](https://github.com/kamipo/activerecord-mysql-awesome) is required)
+  * It is not possible to enable both `--enable-migration-comments` and `--enable-mysql-awesome`
 
 ## Installation
 
@@ -55,6 +58,7 @@ Usage: ridgepole [options]
     -e, --export
         --split
         --split-with-dir
+        --without-table-options
     -d, --diff DSL1 DSL2
         --reverse
         --with-apply
@@ -65,7 +69,9 @@ Usage: ridgepole [options]
         --enable-mysql-pkdump
         --enable-foreigner
         --enable-migration-comments
+        --enable-mysql-awesome
         --normalize-mysql-float
+    -r, --require LIBS
         --log-file LOG_FILE
         --verbose
         --debug

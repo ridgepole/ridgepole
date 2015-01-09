@@ -49,10 +49,18 @@ end
 def client(options = {}, config = {})
   config = conn_spec(config)
 
-  options = {
-    :enable_mysql_unsigned => true,
+  default_options = {
     :debug => !!ENV['DEBUG'],
-  }.merge(options)
+  }
+
+  if mysql_awesome_enabled?
+    default_options[:enable_mysql_awesome] = true
+    default_options[:without_table_options] = true
+  else
+    default_options[:enable_mysql_unsigned] = true
+  end
+
+  options = default_options.merge(options)
 
   Ridgepole::Client.new(config, options)
 end
@@ -128,4 +136,8 @@ def run_cli(options = {})
     cmd = ([:ruby, f.path] + args).join(' ')
     Open3.capture2e(cmd)
   end
+end
+
+def mysql_awesome_enabled?
+  ENV['ENABLE_MYSQL_AWESOME'] == '1'
 end

@@ -34,6 +34,12 @@ class Ridgepole::Dumper
       line !~ /\A#/ &&
       line !~ /\AActiveRecord::Schema\.define/ &&
       line !~ /\Aend/
+    }.map {|line|
+      if @options[:without_table_options] and line =~ /\A  create_table /
+        line.gsub(/, options: "[^"]*"/, '')
+      else
+        line
+      end
     }.join.strip_heredoc
 
     definitions = []

@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#dump' do
   context 'when there is a tables (disable unsigned)' do
     before { restore_tables }
-    subject { client(enable_mysql_unsigned: false) }
+    subject { client(enable_mysql_unsigned: false, enable_mysql_awesome: false) }
 
     it {
       expect(subject.dump).to eq <<-RUBY.strip_heredoc.strip

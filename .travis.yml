@@ -4,3 +4,7 @@ rvm:
 script:
   - bundle install
   - bundle exec rake
+env:
+  matrix:
+    - ENABLE_MYSQL_AWESOME=0
+    - ENABLE_MYSQL_AWESOME=1

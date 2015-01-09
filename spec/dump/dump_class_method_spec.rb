@@ -3,8 +3,21 @@ describe 'Ridgepole::Client.dump' do
     before { restore_tables }
     subject { Ridgepole::Client }
 
+    let(:options) {
+      opts = {}
+
+      if mysql_awesome_enabled?
+        opts[:enable_mysql_awesome] = true
+        opts[:without_table_options] = true
+      else
+        opts[:enable_mysql_unsigned] = true
+      end
+
+      opts
+    }
+
     it {
-      expect(subject.dump(conn_spec, enable_mysql_unsigned: true)).to eq <<-RUBY.strip_heredoc.strip
+      expect(subject.dump(conn_spec, options)).to eq <<-RUBY.strip_heredoc.strip
         create_table "clubs", force: true do |t|
           t.string "name", default: "", null: false
         end

@@ -23,6 +23,7 @@ describe 'ridgepole' do
         -e, --export
             --split
             --split-with-dir
+            --without-table-options
         -d, --diff DSL1 DSL2
             --reverse
             --with-apply
@@ -33,7 +34,9 @@ describe 'ridgepole' do
             --enable-mysql-pkdump
             --enable-foreigner
             --enable-migration-comments
+            --enable-mysql-awesome
             --normalize-mysql-float
+        -r, --require LIBS
             --log-file LOG_FILE
             --verbose
             --debug
