@@ -58,7 +58,6 @@ Usage: ridgepole [options]
     -e, --export
         --split
         --split-with-dir
-        --without-table-options
     -d, --diff DSL1 DSL2
         --reverse
         --with-apply
@@ -71,6 +70,7 @@ Usage: ridgepole [options]
         --enable-migration-comments
         --enable-mysql-awesome
         --normalize-mysql-float
+        --dump-without-table-options
     -r, --require LIBS
         --log-file LOG_FILE
         --verbose

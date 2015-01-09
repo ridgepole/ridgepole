@@ -55,7 +55,7 @@ def client(options = {}, config = {})
 
   if mysql_awesome_enabled?
     default_options[:enable_mysql_awesome] = true
-    default_options[:without_table_options] = true
+    default_options[:dump_without_table_options] = true
   else
     default_options[:enable_mysql_unsigned] = true
   end

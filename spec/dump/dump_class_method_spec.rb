@@ -8,7 +8,7 @@ describe 'Ridgepole::Client.dump' do
 
       if mysql_awesome_enabled?
         opts[:enable_mysql_awesome] = true
-        opts[:without_table_options] = true
+        opts[:dump_without_table_options] = true
       else
         opts[:enable_mysql_unsigned] = true
       end

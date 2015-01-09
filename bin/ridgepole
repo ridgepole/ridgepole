@@ -74,7 +74,6 @@ ARGV.options do |opt|
     opt.on('-e', '--export')                      {    set_mode[:export]                                    }
     opt.on('',   '--split')                       {|v| split = true                                         }
     opt.on('',   '--split-with-dir')              {|v| split = :with_dir                                    }
-    opt.on('',   '--without-table-options')       {    options[:without_table_options] = true               }
     opt.on('-d', '--diff DSL1 DSL2') {|diff_arg1|
       set_mode[:diff]
       diff_arg2 = ARGV.first
@@ -98,6 +97,7 @@ ARGV.options do |opt|
     opt.on('',   '--enable-migration-comments')   {    options[:enable_migration_comments] = true           }
     opt.on('',   '--enable-mysql-awesome')        {    options[:enable_mysql_awesome] = true                }
     opt.on('',   '--normalize-mysql-float')       {    options[:normalize_mysql_float] = true               }
+    opt.on('',   '--dump-without-table-options')  {    options[:dump_without_table_options] = true          }
     opt.on('-r'  , '--require LIBS', Array)       {|v| v.each {|i| require i }                              }
     opt.on(''  , '--log-file LOG_FILE')           {|v| options[:log_file] = v                               }
     opt.on(''  , '--verbose')                     {    Ridgepole::Logger.verbose = true                     }
