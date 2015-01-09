@@ -183,9 +183,20 @@ create_table "articles", force: true, comment: "table comment" do |t|
 end
 ```
 
+## Collation
+You can use the column collation by passing `--enable-mysql-awesome` ([activerecord-mysql-awesome](https://github.com/kamipo/activerecord-mysql-awesome) is required)
+
+```ruby
+create_table "articles", force: true, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  t.string   "title",                    collation: "ascii_bin"
+  t.text     "text",       null: false,  collation: "utf8mb4_bin"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+endend
+```
+
 ## bigint support
 Export of `bigint` PK is enabled by passing `--enable-mysql-pkdump` ([activerecord-mysql-pkdump](https://github.com/winebarrel/activerecord-mysql-pkdump) is required)
-
 ```ruby
 create_table "books", id: "bigint(20) PRIMARY KEY auto_increment", force: true do |t|
   t.string   "title",      null: false
