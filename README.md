@@ -280,3 +280,6 @@ remove_column("articles", "author")
 * https://github.com/winebarrel/ridgepole-example
   * https://github.com/winebarrel/ridgepole-example/pull/1
   * https://github.com/winebarrel/ridgepole-example/pull/2
+
+## Similar tools
+* [Codenize.tools](http://codenize.tools/)
