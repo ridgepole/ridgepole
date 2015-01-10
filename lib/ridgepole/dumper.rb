@@ -36,7 +36,7 @@ class Ridgepole::Dumper
       line !~ /\Aend/
     }.map {|line|
       if @options[:dump_without_table_options] and line =~ /\A  create_table /
-        line.gsub(/, options: "[^"]*"/, '')
+        line.gsub(/, options: ("(?:[^"]|\")*")/, '')
       else
         line
       end
