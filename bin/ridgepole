@@ -114,6 +114,14 @@ ARGV.options do |opt|
       puts opt.help
       exit 1
     end
+
+    if options[:enable_mysql_awesome]
+      if options[:enable_migration_comments]
+        raise "It is not possible to enable both `--enable-mysql-awesome` and `--enable-migration-comments`"
+      elsif options[:enable_mysql_unsigned]
+        raise "It is not possible to enable both `--enable-mysql-awesome` and `--enable-mysql-unsigned`"
+      end
+    end
   rescue => e
     $stderr.puts("[ERROR] #{e.message}")
     exit 1
@@ -121,10 +129,6 @@ ARGV.options do |opt|
 end
 
 begin
-  if options[:enable_migration_comments] and options[:enable_mysql_awesome]
-    raise "It is not possible to enable both `--enable-migration-comments` and `--enable-mysql-awesome`"
-  end
-
   logger = Ridgepole::Logger.instance
   logger.set_debug(options[:debug])
 
