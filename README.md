@@ -193,7 +193,7 @@ create_table "articles", force: true, options: "ENGINE=InnoDB DEFAULT CHARSET=ut
   t.text     "text",       null: false,  collation: "utf8mb4_bin"
   t.datetime "created_at"
   t.datetime "updated_at"
-endend
+end
 ```
 
 ## bigint support
