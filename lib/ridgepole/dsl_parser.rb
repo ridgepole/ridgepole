@@ -121,7 +121,7 @@ class Ridgepole::DSLParser
     end
 
     def require(file)
-      schemafile = File.join(@__working_dir, file)
+      schemafile = (file =~ %r|\A/|) ? file : File.join(@__working_dir, file)
 
       if File.exist?(schemafile)
         instance_eval(File.read(schemafile), schemafile)
