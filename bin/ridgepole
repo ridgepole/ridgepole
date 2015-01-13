@@ -120,6 +120,8 @@ ARGV.options do |opt|
         raise "It is not possible to enable both `--enable-mysql-awesome` and `--enable-migration-comments`"
       elsif options[:enable_mysql_unsigned]
         raise "It is not possible to enable both `--enable-mysql-awesome` and `--enable-mysql-unsigned`"
+      elsif options[:enable_mysql_pkdump]
+        raise "It is not possible to enable both `--enable-mysql-awesome` and `--enable-mysql-pkdump`"
       end
     end
   rescue => e

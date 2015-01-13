@@ -5,7 +5,7 @@ describe 'Ridgepole::Client#dump' do
 
     it {
       expect(subject.dump).to eq <<-RUBY.strip_heredoc.strip
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no",#{mysql_awesome_enabled? ? ' id: :integer,' : ''} force: true do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -40,7 +40,7 @@ describe 'Ridgepole::Client#dump' do
 
     it {
       expect(subject.dump).to eq <<-RUBY.strip_heredoc.strip
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no",#{mysql_awesome_enabled? ? ' id: :integer,' : ''} force: true do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false

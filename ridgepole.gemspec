@@ -28,5 +28,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'foreigner', '<= 1.7.1'
   spec.add_development_dependency 'activerecord-mysql-pkdump', '>= 0.1.0'
   spec.add_development_dependency 'migration_comments'
-  spec.add_development_dependency 'activerecord-mysql-awesome'
+  spec.add_development_dependency 'activerecord-mysql-awesome', '>= 0.0.3'
 end
