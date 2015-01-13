@@ -24,8 +24,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Add `--enable-migration-comments` option ([migration_comments](https://github.com/pinnymz/migration_comments) is required)
   * Fix rails version `< 4.2.0`
 * `>= 0.5.2`
-  * Add `--enable-mysql-awesome` option ([activerecord-mysql-awesome](https://github.com/kamipo/activerecord-mysql-awesome) is required)
-  * It is not possible to enable both `--enable-migration-comments` and `--enable-mysql-awesome`
+  * Add `--enable-mysql-awesome` option ([activerecord-mysql-awesome](https://github.com/kamipo/activerecord-mysql-awesome) is required `>= 0.0.3`)
+  * It is not possible to enable both `--enable-mysql-awesome` and --enable-migration-comments`, `--enable-mysql-awesome` and --enable-mysql-unsigned`, `--enable-mysql-awesome` and --enable-mysql-pkdump`
   * Fix foreigner version `<= 1.7.1`
 
 ## Installation
