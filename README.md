@@ -70,6 +70,7 @@ Usage: ridgepole [options]
         --enable-foreigner
         --enable-migration-comments
         --enable-mysql-awesome
+        --mysql-awesome-unsigned-pk
         --normalize-mysql-float
         --dump-without-table-options
     -r, --require LIBS

@@ -21,7 +21,10 @@ class Ridgepole::Client
 
     if @options[:enable_mysql_awesome]
       require 'activerecord/mysql/awesome/base'
-      require 'ridgepole/ext/mysql_awesome.rb'
+
+      if @options[:mysql_awesome_unsigned_pk]
+        require 'ridgepole/ext/mysql_awesome.rb'
+      end
     end
 
     if @options[:enable_foreigner]
