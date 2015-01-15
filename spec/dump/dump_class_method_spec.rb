@@ -3,15 +3,29 @@ describe 'Ridgepole::Client.dump' do
     before { restore_tables }
     subject { Ridgepole::Client }
 
+    let(:options) {
+      opts = {}
+
+      if mysql_awesome_enabled?
+        opts[:enable_mysql_awesome] = true
+        opts[:dump_without_table_options] = true
+        opts[:mysql_awesome_unsigned_pk] = true
+      else
+        opts[:enable_mysql_unsigned] = true
+      end
+
+      opts
+    }
+
     it {
-      expect(subject.dump(conn_spec, enable_mysql_unsigned: true)).to eq <<-RUBY.strip_heredoc.strip
+      expect(subject.dump(conn_spec, options)).to eq <<-RUBY.strip_heredoc.strip
         create_table "clubs", force: true do |t|
           t.string "name", default: "", null: false
         end
 
         add_index "clubs", ["name"], name: "idx_name", unique: true, using: :btree
 
-        create_table "departments", primary_key: "dept_no", force: true do |t|
+        create_table "departments", primary_key: "dept_no",#{mysql_awesome_enabled? ? ' id: :string, limit: 4,' : ''} force: true do |t|
           t.string "dept_name", limit: 40, null: false
         end
 
@@ -44,7 +58,7 @@ describe 'Ridgepole::Client.dump' do
 
         add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_emp_no_club_id", using: :btree
 
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no",#{mysql_awesome_enabled? ? ' id: :integer,' : ''} force: true do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false

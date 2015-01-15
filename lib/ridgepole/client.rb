@@ -15,8 +15,16 @@ class Ridgepole::Client
       require 'activerecord-mysql-pkdump'
     end
 
-    if @options[:migration_comments]
+    if @options[:enable_migration_comments]
       require 'migration_comments'
+    end
+
+    if @options[:enable_mysql_awesome]
+      require 'activerecord/mysql/awesome/base'
+
+      if @options[:mysql_awesome_unsigned_pk]
+        require 'ridgepole/ext/mysql_awesome.rb'
+      end
     end
 
     if @options[:enable_foreigner]

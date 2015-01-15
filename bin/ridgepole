@@ -94,8 +94,12 @@ ARGV.options do |opt|
     opt.on('',   '--enable-mysql-unsigned')       {    options[:enable_mysql_unsigned] = true               }
     opt.on('',   '--enable-mysql-pkdump')         {    options[:enable_mysql_pkdump] = true                 }
     opt.on('',   '--enable-foreigner')            {    options[:enable_foreigner] = true                    }
-    opt.on('',   '--enable-migration-comments')   {    options[:migration_comments] = true                  }
+    opt.on('',   '--enable-migration-comments')   {    options[:enable_migration_comments] = true           }
+    opt.on('',   '--enable-mysql-awesome')        {    options[:enable_mysql_awesome] = true                }
+    opt.on('',   '--mysql-awesome-unsigned-pk')   {    options[:mysql_awesome_unsigned_pk] = true           }
     opt.on('',   '--normalize-mysql-float')       {    options[:normalize_mysql_float] = true               }
+    opt.on('',   '--dump-without-table-options')  {    options[:dump_without_table_options] = true          }
+    opt.on('-r'  , '--require LIBS', Array)       {|v| v.each {|i| require i }                              }
     opt.on(''  , '--log-file LOG_FILE')           {|v| options[:log_file] = v                               }
     opt.on(''  , '--verbose')                     {    Ridgepole::Logger.verbose = true                     }
     opt.on(''  , '--debug')                       {    options[:debug] = true                               }
@@ -110,6 +114,16 @@ ARGV.options do |opt|
     if not mode or ([:apply, :export].include?(mode) and not config) or  (options[:with_apply] and not config)
       puts opt.help
       exit 1
+    end
+
+    if options[:enable_mysql_awesome]
+      if options[:enable_migration_comments]
+        raise "It is not possible to enable both `--enable-mysql-awesome` and `--enable-migration-comments`"
+      elsif options[:enable_mysql_unsigned]
+        raise "It is not possible to enable both `--enable-mysql-awesome` and `--enable-mysql-unsigned`"
+      elsif options[:enable_mysql_pkdump]
+        raise "It is not possible to enable both `--enable-mysql-awesome` and `--enable-mysql-pkdump`"
+      end
     end
   rescue => e
     $stderr.puts("[ERROR] #{e.message}")

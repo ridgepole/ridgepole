@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['sugawara@cookpad.com']
   spec.summary       = %q{Ridgepole is a tool to manage DB schema.}
   spec.description   = %q{Ridgepole is a tool to manage DB schema. It defines DB schema using Rails DSL, and updates DB schema according to DSL.}
-  spec.homepage      = 'https://github.com/winebarrel/ridgepole'
+  spec.homepage      = 'http://ridgepole.codenize.tools/'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -25,7 +25,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'mysql2'
   spec.add_development_dependency 'coveralls'
   spec.add_development_dependency 'activerecord-mysql-unsigned', '~> 0.3.1'
-  spec.add_development_dependency 'foreigner'
+  spec.add_development_dependency 'foreigner', '<= 1.7.1'
   spec.add_development_dependency 'activerecord-mysql-pkdump', '>= 0.1.0'
   spec.add_development_dependency 'migration_comments'
+  spec.add_development_dependency 'activerecord-mysql-awesome', '>= 0.0.3'
 end
