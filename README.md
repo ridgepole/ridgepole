@@ -208,6 +208,14 @@ create_table "books", id: "bigint(20) PRIMARY KEY auto_increment", force: true d
 end
 ```
 
+If you use `--enable-mysql-awesome`:
+
+```ruby
+create_table "books", id: :bigint, force: true do |t|
+  ...
+end
+```
+
 ## Execute
 ```ruby
 create_table "authors", force: true do |t|
