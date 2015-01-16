@@ -19,3 +19,4 @@ tmp
 test.rb
 Schemafile
 *.schema
+_site/
