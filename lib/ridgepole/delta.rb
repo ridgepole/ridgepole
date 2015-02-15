@@ -59,7 +59,7 @@ class Ridgepole::Delta
         buf = StringIO.new
 
         callback = proc do |sql, name|
-          buf.puts sql if sql =~ /\A(CREATE|ALTER|DROP|RENAME)\b/i
+          buf.puts sql if sql =~ /\A(CREATE|ALTER|DROP|RENAME|COPY)\b/i
         end
 
         Ridgepole::ExecuteExpander.without_operation(callback) do

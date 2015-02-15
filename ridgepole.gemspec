@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec', '>= 3.0.0'
   spec.add_development_dependency 'mysql2'
+  spec.add_development_dependency 'sqlite3'
   spec.add_development_dependency 'coveralls'
   spec.add_development_dependency 'activerecord-mysql-unsigned', '~> 0.3.1'
   spec.add_development_dependency 'foreigner', '<= 1.7.1'
