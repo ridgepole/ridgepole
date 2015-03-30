@@ -78,10 +78,7 @@ class Ridgepole::Diff
     scan_options_change(table_name, from[:options], to[:options], table_delta)
     scan_definition_change(from[:definition], to[:definition], from[:indices], table_delta)
     scan_indices_change(from[:indices], to[:indices], to[:definition], table_delta, from[:options], to[:options])
-
-    if @options[:enable_foreigner]
-      Ridgepole::ForeignKey.scan_foreign_keys_change(from[:foreign_keys], to[:foreign_keys], table_delta, @options)
-    end
+    scan_foreign_keys_change(from[:foreign_keys], to[:foreign_keys], table_delta, @options)
 
     unless table_delta.empty?
       delta[:change] ||= {}
@@ -247,6 +244,8 @@ class Ridgepole::Diff
     case attrs[:type]
     when :string
       opts.delete(:limit) if opts[:limit] == 255
+    when :text
+      opts.delete(:limit) if opts[:limit] == 65535
     end
 
     # XXX: MySQL only?
@@ -255,8 +254,12 @@ class Ridgepole::Diff
     end
 
     # XXX: MySQL only?
-    if @options[:enable_mysql_unsigned] or @options[:enable_mysql_awesome]
+    if @options[:enable_mysql_awesome]
       opts[:unsigned] = false unless opts.has_key?(:unsigned)
+    end
+
+    if @options[:default_int_limit] and attrs[:type] == :integer
+      opts.delete(:limit) if opts[:limit] == @options[:default_int_limit]
     end
 
     if @options[:normalize_mysql_float] and attrs[:type] == :float
@@ -275,5 +278,41 @@ class Ridgepole::Diff
     end
 
     expected_columns.all? {|i| actual_columns.include?(i) }
+  end
+
+  def scan_foreign_keys_change(from, to, table_delta, options)
+    from = (from || {}).dup
+    to = (to || {}).dup
+    foreign_keys_delta = {}
+
+    to.each do |foreign_key_name, to_attrs|
+      from_attrs = from.delete(foreign_key_name)
+
+      if from_attrs
+        if from_attrs != to_attrs
+          foreign_keys_delta[:add] ||= {}
+          foreign_keys_delta[:add][foreign_key_name] = to_attrs
+
+          unless options[:merge]
+            foreign_keys_delta[:delete] ||= {}
+            foreign_keys_delta[:delete][foreign_key_name] = from_attrs
+          end
+        end
+      else
+        foreign_keys_delta[:add] ||= {}
+        foreign_keys_delta[:add][foreign_key_name] = to_attrs
+      end
+    end
+
+    unless options[:merge]
+      from.each do |foreign_key_name, from_attrs|
+        foreign_keys_delta[:delete] ||= {}
+        foreign_keys_delta[:delete][foreign_key_name] = from_attrs
+      end
+    end
+
+    unless foreign_keys_delta.empty?
+      table_delta[:foreign_keys] = foreign_keys_delta
+    end
   end
 end

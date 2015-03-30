@@ -24,8 +24,9 @@ diff_with_apply = false
 exit_code = 0
 
 options = {
-  :dry_run => false,
-  :debug   => false,
+  :default_int_limit => 4,
+  :dry_run           => false,
+  :debug             => false,
 }
 
 set_mode = proc do |m|
@@ -91,10 +92,6 @@ ARGV.options do |opt|
     opt.on('-o', '--output FILE')                 {|v| output_file = v                                      }
     opt.on('-t', '--tables TABLES', Array)        {|v| options[:tables] = v                                 }
     opt.on('',   '--ignore-tables TABLES', Array) {|v| options[:ignore_tables] = v.map {|i| Regexp.new(i) } }
-    opt.on('',   '--enable-mysql-unsigned')       {    options[:enable_mysql_unsigned] = true               }
-    opt.on('',   '--enable-mysql-pkdump')         {    options[:enable_mysql_pkdump] = true                 }
-    opt.on('',   '--enable-foreigner')            {    options[:enable_foreigner] = true                    }
-    opt.on('',   '--enable-migration-comments')   {    options[:enable_migration_comments] = true           }
     opt.on('',   '--enable-mysql-awesome')        {    options[:enable_mysql_awesome] = true                }
     opt.on('',   '--mysql-awesome-unsigned-pk')   {    options[:mysql_awesome_unsigned_pk] = true           }
     opt.on('',   '--normalize-mysql-float')       {    options[:normalize_mysql_float] = true               }
@@ -114,16 +111,6 @@ ARGV.options do |opt|
     if not mode or ([:apply, :export].include?(mode) and not config) or  (options[:with_apply] and not config)
       puts opt.help
       exit 1
-    end
-
-    if options[:enable_mysql_awesome]
-      if options[:enable_migration_comments]
-        raise "It is not possible to enable both `--enable-mysql-awesome` and `--enable-migration-comments`"
-      elsif options[:enable_mysql_unsigned]
-        raise "It is not possible to enable both `--enable-mysql-awesome` and `--enable-mysql-unsigned`"
-      elsif options[:enable_mysql_pkdump]
-        raise "It is not possible to enable both `--enable-mysql-awesome` and `--enable-mysql-pkdump`"
-      end
     end
   rescue => e
     $stderr.puts("[ERROR] #{e.message}")

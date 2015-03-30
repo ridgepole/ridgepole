@@ -226,11 +226,9 @@ end
       end
     end
 
-    if @options[:enable_foreigner] and not (foreign_keys = attrs[:foreign_keys] || {}).empty?
-      append_change_table(table_name, buf) do
-        foreign_keys.each do |foreign_key_name, foreign_key_attrs|
-          Ridgepole::ForeignKey.append_add_foreign_key(table_name, foreign_key_name, foreign_key_attrs, buf, @options)
-        end
+    unless (foreign_keys = attrs[:foreign_keys] || {}).empty?
+      foreign_keys.each do |foreign_key_name, foreign_key_attrs|
+        append_add_foreign_key(table_name, foreign_key_name, foreign_key_attrs, buf, @options)
       end
     end
 
@@ -254,13 +252,19 @@ drop_table(#{table_name.inspect})
   end
 
   def append_change(table_name, attrs, buf)
-    append_change_table(table_name, buf) do
-      append_change_definition(table_name, attrs[:definition] || {}, buf)
-      append_change_indices(table_name, attrs[:indices] || {}, buf)
+    definition = attrs[:definition] || {}
+    indices = attrs[:indices] || {}
+    foreign_keys = attrs[:foreign_keys] || {}
 
-      if @options[:enable_foreigner]
-        Ridgepole::ForeignKey.append_change_foreign_keys(table_name, attrs[:foreign_keys] || {}, buf, @options)
+    if not definition.empty? or not indices.empty?
+      append_change_table(table_name, buf) do
+        append_change_definition(table_name, definition, buf)
+        append_change_indices(table_name, indices, buf)
       end
+    end
+
+    unless foreign_keys.empty?
+      append_change_foreign_keys(table_name, foreign_keys, buf, @options)
     end
 
     buf.puts
@@ -387,6 +391,34 @@ add_index(#{table_name.inspect}, #{column_name.inspect}, #{options.inspect})
 remove_index(#{table_name.inspect}, #{target.inspect})
       EOS
     end
+  end
+
+  def append_change_foreign_keys(table_name, delta, buf, options)
+    (delta[:delete] || {}).each do |foreign_key_name, attrs|
+      append_remove_foreign_key(table_name, foreign_key_name, attrs, buf, options)
+    end
+
+    (delta[:add] || {}).each do |foreign_key_name, attrs|
+      append_add_foreign_key(table_name, foreign_key_name, attrs, buf, options)
+    end
+  end
+
+  def append_add_foreign_key(table_name, foreign_key_name, attrs, buf, options)
+    to_table = attrs.fetch(:to_table)
+    attrs_options = attrs[:options] || {}
+
+    buf.puts(<<-EOS)
+add_foreign_key(#{table_name.inspect}, #{to_table.inspect}, #{attrs_options.inspect})
+    EOS
+  end
+
+  def append_remove_foreign_key(table_name, foreign_key_name, attrs, buf, options)
+    attrs_options = attrs[:options] || {}
+    target = {:name => attrs_options.fetch(:name)}
+
+    buf.puts(<<-EOS)
+remove_foreign_key(#{table_name.inspect}, #{target.inspect})
+    EOS
   end
 
   def delta_execute

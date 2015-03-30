@@ -7,28 +7,12 @@ class Ridgepole::Client
     @parser = Ridgepole::DSLParser.new(@options)
     @diff = Ridgepole::Diff.new(@options)
 
-    if @options[:enable_mysql_unsigned]
-      require 'activerecord-mysql-unsigned/base'
-    end
-
-    if @options[:enable_mysql_pkdump]
-      require 'activerecord-mysql-pkdump'
-    end
-
-    if @options[:enable_migration_comments]
-      require 'migration_comments'
-    end
-
     if @options[:enable_mysql_awesome]
       require 'activerecord/mysql/awesome/base'
 
       if @options[:mysql_awesome_unsigned_pk]
         require 'ridgepole/ext/mysql_awesome.rb'
       end
-    end
-
-    if @options[:enable_foreigner]
-      Ridgepole::ForeignKey.init
     end
   end
 

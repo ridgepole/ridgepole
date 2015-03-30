@@ -50,6 +50,7 @@ def client(options = {}, config = {})
   config = conn_spec(config)
 
   default_options = {
+    :default_int_limit => 4,
     :debug => !!ENV['DEBUG'],
   }
 
@@ -57,8 +58,6 @@ def client(options = {}, config = {})
     default_options[:enable_mysql_awesome] = true
     default_options[:dump_without_table_options] = true
     default_options[:mysql_awesome_unsigned_pk] = true
-  else
-    default_options[:enable_mysql_unsigned] = true
   end
 
   options = default_options.merge(options)
@@ -141,4 +140,16 @@ end
 
 def mysql_awesome_enabled?
   ENV['ENABLE_MYSQL_AWESOME'] == '1'
+end
+
+def if_mysql_awesome_enabled(then_str, else_str = '')
+  if mysql_awesome_enabled?
+    then_str
+  else
+    else_str
+  end
+end
+
+def unsigned_if_enabled(prefix = ', ')
+  if_mysql_awesome_enabled("#{prefix}unsigned: true")
 end
