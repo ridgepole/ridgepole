@@ -2,18 +2,31 @@ require 'erb'
 require 'yaml'
 
 class Ridgepole::Config
-  def self.load(config, env = 'development')
-    config = if File.exist?(config)
-               yaml = ERB.new(File.read(config)).result
-               YAML.load(yaml)
-             else
-               YAML.load(ERB.new(config).result)
-             end
+  class << self
+    def load(config, env = 'development')
+      parsed_config = if File.exist?(config)
+                        parse_config_file(config)
+                      else
+                        YAML.load(ERB.new(config).result)
+                      end
 
-    if config.has_key?(env.to_s)
-      config.fetch(env.to_s)
-    else
-      config
+      unless parsed_config.kind_of?(Hash)
+        config = File.expand_path(config)
+        parse_config = parse_config_file(config)
+      end
+
+      if parsed_config.has_key?(env.to_s)
+        parsed_config.fetch(env.to_s)
+      else
+        parsed_config
+      end
     end
-  end
+
+    private
+
+    def parse_config_file(path)
+      yaml = ERB.new(File.read(path)).result
+      YAML.load(yaml)
+    end
+  end # of class methods
 end
