@@ -70,4 +70,18 @@ describe Ridgepole::Config do
       }
     end
   end
+
+  context 'when passed unexisting yaml' do
+    let(:config) {
+      'database.yml'
+    }
+
+    let(:env) { 'development' }
+
+    it {
+      expect {
+        subject
+      }.to raise_error(%r|o such file or directory - .*/database.yml|)
+    }
+  end
 end
