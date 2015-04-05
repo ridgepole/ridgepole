@@ -173,7 +173,7 @@ end
 
 add_index "child", ["parent_id"], name: "par_ind", using: :btree
 
-add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
+add_foreign_key "child", "parent", name: "child_ibfk_1"
 ```
 
 ## Collation
@@ -185,25 +185,6 @@ create_table "articles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSE
   t.text     "text",       null: false,  collation: "utf8mb4_bin"
   t.datetime "created_at"
   t.datetime "updated_at"
-end
-```
-
-## bigint support
-Export of `bigint` PK is enabled by passing `--enable-mysql-pkdump` ([activerecord-mysql-pkdump](https://github.com/winebarrel/activerecord-mysql-pkdump) is required)
-```ruby
-create_table "books", id: "bigint(20) PRIMARY KEY auto_increment", force: :cascade do |t|
-  t.string   "title",      null: false
-  t.integer  "author_id",  null: false
-  t.datetime "created_at"
-  t.datetime "updated_at"
-end
-```
-
-If you use `--enable-mysql-awesome`:
-
-```ruby
-create_table "books", id: :bigint, force: :cascade do |t|
-  ...
 end
 ```
 
