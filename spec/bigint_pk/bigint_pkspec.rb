@@ -2,7 +2,7 @@ if mysql_awesome_enabled?
   describe 'Ridgepole::Client (with bigint pk)' do
     let(:dsl1) {
       <<-RUBY
-        create_table "books", id: :primary_key, limit: 8, force: true do |t|
+        create_table "books", id: :primary_key, limit: 8, force: :cascade do |t|
           t.string   "title",      null: false
           t.integer  "author_id",  null: false
           t.datetime "created_at"
@@ -13,7 +13,7 @@ if mysql_awesome_enabled?
 
     let(:dsl2) {
       <<-RUBY
-        create_table "books", id: :bigint, force: true do |t|
+        create_table "books", id: :bigint, force: :cascade do |t|
           t.string   "title",      null: false
           t.integer  "author_id",  null: false
           t.datetime "created_at"

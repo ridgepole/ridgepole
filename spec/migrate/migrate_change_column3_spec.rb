@@ -2,7 +2,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when use timestamps (no change)' do
     let(:actual_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date",            null: false
           t.string   "first_name", limit: 14, null: false
           t.string   "last_name",  limit: 16, null: false
@@ -16,7 +16,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -39,7 +39,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when use timestamps (change)' do
     let(:actual_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -51,7 +51,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -64,7 +64,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
           t.date     "birth_date",            null: false
           t.string   "first_name", limit: 14, null: false
           t.string   "last_name",  limit: 16, null: false
@@ -91,7 +91,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when use references (no change)' do
     let(:actual_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date",            null: false
           t.string   "first_name", limit: 14, null: false
           t.string   "last_name",  limit: 16, null: false
@@ -105,7 +105,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -128,7 +128,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when use references with polymorphic (no change)' do
     let(:actual_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date",            null: false
           t.string   "first_name", limit: 14, null: false
           t.string   "last_name",  limit: 16, null: false
@@ -144,7 +144,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -167,7 +167,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when use references (change)' do
     let(:actual_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -179,7 +179,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -192,14 +192,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
           t.date    "birth_date",             null: false
           t.string  "first_name",  limit: 14, null: false
           t.string  "last_name",   limit: 16, null: false
           t.string  "gender",      limit: 1,  null: false
           t.date    "hire_date",              null: false
-          t.integer "products_id"
-          t.integer "user_id"
+          t.integer "products_id", limit: 4
+          t.integer "user_id",     limit: 4
         end
       RUBY
     }
@@ -219,7 +219,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when use references with polymorphic (change)' do
     let(:actual_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -231,7 +231,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -244,16 +244,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
-          t.date    "birth_date",               null: false
-          t.string  "first_name",    limit: 14, null: false
-          t.string  "last_name",     limit: 16, null: false
-          t.string  "gender",        limit: 1,  null: false
-          t.date    "hire_date",                null: false
-          t.integer "products_id"
-          t.string  "products_type"
-          t.integer "user_id"
-          t.string  "user_type"
+        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
+          t.date    "birth_date",                null: false
+          t.string  "first_name",    limit: 14,  null: false
+          t.string  "last_name",     limit: 16,  null: false
+          t.string  "gender",        limit: 1,   null: false
+          t.date    "hire_date",                 null: false
+          t.integer "products_id",   limit: 4
+          t.string  "products_type", limit: 255
+          t.integer "user_id",       limit: 4
+          t.string  "user_type",     limit: 255
         end
       RUBY
     }

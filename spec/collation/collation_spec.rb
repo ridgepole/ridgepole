@@ -3,22 +3,22 @@ if mysql_awesome_enabled?
     context 'when change column (add collation)' do
       let(:actual_dsl) {
         <<-RUBY
-          create_table "employee_clubs", force: true do |t|
-            t.integer "emp_no",  null: false
-            t.integer "club_id", null: false, unsigned: true
-            t.string  "string",  null: false
-            t.text    "text",    null: false
+          create_table "employee_clubs", unsigned: true, force: :cascade do |t|
+            t.integer "emp_no",  limit: 4,     null: false
+            t.integer "club_id", limit: 4,     null: false, unsigned: true
+            t.string  "string",  limit: 255,   null: false
+            t.text    "text",    limit: 65535, null: false
           end
         RUBY
       }
 
       let(:expected_dsl) {
         <<-RUBY
-          create_table "employee_clubs", force: true do |t|
-            t.integer "emp_no",  null: false
-            t.integer "club_id", null: false, unsigned: true
-            t.string  "string",  null: false,                 collation: "ascii_bin"
-            t.text    "text",    null: false,                 collation: "utf8mb4_bin"
+          create_table "employee_clubs", unsigned: true, force: :cascade do |t|
+            t.integer "emp_no",  limit: 4,     null: false
+            t.integer "club_id", limit: 4,     null: false, unsigned: true
+            t.string  "string",  limit: 255,   null: false,                 collation: "ascii_bin"
+            t.text    "text",    limit: 65535, null: false,                 collation: "utf8mb4_bin"
           end
         RUBY
       }
@@ -38,22 +38,22 @@ if mysql_awesome_enabled?
     context 'when change column (delete collation)' do
       let(:actual_dsl) {
         <<-RUBY
-          create_table "employee_clubs", force: true do |t|
-            t.integer "emp_no",  null: false
-            t.integer "club_id", null: false, unsigned: true
-            t.string  "string",  null: false,                 collation: "ascii_bin"
-            t.text    "text",    null: false,                 collation: "utf8mb4_bin"
+          create_table "employee_clubs", unsigned: true, force: :cascade do |t|
+            t.integer "emp_no",  limit: 4,     null: false
+            t.integer "club_id", limit: 4,     null: false, unsigned: true
+            t.string  "string",  limit: 255,   null: false,                 collation: "ascii_bin"
+            t.text    "text",    limit: 65535, null: false,                 collation: "utf8mb4_bin"
           end
         RUBY
       }
 
       let(:expected_dsl) {
         <<-RUBY
-          create_table "employee_clubs", force: true do |t|
-            t.integer "emp_no",  null: false
-            t.integer "club_id", null: false, unsigned: true
-            t.string  "string",  null: false
-            t.text    "text",    null: false
+          create_table "employee_clubs", unsigned: true, force: :cascade do |t|
+            t.integer "emp_no",  limit: 4,     null: false
+            t.integer "club_id", limit: 4,     null: false, unsigned: true
+            t.string  "string",  limit: 255,   null: false
+            t.text    "text",    limit: 65535, null: false
           end
         RUBY
       }
@@ -73,22 +73,22 @@ if mysql_awesome_enabled?
     context 'when change column (change collation)' do
       let(:actual_dsl) {
         <<-RUBY
-          create_table "employee_clubs", force: true do |t|
-            t.integer "emp_no",  null: false
-            t.integer "club_id", null: false, unsigned: true
-            t.string  "string",  null: false,                 collation: "ascii_bin"
-            t.text    "text",    null: false,                 collation: "utf8mb4_bin"
+          create_table "employee_clubs", unsigned: true, force: :cascade do |t|
+            t.integer "emp_no",  limit: 4,     null: false
+            t.integer "club_id", limit: 4,     null: false, unsigned: true
+            t.string  "string",  limit: 255,   null: false,                 collation: "ascii_bin"
+            t.text    "text",    limit: 65535, null: false,                 collation: "utf8mb4_bin"
           end
         RUBY
       }
 
       let(:expected_dsl) {
         <<-RUBY
-          create_table "employee_clubs", force: true do |t|
-            t.integer "emp_no",  null: false
-            t.integer "club_id", null: false, unsigned: true
-            t.string  "string",  null: false,                 collation: "utf8mb4_bin"
-            t.text    "text",    null: false,                 collation: "ascii_bin"
+          create_table "employee_clubs", unsigned: true, force: :cascade do |t|
+            t.integer "emp_no",  limit: 4,     null: false
+            t.integer "club_id", limit: 4,     null: false, unsigned: true
+            t.string  "string",  limit: 255,   null: false,                 collation: "utf8mb4_bin"
+            t.text    "text",    limit: 65535, null: false,                 collation: "ascii_bin"
           end
         RUBY
       }
@@ -108,11 +108,11 @@ if mysql_awesome_enabled?
     context 'when change column (no change collation)' do
       let(:actual_dsl) {
         <<-RUBY
-          create_table "employee_clubs", force: true do |t|
-            t.integer "emp_no",  null: false
-            t.integer "club_id", null: false, unsigned: true
-            t.string  "string",  null: false,                 collation: "ascii_bin"
-            t.text    "text",    null: false,                 collation: "utf8mb4_bin"
+          create_table "employee_clubs", unsigned: true, force: :cascade do |t|
+            t.integer "emp_no",  limit: 4,     null: false
+            t.integer "club_id", limit: 4,     null: false, unsigned: true
+            t.string  "string",  limit: 255,   null: false,                 collation: "ascii_bin"
+            t.text    "text",    limit: 65535, null: false,                 collation: "utf8mb4_bin"
           end
         RUBY
       }

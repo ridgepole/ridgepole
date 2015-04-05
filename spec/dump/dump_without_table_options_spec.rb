@@ -2,9 +2,9 @@ if mysql_awesome_enabled?
   describe 'Ridgepole::Client#dump' do
     let(:actual_dsl) {
       <<-'RUBY'
-        create_table "books", force: true, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='\"london\" bridge \"is\" falling \"down\"'" do |t|
-          t.string   "title",      null: false
-          t.integer  "author_id",  null: false
+        create_table "books", unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='\"london\" bridge \"is\" falling \"down\"'" do |t|
+          t.string   "title",      limit: 255, null: false
+          t.integer  "author_id",  limit: 4,   null: false
           t.datetime "created_at"
           t.datetime "updated_at"
         end
@@ -14,9 +14,9 @@ if mysql_awesome_enabled?
     context 'when without table options' do
       let(:expected_dsl) {
         <<-RUBY
-          create_table "books", force: true do |t|
-            t.string   "title",      null: false
-            t.integer  "author_id",  null: false
+          create_table "books", unsigned: true, force: :cascade do |t|
+            t.string   "title",      limit: 255, null: false
+            t.integer  "author_id",  limit: 4,   null: false
             t.datetime "created_at"
             t.datetime "updated_at"
           end

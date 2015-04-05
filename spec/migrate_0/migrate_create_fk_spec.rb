@@ -2,13 +2,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create fk' do
     let(:actual_dsl) {
       <<-RUBY
-create_table "child", force: true do |t|
-  t.integer "parent_id", unsigned: true
+create_table "child"#{unsigned_if_enabled}, force: :cascade do |t|
+  t.integer "parent_id", limit: 4#{unsigned_if_enabled}
 end
 
 add_index "child", ["parent_id"], name: "par_ind", using: :btree
 
-create_table "parent", force: true do |t|
+create_table "parent"#{unsigned_if_enabled}, force: :cascade do |t|
 end
       RUBY
     }
@@ -16,12 +16,12 @@ end
     let(:expected_dsl) {
       actual_dsl + (<<-RUBY)
 
-add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
+add_foreign_key "child", "parent", name: "child_ibfk_1"
       RUBY
     }
 
     before { subject.diff(actual_dsl).migrate }
-    subject { client(enable_foreigner: true) }
+    subject { client }
 
     it {
       delta = subject.diff(expected_dsl)
@@ -32,7 +32,7 @@ add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
     }
 
     it {
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true, enable_foreigner: true)
+      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true, default_int_limit: 4)
       expect(delta.differ?).to be_truthy
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
         remove_foreign_key("child", {:name=>"child_ibfk_1"})
@@ -40,13 +40,11 @@ add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
     }
 
     it {
-      delta = client(enable_foreigner: true, bulk_change: true).diff(expected_dsl)
+      delta = client(bulk_change: true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump.delete_empty_lines).to eq actual_dsl.strip_heredoc.strip.delete_empty_lines
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
-        change_table("child", {:bulk => true}) do |t|
-          t.foreign_key("parent", {:name=>"child_ibfk_1", :dependent=>:delete})
-        end
+        add_foreign_key("child", "parent", {:name=>"child_ibfk_1"})
       RUBY
       delta.migrate
       expect(subject.dump.delete_empty_lines).to eq expected_dsl.strip_heredoc.strip.delete_empty_lines
@@ -57,35 +55,36 @@ add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
     let(:dsl) {
       <<-RUBY
 # Define parent before child
-create_table "parent", force: true do |t|
+create_table "parent", force: :cascade do |t|
 end
 
-create_table "child", force: true do |t|
+create_table "child", force: :cascade do |t|
   t.integer "parent_id", unsigned: true
 end
 
 add_index "child", ["parent_id"], name: "par_ind", using: :btree
 
-add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
+add_foreign_key "child", "parent", name: "child_ibfk_1"
       RUBY
     }
 
     let(:sorted_dsl) {
       <<-RUBY
-create_table "child", force: true do |t|
-  t.integer "parent_id", unsigned: true
+
+create_table "child"#{unsigned_if_enabled}, force: :cascade do |t|
+  t.integer "parent_id", limit: 4#{unsigned_if_enabled}
 end
 
 add_index "child", ["parent_id"], name: "par_ind", using: :btree
 
-create_table "parent", force: true do |t|
+create_table "parent"#{unsigned_if_enabled}, force: :cascade do |t|
 end
 
-add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
+add_foreign_key "child", "parent", name: "child_ibfk_1"
       RUBY
     }
 
-    subject { client(enable_foreigner: true) }
+    subject { client }
 
     it {
       delta = subject.diff(dsl)
@@ -100,22 +99,22 @@ add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
     let(:dsl) {
       <<-RUBY
 # Define parent before child
-create_table "parent", force: true do |t|
+create_table "parent", force: :cascade do |t|
 end
 
-create_table "child", force: true do |t|
+create_table "child", force: :cascade do |t|
   t.integer "parent_id", unsigned: true
 end
 
 add_index "child", ["parent_id"], name: "par_ind", using: :btree
 
-add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
+add_foreign_key "child", "parent", name: "child_ibfk_1"
 
-add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
+add_foreign_key "child", "parent", name: "child_ibfk_1"
       RUBY
     }
 
-    subject { client(enable_foreigner: true) }
+    subject { client }
 
     it {
       expect {
@@ -128,20 +127,20 @@ add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
     let(:dsl) {
       <<-RUBY
 # Define parent before child
-create_table "parent", force: true do |t|
+create_table "parent", force: :cascade do |t|
 end
 
-create_table "child", force: true do |t|
+create_table "child", force: :cascade do |t|
   t.integer "parent_id", unsigned: true
 end
 
 add_index "child", ["parent_id"], name: "par_ind", using: :btree
 
-add_foreign_key "child", "parent", dependent: :delete
+add_foreign_key "child", "parent"
       RUBY
     }
 
-    subject { client(enable_foreigner: true) }
+    subject { client }
 
     it {
       expect {
@@ -154,14 +153,14 @@ add_foreign_key "child", "parent", dependent: :delete
     let(:dsl) {
       <<-RUBY
 # Define parent before child
-create_table "parent", force: true do |t|
+create_table "parent", force: :cascade do |t|
 end
 
-add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
+add_foreign_key "child", "parent", name: "child_ibfk_1"
       RUBY
     }
 
-    subject { client(enable_foreigner: true) }
+    subject { client }
 
     it {
       expect {

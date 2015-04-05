@@ -2,7 +2,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when database and definition are same (default null / nothing -> null:true)' do
     let(:actual_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -14,7 +14,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -39,7 +39,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when database and definition are same (default null / null:true -> nothing)' do
     let(:actual_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -51,7 +51,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false

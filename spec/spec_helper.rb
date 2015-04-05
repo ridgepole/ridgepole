@@ -50,7 +50,6 @@ def client(options = {}, config = {})
   config = conn_spec(config)
 
   default_options = {
-    :default_int_limit => 4,
     :debug => !!ENV['DEBUG'],
   }
 
@@ -150,6 +149,18 @@ def if_mysql_awesome_enabled(then_str, else_str = '')
   end
 end
 
-def unsigned_if_enabled(prefix = ', ')
-  if_mysql_awesome_enabled("#{prefix}unsigned: true")
+def unsigned_if_enabled(prefix = ', ', suffix = '')
+  if_mysql_awesome_enabled("#{prefix}unsigned: true#{suffix}")
+end
+
+def unsigned_false_if_enabled(prefix = ', ', suffix = '')
+  if_mysql_awesome_enabled("#{prefix}unsigned: false#{suffix}")
+end
+
+def unsigned_if_enabled2(prefix = ', ', suffix = '')
+  if_mysql_awesome_enabled("#{prefix}:unsigned=>true#{suffix}")
+end
+
+def unsigned_false_if_enabled2(prefix = ', ', suffix = '')
+  if_mysql_awesome_enabled("#{prefix}:unsigned=>false#{suffix}")
 end

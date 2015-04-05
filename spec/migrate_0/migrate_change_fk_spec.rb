@@ -2,43 +2,43 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change fk' do
     let(:actual_dsl) {
       <<-RUBY
-create_table "parent", force: true do |t|
+create_table "parent", force: :cascade do |t|
 end
 
-create_table "child", force: true do |t|
-  t.integer "parent_id", unsigned: true
+create_table "child", force: :cascade do |t|
+  t.integer "parent_id"#{unsigned_if_enabled}
 end
 
 add_index "child", ["parent_id"], name: "par_ind", using: :btree
 
-add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
+add_foreign_key "child", "parent", name: "child_ibfk_1", on_delete: :cascade
       RUBY
     }
 
     let(:sorted_actual_dsl) {
       <<-RUBY
-create_table "child", force: true do |t|
-  t.integer "parent_id", unsigned: true
+create_table "child"#{unsigned_if_enabled}, force: :cascade do |t|
+  t.integer "parent_id", limit: 4#{unsigned_if_enabled}
 end
 
 add_index "child", ["parent_id"], name: "par_ind", using: :btree
 
-create_table "parent", force: true do |t|
+create_table "parent"#{unsigned_if_enabled}, force: :cascade do |t|
 end
 
-add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
+add_foreign_key "child", "parent", name: "child_ibfk_1", on_delete: :cascade
       RUBY
     }
 
     let(:expected_dsl) {
       <<-RUBY
-create_table "child", force: true do |t|
-  t.integer "parent_id", unsigned: true
+create_table "child"#{unsigned_if_enabled}, force: :cascade do |t|
+  t.integer "parent_id", limit: 4#{unsigned_if_enabled}
 end
 
 add_index "child", ["parent_id"], name: "par_ind", using: :btree
 
-create_table "parent", force: true do |t|
+create_table "parent"#{unsigned_if_enabled}, force: :cascade do |t|
 end
 
 add_foreign_key "child", "parent", name: "child_ibfk_1"

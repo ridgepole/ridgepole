@@ -24,9 +24,8 @@ diff_with_apply = false
 exit_code = 0
 
 options = {
-  :default_int_limit => 4,
-  :dry_run           => false,
-  :debug             => false,
+  :dry_run => false,
+  :debug   => false,
 }
 
 set_mode = proc do |m|
@@ -67,9 +66,13 @@ ARGV.options do |opt|
       raise "Cannot use `bulk-change` in `merge`" if options[:merge]
       options[:bulk_change] = true
     }
-    opt.on('',   '--default-int-limit LIMIT', Integer) {|v|
-      options[:default_int_limit] = v
-    }
+
+    Ridgepole::DEFAULTS_LIMITS.keys.each do |column_type|
+      opt.on('', "--default-#{column_type == :integer ? :int : column_type}-limit LIMIT", Integer) {|v|
+        options[:"default_#{column_type}_limit"] = v
+      }
+    end
+
     opt.on('',   '--pre-query QUERY')             {|v| options[:pre_query] = v                              }
     opt.on('',   '--post-query QUERY')            {|v| options[:post_query] = v                             }
     opt.on('-e', '--export')                      {    set_mode[:export]                                    }
@@ -94,7 +97,6 @@ ARGV.options do |opt|
     opt.on('',   '--ignore-tables TABLES', Array) {|v| options[:ignore_tables] = v.map {|i| Regexp.new(i) } }
     opt.on('',   '--enable-mysql-awesome')        {    options[:enable_mysql_awesome] = true                }
     opt.on('',   '--mysql-awesome-unsigned-pk')   {    options[:mysql_awesome_unsigned_pk] = true           }
-    opt.on('',   '--normalize-mysql-float')       {    options[:normalize_mysql_float] = true               }
     opt.on('',   '--dump-without-table-options')  {    options[:dump_without_table_options] = true          }
     opt.on('-r'  , '--require LIBS', Array)       {|v| v.each {|i| require i }                              }
     opt.on(''  , '--log-file LOG_FILE')           {|v| options[:log_file] = v                               }
@@ -114,6 +116,7 @@ ARGV.options do |opt|
     end
   rescue => e
     $stderr.puts("[ERROR] #{e.message}")
+    puts e.backtrace
     exit 1
   end
 end

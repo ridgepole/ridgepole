@@ -2,7 +2,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when with ignore tables option (same)' do
     let(:current_schema) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -10,7 +10,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",             null: false
         end
 
-        create_table "salaries", id: false, force: true do |t|
+        create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no",    null: false
           t.integer "salary",    null: false
           t.date    "from_date", null: false
@@ -23,7 +23,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -31,7 +31,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",             null: false
         end
 
-        create_table "salaries", id: false, force: true do |t|
+        create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no",    null: false
           t.integer "salary",    null: false
           t.date    "from_date", null: false
@@ -44,7 +44,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -69,7 +69,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when with ignore tables option (differ)' do
     let(:current_schema) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -77,7 +77,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",             null: false
         end
 
-        create_table "salaries", id: false, force: true do |t|
+        create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no",    null: false
           t.integer "salary",    null: false
           t.date    "from_date", null: false
@@ -90,7 +90,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 15, null: false
           t.string "last_name",  limit: 16, null: false
@@ -98,7 +98,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",             null: false
         end
 
-        create_table "salaries", id: false, force: true do |t|
+        create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no",    null: false
           t.integer "salary",    null: false
           t.date    "from_date", null: false
@@ -111,7 +111,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:before_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -123,7 +123,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:after_dsl) {
       <<-RUBY
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 15, null: false
           t.string "last_name",  limit: 16, null: false
@@ -145,7 +145,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     it {
-      delta = Ridgepole::Client.diff(current_schema, dsl, ignore_tables: [/^salaries$/], reverse: true, enable_mysql_unsigned: true)
+      delta = Ridgepole::Client.diff(current_schema, dsl, ignore_tables: [/^salaries$/], reverse: true, enable_mysql_awesome: true)
       expect(delta.differ?).to be_truthy
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
         change_column("employees", "first_name", :string, {:limit=>14, :null=>false, :unsigned=>false})

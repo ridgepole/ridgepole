@@ -240,12 +240,13 @@ class Ridgepole::Diff
     opts = attrs[:options]
     opts[:null] = true unless opts.has_key?(:null)
 
-    # XXX: MySQL only?
-    case attrs[:type]
-    when :string
-      opts.delete(:limit) if opts[:limit] == 255
-    when :text
-      opts.delete(:limit) if opts[:limit] == 65535
+    Ridgepole::DEFAULTS_LIMITS.keys.each do |column_type|
+      default_limit = @options[:"default_#{column_type}_limit"]
+      next if default_limit <= 0
+
+      if attrs[:type] == column_type and opts[:limit] == default_limit
+        opts.delete(:limit)
+      end
     end
 
     # XXX: MySQL only?
@@ -253,17 +254,8 @@ class Ridgepole::Diff
       opts[:default] = nil
     end
 
-    # XXX: MySQL only?
     if @options[:enable_mysql_awesome]
       opts[:unsigned] = false unless opts.has_key?(:unsigned)
-    end
-
-    if @options[:default_int_limit] and attrs[:type] == :integer
-      opts.delete(:limit) if opts[:limit] == @options[:default_int_limit]
-    end
-
-    if @options[:normalize_mysql_float] and attrs[:type] == :float
-      opts.delete(:limit) if opts[:limit] == 24
     end
   end
 

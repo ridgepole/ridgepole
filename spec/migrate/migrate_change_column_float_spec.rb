@@ -2,8 +2,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change float column' do
     let(:actual_dsl) {
       <<-RUBY
-        create_table "salaries", id: false, force: true do |t|
-          t.integer "emp_no",               null: false
+        create_table "salaries", id: false, force: :cascade do |t|
+          t.integer "emp_no",    limit: 4,  null: false
           t.float   "salary",    limit: 24, null: false
           t.date    "from_date",            null: false
           t.date    "to_date",              null: false
@@ -13,7 +13,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) {
       <<-RUBY
-        create_table "salaries", id: false, force: true do |t|
+        create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no",               null: false
           t.float   "salary",               null: false
           t.date    "from_date",            null: false
@@ -23,7 +23,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     before { subject.diff(actual_dsl).migrate }
-    subject { client }
+    subject { client(default_float_limit: 0) }
 
     it {
       delta = subject.diff(expected_dsl)
@@ -37,7 +37,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change float column (no change)' do
     let(:actual_dsl) {
       <<-RUBY
-        create_table "salaries", id: false, force: true do |t|
+        create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no",               null: false
           t.float   "salary",    limit: 24, null: false
           t.date    "from_date",            null: false
@@ -48,7 +48,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) {
       <<-RUBY
-        create_table "salaries", id: false, force: true do |t|
+        create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no",               null: false
           t.float   "salary",               null: false
           t.date    "from_date",            null: false
@@ -58,7 +58,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     before { subject.diff(actual_dsl).migrate }
-    subject { client(normalize_mysql_float: true) }
+    subject { client }
 
     it {
       delta = subject.diff(expected_dsl)

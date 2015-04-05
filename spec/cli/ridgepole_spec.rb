@@ -18,6 +18,9 @@ describe 'ridgepole' do
             --table-options OPTIONS
             --bulk-change
             --default-int-limit LIMIT
+            --default-float-limit LIMIT
+            --default-string-limit LIMIT
+            --default-text-limit LIMIT
             --pre-query QUERY
             --post-query QUERY
         -e, --export
@@ -29,13 +32,8 @@ describe 'ridgepole' do
         -o, --output FILE
         -t, --tables TABLES
             --ignore-tables TABLES
-            --enable-mysql-unsigned
-            --enable-mysql-pkdump
-            --enable-foreigner
-            --enable-migration-comments
             --enable-mysql-awesome
             --mysql-awesome-unsigned-pk
-            --normalize-mysql-float
             --dump-without-table-options
         -r, --require LIBS
             --log-file LOG_FILE

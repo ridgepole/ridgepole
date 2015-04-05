@@ -2,20 +2,20 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column' do
     let(:actual_dsl) {
       <<-RUBY
-        create_table "clubs", force: true do |t|
-          t.string "name", default: "", null: false
+        create_table "clubs"#{unsigned_if_enabled}, force: :cascade do |t|
+          t.string "name", limit: 255, default: "", null: false
         end
 
         add_index "clubs", ["name"], name: "idx_name", unique: true, using: :btree
 
-        create_table "departments", primary_key: "dept_no", force: true do |t|
+        create_table "departments", primary_key: "dept_no"#{unsigned_if_enabled}, force: :cascade do |t|
           t.string "dept_name", limit: 40, null: false
         end
 
         add_index "departments", ["dept_name"], name: "dept_name", unique: true, using: :btree
 
-        create_table "dept_emp", id: false, force: true do |t|
-          t.integer "emp_no",              null: false
+        create_table "dept_emp", id: false, force: :cascade do |t|
+          t.integer "emp_no",    limit: 4, null: false
           t.string  "dept_no",   limit: 4, null: false
           t.date    "from_date",           null: false
           t.date    "to_date",             null: false
@@ -24,9 +24,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
         add_index "dept_emp", ["dept_no"], name: "dept_no", using: :btree
         add_index "dept_emp", ["emp_no"], name: "emp_no", using: :btree
 
-        create_table "dept_manager", id: false, force: true do |t|
+        create_table "dept_manager", id: false, force: :cascade do |t|
           t.string  "dept_no",   limit: 4, null: false
-          t.integer "emp_no",              null: false
+          t.integer "emp_no",    limit: 4, null: false
           t.date    "from_date",           null: false
           t.date    "to_date",             null: false
         end
@@ -34,14 +34,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
         add_index "dept_manager", ["dept_no"], name: "dept_no", using: :btree
         add_index "dept_manager", ["emp_no"], name: "emp_no", using: :btree
 
-        create_table "employee_clubs", force: true do |t|
-          t.integer "emp_no",  null: false, unsigned: true
-          t.integer "club_id", null: false, unsigned: true
+        create_table "employee_clubs"#{unsigned_if_enabled}, force: :cascade do |t|
+          t.integer "emp_no",  limit: 4, null: false#{unsigned_if_enabled}
+          t.integer "club_id", limit: 4, null: false#{unsigned_if_enabled}
         end
 
         add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_emp_no_club_id", using: :btree
 
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -49,17 +49,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",             null: false
         end
 
-        create_table "salaries", id: false, force: true do |t|
-          t.integer "emp_no",    null: false
-          t.integer "salary",    null: false
-          t.date    "from_date", null: false
-          t.date    "to_date",   null: false
+        create_table "salaries", id: false, force: :cascade do |t|
+          t.integer "emp_no",    limit: 4, null: false
+          t.integer "salary",    limit: 4, null: false
+          t.date    "from_date",           null: false
+          t.date    "to_date",             null: false
         end
 
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
 
-        create_table "titles", id: false, force: true do |t|
-          t.integer "emp_no",               null: false
+        create_table "titles", id: false, force: :cascade do |t|
+          t.integer "emp_no",    limit: 4,  null: false
           t.string  "title",     limit: 50, null: false
           t.date    "from_date",            null: false
           t.date    "to_date"
@@ -71,20 +71,20 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) {
       <<-RUBY
-        create_table "clubs", force: true do |t|
-          t.string "name", default: "", null: false
+        create_table "clubs"#{unsigned_if_enabled}, force: :cascade do |t|
+          t.string "name", limit: 255, default: "", null: false
         end
 
         add_index "clubs", ["name"], name: "idx_name", unique: true, using: :btree
 
-        create_table "departments", primary_key: "dept_no", force: true do |t|
+        create_table "departments", primary_key: "dept_no"#{unsigned_if_enabled}, force: :cascade do |t|
           t.string "dept_name", limit: 40, null: false
         end
 
         add_index "departments", ["dept_name"], name: "dept_name", unique: true, using: :btree
 
-        create_table "dept_emp", id: false, force: true do |t|
-          t.integer "emp_no",              null: false
+        create_table "dept_emp", id: false, force: :cascade do |t|
+          t.integer "emp_no",    limit: 4, null: false
           t.string  "dept_no",   limit: 4, null: false
           t.date    "from_date",           null: false
           t.date    "to_date",             null: false
@@ -93,9 +93,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
         add_index "dept_emp", ["dept_no"], name: "dept_no", using: :btree
         add_index "dept_emp", ["emp_no"], name: "emp_no", using: :btree
 
-        create_table "dept_manager", id: false, force: true do |t|
+        create_table "dept_manager", id: false, force: :cascade do |t|
           t.string  "dept_no",   limit: 4, null: false
-          t.integer "emp_no",              null: false
+          t.integer "emp_no",    limit: 4, null: false
           t.date    "from_date",           null: false
           t.date    "to_date",             null: false
         end
@@ -103,14 +103,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
         add_index "dept_manager", ["dept_no"], name: "dept_no", using: :btree
         add_index "dept_manager", ["emp_no"], name: "emp_no", using: :btree
 
-        create_table "employee_clubs", force: true do |t|
-          t.integer "emp_no",  null: false, unsigned: true
-          t.integer "club_id", unsigned: false, null: true
+        create_table "employee_clubs"#{unsigned_if_enabled}, force: :cascade do |t|
+          t.integer "emp_no",  limit: 4, null: false#{unsigned_if_enabled}
+          t.integer "club_id", limit: 4
         end
 
         add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_emp_no_club_id", using: :btree
 
-        create_table "employees", primary_key: "emp_no", force: true do |t|
+        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
           t.date   "birth_date",                            null: false
           t.string "first_name", limit: 14,                 null: false
           t.string "last_name",  limit: 20, default: "XXX", null: false
@@ -118,17 +118,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",                             null: false
         end
 
-        create_table "salaries", id: false, force: true do |t|
-          t.integer "emp_no",    null: false
-          t.integer "salary",    null: false
-          t.date    "from_date", null: false
-          t.date    "to_date",   null: false
+        create_table "salaries", id: false, force: :cascade do |t|
+          t.integer "emp_no",    limit: 4, null: false
+          t.integer "salary",    limit: 4, null: false
+          t.date    "from_date",           null: false
+          t.date    "to_date",             null: false
         end
 
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
 
-        create_table "titles", id: false, force: true do |t|
-          t.integer "emp_no",               null: false
+        create_table "titles", id: false, force: :cascade do |t|
+          t.integer "emp_no",    limit: 4,  null: false
           t.string  "title",     limit: 50, null: false
           t.date    "from_date",            null: false
           t.date    "to_date"
@@ -153,10 +153,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true, enable_mysql_unsigned: true)
       expect(delta.differ?).to be_truthy
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
-        change_column("employee_clubs", "club_id", :integer, {:null=>false, :unsigned=>true})
+        change_column("employee_clubs", "club_id", :integer, {:null=>false#{unsigned_if_enabled2}})
 
-        change_column("employees", "last_name", :string, {:limit=>16, :null=>false, :unsigned=>false})
-        change_column("employees", "gender", :string, {:limit=>1, :null=>false, :unsigned=>false})
+        change_column("employees", "last_name", :string, {:limit=>16, :null=>false})
+        change_column("employees", "gender", :string, {:limit=>1, :null=>false})
       RUBY
     }
 
@@ -166,12 +166,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
         change_table("employee_clubs", {:bulk => true}) do |t|
-          t.change("club_id", :integer, {:unsigned=>false, :null=>true, :default=>nil})
+          t.change("club_id", :integer, {:null=>true, :default=>nil#{unsigned_false_if_enabled2}})
         end
 
         change_table("employees", {:bulk => true}) do |t|
-          t.change("last_name", :string, {:limit=>20, :default=>"XXX", :null=>false, :unsigned=>false})
-          t.change("gender", :string, {:limit=>2, :null=>false, :unsigned=>false})
+          t.change("last_name", :string, {:limit=>20, :default=>"XXX", :null=>false#{unsigned_false_if_enabled2}})
+          t.change("gender", :string, {:limit=>2, :null=>false#{unsigned_false_if_enabled2}})
         end
       RUBY
       delta.migrate

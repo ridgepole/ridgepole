@@ -14,6 +14,7 @@ class Ridgepole::Delta
       end
 
       open(log_file, 'wb') {|f| f.puts JSON.pretty_generate(result) }
+      result
     else
       migrate0(options)
     end
@@ -204,10 +205,7 @@ create_table(#{table_name.inspect}, #{options.inspect}) do |t|
     definition.each do |column_name, column_attrs|
       column_type = column_attrs.fetch(:type)
       column_options = column_attrs[:options] || {}
-
-      if @options[:default_int_limit] and column_type == :integer
-        column_options[:limit] ||= @options[:default_int_limit]
-      end
+      normalize_limit(column_type, column_options)
 
       buf.puts(<<-EOS)
   t.#{column_type}(#{column_name.inspect}, #{column_options.inspect})
@@ -297,10 +295,7 @@ drop_table(#{table_name.inspect})
   def append_add_column(table_name, column_name, attrs, buf)
     type = attrs.fetch(:type)
     options = attrs[:options] || {}
-
-    if @options[:default_int_limit] and type == :integer
-      options[:limit] ||= @options[:default_int_limit]
-    end
+    normalize_limit(type, options)
 
     if @options[:bulk_change]
       buf.puts(<<-EOS)
@@ -423,5 +418,16 @@ remove_foreign_key(#{table_name.inspect}, #{target.inspect})
 
   def delta_execute
     @delta[:execute] || []
+  end
+
+  def normalize_limit(column_type, column_options)
+    Ridgepole::DEFAULTS_LIMITS.each do |default_column_type, limit|
+      default_limit = @options[:"default_#{default_column_type}_limit"]
+      next if default_limit <= 0
+
+      if column_type == default_column_type
+        column_options[:limit] ||= default_limit
+      end
+    end
   end
 end
