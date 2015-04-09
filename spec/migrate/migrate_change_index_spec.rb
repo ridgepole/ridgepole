@@ -223,13 +223,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
         remove_index("dept_emp", {:name=>"emp_no"})
-        add_index("dept_emp", ["emp_no"], {:name=>"emp_no", :using=>:btree})
+        add_index("dept_emp", ["emp_no"], {:name=>"emp_no", :using=>:btree, :unique=>false})
 
         remove_index("dept_manager", {:name=>"emp_no"})
-        add_index("dept_manager", ["emp_no"], {:name=>"emp_no", :using=>:btree})
+        add_index("dept_manager", ["emp_no"], {:name=>"emp_no", :using=>:btree, :unique=>false})
 
         remove_index("salaries", {:name=>"emp_no"})
-        add_index("salaries", ["emp_no"], {:name=>"emp_no", :using=>:btree})
+        add_index("salaries", ["emp_no"], {:name=>"emp_no", :using=>:btree, :unique=>false})
       RUBY
     }
 
@@ -240,17 +240,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
         change_table("dept_emp", {:bulk => true}) do |t|
           t.remove_index({:name=>"emp_no"})
-          t.index(["from_date"], {:name=>"emp_no", :using=>:btree})
+          t.index(["from_date"], {:name=>"emp_no", :using=>:btree, :unique=>false})
         end
 
         change_table("dept_manager", {:bulk => true}) do |t|
           t.remove_index({:name=>"emp_no"})
-          t.index(["from_date"], {:name=>"emp_no", :using=>:btree})
+          t.index(["from_date"], {:name=>"emp_no", :using=>:btree, :unique=>false})
         end
 
         change_table("salaries", {:bulk => true}) do |t|
           t.remove_index({:name=>"emp_no"})
-          t.index(["from_date"], {:name=>"emp_no", :using=>:btree})
+          t.index(["from_date"], {:name=>"emp_no", :using=>:btree, :unique=>false})
         end
       RUBY
 
