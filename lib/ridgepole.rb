@@ -9,6 +9,7 @@ require 'active_support/core_ext'
 module Ridgepole
   # for MySQL
   DEFAULTS_LIMITS = {
+    :boolean => 1,
     :integer => 4,
     :float   => 24,
     :string  => 255,

@@ -68,7 +68,16 @@ ARGV.options do |opt|
     }
 
     Ridgepole::DEFAULTS_LIMITS.keys.each do |column_type|
-      opt.on('', "--default-#{column_type == :integer ? :int : column_type}-limit LIMIT", Integer) {|v|
+      case column_type
+      when :integer
+        option_column_type = :int
+      when :boolean
+        option_column_type = :bool
+      else
+        option_column_type = column_type
+      end
+
+      opt.on('', "--default-#{option_column_type}-limit LIMIT", Integer) {|v|
         options[:"default_#{column_type}_limit"] = v
       }
     end
