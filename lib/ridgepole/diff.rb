@@ -262,6 +262,7 @@ class Ridgepole::Diff
   def normalize_index_options!(opts)
     # XXX: MySQL only?
     opts[:using] = :btree unless opts.has_key?(:using)
+    opts[:unique] = false unless opts.has_key?(:unique)
   end
 
   def columns_all_include?(expected_columns, actual_columns, table_options)
