@@ -17,6 +17,7 @@ describe 'ridgepole' do
             --dry-run
             --table-options OPTIONS
             --bulk-change
+            --default-bool-limit LIMIT
             --default-int-limit LIMIT
             --default-float-limit LIMIT
             --default-string-limit LIMIT
