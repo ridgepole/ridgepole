@@ -239,15 +239,8 @@ class Ridgepole::Diff
   def normalize_column_options!(attrs)
     opts = attrs[:options]
     opts[:null] = true unless opts.has_key?(:null)
-
-    Ridgepole::DEFAULTS_LIMITS.keys.each do |column_type|
-      default_limit = @options[:"default_#{column_type}_limit"]
-      next if default_limit <= 0
-
-      if attrs[:type] == column_type and opts[:limit] == default_limit
-        opts.delete(:limit)
-      end
-    end
+    default_limit = Ridgepole::DefaultsLimit.default_limit(attrs[:type], @options)
+    opts.delete(:limit) if opts[:limit] == default_limit
 
     # XXX: MySQL only?
     if not opts.has_key?(:default) and opts[:null]

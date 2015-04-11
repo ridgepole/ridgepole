@@ -6,18 +6,10 @@ require 'active_record'
 require 'active_support'
 require 'active_support/core_ext'
 
-module Ridgepole
-  # for MySQL
-  DEFAULTS_LIMITS = {
-    :boolean => 1,
-    :integer => 4,
-    :float   => 24,
-    :string  => 255,
-    :text    => 65535,
-  }
-end
+module Ridgepole; end
 
 require 'ridgepole/client'
+require 'ridgepole/default_limit'
 require 'ridgepole/delta'
 require 'ridgepole/diff'
 require 'ridgepole/dsl_parser'

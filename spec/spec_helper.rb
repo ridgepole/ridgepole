@@ -37,12 +37,20 @@ RSpec.configure do |config|
 end
 
 def restore_database
-  sql_file = File.expand_path('../ridgepole_test_database.sql', __FILE__)
+  restore_database_mysql
+end
+
+def restore_database_mysql
+  sql_file = File.expand_path('../mysql/ridgepole_test_database.sql', __FILE__)
   system("mysql -uroot < #{sql_file}")
 end
 
 def restore_tables
-  sql_file = File.expand_path('../ridgepole_test_tables.sql', __FILE__)
+  restore_tables_mysql
+end
+
+def restore_tables_mysql
+  sql_file = File.expand_path('../mysql/ridgepole_test_tables.sql', __FILE__)
   system("mysql -uroot < #{sql_file}")
 end
 

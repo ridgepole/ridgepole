@@ -421,13 +421,7 @@ remove_foreign_key(#{table_name.inspect}, #{target.inspect})
   end
 
   def normalize_limit(column_type, column_options)
-    Ridgepole::DEFAULTS_LIMITS.each do |default_column_type, limit|
-      default_limit = @options[:"default_#{default_column_type}_limit"]
-      next if default_limit <= 0
-
-      if column_type == default_column_type
-        column_options[:limit] ||= default_limit
-      end
-    end
+    default_limit = Ridgepole::DefaultsLimit.default_limit(column_type, @options)
+    column_options[:limit] ||= default_limit if default_limit
   end
 end

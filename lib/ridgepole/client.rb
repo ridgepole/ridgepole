@@ -1,6 +1,5 @@
 class Ridgepole::Client
   def initialize(conn_spec, options = {})
-    Ridgepole::Client.normalize_options(options)
     @options = options
 
     ActiveRecord::Base.establish_connection(conn_spec)
@@ -37,7 +36,6 @@ class Ridgepole::Client
 
   class << self
     def diff(dsl_or_config1, dsl_or_config2, options = {})
-      normalize_options(options)
       logger = Ridgepole::Logger.instance
 
       logger.verbose_info('# Parse DSL1')
@@ -51,15 +49,8 @@ class Ridgepole::Client
     end
 
     def dump(conn_spec, options = {}, &block)
-      normalize_options(options)
       client = self.new(conn_spec, options)
       client.dump(&block)
-    end
-
-    def normalize_options(options)
-      Ridgepole::DEFAULTS_LIMITS.each do |column_type, limit|
-        options[:"default_#{column_type}_limit"] ||= limit
-      end
     end
 
     private
