@@ -12,7 +12,7 @@ CREATE TABLE departments (
   dept_no char(4) PRIMARY KEY,
   dept_name varchar(40) NOT NULL
 );
-CREATE UNIQUE INDEX idx_dept_name ON clubs (dept_name);
+CREATE UNIQUE INDEX idx_dept_name ON departments (dept_name);
 
 DROP TABLE IF EXISTS dept_emp ;
 CREATE TABLE dept_emp (
