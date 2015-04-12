@@ -34,6 +34,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
     * migration_comments
     * foreigner
   * Disable sqlite support
+  * Add PostgreSQL test
 
 ## Installation
 
