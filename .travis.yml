@@ -10,3 +10,5 @@ env:
     - ENABLE_MYSQL_AWESOME=0
     - ENABLE_MYSQL_AWESOME=1
     - POSTGRESQL=1
+addons:
+  postgresql: "9.3"

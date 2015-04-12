@@ -1,6 +1,10 @@
 $: << File.expand_path('..', __FILE__)
 
-if ENV['TRAVIS']
+def travis?
+  !!ENV['TRAVIS']
+end
+
+if travis?
   require 'simplecov'
   require 'coveralls'
 
@@ -51,7 +55,7 @@ end
 
 def restore_database_postgresql
   sql_file = File.expand_path('../postgresql/ridgepole_test_database.sql', __FILE__)
-  system("psql --set ON_ERROR_STOP=off -q -f #{sql_file} 2>/dev/null")
+  system("psql #{travis? ? '-U postgres' : ''} --set ON_ERROR_STOP=off -q -f #{sql_file} 2>/dev/null")
 end
 
 def restore_tables
@@ -69,7 +73,7 @@ end
 
 def restore_tables_postgresql
   sql_file = File.expand_path('../postgresql/ridgepole_test_tables.sql', __FILE__)
-  system("psql -q -f #{sql_file} 2>/dev/null")
+  system("psql #{travis? ? '-U postgres' : ''} -q -f #{sql_file} 2>/dev/null")
 end
 
 def client(options = {}, config = {})
@@ -91,10 +95,20 @@ def client(options = {}, config = {})
 end
 
 def conn_spec(config = {})
-  {
-    adapter: postgresql? ? 'postgresql' : 'mysql2',
-    database: TEST_SCHEMA,
-  }.merge(config)
+  if postgresql?
+    spec = {
+      adapter: 'postgresql',
+      database: TEST_SCHEMA,
+    }
+
+    spec[:username] = 'postgres' if travis?
+    spec.merge(config)
+  else
+    {
+      adapter: 'mysql2',
+      database: TEST_SCHEMA,
+    }.merge(config)
+  end
 end
 
 def show_create_table(table_name)
@@ -111,7 +125,7 @@ def show_create_table_mysql(table_name)
 end
 
 def show_create_table_postgresql(table_name)
-  `pg_dump --schema-only #{TEST_SCHEMA} --table=#{table_name} | awk '/^CREATE TABLE/,/);/{print} /^CREATE INDEX/{print}'`.strip
+  `pg_dump #{travis? ? '-U postgres' : ''} --schema-only #{TEST_SCHEMA} --table=#{table_name} | awk '/^CREATE TABLE/,/);/{print} /^CREATE INDEX/{print}'`.strip
 end
 
 def default_cli_hook
