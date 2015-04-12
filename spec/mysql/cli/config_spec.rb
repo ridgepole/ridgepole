@@ -82,7 +82,7 @@ describe Ridgepole::Config do
     it {
       expect {
         subject
-      }.to raise_error(%r|o such file or directory - .*/database.yml|)
+      }.to raise_error Errno::ENOENT
     }
   end
 end
