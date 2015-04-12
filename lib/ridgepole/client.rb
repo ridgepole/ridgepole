@@ -3,6 +3,11 @@ class Ridgepole::Client
     @options = options
 
     ActiveRecord::Base.establish_connection(conn_spec)
+
+    if not @options.has_key?(:index_removed_drop_column) and Ridgepole::DefaultsLimit.adapter == :postgresql
+      @options[:index_removed_drop_column] = true
+    end
+
     Ridgepole::ExecuteExpander.expand_execute(ActiveRecord::Base.connection)
     @dumper = Ridgepole::Dumper.new(@options)
     @parser = Ridgepole::DSLParser.new(@options)

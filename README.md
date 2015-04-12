@@ -79,6 +79,7 @@ Usage: ridgepole [options]
         --enable-mysql-awesome
         --mysql-awesome-unsigned-pk
         --dump-without-table-options
+        --index-removed-drop-column
     -r, --require LIBS
         --log-file LOG_FILE
         --verbose

@@ -134,8 +134,19 @@ class Ridgepole::Diff
         definition_delta[:delete][column_name] = from_attrs
 
         if from_indices
+          modified_indices = []
+
           from_indices.each do |name, attrs|
-            attrs[:column_name].delete(column_name)
+            if attrs[:column_name].delete(column_name)
+              modified_indices << name
+            end
+          end
+
+          # In PostgreSQL, the index is deleted when the column is deleted
+          if @options[:index_removed_drop_column]
+            from_indices.reject! do |name, attrs|
+              modified_indices.include?(name)
+            end
           end
 
           from_indices.reject! do |name, attrs|

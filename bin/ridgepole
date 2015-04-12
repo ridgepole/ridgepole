@@ -106,6 +106,7 @@ ARGV.options do |opt|
     opt.on('',   '--enable-mysql-awesome')        {    options[:enable_mysql_awesome] = true                }
     opt.on('',   '--mysql-awesome-unsigned-pk')   {    options[:mysql_awesome_unsigned_pk] = true           }
     opt.on('',   '--dump-without-table-options')  {    options[:dump_without_table_options] = true          }
+    opt.on('',   '--index-removed-drop-column')   {    options[:index_removed_drop_column] = true           }
     opt.on('-r'  , '--require LIBS', Array)       {|v| v.each {|i| require i }                              }
     opt.on(''  , '--log-file LOG_FILE')           {|v| options[:log_file] = v                               }
     opt.on(''  , '--verbose')                     {    Ridgepole::Logger.verbose = true                     }

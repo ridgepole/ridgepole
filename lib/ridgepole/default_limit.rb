@@ -17,8 +17,6 @@ class Ridgepole::DefaultsLimit
       default_limit.zero? ? nil : default_limit
     end
 
-    private
-
     def adapter
       ActiveRecord::Base.connection_config.fetch(:adapter).to_sym
     rescue ActiveRecord::ConnectionNotEstablished
