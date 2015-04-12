@@ -4,6 +4,7 @@ class Ridgepole::Client
 
     ActiveRecord::Base.establish_connection(conn_spec)
 
+    # XXX: If the required processing in class method?
     if not @options.has_key?(:index_removed_drop_column) and Ridgepole::DefaultsLimit.adapter == :postgresql
       @options[:index_removed_drop_column] = true
     end
