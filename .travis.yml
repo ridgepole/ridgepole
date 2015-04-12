@@ -1,6 +1,7 @@
 language: ruby
 rvm:
   - 2.0.0
+  - 2.1.5
 script:
   - bundle install
   - bundle exec rake
@@ -8,3 +9,4 @@ env:
   matrix:
     - ENABLE_MYSQL_AWESOME=0
     - ENABLE_MYSQL_AWESOME=1
+    - POSTGRESQL=1

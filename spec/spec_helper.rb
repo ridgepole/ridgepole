@@ -37,7 +37,11 @@ RSpec.configure do |config|
 end
 
 def restore_database
-  restore_database_mysql
+  if postgresql?
+    restore_database_postgresql
+  else
+    restore_database_mysql
+  end
 end
 
 def restore_database_mysql
@@ -45,13 +49,27 @@ def restore_database_mysql
   system("mysql -uroot < #{sql_file}")
 end
 
+def restore_database_postgresql
+  sql_file = File.expand_path('../postgresql/ridgepole_test_database.sql', __FILE__)
+  system("psql --set ON_ERROR_STOP=off -q -f #{sql_file} 2>/dev/null")
+end
+
 def restore_tables
-  restore_tables_mysql
+  if postgresql?
+    restore_tables_postgresql
+  else
+    restore_tables_mysql
+  end
 end
 
 def restore_tables_mysql
   sql_file = File.expand_path('../mysql/ridgepole_test_tables.sql', __FILE__)
   system("mysql -uroot < #{sql_file}")
+end
+
+def restore_tables_postgresql
+  sql_file = File.expand_path('../postgresql/ridgepole_test_tables.sql', __FILE__)
+  system("psql -q -f #{sql_file} 2>/dev/null")
 end
 
 def client(options = {}, config = {})
@@ -74,14 +92,26 @@ end
 
 def conn_spec(config = {})
   {
-    adapter: 'mysql2',
+    adapter: postgresql? ? 'postgresql' : 'mysql2',
     database: TEST_SCHEMA,
   }.merge(config)
 end
 
 def show_create_table(table_name)
+  if postgresql?
+    show_create_table_postgresql(table_name)
+  else
+    show_create_table_mysql(table_name)
+  end
+end
+
+def show_create_table_mysql(table_name)
   raw_conn = ActiveRecord::Base.connection.raw_connection
   raw_conn.query("SHOW CREATE TABLE `#{table_name}`").first[1]
+end
+
+def show_create_table_postgresql(table_name)
+  `pg_dump --schema-only #{TEST_SCHEMA} --table=#{table_name} | awk '/^CREATE TABLE/,/);/{print} /^CREATE INDEX/{print}'`.strip
 end
 
 def default_cli_hook
@@ -147,6 +177,10 @@ end
 
 def mysql_awesome_enabled?
   ENV['ENABLE_MYSQL_AWESOME'] == '1'
+end
+
+def postgresql?
+  ENV['POSTGRESQL'] == '1'
 end
 
 def if_mysql_awesome_enabled(then_str, else_str = '')
