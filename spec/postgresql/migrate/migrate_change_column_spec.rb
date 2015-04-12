@@ -171,5 +171,33 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to eq expected_dsl.strip_heredoc.strip.gsub(/(\s*,\s*unsigned: false)?\s*,\s*null: true/, '')
     }
   end
+
+  context 'when string/text without limit (no change)' do
+    let(:actual_dsl) {
+      <<-RUBY
+        create_table "clubs", force: :cascade do |t|
+          t.string "name", default: "", null: false
+          t.text "desc"
+        end
+      RUBY
+    }
+
+    let(:expected_dsl) {
+      <<-RUBY
+        create_table "clubs", force: :cascade do |t|
+          t.string "name", default: "", null: false
+          t.text "desc"
+        end
+      RUBY
+    }
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_falsey
+    }
+  end
 end
 end
