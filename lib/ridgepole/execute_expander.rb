@@ -70,28 +70,31 @@ module ActiveRecord::ConnectionAdapters::SchemaStatements
   alias_method_chain :index_name_exists?, :noop
 end
 
-require 'active_record/connection_adapters/sqlite3_adapter'
+begin
+  require 'active_record/connection_adapters/sqlite3_adapter'
 
-class ActiveRecord::ConnectionAdapters::SQLite3Adapter
-  def exec_query_with_noop(sql, name = nil, binds = [])
-    if Ridgepole::ExecuteExpander.noop
-      if (callback = Ridgepole::ExecuteExpander.callback)
-        callback.call(sql, name)
+  class ActiveRecord::ConnectionAdapters::SQLite3Adapter
+    def exec_query_with_noop(sql, name = nil, binds = [])
+      if Ridgepole::ExecuteExpander.noop
+        if (callback = Ridgepole::ExecuteExpander.callback)
+          callback.call(sql, name)
+        end
+      else
+        exec_query_without_noop(sql, name, binds)
       end
-    else
-      exec_query_without_noop(sql, name, binds)
     end
-  end
-  alias_method_chain :exec_query, :noop
+    alias_method_chain :exec_query, :noop
 
-  def copy_table_with_noop(from, to, options = {})
-    if Ridgepole::ExecuteExpander.noop
-      if (callback = Ridgepole::ExecuteExpander.callback)
-        callback.call("COPY TABLE #{from} TO #{to}")
+    def copy_table_with_noop(from, to, options = {})
+      if Ridgepole::ExecuteExpander.noop
+        if (callback = Ridgepole::ExecuteExpander.callback)
+          callback.call("COPY TABLE #{from} TO #{to}")
+        end
+      else
+        copy_table_without_noop(from, to, options)
       end
-    else
-      copy_table_without_noop(from, to, options)
     end
+    alias_method_chain :copy_table, :noop
   end
-  alias_method_chain :copy_table, :noop
+rescue LoadError
 end
