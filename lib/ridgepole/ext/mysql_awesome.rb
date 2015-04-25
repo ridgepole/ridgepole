@@ -3,6 +3,10 @@ class ActiveRecord::ConnectionAdapters::TableDefinition
   alias primary_key_without_unsigned primary_key
 
   def primary_key(name, type = :primary_key, options = {})
-    primary_key_without_unsigned(name, type, options.merge(primary_key: true).reverse_merge(unsigned: true))
+    if options.has_key?(:id)
+      primary_key_without_unsigned(name, type, options)
+    else
+      primary_key_without_unsigned(name, type, options.merge(primary_key: true).reverse_merge(unsigned: true))
+    end
   end
 end
