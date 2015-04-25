@@ -6,6 +6,7 @@ class Ridgepole::DefaultsLimit
       :float   => 24,
       :string  => 255,
       :text    => 65535,
+      :binary  => 65535,
     }
   }
 

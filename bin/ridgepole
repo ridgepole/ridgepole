@@ -13,6 +13,15 @@ $stderr.sync = true
 Version = Ridgepole::VERSION
 DEFAULT_FILENAME = 'Schemafile'
 
+COLUMN_TYPES = {
+  :boolean => :bool,
+  :integer => :int,
+  :float   => :float,
+  :string  => :string,
+  :text    => :text,
+  :binary  => :binary,
+}
+
 config = nil
 env = 'development'
 mode = nil
@@ -66,21 +75,13 @@ ARGV.options do |opt|
       raise "Cannot use `bulk-change` in `merge`" if options[:merge]
       options[:bulk_change] = true
     }
-    opt.on('', "--default-bool-limit LIMIT", Integer) {|v|
-      options[:default_boolean_limit] = v
-    }
-    opt.on('', "--default-int-limit LIMIT", Integer) {|v|
-      options[:"default_integer_limit"] = v
-    }
-    opt.on('', "--default-float-limit LIMIT", Integer) {|v|
-      options[:"default_float_limit"] = v
-    }
-    opt.on('', "--default-string-limit LIMIT", Integer) {|v|
-      options[:"default_string_limit"] = v
-    }
-    opt.on('', "--default-text-limit LIMIT", Integer) {|v|
-      options[:"default_text_limit"] = v
-    }
+
+    COLUMN_TYPES.each do |column_type, column_type_alias|
+      opt.on('', "--default-#{column_type_alias}-limit LIMIT", Integer) {|v|
+        options[:"default_boolean_#{column_type}"] = v
+      }
+    end
+
     opt.on('',   '--pre-query QUERY')             {|v| options[:pre_query] = v                              }
     opt.on('',   '--post-query QUERY')            {|v| options[:post_query] = v                             }
     opt.on('-e', '--export')                      {    set_mode[:export]                                    }
