@@ -60,7 +60,7 @@ create_table "parent", force: :cascade do |t|
 end
 
 create_table "child", force: :cascade do |t|
-  t.integer "parent_id", unsigned: true
+  t.integer "parent_id"
 end
 
 add_index "child", ["parent_id"], name: "par_id", using: :btree
@@ -72,13 +72,13 @@ add_foreign_key "child", "parent", name: "child_ibfk_1"
     let(:sorted_dsl) {
       <<-RUBY
 
-create_table "child"#{unsigned_if_enabled}, force: :cascade do |t|
-  t.integer "parent_id", limit: 4#{unsigned_if_enabled}
+create_table "child", force: :cascade do |t|
+  t.integer "parent_id", limit: 4
 end
 
 add_index "child", ["parent_id"], name: "par_id", using: :btree
 
-create_table "parent"#{unsigned_if_enabled}, force: :cascade do |t|
+create_table "parent", force: :cascade do |t|
 end
 
 add_foreign_key "child", "parent", name: "child_ibfk_1"

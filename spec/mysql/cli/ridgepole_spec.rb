@@ -36,7 +36,6 @@ describe 'ridgepole' do
         -t, --tables TABLES
             --ignore-tables TABLES
             --enable-mysql-awesome
-            --mysql-awesome-unsigned-pk
             --dump-without-table-options
             --index-removed-drop-column
         -r, --require LIBS

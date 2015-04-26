@@ -35,6 +35,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
     * foreigner
   * Disable sqlite support
   * Add PostgreSQL test
+  * Remove `--mysql-awesome-unsigned-pk` option
 
 ## Installation
 
@@ -79,7 +80,6 @@ Usage: ridgepole [options]
     -t, --tables TABLES
         --ignore-tables TABLES
         --enable-mysql-awesome
-        --mysql-awesome-unsigned-pk
         --dump-without-table-options
         --index-removed-drop-column
     -r, --require LIBS
