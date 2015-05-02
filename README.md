@@ -199,8 +199,8 @@ create_table "authors", force: :cascade do |t|
 end
 
 create_table "books", force: :cascade do |t|
-  t.string  "title",                     null: false
-  t.integer "author_id", unsigned: true, null: false
+  t.string  "title",     null: false
+  t.integer "author_id", null: false
 end
 
 add_index "books", ["author_id"], name: "idx_author_id", using: :btree
