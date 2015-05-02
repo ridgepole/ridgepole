@@ -13,6 +13,15 @@ $stderr.sync = true
 Version = Ridgepole::VERSION
 DEFAULT_FILENAME = 'Schemafile'
 
+COLUMN_TYPES = {
+  :boolean => :bool,
+  :integer => :int,
+  :float   => :float,
+  :string  => :string,
+  :text    => :text,
+  :binary  => :binary,
+}
+
 config = nil
 env = 'development'
 mode = nil
@@ -66,9 +75,13 @@ ARGV.options do |opt|
       raise "Cannot use `bulk-change` in `merge`" if options[:merge]
       options[:bulk_change] = true
     }
-    opt.on('',   '--default-int-limit LIMIT', Integer) {|v|
-      options[:default_int_limit] = v
-    }
+
+    COLUMN_TYPES.each do |column_type, column_type_alias|
+      opt.on('', "--default-#{column_type_alias}-limit LIMIT", Integer) {|v|
+        options[:"default_boolean_#{column_type}"] = v
+      }
+    end
+
     opt.on('',   '--pre-query QUERY')             {|v| options[:pre_query] = v                              }
     opt.on('',   '--post-query QUERY')            {|v| options[:post_query] = v                             }
     opt.on('-e', '--export')                      {    set_mode[:export]                                    }
@@ -91,14 +104,9 @@ ARGV.options do |opt|
     opt.on('-o', '--output FILE')                 {|v| output_file = v                                      }
     opt.on('-t', '--tables TABLES', Array)        {|v| options[:tables] = v                                 }
     opt.on('',   '--ignore-tables TABLES', Array) {|v| options[:ignore_tables] = v.map {|i| Regexp.new(i) } }
-    opt.on('',   '--enable-mysql-unsigned')       {    options[:enable_mysql_unsigned] = true               }
-    opt.on('',   '--enable-mysql-pkdump')         {    options[:enable_mysql_pkdump] = true                 }
-    opt.on('',   '--enable-foreigner')            {    options[:enable_foreigner] = true                    }
-    opt.on('',   '--enable-migration-comments')   {    options[:enable_migration_comments] = true           }
     opt.on('',   '--enable-mysql-awesome')        {    options[:enable_mysql_awesome] = true                }
-    opt.on('',   '--mysql-awesome-unsigned-pk')   {    options[:mysql_awesome_unsigned_pk] = true           }
-    opt.on('',   '--normalize-mysql-float')       {    options[:normalize_mysql_float] = true               }
     opt.on('',   '--dump-without-table-options')  {    options[:dump_without_table_options] = true          }
+    opt.on('',   '--index-removed-drop-column')   {    options[:index_removed_drop_column] = true           }
     opt.on('-r'  , '--require LIBS', Array)       {|v| v.each {|i| require i }                              }
     opt.on(''  , '--log-file LOG_FILE')           {|v| options[:log_file] = v                               }
     opt.on(''  , '--verbose')                     {    Ridgepole::Logger.verbose = true                     }
@@ -115,18 +123,9 @@ ARGV.options do |opt|
       puts opt.help
       exit 1
     end
-
-    if options[:enable_mysql_awesome]
-      if options[:enable_migration_comments]
-        raise "It is not possible to enable both `--enable-mysql-awesome` and `--enable-migration-comments`"
-      elsif options[:enable_mysql_unsigned]
-        raise "It is not possible to enable both `--enable-mysql-awesome` and `--enable-mysql-unsigned`"
-      elsif options[:enable_mysql_pkdump]
-        raise "It is not possible to enable both `--enable-mysql-awesome` and `--enable-mysql-pkdump`"
-      end
-    end
   rescue => e
     $stderr.puts("[ERROR] #{e.message}")
+    puts e.backtrace
     exit 1
   end
 end

@@ -78,10 +78,7 @@ class Ridgepole::Diff
     scan_options_change(table_name, from[:options], to[:options], table_delta)
     scan_definition_change(from[:definition], to[:definition], from[:indices], table_delta)
     scan_indices_change(from[:indices], to[:indices], to[:definition], table_delta, from[:options], to[:options])
-
-    if @options[:enable_foreigner]
-      Ridgepole::ForeignKey.scan_foreign_keys_change(from[:foreign_keys], to[:foreign_keys], table_delta, @options)
-    end
+    scan_foreign_keys_change(from[:foreign_keys], to[:foreign_keys], table_delta, @options)
 
     unless table_delta.empty?
       delta[:change] ||= {}
@@ -137,8 +134,19 @@ class Ridgepole::Diff
         definition_delta[:delete][column_name] = from_attrs
 
         if from_indices
+          modified_indices = []
+
           from_indices.each do |name, attrs|
-            attrs[:column_name].delete(column_name)
+            if attrs[:column_name].delete(column_name)
+              modified_indices << name
+            end
+          end
+
+          # In PostgreSQL, the index is deleted when the column is deleted
+          if @options[:index_removed_drop_column]
+            from_indices.reject! do |name, attrs|
+              modified_indices.include?(name)
+            end
           end
 
           from_indices.reject! do |name, attrs|
@@ -242,31 +250,23 @@ class Ridgepole::Diff
   def normalize_column_options!(attrs)
     opts = attrs[:options]
     opts[:null] = true unless opts.has_key?(:null)
-
-    # XXX: MySQL only?
-    case attrs[:type]
-    when :string
-      opts.delete(:limit) if opts[:limit] == 255
-    end
+    default_limit = Ridgepole::DefaultsLimit.default_limit(attrs[:type], @options)
+    opts.delete(:limit) if opts[:limit] == default_limit
 
     # XXX: MySQL only?
     if not opts.has_key?(:default) and opts[:null]
       opts[:default] = nil
     end
 
-    # XXX: MySQL only?
-    if @options[:enable_mysql_unsigned] or @options[:enable_mysql_awesome]
+    if @options[:enable_mysql_awesome]
       opts[:unsigned] = false unless opts.has_key?(:unsigned)
-    end
-
-    if @options[:normalize_mysql_float] and attrs[:type] == :float
-      opts.delete(:limit) if opts[:limit] == 24
     end
   end
 
   def normalize_index_options!(opts)
     # XXX: MySQL only?
     opts[:using] = :btree unless opts.has_key?(:using)
+    opts[:unique] = false unless opts.has_key?(:unique)
   end
 
   def columns_all_include?(expected_columns, actual_columns, table_options)
@@ -275,5 +275,41 @@ class Ridgepole::Diff
     end
 
     expected_columns.all? {|i| actual_columns.include?(i) }
+  end
+
+  def scan_foreign_keys_change(from, to, table_delta, options)
+    from = (from || {}).dup
+    to = (to || {}).dup
+    foreign_keys_delta = {}
+
+    to.each do |foreign_key_name, to_attrs|
+      from_attrs = from.delete(foreign_key_name)
+
+      if from_attrs
+        if from_attrs != to_attrs
+          foreign_keys_delta[:add] ||= {}
+          foreign_keys_delta[:add][foreign_key_name] = to_attrs
+
+          unless options[:merge]
+            foreign_keys_delta[:delete] ||= {}
+            foreign_keys_delta[:delete][foreign_key_name] = from_attrs
+          end
+        end
+      else
+        foreign_keys_delta[:add] ||= {}
+        foreign_keys_delta[:add][foreign_key_name] = to_attrs
+      end
+    end
+
+    unless options[:merge]
+      from.each do |foreign_key_name, from_attrs|
+        foreign_keys_delta[:delete] ||= {}
+        foreign_keys_delta[:delete][foreign_key_name] = from_attrs
+      end
+    end
+
+    unless foreign_keys_delta.empty?
+      table_delta[:foreign_keys] = foreign_keys_delta
+    end
   end
 end

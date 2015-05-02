@@ -1,6 +1,10 @@
 $: << File.expand_path('..', __FILE__)
 
-if ENV['TRAVIS']
+def travis?
+  !!ENV['TRAVIS']
+end
+
+if travis?
   require 'simplecov'
   require 'coveralls'
 
@@ -37,13 +41,39 @@ RSpec.configure do |config|
 end
 
 def restore_database
-  sql_file = File.expand_path('../ridgepole_test_database.sql', __FILE__)
+  if postgresql?
+    restore_database_postgresql
+  else
+    restore_database_mysql
+  end
+end
+
+def restore_database_mysql
+  sql_file = File.expand_path('../mysql/ridgepole_test_database.sql', __FILE__)
   system("mysql -uroot < #{sql_file}")
 end
 
+def restore_database_postgresql
+  sql_file = File.expand_path('../postgresql/ridgepole_test_database.sql', __FILE__)
+  system("psql #{travis? ? '-U postgres' : ''} --set ON_ERROR_STOP=off -q -f #{sql_file} 2>/dev/null")
+end
+
 def restore_tables
-  sql_file = File.expand_path('../ridgepole_test_tables.sql', __FILE__)
+  if postgresql?
+    restore_tables_postgresql
+  else
+    restore_tables_mysql
+  end
+end
+
+def restore_tables_mysql
+  sql_file = File.expand_path('../mysql/ridgepole_test_tables.sql', __FILE__)
   system("mysql -uroot < #{sql_file}")
+end
+
+def restore_tables_postgresql
+  sql_file = File.expand_path('../postgresql/ridgepole_test_tables.sql', __FILE__)
+  system("psql #{travis? ? '-U postgres' : ''} -q -f #{sql_file} 2>/dev/null")
 end
 
 def client(options = {}, config = {})
@@ -57,8 +87,6 @@ def client(options = {}, config = {})
     default_options[:enable_mysql_awesome] = true
     default_options[:dump_without_table_options] = true
     default_options[:mysql_awesome_unsigned_pk] = true
-  else
-    default_options[:enable_mysql_unsigned] = true
   end
 
   options = default_options.merge(options)
@@ -67,15 +95,37 @@ def client(options = {}, config = {})
 end
 
 def conn_spec(config = {})
-  {
-    adapter: 'mysql2',
-    database: TEST_SCHEMA,
-  }.merge(config)
+  if postgresql?
+    spec = {
+      adapter: 'postgresql',
+      database: TEST_SCHEMA,
+    }
+
+    spec[:username] = 'postgres' if travis?
+    spec.merge(config)
+  else
+    {
+      adapter: 'mysql2',
+      database: TEST_SCHEMA,
+    }.merge(config)
+  end
 end
 
 def show_create_table(table_name)
+  if postgresql?
+    show_create_table_postgresql(table_name)
+  else
+    show_create_table_mysql(table_name)
+  end
+end
+
+def show_create_table_mysql(table_name)
   raw_conn = ActiveRecord::Base.connection.raw_connection
   raw_conn.query("SHOW CREATE TABLE `#{table_name}`").first[1]
+end
+
+def show_create_table_postgresql(table_name)
+  `pg_dump #{travis? ? '-U postgres' : ''} --schema-only #{TEST_SCHEMA} --table=#{table_name} | awk '/^CREATE TABLE/,/);/{print} /^CREATE INDEX/{print}'`.strip
 end
 
 def default_cli_hook
@@ -141,4 +191,32 @@ end
 
 def mysql_awesome_enabled?
   ENV['ENABLE_MYSQL_AWESOME'] == '1'
+end
+
+def postgresql?
+  ENV['POSTGRESQL'] == '1'
+end
+
+def if_mysql_awesome_enabled(then_str, else_str = '')
+  if mysql_awesome_enabled?
+    then_str
+  else
+    else_str
+  end
+end
+
+def unsigned_if_enabled(prefix = ', ', suffix = '')
+  if_mysql_awesome_enabled("#{prefix}unsigned: true#{suffix}")
+end
+
+def unsigned_false_if_enabled(prefix = ', ', suffix = '')
+  if_mysql_awesome_enabled("#{prefix}unsigned: false#{suffix}")
+end
+
+def unsigned_if_enabled2(prefix = ', ', suffix = '')
+  if_mysql_awesome_enabled("#{prefix}:unsigned=>true#{suffix}")
+end
+
+def unsigned_false_if_enabled2(prefix = ', ', suffix = '')
+  if_mysql_awesome_enabled("#{prefix}:unsigned=>false#{suffix}")
 end

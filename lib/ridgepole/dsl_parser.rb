@@ -22,10 +22,12 @@ class Ridgepole::DSLParser
         }
       end
 
+      # https://github.com/winebarrel/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/abstract/schema_definitions.rb#L274
       TYPES = [
         :string,
         :text,
         :integer,
+        :bigint,
         :float,
         :decimal,
         :datetime,
@@ -33,7 +35,7 @@ class Ridgepole::DSLParser
         :time,
         :date,
         :binary,
-        :boolean
+        :boolean,
       ]
 
       TYPES.each do |column_type|
@@ -53,9 +55,11 @@ class Ridgepole::DSLParser
       def references(*args)
         options = args.extract_options!
         polymorphic = options.delete(:polymorphic)
+        type = options.delete(:type) || :integer
+
         args.each do |col|
-          column("#{col}_id", :integer, options)
-          column("#{col}_type", :string, polymorphic.is_a?(Hash) ? polymorphic : options) unless polymorphic.nil?
+          column("#{col}_id", type, options)
+          column("#{col}_type", :string, polymorphic.is_a?(Hash) ? polymorphic : options) if polymorphic
         end
       end
       alias :belongs_to :references
@@ -120,6 +124,28 @@ class Ridgepole::DSLParser
       }
     end
 
+    def add_foreign_key(from_table, to_table, options = {})
+      unless options[:name]
+        raise "Foreign key name in `#{from_table}` is undefined"
+      end
+
+      from_table = from_table.to_s
+      to_table = to_table.to_s
+      options[:name] = options[:name].to_s
+      @__definition[from_table] ||= {}
+      @__definition[from_table][:foreign_keys] ||= {}
+      idx = options[:name]
+
+      if @__definition[from_table][:foreign_keys][idx]
+        raise "Foreign Key `#{from_table}(#{idx})` already defined"
+      end
+
+      @__definition[from_table][:foreign_keys][idx] = {
+        :to_table => to_table,
+        :options => options,
+      }
+    end
+
     def require(file)
       schemafile = (file =~ %r|\A/|) ? file : File.join(@__working_dir, file)
 
@@ -147,11 +173,7 @@ class Ridgepole::DSLParser
   def parse(dsl, opts = {})
     definition, execute = Context.eval(dsl, opts)
     check_orphan_index(definition)
-
-    if @options[:enable_foreigner]
-      Ridgepole::ForeignKey.check_orphan_foreign_key(definition)
-    end
-
+    check_orphan_foreign_key(definition)
     [definition, execute]
   end
 
@@ -161,6 +183,14 @@ class Ridgepole::DSLParser
     definition.each do |table_name, attrs|
       if attrs[:indices] and not attrs[:definition]
         raise "Table `#{table_name}` to create the index is not defined: #{attrs[:indices].keys.join(',')}"
+      end
+    end
+  end
+
+  def check_orphan_foreign_key(definition)
+    definition.each do |table_name, attrs|
+      if attrs[:foreign_keys] and not attrs[:definition]
+        raise "Table `#{table_name}` to create the foreign key is not defined: #{attrs[:foreign_keys].keys.join(',')}"
       end
     end
   end

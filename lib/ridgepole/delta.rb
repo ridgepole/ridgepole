@@ -14,6 +14,7 @@ class Ridgepole::Delta
       end
 
       open(log_file, 'wb') {|f| f.puts JSON.pretty_generate(result) }
+      result
     else
       migrate0(options)
     end
@@ -204,10 +205,7 @@ create_table(#{table_name.inspect}, #{options.inspect}) do |t|
     definition.each do |column_name, column_attrs|
       column_type = column_attrs.fetch(:type)
       column_options = column_attrs[:options] || {}
-
-      if @options[:default_int_limit] and column_type == :integer
-        column_options[:limit] ||= @options[:default_int_limit]
-      end
+      normalize_limit(column_type, column_options)
 
       buf.puts(<<-EOS)
   t.#{column_type}(#{column_name.inspect}, #{column_options.inspect})
@@ -226,11 +224,9 @@ end
       end
     end
 
-    if @options[:enable_foreigner] and not (foreign_keys = attrs[:foreign_keys] || {}).empty?
-      append_change_table(table_name, buf) do
-        foreign_keys.each do |foreign_key_name, foreign_key_attrs|
-          Ridgepole::ForeignKey.append_add_foreign_key(table_name, foreign_key_name, foreign_key_attrs, buf, @options)
-        end
+    unless (foreign_keys = attrs[:foreign_keys] || {}).empty?
+      foreign_keys.each do |foreign_key_name, foreign_key_attrs|
+        append_add_foreign_key(table_name, foreign_key_name, foreign_key_attrs, buf, @options)
       end
     end
 
@@ -254,13 +250,19 @@ drop_table(#{table_name.inspect})
   end
 
   def append_change(table_name, attrs, buf)
-    append_change_table(table_name, buf) do
-      append_change_definition(table_name, attrs[:definition] || {}, buf)
-      append_change_indices(table_name, attrs[:indices] || {}, buf)
+    definition = attrs[:definition] || {}
+    indices = attrs[:indices] || {}
+    foreign_keys = attrs[:foreign_keys] || {}
 
-      if @options[:enable_foreigner]
-        Ridgepole::ForeignKey.append_change_foreign_keys(table_name, attrs[:foreign_keys] || {}, buf, @options)
+    if not definition.empty? or not indices.empty?
+      append_change_table(table_name, buf) do
+        append_change_definition(table_name, definition, buf)
+        append_change_indices(table_name, indices, buf)
       end
+    end
+
+    unless foreign_keys.empty?
+      append_change_foreign_keys(table_name, foreign_keys, buf, @options)
     end
 
     buf.puts
@@ -293,10 +295,7 @@ drop_table(#{table_name.inspect})
   def append_add_column(table_name, column_name, attrs, buf)
     type = attrs.fetch(:type)
     options = attrs[:options] || {}
-
-    if @options[:default_int_limit] and type == :integer
-      options[:limit] ||= @options[:default_int_limit]
-    end
+    normalize_limit(type, options)
 
     if @options[:bulk_change]
       buf.puts(<<-EOS)
@@ -389,7 +388,40 @@ remove_index(#{table_name.inspect}, #{target.inspect})
     end
   end
 
+  def append_change_foreign_keys(table_name, delta, buf, options)
+    (delta[:delete] || {}).each do |foreign_key_name, attrs|
+      append_remove_foreign_key(table_name, foreign_key_name, attrs, buf, options)
+    end
+
+    (delta[:add] || {}).each do |foreign_key_name, attrs|
+      append_add_foreign_key(table_name, foreign_key_name, attrs, buf, options)
+    end
+  end
+
+  def append_add_foreign_key(table_name, foreign_key_name, attrs, buf, options)
+    to_table = attrs.fetch(:to_table)
+    attrs_options = attrs[:options] || {}
+
+    buf.puts(<<-EOS)
+add_foreign_key(#{table_name.inspect}, #{to_table.inspect}, #{attrs_options.inspect})
+    EOS
+  end
+
+  def append_remove_foreign_key(table_name, foreign_key_name, attrs, buf, options)
+    attrs_options = attrs[:options] || {}
+    target = {:name => attrs_options.fetch(:name)}
+
+    buf.puts(<<-EOS)
+remove_foreign_key(#{table_name.inspect}, #{target.inspect})
+    EOS
+  end
+
   def delta_execute
     @delta[:execute] || []
+  end
+
+  def normalize_limit(column_type, column_options)
+    default_limit = Ridgepole::DefaultsLimit.default_limit(column_type, @options)
+    column_options[:limit] ||= default_limit if default_limit
   end
 end

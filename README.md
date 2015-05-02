@@ -27,6 +27,15 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Add `--enable-mysql-awesome` option ([activerecord-mysql-awesome](https://github.com/kamipo/activerecord-mysql-awesome) is required `>= 0.0.3`)
   * It is not possible to enable both `--enable-mysql-awesome` and `--enable-migration-comments`, `--enable-mysql-awesome` and `--enable-mysql-unsigned`, `--enable-mysql-awesome` and `--enable-mysql-pkdump`
   * Fix foreigner version `<= 1.7.1`
+* `>= 0.6.0`
+  * Fix rails version `~> 4.2.1`
+  * Disable following libraries support:
+    * activerecord-mysql-unsigned
+    * migration_comments
+    * foreigner
+  * Disable sqlite support
+  * Add PostgreSQL test
+  * Remove `--mysql-awesome-unsigned-pk` option
 
 ## Installation
 
@@ -53,7 +62,12 @@ Usage: ridgepole [options]
         --dry-run
         --table-options OPTIONS
         --bulk-change
+        --default-bool-limit LIMIT
         --default-int-limit LIMIT
+        --default-float-limit LIMIT
+        --default-string-limit LIMIT
+        --default-text-limit LIMIT
+        --default-binary-limit LIMIT
         --pre-query QUERY
         --post-query QUERY
     -e, --export
@@ -65,14 +79,9 @@ Usage: ridgepole [options]
     -o, --output FILE
     -t, --tables TABLES
         --ignore-tables TABLES
-        --enable-mysql-unsigned
-        --enable-mysql-pkdump
-        --enable-foreigner
-        --enable-migration-comments
         --enable-mysql-awesome
-        --mysql-awesome-unsigned-pk
-        --normalize-mysql-float
         --dump-without-table-options
+        --index-removed-drop-column
     -r, --require LIBS
         --log-file LOG_FILE
         --verbose
@@ -96,7 +105,7 @@ $ ridgepole -c config.yml --export -o Schemafile # or `ridgepole -c '{adapter: m
 Export Schema to `Schemafile`
 
 $ cat Schemafile
-create_table "articles", force: true do |t|
+create_table "articles", force: :cascade do |t|
   t.string   "title"
   t.text     "text"
   t.datetime "created_at"
@@ -117,7 +126,7 @@ index f5848b9..c266fed 100644
 --- a/Schemafile
 +++ b/Schemafile
 @@ -1,6 +1,7 @@
- create_table "articles", force: true do |t|
+ create_table "articles", force: :cascade do |t|
    t.string   "title"
    t.text     "text"
 +  t.text     "author"
@@ -139,7 +148,7 @@ Apply `Schemafile`
 
 ## Rename
 ```ruby
-create_table "articles", force: true do |t|
+create_table "articles", force: :cascade do |t|
   t.string   "title"
   t.text     "desc", renamed_from: "text"
   t.text     "author"
@@ -147,7 +156,7 @@ create_table "articles", force: true do |t|
   t.datetime "updated_at"
 end
 
-create_table "user_comments", force: true, renamed_from: "comments" do |t|
+create_table "user_comments", force: :cascade, renamed_from: "comments" do |t|
   t.string   "commenter"
   t.text     "body"
   t.integer  "article_id"
@@ -157,39 +166,25 @@ end
 ```
 
 ## Foreign Key
-You can use the foreign key by passing `--enable-foreigner` ([foreigner](https://github.com/matthuhiggins/foreigner) is required)
-
 ```ruby
-create_table "parent", force: true do |t|
+create_table "parent", force: :cascade do |t|
 end
 
-create_table "child", id: false, force: true do |t|
+create_table "child", id: false, force: :cascade do |t|
   t.integer "id"
   t.integer "parent_id"
 end
 
 add_index "child", ["parent_id"], name: "par_ind", using: :btree
 
-add_foreign_key "child", "parent", name: "child_ibfk_1", dependent: :delete
-```
-
-## Comment
-You can use the table/column comment by passing `--enable-migration-comments` ([migration_comments](https://github.com/pinnymz/migration_comments) is required)
-
-```ruby
-create_table "articles", force: true, comment: "table comment" do |t|
-  t.string   "title", comment: "column comment"
-  t.text     "text"
-  t.datetime "created_at"
-  t.datetime "updated_at"
-end
+add_foreign_key "child", "parent", name: "child_ibfk_1"
 ```
 
 ## Collation
 You can use the column collation by passing `--enable-mysql-awesome` ([activerecord-mysql-awesome](https://github.com/kamipo/activerecord-mysql-awesome) is required)
 
 ```ruby
-create_table "articles", force: true, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+create_table "articles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
   t.string   "title",                    collation: "ascii_bin"
   t.text     "text",       null: false,  collation: "utf8mb4_bin"
   t.datetime "created_at"
@@ -197,34 +192,15 @@ create_table "articles", force: true, options: "ENGINE=InnoDB DEFAULT CHARSET=ut
 end
 ```
 
-## bigint support
-Export of `bigint` PK is enabled by passing `--enable-mysql-pkdump` ([activerecord-mysql-pkdump](https://github.com/winebarrel/activerecord-mysql-pkdump) is required)
-```ruby
-create_table "books", id: "bigint(20) PRIMARY KEY auto_increment", force: true do |t|
-  t.string   "title",      null: false
-  t.integer  "author_id",  null: false
-  t.datetime "created_at"
-  t.datetime "updated_at"
-end
-```
-
-If you use `--enable-mysql-awesome`:
-
-```ruby
-create_table "books", id: :bigint, force: true do |t|
-  ...
-end
-```
-
 ## Execute
 ```ruby
-create_table "authors", force: true do |t|
+create_table "authors", force: :cascade do |t|
   t.string "name", null: false
 end
 
-create_table "books", force: true do |t|
-  t.string  "title",                     null: false
-  t.integer "author_id", unsigned: true, null: false
+create_table "books", force: :cascade do |t|
+  t.string  "title",     null: false
+  t.integer "author_id", null: false
 end
 
 add_index "books", ["author_id"], name: "idx_author_id", using: :btree
@@ -255,7 +231,7 @@ remove_column("articles", "author")
 ### Reverse diff
 ```sh
 $ cat file1.schema
-create_table "articles", force: true do |t|
+create_table "articles", force: :cascade do |t|
   t.string   "title"
   t.text     "text"
   t.datetime "created_at"
@@ -263,7 +239,7 @@ create_table "articles", force: true do |t|
 end
 
 $ cat file2.schema
-create_table "articles", force: true do |t|
+create_table "articles", force: :cascade do |t|
   t.string   "title"
   t.text     "desc", renamed_from: "text"
   t.text     "author"
