@@ -36,6 +36,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Disable sqlite support
   * Add PostgreSQL test
   * Remove `--mysql-awesome-unsigned-pk` option
+* `>= 0.6.1`
+  * Support [PostgreSQL columns](https://github.com/winebarrel/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/postgresql_adapter.rb#L79)
 
 ## Installation
 

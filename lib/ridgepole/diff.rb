@@ -76,7 +76,7 @@ class Ridgepole::Diff
     table_delta = {}
 
     scan_options_change(table_name, from[:options], to[:options], table_delta)
-    scan_definition_change(from[:definition], to[:definition], from[:indices], table_delta)
+    scan_definition_change(from[:definition], to[:definition], from[:indices], from[:options], table_delta)
     scan_indices_change(from[:indices], to[:indices], to[:definition], table_delta, from[:options], to[:options])
     scan_foreign_keys_change(from[:foreign_keys], to[:foreign_keys], table_delta, @options)
 
@@ -92,7 +92,7 @@ class Ridgepole::Diff
     end
   end
 
-  def scan_definition_change(from, to, from_indices, table_delta)
+  def scan_definition_change(from, to, from_indices, table_options, table_delta)
     from = (from || {}).dup
     to = (to || {}).dup
     definition_delta = {}
@@ -101,7 +101,11 @@ class Ridgepole::Diff
     # for reverse option
     scan_column_rename(to, from, definition_delta)
 
-    priv_column_name = nil
+    if table_options[:primary_key].nil?
+      priv_column_name = (table_options[:id] == false) ? nil : 'id'
+    else
+      priv_column_name = table_options[:primary_key]
+    end
 
     to.each do |column_name, to_attrs|
       if (from_attrs = from.delete(column_name))
