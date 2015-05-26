@@ -41,9 +41,9 @@ class Ridgepole::Client
       logger = Ridgepole::Logger.instance
 
       logger.verbose_info('# Parse DSL1')
-      definition1, execute1 = load_definition(dsl_or_config1)
+      definition1, execute1 = load_definition(dsl_or_config1, options)
       logger.verbose_info('# Parse DSL2')
-      definition2, execute2 = load_definition(dsl_or_config2)
+      definition2, execute2 = load_definition(dsl_or_config2, options)
 
       logger.verbose_info('# Compare definitions')
       diff = Ridgepole::Diff.new(options)
