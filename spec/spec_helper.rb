@@ -220,3 +220,10 @@ end
 def unsigned_false_if_enabled2(prefix = ', ', suffix = '')
   if_mysql_awesome_enabled("#{prefix}:unsigned=>false#{suffix}")
 end
+
+def run_ridgepole(*args)
+  Dir.chdir(File.expand_path('../..', __FILE__)) do
+    cmd = [:bundle, :exec, './bin/ridgepole'] + args
+    Open3.capture2e(cmd.join(' '))
+  end
+end

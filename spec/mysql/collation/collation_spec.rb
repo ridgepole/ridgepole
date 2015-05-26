@@ -128,6 +128,18 @@ if mysql_awesome_enabled?
         delta.migrate
         expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
       }
+
+      describe '#diff' do
+        it {
+          Tempfile.open("#{File.basename __FILE__}.#{$$}") do |f|
+            f.puts(actual_dsl)
+            f.flush
+            out, status = run_ridgepole('--diff', "'#{JSON.dump(conn_spec)}'", f.path, '--enable-mysql-awesome', '--dump-without-table-options')
+            expect(out).to be_empty
+            expect(status.success?).to be_truthy
+          end
+        }
+      end
     end
   end
 end
