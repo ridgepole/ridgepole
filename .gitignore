@@ -20,3 +20,4 @@ test.rb
 Schemafile
 *.schema
 _site/
+config.yml
