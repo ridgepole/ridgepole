@@ -145,7 +145,7 @@ describe 'Ridgepole::Client.diff' do
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
         change_column("employee_clubs", "club_id", :integer, {:null=>true, :default=>nil})
 
-        change_column("employees", "last_name", :string, {:limit=>20, :default=>"XXX", :null=>false})
+        change_column("employees", "last_name", :string, {:limit=>20, :default=>"XXX"})
       RUBY
     }
   end
