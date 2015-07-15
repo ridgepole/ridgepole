@@ -243,9 +243,11 @@ class Ridgepole::Diff
   end
 
   def target?(table_name)
-    if @options[:ignore_tables] and @options[:ignore_tables].any? {|i| i =~ table_name }
+    if @options[:tables] and @options[:tables].include?(table_name)
+      true
+    elsif @options[:ignore_tables] and @options[:ignore_tables].any? {|i| i =~ table_name }
       false
-    elsif @options[:tables] and not @options[:tables].include?(table_name)
+    elsif @options[:tables]
       false
     else
       true
