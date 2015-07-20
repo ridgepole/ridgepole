@@ -1,7 +1,3 @@
-CREATE DATABASE ridgepole_test;
-
-\c ridgepole_test;
-
 CREATE EXTENSION hstore;
 CREATE EXTENSION ltree;
 CREATE EXTENSION citext;

@@ -48,14 +48,21 @@ def restore_database
   end
 end
 
+def system_raise_on_fail(*args)
+  unless system(*args)
+    raise RuntimeError.new("Failed to run: #{args}")
+  end
+end
+
 def restore_database_mysql
   sql_file = File.expand_path('../mysql/ridgepole_test_database.sql', __FILE__)
-  system("mysql -uroot < #{sql_file}")
+  system_raise_on_fail("mysql -uroot < #{sql_file}")
 end
 
 def restore_database_postgresql
   sql_file = File.expand_path('../postgresql/ridgepole_test_database.sql', __FILE__)
-  system("psql #{travis? ? '-U postgres' : ''} --set ON_ERROR_STOP=off -q -f #{sql_file} 2>/dev/null")
+  system("createdb ridgepole_test #{travis? ? '-U postgres' : ''} 2>/dev/null")
+  system_raise_on_fail("psql ridgepole_test #{travis? ? '-U postgres' : ''} --set ON_ERROR_STOP=off -q -f #{sql_file} 2>/dev/null")
 end
 
 def restore_tables
@@ -68,12 +75,12 @@ end
 
 def restore_tables_mysql
   sql_file = File.expand_path('../mysql/ridgepole_test_tables.sql', __FILE__)
-  system("mysql -uroot < #{sql_file}")
+  system_raise_on_fail("mysql -uroot < #{sql_file}")
 end
 
 def restore_tables_postgresql
   sql_file = File.expand_path('../postgresql/ridgepole_test_tables.sql', __FILE__)
-  system("psql #{travis? ? '-U postgres' : ''} -q -f #{sql_file} 2>/dev/null")
+  system_raise_on_fail("psql ridgepole_test #{travis? ? '-U postgres' : ''} -q -f #{sql_file} 2>/dev/null")
 end
 
 def client(options = {}, config = {})
