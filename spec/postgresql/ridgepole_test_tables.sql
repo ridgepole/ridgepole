@@ -1,5 +1,3 @@
-\c ridgepole_test;
-
 DROP TABLE IF EXISTS clubs;
 CREATE TABLE clubs (
   id serial PRIMARY KEY,

@@ -61,6 +61,7 @@ end
 
 def restore_database_postgresql
   sql_file = File.expand_path('../postgresql/ridgepole_test_database.sql', __FILE__)
+  system("createdb ridgepole_test #{travis? ? '-U postgres' : ''} 2>/dev/null")
   system_raise_on_fail("psql ridgepole_test #{travis? ? '-U postgres' : ''} --set ON_ERROR_STOP=off -q -f #{sql_file} 2>/dev/null")
 end
 
