@@ -93,7 +93,6 @@ def client(options = {}, config = {})
   if mysql_awesome_enabled?
     default_options[:enable_mysql_awesome] = true
     default_options[:dump_without_table_options] = true
-    default_options[:mysql_awesome_unsigned_pk] = true
   end
 
   options = default_options.merge(options)
@@ -198,6 +197,10 @@ end
 
 def mysql_awesome_enabled?
   ENV['ENABLE_MYSQL_AWESOME'] == '1'
+end
+
+def migration_comments_enabled?
+  ENV['ENABLE_MIGRATION_COMMENTS'] == '1'
 end
 
 def postgresql?
