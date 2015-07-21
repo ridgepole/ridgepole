@@ -26,4 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pg'
   spec.add_development_dependency 'coveralls'
   spec.add_development_dependency 'activerecord-mysql-awesome', '>= 0.0.7'
+  spec.add_development_dependency 'migration_comments'
 end
