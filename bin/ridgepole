@@ -78,7 +78,7 @@ ARGV.options do |opt|
 
     COLUMN_TYPES.each do |column_type, column_type_alias|
       opt.on('', "--default-#{column_type_alias}-limit LIMIT", Integer) {|v|
-        options[:"default_boolean_#{column_type}"] = v
+        options[:"default_#{column_type}_limit"] = v
       }
     end
 
