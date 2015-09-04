@@ -1,5 +1,6 @@
 require 'erb'
 require 'yaml'
+require 'uri'
 
 class Ridgepole::Config
   class << self
@@ -20,6 +21,20 @@ class Ridgepole::Config
       else
         parsed_config
       end
+    end
+
+    def load_env_param(database_url)
+      parsed_uri = URI.parse(database_url)
+
+      parsed_config = {}
+      parsed_config[:adapter] = parsed_uri.scheme
+      parsed_config[:adapter] = "postgresql" if parsed_config[:adapter] == "postgres"
+      parsed_config[:database] = (parsed_uri.path || "").split("/")[1]
+      parsed_config[:username] = parsed_uri.user
+      parsed_config[:password] = parsed_uri.password
+      parsed_config[:host] = parsed_uri.host
+      parsed_config[:port] = parsed_uri.port
+      parsed_config
     end
 
     private
