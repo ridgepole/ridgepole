@@ -85,5 +85,30 @@ describe Ridgepole::Config do
       }.to raise_error Errno::ENOENT
     }
   end
+
+  context 'when use env param[DATABASE_URL]' do
+    context 'in development' do
+      let(:db_uri_local) { 'mysql2://user@localhost/mydb' }
+      it {
+        param = Ridgepole::Config.load_env_param(db_uri_local)
+        expect(param[:adapter]).to eq "mysql2"
+        expect(param[:database]).to eq "mydb"
+        expect(param[:username]).to eq "user"
+      }
+    end
+
+    context 'in production' do
+      let(:db_uri) { 'mysql2://user:pass@heroku.com:3306/mydb' }
+      it {
+        param = Ridgepole::Config.load_env_param(db_uri)
+        expect(param[:adapter]).to eq "mysql2"
+        expect(param[:database]).to eq "mydb"
+        expect(param[:username]).to eq "user"
+        expect(param[:password]).to eq "pass"
+        expect(param[:host]).to eq "heroku.com"
+        expect(param[:port]).to eq 3306
+      }
+    end
+  end
 end
 end

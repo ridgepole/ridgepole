@@ -23,6 +23,7 @@ COLUMN_TYPES = {
 }
 
 config = nil
+database_url = ENV["DATABASE_URL"]
 env = 'development'
 mode = nil
 file = DEFAULT_FILENAME
@@ -120,7 +121,7 @@ ARGV.options do |opt|
 
     opt.parse!
 
-    if not mode or ([:apply, :export].include?(mode) and not config) or  (options[:with_apply] and not config)
+    if not mode or ([:apply, :export].include?(mode) and not (config or database_url)) or  (options[:with_apply] and not (config or database_url))
       puts opt.help
       exit 1
     end
@@ -135,7 +136,11 @@ begin
   logger = Ridgepole::Logger.instance
   logger.set_debug(options[:debug])
 
-  client = Ridgepole::Client.new(Ridgepole::Config.load(config, env), options) if config
+  client = if config
+             Ridgepole::Client.new(Ridgepole::Config.load(config, env), options)
+           elsif database_url
+             Ridgepole::Client.new(Ridgepole::Config.load_env_param(database_url), options)
+           end
 
   ActiveRecord::Base.logger = logger
 
