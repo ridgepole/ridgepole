@@ -21,6 +21,7 @@ require 'string_ext'
 require 'open3'
 require 'tempfile'
 require 'json'
+require 'mysql2'
 
 TEST_SCHEMA = 'ridgepole_test'
 
