@@ -38,6 +38,7 @@ describe 'ridgepole' do
             --enable-mysql-awesome
             --dump-without-table-options
             --index-removed-drop-column
+            --enable-migration-comments
         -r, --require LIBS
             --log-file LOG_FILE
             --verbose

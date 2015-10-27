@@ -154,10 +154,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true, enable_mysql_unsigned: true)
       expect(delta.differ?).to be_truthy
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
-        change_column("employee_clubs", "club_id", :integer, {:null=>false#{unsigned_if_enabled2}})
+        change_column("employee_clubs", "club_id", :integer, {:null=>false#{unsigned_if_enabled2}, :default=>nil})
 
-        change_column("employees", "last_name", :string, {:limit=>16, :null=>false})
-        change_column("employees", "gender", :string, {:limit=>1, :null=>false})
+        change_column("employees", "last_name", :string, {:limit=>16, :default=>nil})
+        change_column("employees", "gender", :string, {:limit=>1, :null=>false, :default=>nil})
       RUBY
     }
 
@@ -171,8 +171,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         change_table("employees", {:bulk => true}) do |t|
-          t.change("last_name", :string, {:limit=>20, :default=>"XXX", :null=>false#{unsigned_false_if_enabled2}})
-          t.change("gender", :string, {:limit=>2, :null=>false#{unsigned_false_if_enabled2}})
+          t.change("last_name", :string, {:limit=>20, :default=>"XXX"#{unsigned_false_if_enabled2}})
+          t.change("gender", :string, {:limit=>2, :null=>false, :default=>nil#{unsigned_false_if_enabled2}})
         end
       RUBY
       delta.migrate

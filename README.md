@@ -38,6 +38,9 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Remove `--mysql-awesome-unsigned-pk` option
 * `>= 0.6.1`
   * Support [PostgreSQL columns](https://github.com/winebarrel/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/postgresql_adapter.rb#L79)
+* `>= 0.6.3`
+  * Fix `default` option ([pull#48](https://github.com/winebarrel/ridgepole/pull/48))
+  * Add `--enable-migration-comments` option ([pull#50](https://github.com/winebarrel/ridgepole/pull/50))
 
 ## Installation
 
@@ -84,6 +87,7 @@ Usage: ridgepole [options]
         --enable-mysql-awesome
         --dump-without-table-options
         --index-removed-drop-column
+        --enable-migration-comments
     -r, --require LIBS
         --log-file LOG_FILE
         --verbose

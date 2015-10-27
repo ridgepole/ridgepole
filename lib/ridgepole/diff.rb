@@ -76,7 +76,7 @@ class Ridgepole::Diff
     table_delta = {}
 
     scan_options_change(table_name, from[:options], to[:options], table_delta)
-    scan_definition_change(from[:definition], to[:definition], from[:indices], from[:options], table_delta)
+    scan_definition_change(from[:definition], to[:definition], from[:indices], table_name, from[:options], table_delta)
     scan_indices_change(from[:indices], to[:indices], to[:definition], table_delta, from[:options], to[:options])
     scan_foreign_keys_change(from[:foreign_keys], to[:foreign_keys], table_delta, @options)
 
@@ -92,7 +92,7 @@ class Ridgepole::Diff
     end
   end
 
-  def scan_definition_change(from, to, from_indices, table_options, table_delta)
+  def scan_definition_change(from, to, from_indices, table_name, table_options, table_delta)
     from = (from || {}).dup
     to = (to || {}).dup
     definition_delta = {}
@@ -114,6 +114,7 @@ class Ridgepole::Diff
 
         if from_attrs != to_attrs
           definition_delta[:change] ||= {}
+          to_attrs = fix_change_column_options(table_name, from_attrs, to_attrs)
           definition_delta[:change][column_name] = to_attrs
         end
       else
@@ -242,9 +243,11 @@ class Ridgepole::Diff
   end
 
   def target?(table_name)
-    if @options[:ignore_tables] and @options[:ignore_tables].any? {|i| i =~ table_name }
+    if @options[:tables] and @options[:tables].include?(table_name)
+      true
+    elsif @options[:ignore_tables] and @options[:ignore_tables].any? {|i| i =~ table_name }
       false
-    elsif @options[:tables] and not @options[:tables].include?(table_name)
+    elsif @options[:tables]
       false
     else
       true
@@ -258,7 +261,7 @@ class Ridgepole::Diff
     opts.delete(:limit) if opts[:limit] == default_limit
 
     # XXX: MySQL only?
-    if not opts.has_key?(:default) and opts[:null]
+    if not opts.has_key?(:default)
       opts[:default] = nil
     end
 
@@ -315,5 +318,31 @@ class Ridgepole::Diff
     unless foreign_keys_delta.empty?
       table_delta[:foreign_keys] = foreign_keys_delta
     end
+  end
+
+
+  # XXX: MySQL only?
+  # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/abstract_mysql_adapter.rb#L760
+  # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/abstract/schema_creation.rb#L102
+  def fix_change_column_options(table_name, from_attrs, to_attrs)
+    # default: 0, null: false -> default: nil, null: false | default: nil
+    # default: 0, null: false ->               null: false | default: nil
+    # default: 0, null: false -> default: nil, null: true  | default: nil, null: true
+    # default: 0, null: false ->               null: true  | default: nil, null: true
+    # default: 0, null: true  -> default: nil, null: true  | default: nil
+    # default: 0, null: true  ->               null: true  | default: nil
+    # default: 0, null: true  -> default: nil, null: false | default: nil, null: false (`default: nil` is ignored)
+    # default: 0, null: true ->                null: false | default: nil, null: false (`default: nil` is ignored)
+
+    if from_attrs[:options][:default] != to_attrs[:options][:default] and from_attrs[:options][:null] == to_attrs[:options][:null]
+      to_attrs = to_attrs.deep_dup
+      to_attrs[:options].delete(:null)
+    end
+
+    if to_attrs[:options][:default] == nil and to_attrs[:options][:null] == false
+      Ridgepole::Logger.instance.warn("[WARNING] Table `#{table_name}`: `default: nil` is ignored when `null: false`. Please apply twice")
+    end
+
+    to_attrs
   end
 end

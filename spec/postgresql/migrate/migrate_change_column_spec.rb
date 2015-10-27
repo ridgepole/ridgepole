@@ -148,9 +148,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true, enable_mysql_unsigned: true)
       expect(delta.differ?).to be_truthy
       expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
-        change_column("employee_clubs", "club_id", :integer, {:null=>false})
+        change_column("employee_clubs", "club_id", :integer, {:null=>false, :default=>nil})
 
-        change_column("employees", "last_name", :string, {:limit=>16, :null=>false})
+        change_column("employees", "last_name", :string, {:limit=>16, :default=>nil})
       RUBY
     }
 
@@ -164,7 +164,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         change_table("employees", {:bulk => true}) do |t|
-          t.change("last_name", :string, {:limit=>20, :default=>"XXX", :null=>false})
+          t.change("last_name", :string, {:limit=>20, :default=>"XXX"})
         end
       RUBY
       delta.migrate
