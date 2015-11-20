@@ -69,6 +69,7 @@ Usage: ridgepole [options]
     -f, --file FILE
         --dry-run
         --table-options OPTIONS
+        --external-script SCRIPT
         --bulk-change
         --default-bool-limit LIMIT
         --default-int-limit LIMIT
@@ -263,6 +264,16 @@ rename_column("articles", "text", "desc")
 $ ridgepole --diff file1.schema file2.schema --reverse
 rename_column("articles", "desc", "text")
 remove_column("articles", "author")
+```
+
+## Execute SQL using external script
+
+```sh
+$ cat test.sh
+#!/bin/sh
+echo "$1" | mysql -u root my_db
+
+$ ridgepole -c config.yml --apply --external-script ./test.sh
 ```
 
 ## Demo
