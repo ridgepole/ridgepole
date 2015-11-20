@@ -195,6 +195,15 @@ def run_cli(options = {})
   end
 end
 
+def tempfile(basename, content)
+  Tempfile.open(basename) do |f|
+    f << content
+    f.flush
+    f.rewind
+    yield(f)
+  end
+end
+
 def mysql_awesome_enabled?
   ENV['ENABLE_MYSQL_AWESOME'] == '1'
 end

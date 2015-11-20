@@ -7,6 +7,8 @@ script:
   - bundle install
   - bundle exec rake
 env:
+  global:
+    - DEBUG=1
   matrix:
     - ENABLE_MYSQL_AWESOME=0 ENABLE_MIGRATION_COMMENTS=0
     - ENABLE_MYSQL_AWESOME=1 ENABLE_MIGRATION_COMMENTS=0
