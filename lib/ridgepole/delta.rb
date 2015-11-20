@@ -71,6 +71,10 @@ class Ridgepole::Delta
       ensure
         ActiveRecord::Migration.disable_logging = disable_logging_orig
       end
+    elsif options[:external_script]
+      Ridgepole::ExecuteExpander.with_script(options[:external_script], Ridgepole::Logger.instance) do
+        migrated = eval_script(script, options)
+      end
     else
       migrated = eval_script(script, options)
     end
