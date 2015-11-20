@@ -196,11 +196,13 @@ def run_cli(options = {})
 end
 
 def tempfile(basename, content)
-  Tempfile.open(basename) do |f|
-    f << content
-    f.flush
-    f.rewind
-    yield(f)
+  begin
+    path = `mktemp /tmp/#{basename}.XXXXXX`
+    open(path, 'wb') {|f| f << content }
+    FileUtils.chmod(0777, path)
+    yield(path)
+  ensure
+    FileUtils.rm_f(path) if path
   end
 end
 

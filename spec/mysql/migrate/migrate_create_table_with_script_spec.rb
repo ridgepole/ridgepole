@@ -90,12 +90,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
         echo "$1" | mysql -uroot #{TEST_SCHEMA}
       EOS
 
-      tempfile(File.basename(__FILE__), script) do |f|
-        FileUtils.chmod(0755, f.path)
-        puts "*****************************"
-        puts `ls -lha #{f.path}`
-        puts "*****************************"
-        delta.migrate(external_script: f.path)
+      tempfile(File.basename(__FILE__), script) do |path|
+        FileUtils.chmod(0755, path)
+        delta.migrate(external_script: path)
       end
 
       expect(subject.dump.delete_empty_lines).to eq expected_dsl.strip_heredoc.strip.delete_empty_lines
