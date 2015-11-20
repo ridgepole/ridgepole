@@ -37,6 +37,7 @@ describe 'ridgepole' do
         -t, --tables TABLES
             --ignore-tables TABLES
             --enable-mysql-awesome
+            --mysql-use-alter
             --dump-without-table-options
             --index-removed-drop-column
             --enable-migration-comments

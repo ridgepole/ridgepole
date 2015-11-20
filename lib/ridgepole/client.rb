@@ -25,6 +25,10 @@ class Ridgepole::Client
 
       require 'activerecord/mysql/awesome/base'
     end
+
+    if @options[:mysql_use_alter]
+      require 'ridgepole/ext/abstract_mysql_adapter'
+    end
   end
 
   def dump(&block)
