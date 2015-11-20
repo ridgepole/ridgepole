@@ -45,6 +45,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 * `>= 0.6.4`
   * Execute sql using external script ([pull#56](https://github.com/winebarrel/ridgepole/pull/56))
   * Add `--mysql-use-alter` option
+  * Add `--alter-extra` option
 
 ## Installation
 
