@@ -108,7 +108,7 @@ ARGV.options do |opt|
     opt.on('',   '--dump-without-table-options')  {    options[:dump_without_table_options] = true          }
     opt.on('',   '--index-removed-drop-column')   {    options[:index_removed_drop_column] = true           }
     opt.on('',   '--enable-migration-comments')   {    options[:enable_migration_comments] = true           }
-    opt.on('-r'  , '--require LIBS', Array)       {|v| v.each {|i| require i }                              }
+    opt.on('-r', '--require LIBS', Array)         {|v| v.each {|i| require i }                              }
     opt.on(''  , '--log-file LOG_FILE')           {|v| options[:log_file] = v                               }
     opt.on(''  , '--verbose')                     {    Ridgepole::Logger.verbose = true                     }
     opt.on(''  , '--debug')                       {    options[:debug] = true                               }
