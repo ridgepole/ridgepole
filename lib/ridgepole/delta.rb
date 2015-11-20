@@ -63,8 +63,18 @@ class Ridgepole::Delta
           buf.puts sql if sql =~ /\A(CREATE|ALTER|DROP|RENAME)\b/i
         end
 
-        Ridgepole::ExecuteExpander.without_operation(callback) do
-          migrated = eval_script(script, options.merge(:out => buf))
+        eval_script_block = proc do
+          Ridgepole::ExecuteExpander.without_operation(callback) do
+            migrated = eval_script(script, options.merge(:out => buf))
+          end
+        end
+
+        if options[:alter_extra]
+          Ridgepole::ExecuteExpander.with_alter_extra(options[:alter_extra]) do
+            eval_script_block.call
+          end
+        else
+          eval_script_block.call
         end
 
         out = buf.string.strip
@@ -73,6 +83,10 @@ class Ridgepole::Delta
       end
     elsif options[:external_script]
       Ridgepole::ExecuteExpander.with_script(options[:external_script], Ridgepole::Logger.instance) do
+        migrated = eval_script(script, options)
+      end
+    elsif options[:alter_extra]
+      Ridgepole::ExecuteExpander.with_alter_extra(options[:alter_extra]) do
         migrated = eval_script(script, options)
       end
     else

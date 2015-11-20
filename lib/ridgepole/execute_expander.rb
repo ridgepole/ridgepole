@@ -9,6 +9,7 @@ class Ridgepole::ExecuteExpander
   cattr_accessor :callback,     :instance_writer => false, :instance_reader => false
   cattr_accessor :use_script,   :instance_writer => false, :instance_reader => false
   cattr_accessor :sql_executer, :instance_writer => false, :instance_reader => false
+  cattr_accessor :alter_extra,  :instance_writer => false, :instance_reader => false
 
   class << self
     def without_operation(callback = nil)
@@ -33,6 +34,15 @@ class Ridgepole::ExecuteExpander
       end
     end
 
+    def with_alter_extra(extra)
+      begin
+        self.alter_extra = extra
+        yield
+      ensure
+        self.alter_extra = nil
+      end
+    end
+
     def expand_execute(connection)
       return if connection.respond_to?(:execute_with_ext)
 
@@ -40,6 +50,7 @@ class Ridgepole::ExecuteExpander
         def execute_with_ext(sql, name = nil)
           if Ridgepole::ExecuteExpander.noop
             if (callback = Ridgepole::ExecuteExpander.callback)
+              sql = append_alter_extra(sql)
               callback.call(sql, name)
             end
 
@@ -56,14 +67,26 @@ class Ridgepole::ExecuteExpander
             if sql =~ /\A(SELECT|SHOW)\b/i
               execute_without_ext(sql, name)
             else
+              sql = append_alter_extra(sql)
               Ridgepole::ExecuteExpander.sql_executer.execute(sql)
               nil
             end
           else
+            sql = append_alter_extra(sql)
             execute_without_ext(sql, name)
           end
         end
         alias_method_chain :execute, :ext
+
+        private
+
+        def append_alter_extra(sql)
+          if Ridgepole::ExecuteExpander.alter_extra and sql =~ /\AALTER\b/i
+            sql = sql + ',' + Ridgepole::ExecuteExpander.alter_extra
+          end
+
+          sql
+        end
       end
     end
   end # of class methods

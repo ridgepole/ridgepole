@@ -17,6 +17,7 @@ describe 'ridgepole' do
         -f, --file FILE
             --dry-run
             --table-options OPTIONS
+            --alter-extra ALTER_SPEC
             --external-script SCRIPT
             --bulk-change
             --default-bool-limit LIMIT

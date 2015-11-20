@@ -70,6 +70,7 @@ Usage: ridgepole [options]
     -f, --file FILE
         --dry-run
         --table-options OPTIONS
+        --alter-extra ALTER_SPEC
         --external-script SCRIPT
         --bulk-change
         --default-bool-limit LIMIT
@@ -90,6 +91,7 @@ Usage: ridgepole [options]
     -t, --tables TABLES
         --ignore-tables TABLES
         --enable-mysql-awesome
+        --mysql-use-alter
         --dump-without-table-options
         --index-removed-drop-column
         --enable-migration-comments

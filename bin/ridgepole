@@ -42,12 +42,15 @@ set_mode = proc do |m|
   mode = m
 end
 
-def noop_migrate(delta)
+def noop_migrate(delta, options)
   unless delta.script.empty?
     puts delta.script + "\n\n"
   end
 
-  migrated, out = delta.migrate(:noop => true)
+  migrated, out = delta.migrate(
+    :noop => true,
+    :alter_extra => options[:alter_extra]
+  )
 
   if migrated
     out.each_line do |line|
@@ -71,6 +74,7 @@ ARGV.options do |opt|
     opt.on('-f', '--file FILE')                   {|v| file = v                                             }
     opt.on('',   '--dry-run')                     {    options[:dry_run] = true                             }
     opt.on('',   '--table-options OPTIONS')       {|v| options[:table_options] = v                          }
+    opt.on('',   '--alter-extra ALTER_SPEC')      {|v| options[:alter_extra] = v                            }
     opt.on('',   '--external-script SCRIPT')      {|v| options[:external_script] = v                        }
     opt.on('',   '--bulk-change') {
       raise "Cannot use `bulk-change` in `merge`" if options[:merge]
@@ -197,11 +201,15 @@ begin
 
     if options[:dry_run]
       if differ
-        differ = noop_migrate(delta)
+        differ = noop_migrate(delta, options)
       end
     else
       logger.verbose_info('# Update schema')
-      differ, out = delta.migrate(:external_script => options[:external_script])
+
+      differ, out = delta.migrate(
+        :external_script => options[:external_script],
+        :alter_extra => options[:alter_extra]
+      )
     end
 
     unless differ
@@ -236,7 +244,7 @@ begin
         logger.info('No change')
       end
     elsif delta.differ?
-      differ = noop_migrate(delta)
+      differ = noop_migrate(delta, options)
       exit_code = 1 if differ
     end
   end
