@@ -5,8 +5,10 @@ class Ridgepole::ExecuteExpander
     end
   end
 
-  cattr_accessor :noop,     :instance_writer => false, :instance_reader => false
-  cattr_accessor :callback, :instance_writer => false, :instance_reader => false
+  cattr_accessor :noop,         :instance_writer => false, :instance_reader => false
+  cattr_accessor :callback,     :instance_writer => false, :instance_reader => false
+  cattr_accessor :use_script,   :instance_writer => false, :instance_reader => false
+  cattr_accessor :sql_executer, :instance_writer => false, :instance_reader => false
 
   class << self
     def without_operation(callback = nil)
@@ -20,11 +22,22 @@ class Ridgepole::ExecuteExpander
       end
     end
 
+    def with_script(script, logger)
+      begin
+        self.use_script = true
+        self.sql_executer = Ridgepole::ExternalSqlExecuter.new(script, logger)
+        yield
+      ensure
+        self.use_script = false
+        self.sql_executer = nil
+      end
+    end
+
     def expand_execute(connection)
-      return if connection.respond_to?(:execute_with_noop)
+      return if connection.respond_to?(:execute_with_ext)
 
       class << connection
-        def execute_with_noop(sql, name = nil)
+        def execute_with_ext(sql, name = nil)
           if Ridgepole::ExecuteExpander.noop
             if (callback = Ridgepole::ExecuteExpander.callback)
               callback.call(sql, name)
@@ -32,18 +45,25 @@ class Ridgepole::ExecuteExpander
 
             if sql =~ /\A(SELECT|SHOW)\b/i
               begin
-                execute_without_noop(sql, name)
+                execute_without_ext(sql, name)
               rescue => e
                 Stub.new
               end
             else
               Stub.new
             end
+          elsif Ridgepole::ExecuteExpander.use_script
+            if sql =~ /\A(SELECT|SHOW)\b/i
+              execute_without_ext(sql, name)
+            else
+              Ridgepole::ExecuteExpander.sql_executer.execute(sql)
+              nil
+            end
           else
-            execute_without_noop(sql, name)
+            execute_without_ext(sql, name)
           end
         end
-        alias_method_chain :execute, :noop
+        alias_method_chain :execute, :ext
       end
     end
   end # of class methods

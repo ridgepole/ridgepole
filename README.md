@@ -42,6 +42,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Fix `default` option ([pull#48](https://github.com/winebarrel/ridgepole/pull/48))
   * Add `--enable-migration-comments` option ([pull#50](https://github.com/winebarrel/ridgepole/pull/50))
   * Disable `rename_table_indexes`
+* `>= 0.6.4`
+  * Execute sql using external script
 
 ## Installation
 
