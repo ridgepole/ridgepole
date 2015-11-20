@@ -21,10 +21,10 @@ class Ridgepole::ExecuteExpander
     end
 
     def expand_execute(connection)
-      return if connection.respond_to?(:execute_with_noop)
+      return if connection.respond_to?(:execute_with_ext)
 
       class << connection
-        def execute_with_noop(sql, name = nil)
+        def execute_with_ext(sql, name = nil)
           if Ridgepole::ExecuteExpander.noop
             if (callback = Ridgepole::ExecuteExpander.callback)
               callback.call(sql, name)
@@ -32,7 +32,7 @@ class Ridgepole::ExecuteExpander
 
             if sql =~ /\A(SELECT|SHOW)\b/i
               begin
-                execute_without_noop(sql, name)
+                execute_without_ext(sql, name)
               rescue => e
                 Stub.new
               end
@@ -40,10 +40,10 @@ class Ridgepole::ExecuteExpander
               Stub.new
             end
           else
-            execute_without_noop(sql, name)
+            execute_without_ext(sql, name)
           end
         end
-        alias_method_chain :execute, :noop
+        alias_method_chain :execute, :ext
       end
     end
   end # of class methods
