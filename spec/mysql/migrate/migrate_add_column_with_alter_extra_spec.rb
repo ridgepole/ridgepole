@@ -149,7 +149,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
-      delta.migrate(alter_extra: 'LOCK=NONE')
+      delta.migrate(alter_extra: 'FORCE')
       expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
     }
   end
