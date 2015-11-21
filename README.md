@@ -280,6 +280,34 @@ echo "$1" | mysql -u root my_db
 $ ridgepole -c config.yml --apply --external-script ./test.sh
 ```
 
+## Add extra statement to ALTER
+
+```sh
+$ ridgepole -a -c database.yml --alter-extra="LOCK=NONE" --debug
+Apply `Schemafile`
+...
+-- add_column("dept_manager", "to_date2", :date, {:null=>false, :after=>"from_date"})
+   (42.2ms)  ALTER TABLE `dept_manager` ADD `to_date2` date NOT NULL AFTER `from_date`,LOCK=NONE
+   -> 0.0428s
+-- remove_column("dept_manager", "to_date")
+   (46.9ms)  ALTER TABLE `dept_manager` DROP `to_date`,LOCK=NONE
+   -> 0.0471s
+```
+
+## Use ALTER instead of CREATE/DROP INDEX
+
+```sh
+$ ridgepole -a -c database.yml --mysql-use-alter --debug
+Apply `Schemafile`
+...
+-- remove_index("dept_manager", {:name=>"emp_no"})
+   (19.2ms)  ALTER TABLE `dept_manager` DROP INDEX `emp_no`,LOCK=NONE
+   -> 0.0200s
+-- add_index("dept_manager", ["emp_no"], {:name=>"emp_no2", :using=>:btree})
+   (23.4ms)  ALTER TABLE `dept_manager` ADD  INDEX `emp_no2` USING btree (`emp_no`),LOCK=NONE
+   -> 0.0243s
+```
+
 ## Demo
 
 * [asciinema.org/a/9349](https://asciinema.org/a/9349)
