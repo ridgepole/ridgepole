@@ -5,8 +5,8 @@ class Ridgepole::ExternalSqlExecuter
   end
 
   def execute(sql)
-    cmd = Shellwords.join([@script, sql])
-    @logger.info("Execute #{cmd}")
+    cmd = Shellwords.join([@script, sql, JSON.dump(ActiveRecord::Base.connection_config)])
+    @logger.info("Execute #{@script}")
 
     out, err, status = Open3.capture3(cmd)
     out.strip!

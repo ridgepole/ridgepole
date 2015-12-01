@@ -275,7 +275,9 @@ remove_column("articles", "author")
 ```sh
 $ cat test.sh
 #!/bin/sh
-echo "$1" | mysql -u root my_db
+SQL="$1"
+CONFIG_JSON="$2"
+echo "$SQL" | mysql -u root my_db
 
 $ ridgepole -c config.yml --apply --external-script ./test.sh
 ```
