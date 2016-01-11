@@ -88,7 +88,7 @@ class Ridgepole::Diff
 
   def scan_options_change(table_name, from, to, table_delta)
     unless from == to
-      Ridgepole::Logger.instance.warn("[WARNING] Table `#{table_name}` options cannot be changed")
+      Ridgepole::Logger.instance.warn("[WARNING] No difference of schema configuration for table `#{table_name}`. (if you changed some options, please reconfirm your Schemafile.")
     end
   end
 
