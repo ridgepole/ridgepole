@@ -68,7 +68,7 @@ Usage: ridgepole [options]
     -E, --env ENVIRONMENT
     -a, --apply
     -m, --merge
-    -f, --file FILE
+    -f, --file SCHEMAFILE
         --dry-run
         --table-options OPTIONS
         --alter-extra ALTER_SPEC
