@@ -1,15 +1,15 @@
-unless postgresql?
+if postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create fk' do
     let(:actual_dsl) {
       <<-RUBY
-create_table "child"#{unsigned_if_enabled}, force: :cascade do |t|
-  t.integer "parent_id", limit: 4#{unsigned_if_enabled}
+create_table "child", force: :cascade do |t|
+  t.integer "parent_id"
 end
 
 add_index "child", ["parent_id"], name: "par_id", using: :btree
 
-create_table "parent"#{unsigned_if_enabled}, force: :cascade do |t|
+create_table "parent", force: :cascade do |t|
 end
       RUBY
     }
@@ -60,7 +60,7 @@ create_table "parent", force: :cascade do |t|
 end
 
 create_table "child", force: :cascade do |t|
-  t.integer "parent_id"
+  t.integer "parent_id", unsigned: true
 end
 
 add_index "child", ["parent_id"], name: "par_id", using: :btree
@@ -71,9 +71,8 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
 
     let(:sorted_dsl) {
       <<-RUBY
-
 create_table "child", force: :cascade do |t|
-  t.integer "parent_id", limit: 4
+  t.integer "parent_id"
 end
 
 add_index "child", ["parent_id"], name: "par_id", using: :btree
@@ -85,6 +84,7 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       RUBY
     }
 
+    before { client.diff('').migrate }
     subject { client(dumb_with_default_fk_name: true) }
 
     it {

@@ -1,4 +1,4 @@
-unless postgresql?
+if postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop fk' do
     let(:actual_dsl) {
@@ -26,7 +26,7 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
     let(:expected_dsl) {
       <<-RUBY
 create_table "child", force: :cascade do |t|
-  t.integer "parent_id", limit: 4
+  t.integer "parent_id"
 end
 
 add_index "child", ["parent_id"], name: "par_id", using: :btree
@@ -75,7 +75,7 @@ end
 
 
 create_table "child", force: :cascade do |t|
-  t.integer "parent_id"
+  t.integer "parent_id", unsigned: true
 end
 
 add_index "child", ["parent_id"], name: "par_id", using: :btree
@@ -87,7 +87,7 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
     let(:sorted_dsl) {
       <<-RUBY
 create_table "child", force: :cascade do |t|
-  t.integer "parent_id", limit: 4
+  t.integer "parent_id"
 end
 
 add_index "child", ["parent_id"], name: "par_id", using: :btree
