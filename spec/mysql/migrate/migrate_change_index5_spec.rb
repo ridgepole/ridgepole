@@ -23,7 +23,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date",             null: false
         end
 
-        add_index "salaries", ["emp_no", "id"], unique: false, name: "emp_no", unique: false, using: :btree
+        add_index "salaries", ["emp_no", "id"], name: "emp_no", unique: false, using: :btree
       RUBY
     }
 

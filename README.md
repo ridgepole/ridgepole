@@ -46,6 +46,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Execute sql using external script ([pull#56](https://github.com/winebarrel/ridgepole/pull/56))
   * Add `--mysql-use-alter` option
   * Add `--alter-extra` option
+  * Add `--dump-with-default-fk-name` option
 
 ## Installation
 
@@ -94,6 +95,7 @@ Usage: ridgepole [options]
         --enable-mysql-awesome
         --mysql-use-alter
         --dump-without-table-options
+        --dump-with-default-fk-name
         --index-removed-drop-column
         --enable-migration-comments
     -r, --require LIBS

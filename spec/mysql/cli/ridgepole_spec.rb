@@ -40,6 +40,7 @@ describe 'ridgepole' do
             --enable-mysql-awesome
             --mysql-use-alter
             --dump-without-table-options
+            --dump-with-default-fk-name
             --index-removed-drop-column
             --enable-migration-comments
         -r, --require LIBS

@@ -48,7 +48,7 @@ add_foreign_key "child", "parent", name: "child_ibfk_1"
 
     before { subject.diff(actual_dsl).migrate }
 
-    subject { client(enable_foreigner: true) }
+    subject { client }
 
     it {
       delta = subject.diff(expected_dsl)

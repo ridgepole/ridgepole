@@ -29,6 +29,10 @@ class Ridgepole::Client
     if @options[:mysql_use_alter]
       require 'ridgepole/ext/abstract_mysql_adapter'
     end
+
+    if @options[:dumb_with_default_fk_name]
+      require 'ridgepole/ext/schema_dumper'
+    end
   end
 
   def dump(&block)
