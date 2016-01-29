@@ -89,7 +89,7 @@ Usage: ridgepole [options]
     -d, --diff DSL1 DSL2
         --reverse
         --with-apply
-    -o, --output FILE
+    -o, --output SCHEMAFILE
     -t, --tables TABLES
         --ignore-tables TABLES
         --enable-mysql-awesome
