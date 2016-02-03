@@ -9,8 +9,10 @@ class Ridgepole::DSLParser
     class TableDefinition
       attr_reader :__definition
 
-      def initialize
+      def initialize(table_name, base)
         @__definition = {}
+        @table_name = table_name
+        @base = base
       end
 
       def column(name, type, options = {})
@@ -72,6 +74,10 @@ class Ridgepole::DSLParser
         end
       end
 
+      def index(name, options = {})
+        @base.add_index(@table_name, name, options)
+      end
+
       def timestamps(*args)
         options = {:null => false}.merge(args.extract_options!)
         column(:created_at, :datetime, options)
@@ -81,11 +87,16 @@ class Ridgepole::DSLParser
       def references(*args)
         options = args.extract_options!
         polymorphic = options.delete(:polymorphic)
+        index_options = options.delete(:index)
         type = options.delete(:type) || :integer
 
         args.each do |col|
           column("#{col}_id", type, options)
           column("#{col}_type", :string, polymorphic.is_a?(Hash) ? polymorphic : options) if polymorphic
+          if index_options
+            index("#{col}_id", index_options.is_a?(Hash) ? index_options : {})
+            index("#{col}_type", index_options.is_a?(Hash) ? index_options : {}) if polymorphic
+          end
         end
       end
       alias :belongs_to :references
@@ -114,7 +125,7 @@ class Ridgepole::DSLParser
 
     def create_table(table_name, options = {})
       table_name = table_name.to_s
-      table_definition = TableDefinition.new
+      table_definition = TableDefinition.new(table_name, self)
 
       [:primary_key].each do |key|
         options[key] = options[key].to_s if options[key]
