@@ -1,5 +1,7 @@
 # Ridgepole
 
+[![Join the chat at https://gitter.im/winebarrel/ridgepole](https://badges.gitter.im/winebarrel/ridgepole.svg)](https://gitter.im/winebarrel/ridgepole?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Ridgepole is a tool to manage DB schema.
 
 It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.html#types-of-schema-dumps), and updates DB schema according to DSL.
