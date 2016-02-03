@@ -210,10 +210,6 @@ def mysql_awesome_enabled?
   ENV['ENABLE_MYSQL_AWESOME'] == '1'
 end
 
-def migration_comments_enabled?
-  ENV['ENABLE_MIGRATION_COMMENTS'] == '1'
-end
-
 def postgresql?
   ENV['POSTGRESQL'] == '1'
 end
