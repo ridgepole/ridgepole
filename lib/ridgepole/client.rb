@@ -14,15 +14,7 @@ class Ridgepole::Client
     @parser = Ridgepole::DSLParser.new(@options)
     @diff = Ridgepole::Diff.new(@options)
 
-    if @options[:enable_migration_comments]
-      require 'migration_comments'
-    end
-
     if @options[:enable_mysql_awesome]
-      if @options[:enable_migration_comments]
-        require 'ridgepole/ext/migration_comments'
-      end
-
       require 'activerecord/mysql/awesome/base'
     end
 
