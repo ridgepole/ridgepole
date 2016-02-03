@@ -8,7 +8,6 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 [![Gem Version](https://badge.fury.io/rb/ridgepole.svg)](http://badge.fury.io/rb/ridgepole)
 [![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=master)](https://travis-ci.org/winebarrel/ridgepole)
 [![Coverage Status](https://coveralls.io/repos/winebarrel/ridgepole/badge.svg?branch=master)](https://coveralls.io/r/winebarrel/ridgepole?branch=master)
-[![Gitter](https://badges.gitter.im/winebarrel/ridgepole.svg)](https://gitter.im/winebarrel/ridgepole?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 **Notice**
 
