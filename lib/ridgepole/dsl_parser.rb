@@ -1,11 +1,5 @@
 class Ridgepole::DSLParser
   class Context
-    def self.include_module(mod)
-      unless self.included_modules.include?(mod)
-        include mod
-      end
-    end
-
     class TableDefinition
       attr_reader :__definition
 
