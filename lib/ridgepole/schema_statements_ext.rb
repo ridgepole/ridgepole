@@ -26,7 +26,7 @@ end
 module ActiveRecord
   module ConnectionAdapters
     class AbstractAdapter
-      include Ridgepole::SchemaStatementsExt
+      prepend Ridgepole::SchemaStatementsExt
     end
   end
 end
