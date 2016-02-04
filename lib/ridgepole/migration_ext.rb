@@ -2,7 +2,7 @@ require 'active_record/migration'
 
 module Ridgepole
   module MigrationExt
-    def self.included(klass)
+    def self.prepended(klass)
       klass.class_eval do
         cattr_accessor :time_recorder
         cattr_accessor :disable_logging
@@ -64,6 +64,6 @@ end
 
 module ActiveRecord
   class Migration
-    include Ridgepole::MigrationExt
+    prepend Ridgepole::MigrationExt
   end
 end

@@ -20,7 +20,7 @@ end
 module ActiveRecord
   module ConnectionAdapters
     class AbstractMysqlAdapter
-      include Ridgepole::Ext::AbstractMysqlAdapter
+      prepend Ridgepole::Ext::AbstractMysqlAdapter
     end
   end
 end
