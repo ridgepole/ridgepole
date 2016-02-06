@@ -49,6 +49,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Add `--dump-with-default-fk-name` option
   * Support `t.index` ([pull#64](https://github.com/winebarrel/ridgepole/pull/64))
   * Remove migration_comments
+  * Fix foreign key apply order
 
 ## Installation
 
