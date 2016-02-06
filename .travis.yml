@@ -9,7 +9,6 @@ rvm:
   - 2.3.0
 before_install:
   - gem install bundler
-  - gem update bundler
 script:
   - bundle install
   - bundle exec rake
