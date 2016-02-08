@@ -1,10 +1,17 @@
 require 'active_record/schema_dumper'
 
-class ActiveRecord::SchemaDumper
-  def table_with_logging(table, stream)
-    logger = Ridgepole::Logger.instance
-    logger.verbose_info("#   #{table}")
-    table_without_logging(table, stream)
+module Ridgepole
+  module SchemaDumperExt
+    def table(table, stream)
+      logger = Ridgepole::Logger.instance
+      logger.verbose_info("#   #{table}")
+      super
+    end
   end
-  alias_method_chain :table, :logging
+end
+
+module ActiveRecord
+  class SchemaDumper
+    prepend Ridgepole::SchemaDumperExt
+  end
 end

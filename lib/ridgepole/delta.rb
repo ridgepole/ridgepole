@@ -22,9 +22,10 @@ class Ridgepole::Delta
 
   def script
     buf = StringIO.new
+    buf_for_fk = StringIO.new
 
     (@delta[:add] || {}).each do |table_name, attrs|
-      append_create_table(table_name, attrs, buf)
+      append_create_table(table_name, attrs, buf, buf_for_fk)
     end
 
     (@delta[:rename] || {}).each do |table_name, attrs|
@@ -32,14 +33,14 @@ class Ridgepole::Delta
     end
 
     (@delta[:change] || {}).each do |table_name, attrs|
-      append_change(table_name, attrs, buf)
+      append_change(table_name, attrs, buf, buf_for_fk)
     end
 
     (@delta[:delete] || {}).each do |table_name, attrs|
       append_drop_table(table_name, attrs, buf)
     end
 
-    buf.string.strip
+    (buf.string.strip + "\n\n" + buf_for_fk.string.strip).strip
   end
 
   def differ?
@@ -63,13 +64,31 @@ class Ridgepole::Delta
           buf.puts sql if sql =~ /\A(CREATE|ALTER|DROP|RENAME)\b/i
         end
 
-        Ridgepole::ExecuteExpander.without_operation(callback) do
-          migrated = eval_script(script, options.merge(:out => buf))
+        eval_script_block = proc do
+          Ridgepole::ExecuteExpander.without_operation(callback) do
+            migrated = eval_script(script, options.merge(:out => buf))
+          end
+        end
+
+        if options[:alter_extra]
+          Ridgepole::ExecuteExpander.with_alter_extra(options[:alter_extra]) do
+            eval_script_block.call
+          end
+        else
+          eval_script_block.call
         end
 
         out = buf.string.strip
       ensure
         ActiveRecord::Migration.disable_logging = disable_logging_orig
+      end
+    elsif options[:external_script]
+      Ridgepole::ExecuteExpander.with_script(options[:external_script], Ridgepole::Logger.instance) do
+        migrated = eval_script(script, options)
+      end
+    elsif options[:alter_extra]
+      Ridgepole::ExecuteExpander.with_alter_extra(options[:alter_extra]) do
+        migrated = eval_script(script, options)
       end
     else
       migrated = eval_script(script, options)
@@ -192,7 +211,7 @@ class Ridgepole::Delta
     end
   end
 
-  def append_create_table(table_name, attrs, buf)
+  def append_create_table(table_name, attrs, buf, buf_for_fk)
     options = attrs[:options] || {}
     options[:options] ||= @options[:table_options] if @options[:table_options]
     definition = attrs[:definition] || {}
@@ -226,11 +245,12 @@ end
 
     unless (foreign_keys = attrs[:foreign_keys] || {}).empty?
       foreign_keys.each do |foreign_key_name, foreign_key_attrs|
-        append_add_foreign_key(table_name, foreign_key_name, foreign_key_attrs, buf, @options)
+        append_add_foreign_key(table_name, foreign_key_name, foreign_key_attrs, buf_for_fk, @options)
       end
     end
 
     buf.puts
+    buf_for_fk.puts
   end
 
   def append_rename_table(to_table_name, from_table_name, buf)
@@ -249,7 +269,7 @@ drop_table(#{table_name.inspect})
     buf.puts
   end
 
-  def append_change(table_name, attrs, buf)
+  def append_change(table_name, attrs, buf, buf_for_fk)
     definition = attrs[:definition] || {}
     indices = attrs[:indices] || {}
     foreign_keys = attrs[:foreign_keys] || {}
@@ -262,10 +282,11 @@ drop_table(#{table_name.inspect})
     end
 
     unless foreign_keys.empty?
-      append_change_foreign_keys(table_name, foreign_keys, buf, @options)
+      append_change_foreign_keys(table_name, foreign_keys, buf_for_fk, @options)
     end
 
     buf.puts
+    buf_for_fk.puts
   end
 
   def append_change_table(table_name, buf)

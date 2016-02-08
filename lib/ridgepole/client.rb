@@ -14,16 +14,16 @@ class Ridgepole::Client
     @parser = Ridgepole::DSLParser.new(@options)
     @diff = Ridgepole::Diff.new(@options)
 
-    if @options[:enable_migration_comments]
-      require 'migration_comments'
+    if @options[:enable_mysql_awesome]
+      require 'activerecord/mysql/awesome/base'
     end
 
-    if @options[:enable_mysql_awesome]
-      if @options[:enable_migration_comments]
-        require 'ridgepole/ext/migration_comments'
-      end
+    if @options[:mysql_use_alter]
+      require 'ridgepole/ext/abstract_mysql_adapter'
+    end
 
-      require 'activerecord/mysql/awesome/base'
+    if @options[:dumb_with_default_fk_name]
+      require 'ridgepole/ext/schema_dumper'
     end
   end
 

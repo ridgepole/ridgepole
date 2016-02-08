@@ -12,7 +12,7 @@ end
 
 add_index "child", ["parent_id"], name: "par_id", using: :btree
 
-add_foreign_key "child", "parent", name: "child_ibfk_1", on_delete: :cascade
+add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc", on_delete: :cascade
       RUBY
     }
 
@@ -27,7 +27,7 @@ add_index "child", ["parent_id"], name: "par_id", using: :btree
 create_table "parent", force: :cascade do |t|
 end
 
-add_foreign_key "child", "parent", name: "child_ibfk_1", on_delete: :cascade
+add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc", on_delete: :cascade
       RUBY
     }
 
@@ -42,13 +42,13 @@ add_index "child", ["parent_id"], name: "par_id", using: :btree
 create_table "parent", force: :cascade do |t|
 end
 
-add_foreign_key "child", "parent", name: "child_ibfk_1"
+add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       RUBY
     }
 
     before { subject.diff(actual_dsl).migrate }
 
-    subject { client }
+    subject { client(dumb_with_default_fk_name: true) }
 
     it {
       delta = subject.diff(expected_dsl)

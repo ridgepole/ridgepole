@@ -14,9 +14,11 @@ describe 'ridgepole' do
         -E, --env ENVIRONMENT
         -a, --apply
         -m, --merge
-        -f, --file FILE
+        -f, --file SCHEMAFILE
             --dry-run
             --table-options OPTIONS
+            --alter-extra ALTER_SPEC
+            --external-script SCRIPT
             --bulk-change
             --default-bool-limit LIMIT
             --default-int-limit LIMIT
@@ -32,13 +34,14 @@ describe 'ridgepole' do
         -d, --diff DSL1 DSL2
             --reverse
             --with-apply
-        -o, --output FILE
+        -o, --output SCHEMAFILE
         -t, --tables TABLES
             --ignore-tables TABLES
             --enable-mysql-awesome
+            --mysql-use-alter
             --dump-without-table-options
+            --dump-with-default-fk-name
             --index-removed-drop-column
-            --enable-migration-comments
         -r, --require LIBS
             --log-file LOG_FILE
             --verbose

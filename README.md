@@ -42,6 +42,14 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Fix `default` option ([pull#48](https://github.com/winebarrel/ridgepole/pull/48))
   * Add `--enable-migration-comments` option ([pull#50](https://github.com/winebarrel/ridgepole/pull/50))
   * Disable `rename_table_indexes`
+* `>= 0.6.4`
+  * Execute sql using external script ([pull#56](https://github.com/winebarrel/ridgepole/pull/56))
+  * Add `--mysql-use-alter` option
+  * Add `--alter-extra` option
+  * Add `--dump-with-default-fk-name` option
+  * Support `t.index` ([pull#64](https://github.com/winebarrel/ridgepole/pull/64))
+  * Remove migration_comments
+  * Fix foreign key apply order
 
 ## Installation
 
@@ -64,9 +72,11 @@ Usage: ridgepole [options]
     -E, --env ENVIRONMENT
     -a, --apply
     -m, --merge
-    -f, --file FILE
+    -f, --file SCHEMAFILE
         --dry-run
         --table-options OPTIONS
+        --alter-extra ALTER_SPEC
+        --external-script SCRIPT
         --bulk-change
         --default-bool-limit LIMIT
         --default-int-limit LIMIT
@@ -82,13 +92,14 @@ Usage: ridgepole [options]
     -d, --diff DSL1 DSL2
         --reverse
         --with-apply
-    -o, --output FILE
+    -o, --output SCHEMAFILE
     -t, --tables TABLES
         --ignore-tables TABLES
         --enable-mysql-awesome
+        --mysql-use-alter
         --dump-without-table-options
+        --dump-with-default-fk-name
         --index-removed-drop-column
-        --enable-migration-comments
     -r, --require LIBS
         --log-file LOG_FILE
         --verbose
@@ -261,6 +272,46 @@ rename_column("articles", "text", "desc")
 $ ridgepole --diff file1.schema file2.schema --reverse
 rename_column("articles", "desc", "text")
 remove_column("articles", "author")
+```
+
+## Execute SQL using external script
+
+```sh
+$ cat test.sh
+#!/bin/sh
+SQL="$1"
+CONFIG_JSON="$2"
+echo "$SQL" | mysql -u root my_db
+
+$ ridgepole -c config.yml --apply --external-script ./test.sh
+```
+
+## Add extra statement to ALTER
+
+```sh
+$ ridgepole -a -c database.yml --alter-extra="LOCK=NONE" --debug
+Apply `Schemafile`
+...
+-- add_column("dept_manager", "to_date2", :date, {:null=>false, :after=>"from_date"})
+   (42.2ms)  ALTER TABLE `dept_manager` ADD `to_date2` date NOT NULL AFTER `from_date`,LOCK=NONE
+   -> 0.0428s
+-- remove_column("dept_manager", "to_date")
+   (46.9ms)  ALTER TABLE `dept_manager` DROP `to_date`,LOCK=NONE
+   -> 0.0471s
+```
+
+## Use ALTER instead of CREATE/DROP INDEX
+
+```sh
+$ ridgepole -a -c database.yml --mysql-use-alter --debug
+Apply `Schemafile`
+...
+-- remove_index("dept_manager", {:name=>"emp_no"})
+   (19.2ms)  ALTER TABLE `dept_manager` DROP INDEX `emp_no`,LOCK=NONE
+   -> 0.0200s
+-- add_index("dept_manager", ["emp_no"], {:name=>"emp_no2", :using=>:btree})
+   (23.4ms)  ALTER TABLE `dept_manager` ADD  INDEX `emp_no2` USING btree (`emp_no`),LOCK=NONE
+   -> 0.0243s
 ```
 
 ## Demo

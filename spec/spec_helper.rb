@@ -195,12 +195,19 @@ def run_cli(options = {})
   end
 end
 
-def mysql_awesome_enabled?
-  ENV['ENABLE_MYSQL_AWESOME'] == '1'
+def tempfile(basename, content = '')
+  begin
+    path = `mktemp /tmp/#{basename}.XXXXXX`
+    open(path, 'wb') {|f| f << content }
+    FileUtils.chmod(0777, path)
+    yield(path)
+  ensure
+    FileUtils.rm_f(path) if path
+  end
 end
 
-def migration_comments_enabled?
-  ENV['ENABLE_MIGRATION_COMMENTS'] == '1'
+def mysql_awesome_enabled?
+  ENV['ENABLE_MYSQL_AWESOME'] == '1'
 end
 
 def postgresql?

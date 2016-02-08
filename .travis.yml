@@ -1,21 +1,26 @@
-sudo: false
+dist: trusty
+sudo: required
 language: ruby
+cache: bundler
 rvm:
   - 2.0.0
   - 2.1.8
   - 2.2.4
   - 2.3.0
 before_install:
-  - gem update bundler
+  - gem install bundler
 script:
   - bundle install
   - bundle exec rake
 env:
   matrix:
-    - ENABLE_MYSQL_AWESOME=0 ENABLE_MIGRATION_COMMENTS=0
-    - ENABLE_MYSQL_AWESOME=1 ENABLE_MIGRATION_COMMENTS=0
-    - ENABLE_MYSQL_AWESOME=0 ENABLE_MIGRATION_COMMENTS=1
-    - ENABLE_MYSQL_AWESOME=1 ENABLE_MIGRATION_COMMENTS=1
+    - ENABLE_MYSQL_AWESOME=0
+    - ENABLE_MYSQL_AWESOME=1
     - POSTGRESQL=1
 addons:
   postgresql: "9.4"
+  apt:
+    packages:
+    - mysql-server-5.6
+    - mysql-client-core-5.6
+    - mysql-client-5.6
