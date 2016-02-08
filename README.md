@@ -307,10 +307,10 @@ $ ridgepole -a -c database.yml --mysql-use-alter --debug
 Apply `Schemafile`
 ...
 -- remove_index("dept_manager", {:name=>"emp_no"})
-   (19.2ms)  ALTER TABLE `dept_manager` DROP INDEX `emp_no`,LOCK=NONE
+   (19.2ms)  ALTER TABLE `dept_manager` DROP INDEX `emp_no`
    -> 0.0200s
 -- add_index("dept_manager", ["emp_no"], {:name=>"emp_no2", :using=>:btree})
-   (23.4ms)  ALTER TABLE `dept_manager` ADD  INDEX `emp_no2` USING btree (`emp_no`),LOCK=NONE
+   (23.4ms)  ALTER TABLE `dept_manager` ADD  INDEX `emp_no2` USING btree (`emp_no`)
    -> 0.0243s
 ```
 
