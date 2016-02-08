@@ -6,6 +6,20 @@ module Ridgepole
       klass.class_eval do
         cattr_accessor :time_recorder
         cattr_accessor :disable_logging
+
+        def self.record_time
+          result = nil
+
+          begin
+            self.time_recorder = TimeRecorder.new
+            yield
+            result = self.time_recorder.result
+          ensure
+            self.time_recorder = nil
+          end
+
+          result
+        end
       end
     end
 
@@ -24,20 +38,6 @@ module Ridgepole
       when /\A\s+->\s+(\d+\.\d+)s\Z/
         self.time_recorder.add_value($1.to_f)
       end
-    end
-
-    def self.record_time
-      result = nil
-
-      begin
-        self.time_recorder = TimeRecorder.new
-        yield
-        result = self.time_recorder.result
-      ensure
-        self.time_recorder = nil
-      end
-
-      result
     end
 
     class TimeRecorder

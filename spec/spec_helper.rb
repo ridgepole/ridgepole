@@ -195,7 +195,7 @@ def run_cli(options = {})
   end
 end
 
-def tempfile(basename, content)
+def tempfile(basename, content = '')
   begin
     path = `mktemp /tmp/#{basename}.XXXXXX`
     open(path, 'wb') {|f| f << content }
