@@ -31,8 +31,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       expect(Ridgepole::Logger.instance).to receive(:warn).with("[WARNING] No difference of schema configuration for table `employees` but table options differ.")
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(%Q{  from: {:primary_key=>"emp_no"}})
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(%Q{    to: {:primary_key=>"emp_no2"}})
+      expect(Ridgepole::Logger.instance).to receive(:warn).with(%Q{  from: {:primary_key=>"emp_no"#{unsigned_if_enabled2}}})
+      expect(Ridgepole::Logger.instance).to receive(:warn).with(%Q{    to: {:primary_key=>"emp_no2"#{unsigned_if_enabled2}}})
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_falsey
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
@@ -42,8 +42,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       expect(Ridgepole::Logger.instance).to receive(:warn).with("[WARNING] No difference of schema configuration for table `employees` but table options differ.")
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(%Q{  from: {:primary_key=>"emp_no2"}})
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(%Q{    to: {:primary_key=>"emp_no"}})
+      expect(Ridgepole::Logger.instance).to receive(:warn).with(%Q{  from: {:primary_key=>"emp_no2"#{unsigned_if_enabled2}}})
+      expect(Ridgepole::Logger.instance).to receive(:warn).with(%Q{    to: {:primary_key=>"emp_no"#{unsigned_if_enabled2}}})
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
       expect(delta.differ?).to be_falsey
     }
