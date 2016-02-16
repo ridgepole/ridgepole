@@ -12,6 +12,11 @@ before_install:
 before_script:
   - sudo service mysql stop
   - sudo service postgresql stop
+  - docker-compose up -d
+  - function mysql_ping { mysqladmin -u root -h 127.0.0.1 -ppassword ping > /dev/null 2> /dev/null; }
+  - function pg_ping { PGPASSWORD=password pg_isready -U postgres -h 127.0.0.1 > /dev/null 2> /dev/null; }
+  - for i in {1..60}; do mysql_ping && break; sleep 1; done
+  - for i in {1..60}; do pg_ping && break; sleep 1; done
 script:
   - bundle install
   - bundle exec rake
@@ -20,10 +25,10 @@ env:
     - ENABLE_MYSQL_AWESOME=0
     - ENABLE_MYSQL_AWESOME=1
     - POSTGRESQL=1
+services:
+  - docker
 addons:
-  postgresql: "9.4"
   apt:
     packages:
-    - mysql-server-5.6
-    - mysql-client-core-5.6
     - mysql-client-5.6
+    - postgresql-client-9.4

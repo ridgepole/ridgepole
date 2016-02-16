@@ -22,6 +22,23 @@ require 'open3'
 require 'tempfile'
 require 'json'
 
+TEST_MYSQL_HOST = '127.0.0.1'
+TEST_MYSQL_PORT = 3306
+TEST_MYSQL_USER = 'root'
+TEST_MYSQL_PASS = 'password'
+
+MYSQL_CLI = "MYSQL_PWD=#{TEST_MYSQL_PASS} mysql -h #{TEST_MYSQL_HOST} -P #{TEST_MYSQL_PORT} -u #{TEST_MYSQL_USER}"
+
+TEST_PG_HOST = '127.0.0.1'
+TEST_PG_PORT = 5432
+TEST_PG_USER = 'postgres'
+TEST_PG_PASS = 'password'
+
+PG_CLI_OPTS = "PGPASSWORD=#{TEST_PG_PASS} %s -h #{TEST_PG_HOST} -p #{TEST_PG_PORT} -U #{TEST_PG_USER}"
+PG_PSQL = PG_CLI_OPTS % 'psql'
+PG_CREATEDB = PG_CLI_OPTS % 'createdb'
+PG_DUMP = PG_CLI_OPTS % 'pg_dump'
+
 TEST_SCHEMA = 'ridgepole_test'
 
 if ENV['DEBUG']
@@ -56,13 +73,13 @@ end
 
 def restore_database_mysql
   sql_file = File.expand_path('../mysql/ridgepole_test_database.sql', __FILE__)
-  system_raise_on_fail("mysql -uroot < #{sql_file}")
+  system_raise_on_fail("#{MYSQL_CLI} < #{sql_file}")
 end
 
 def restore_database_postgresql
   sql_file = File.expand_path('../postgresql/ridgepole_test_database.sql', __FILE__)
-  system("createdb ridgepole_test #{travis? ? '-U postgres' : ''} 2>/dev/null")
-  system_raise_on_fail("psql ridgepole_test #{travis? ? '-U postgres' : ''} --set ON_ERROR_STOP=off -q -f #{sql_file} 2>/dev/null")
+  system("#{PG_CREATEDB} ridgepole_test 2>/dev/null")
+  system_raise_on_fail("#{PG_PSQL} ridgepole_test --set ON_ERROR_STOP=off -q -f #{sql_file} 2>/dev/null")
 end
 
 def restore_tables
@@ -75,12 +92,12 @@ end
 
 def restore_tables_mysql
   sql_file = File.expand_path('../mysql/ridgepole_test_tables.sql', __FILE__)
-  system_raise_on_fail("mysql -uroot < #{sql_file}")
+  system_raise_on_fail("#{MYSQL_CLI} < #{sql_file}")
 end
 
 def restore_tables_postgresql
   sql_file = File.expand_path('../postgresql/ridgepole_test_tables.sql', __FILE__)
-  system_raise_on_fail("psql ridgepole_test #{travis? ? '-U postgres' : ''} -q -f #{sql_file} 2>/dev/null")
+  system_raise_on_fail("#{PG_PSQL} ridgepole_test -q -f #{sql_file} 2>/dev/null")
 end
 
 def client(options = {}, config = {})
@@ -102,17 +119,22 @@ end
 
 def conn_spec(config = {})
   if postgresql?
-    spec = {
+    {
       adapter: 'postgresql',
       database: TEST_SCHEMA,
-    }
-
-    spec[:username] = 'postgres' if travis?
-    spec.merge(config)
+      host: TEST_PG_HOST,
+      port: TEST_PG_PORT,
+      username: TEST_PG_USER,
+      password: TEST_PG_PASS,
+    }.merge(config)
   else
     {
       adapter: 'mysql2',
       database: TEST_SCHEMA,
+      host: TEST_MYSQL_HOST,
+      port: TEST_MYSQL_PORT,
+      username: TEST_MYSQL_USER,
+      password: TEST_MYSQL_PASS,
     }.merge(config)
   end
 end
@@ -131,7 +153,7 @@ def show_create_table_mysql(table_name)
 end
 
 def show_create_table_postgresql(table_name)
-  `pg_dump #{travis? ? '-U postgres' : ''} --schema-only #{TEST_SCHEMA} --table=#{table_name} | awk '/^CREATE TABLE/,/);/{print} /^CREATE INDEX/{print}'`.strip
+  `#{PG_DUMP} --schema-only #{TEST_SCHEMA} --table=#{table_name} | awk '/^CREATE TABLE/,/);/{print} /^CREATE INDEX/{print}'`.strip
 end
 
 def default_cli_hook
