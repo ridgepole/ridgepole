@@ -3,6 +3,10 @@ describe 'ridgepole' do
   let(:differ) { false }
   let(:conf) { "'" + JSON.dump(conn_spec) + "'" }
 
+  def conn_spec_str(database)
+    ActiveSupport::HashWithIndifferentAccess.new(conn_spec(database: database)).inspect
+  end
+
   context 'when help' do
     it do
       out, status = run_cli(:args => ['-h'])
@@ -57,7 +61,7 @@ describe 'ridgepole' do
 
       expect(status.success?).to be_truthy
       expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-        Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
+        Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
         # Export Schema
         Ridgepole::Client#dump
       EOS
@@ -69,7 +73,7 @@ describe 'ridgepole' do
 
         expect(status.success?).to be_truthy
         expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-          Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
+          Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
           Export Schema to `#{f.path}`
           Ridgepole::Client#dump
         EOS
@@ -81,7 +85,7 @@ describe 'ridgepole' do
 
       expect(status.success?).to be_truthy
       expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-        Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
+        Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
         # Export Schema
         Ridgepole::Client#dump
       EOS
@@ -92,7 +96,7 @@ describe 'ridgepole' do
 
       expect(status.success?).to be_truthy
       expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-        Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
+        Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
         Export Schema
         Ridgepole::Client#dump
           write `Schemafile`
@@ -105,7 +109,7 @@ describe 'ridgepole' do
 
         expect(status.success?).to be_truthy
         expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-          Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
+          Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
           Export Schema
           Ridgepole::Client#dump
             write `#{f.path}`
@@ -120,7 +124,7 @@ describe 'ridgepole' do
 
       expect(status.success?).to be_truthy
       expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-        Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
+        Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
         Apply `Schemafile`
         Ridgepole::Client#diff
         Ridgepole::Delta#differ?
@@ -182,7 +186,7 @@ describe 'ridgepole' do
 
       expect(status.success?).to be_truthy
       expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-        Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>true, :debug=>false}])
+        Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>true, :debug=>false}])
         Apply `Schemafile` (dry-run)
         Ridgepole::Client#diff
         Ridgepole::Delta#differ?
@@ -198,7 +202,7 @@ describe 'ridgepole' do
 
         expect(status.success?).to be_truthy
         expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-          Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
+          Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
           Apply `Schemafile`
           Ridgepole::Client#diff
           Ridgepole::Delta#differ?
@@ -211,7 +215,7 @@ describe 'ridgepole' do
 
         expect(status.success?).to be_truthy
         expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-          Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>true, :debug=>false}])
+          Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>true, :debug=>false}])
           Apply `Schemafile` (dry-run)
           Ridgepole::Client#diff
           Ridgepole::Delta#differ?
@@ -234,8 +238,8 @@ describe 'ridgepole' do
 
       expect(status.success?).to be_truthy
       expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-        Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
-        Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
+        Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
+        Ridgepole::Client.diff([#{conn_spec_str("ridgepole_test")}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
         Ridgepole::Delta#differ?
       EOS
     end
@@ -250,8 +254,8 @@ describe 'ridgepole' do
         expect(status.success?).to be_falsey
 
         expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-          Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
-          Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
+          Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
+          Ridgepole::Client.diff([#{conn_spec_str("ridgepole_test")}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
           Ridgepole::Delta#differ?
           Ridgepole::Delta#script
           Ridgepole::Delta#script
@@ -279,8 +283,8 @@ describe 'ridgepole' do
           expect(status.success?).to be_truthy
 
           expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-            Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
-            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, {"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
+            Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
+            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
             Ridgepole::Delta#differ?
           EOS
         end
@@ -299,8 +303,8 @@ describe 'ridgepole' do
           expect(status.success?).to be_truthy
 
           expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-            Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
-            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, {:dry_run=>false, :debug=>false}])
+            Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
+            Ridgepole::Client.diff([#{conn_spec_str("ridgepole_test")}, {"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, {:dry_run=>false, :debug=>false}])
             Ridgepole::Delta#differ?
           EOS
         end
@@ -323,8 +327,8 @@ describe 'ridgepole' do
           expect(status.success?).to be_truthy
 
           expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-            Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
-            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_development"}, {"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
+            Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
+            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_development"}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
             Ridgepole::Delta#differ?
           EOS
         end
@@ -347,8 +351,8 @@ describe 'ridgepole' do
           expect(status.success?).to be_truthy
 
           expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-            Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
-            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_production"}, {"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
+            Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
+            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_production"}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
             Ridgepole::Delta#differ?
           EOS
         end
@@ -367,8 +371,8 @@ describe 'ridgepole' do
           expect(status.success?).to be_truthy
 
           expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-            Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
-            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, {"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
+            Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
+            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
             Ridgepole::Delta#differ?
           EOS
         end
@@ -387,8 +391,8 @@ describe 'ridgepole' do
           expect(status.success?).to be_truthy
 
           expect(out.strip).to eq <<-EOS.strip_heredoc.strip
-            Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
-            Ridgepole::Client.diff([#{conf_file.path}, {"adapter"=>"mysql2", "database"=>"ridgepole_test"}, {:dry_run=>false, :debug=>false}])
+            Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
+            Ridgepole::Client.diff([#{conf_file.path}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false}])
             Ridgepole::Delta#differ?
           EOS
         end
