@@ -151,7 +151,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
 
       script = <<-EOS
-        echo "$1" | mysql -uroot #{TEST_SCHEMA}
+        echo "$1" | #{MYSQL_CLI} #{TEST_SCHEMA}
       EOS
 
       tempfile(File.basename(__FILE__), script) do |path|
