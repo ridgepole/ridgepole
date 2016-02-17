@@ -314,6 +314,25 @@ Apply `Schemafile`
    -> 0.0243s
 ```
 
+## Running tests
+
+```sh
+docker-compose up -d
+bundle install
+bundle exec rake
+# ENABLE_MYSQL_AWESOME=1 bundle exec rake
+# POSTGRESQL=1 bundle exec rake
+```
+
+### on OS X (docker-machine & VirtualBox)
+
+Port forwarding setting is required.
+
+```sh
+VBoxManage controlvm default natpf1 "mysql,tcp,127.0.0.1,3306,,3306"
+VBoxManage controlvm default natpf1 "psql,tcp,127.0.0.1,5432,,5432"
+```
+
 ## Demo
 
 * [asciinema.org/a/9349](https://asciinema.org/a/9349)
