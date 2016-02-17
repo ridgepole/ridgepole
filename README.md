@@ -324,9 +324,11 @@ bundle exec rake
 # POSTGRESQL=1 bundle exec rake
 ```
 
+**Notice:** mysql-client/postgresql-client is required.
+
 ### on OS X (docker-machine & VirtualBox)
 
-Port forwarding setting is required.
+Port forwarding is required.
 
 ```sh
 VBoxManage controlvm default natpf1 "mysql,tcp,127.0.0.1,3306,,3306"
