@@ -26,6 +26,7 @@ config = nil
 env = 'development'
 mode = nil
 file = DEFAULT_FILENAME
+schema_dir = nil
 output_file = '-'
 split = false
 diff_files = nil
@@ -72,6 +73,7 @@ ARGV.options do |opt|
     opt.on('-a', '--apply')                       {    set_mode[:apply]                                     }
     opt.on('-m', '--merge')                       {    set_mode[:apply]; options[:merge] = true             }
     opt.on('-f', '--file SCHEMAFILE')             {|v| file = v                                             }
+    opt.on('',   '--dir SCHEMADIR')               {|v| schema_dir = v                                       }
     opt.on('',   '--dry-run')                     {    options[:dry_run] = true                             }
     opt.on('',   '--table-options OPTIONS')       {|v| options[:table_options] = v                          }
     opt.on('',   '--alter-extra ALTER_SPEC')      {|v| options[:alter_extra] = v                            }
