@@ -38,6 +38,20 @@ class Ridgepole::Client
 
     logger.verbose_info('# Parse DSL')
     expected_definition, expected_execute = @parser.parse(dsl, opts)
+    diff_from_current_definition(expected_definition, expected_execute)
+  end
+
+  def diff_files(files, opts = {})
+    logger = Ridgepole::Logger.instance
+
+    logger.verbose_info('# Parse DSL from files')
+    expected_definition, expected_execute = @parser.parse_files(files, opts)
+    diff_from_current_definition(expected_definition, expected_execute)
+  end
+
+  def diff_from_current_definition(expected_definition, expected_execute)
+    logger = Ridgepole::Logger.instance
+
     logger.verbose_info('# Load tables')
     current_definition, current_execute = @parser.parse(@dumper.dump)
     logger.verbose_info('# Compare definitions')
