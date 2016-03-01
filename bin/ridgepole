@@ -189,16 +189,28 @@ begin
       end
     end
   when :apply
-    unless File.exist?(file)
-      raise "No Schemafile found (looking for: #{file})"
+    if schema_dir
+      unless File.exist?(schema_dir) && File.directory?(schema_dir)
+        raise "Schema directory not found (looking for: #{schema_dir})"
+      end
+    else
+      unless File.exist?(file)
+        raise "No Schemafile found (looking for: #{file})"
+      end
     end
 
-    msg = (options[:merge] ? 'Merge' : 'Apply') + " `#{file}`"
+    msg = (options[:merge] ? 'Merge' : 'Apply')
+    msg << (schema_dir ? " directory `#{schema_dir}`" : " `#{file}`")
     msg << ' (dry-run)' if options[:dry_run]
     logger.info(msg)
 
-    dsl = File.read(file)
-    delta = client.diff(dsl, :path => file)
+    delta = if schema_dir
+              files = Dir[File.join(schema_dir, "**/*")].to_a
+              client.diff_files(files, :path => file)
+            else
+              dsl = File.read(file)
+              client.diff(dsl, :path => file)
+            end
     differ = delta.differ?
 
     if options[:dry_run]
