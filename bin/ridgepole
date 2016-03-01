@@ -206,7 +206,7 @@ begin
 
     delta = if schema_dir
               files = Dir[File.join(schema_dir, "**/*")].to_a
-              client.diff_files(files, :path => file)
+              client.diff_files(files)
             else
               dsl = File.read(file)
               client.diff(dsl, :path => file)
