@@ -1,5 +1,9 @@
 $: << File.expand_path('..', __FILE__)
 
+if ENV['ENABLE_MYSQL_AWESOME'] == '1' and ENV['BUNDLE_GEMFILE'] =~ /activerecord_5/
+  exit
+end
+
 def travis?
   !!ENV['TRAVIS']
 end
