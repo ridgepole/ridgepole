@@ -117,6 +117,16 @@ class Ridgepole::DSLParser
       [ctx.__definition, ctx.__execute]
     end
 
+    def self.eval_files(files, opts = {})
+      ctx = self.new(opts)
+
+      files.each do |file|
+        ctx.require(file) if FileTest.file?(file)
+      end
+
+      [ctx.__definition, ctx.__execute]
+    end
+
     def create_table(table_name, options = {})
       table_name = table_name.to_s
       table_definition = TableDefinition.new(table_name, self)
@@ -203,6 +213,13 @@ class Ridgepole::DSLParser
 
   def parse(dsl, opts = {})
     definition, execute = Context.eval(dsl, opts)
+    check_orphan_index(definition)
+    check_orphan_foreign_key(definition)
+    [definition, execute]
+  end
+
+  def parse_files(files, opts = {})
+    definition, execute = Context.eval_files(files, opts)
     check_orphan_index(definition)
     check_orphan_foreign_key(definition)
     [definition, execute]

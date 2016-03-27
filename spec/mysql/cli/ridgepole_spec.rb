@@ -19,6 +19,7 @@ describe 'ridgepole' do
         -a, --apply
         -m, --merge
         -f, --file SCHEMAFILE
+            --dir SCHEMADIR
             --dry-run
             --table-options OPTIONS
             --alter-extra ALTER_SPEC
