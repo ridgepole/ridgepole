@@ -319,9 +319,10 @@ Apply `Schemafile`
 ```sh
 docker-compose up -d
 bundle install
-bundle exec rake
-# ENABLE_MYSQL_AWESOME=1 bundle exec rake
-# POSTGRESQL=1 bundle exec rake
+bundle exec appraisal install
+bundle exec appraisal activerecord-4.2 rake
+# ENABLE_MYSQL_AWESOME=1 bundle exec appraisal activerecord-4.2 rake
+# POSTGRESQL=1 bundle exec appraisal activerecord-4.2 rake
 ```
 
 **Notice:** mysql-client/postgresql-client is required.
