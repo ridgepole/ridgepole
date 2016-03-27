@@ -18,8 +18,9 @@ before_script:
   - for i in {1..60}; do mysql_ping && break; sleep 1; done
   - for i in {1..60}; do pg_ping && break; sleep 1; done
 script:
-  - bundle install
   - bundle exec rake
+gemfile:
+  - gemfiles/activerecord_4.2.gemfile
 env:
   matrix:
     - ENABLE_MYSQL_AWESOME=0

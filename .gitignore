@@ -21,3 +21,4 @@ Schemafile
 *.schema
 _site/
 config.yml
+/gemfiles/*.lock
