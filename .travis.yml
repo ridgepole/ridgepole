@@ -1,7 +1,9 @@
 dist: trusty
 sudo: required
 language: ruby
-cache: bundler
+cache:
+  - bundler
+  - apt
 rvm:
   - 2.2.4
   - 2.3.0
