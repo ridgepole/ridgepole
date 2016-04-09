@@ -1,4 +1,3 @@
-if postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop fk' do
     let(:actual_dsl) {
@@ -110,5 +109,4 @@ add_foreign_key "child", "parent", name: "child_ibfk_1"
       expect(subject.dump.strip).to eq ''
     }
   end
-end
 end

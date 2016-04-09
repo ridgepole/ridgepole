@@ -1,4 +1,3 @@
-if postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop table' do
     let(:dsl) {
@@ -112,5 +111,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       RUBY
     }
   end
-end
 end

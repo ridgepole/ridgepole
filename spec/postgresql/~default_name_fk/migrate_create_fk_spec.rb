@@ -1,4 +1,3 @@
-if postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create fk' do
     let(:actual_dsl) {
@@ -169,5 +168,4 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       }.to raise_error('Table `child` to create the foreign key is not defined: fk_rails_e74ce85cbc')
     }
   end
-end
 end

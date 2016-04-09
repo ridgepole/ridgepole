@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column after id (pk: normal)' do
     let(:actual_dsl) {
@@ -237,5 +236,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       EOS
     }
   end
-end
 end

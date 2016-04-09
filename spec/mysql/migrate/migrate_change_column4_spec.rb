@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (boolean without limit)' do
     let(:actual_dsl) {
@@ -79,5 +78,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_falsey
     }
   end
-end
 end

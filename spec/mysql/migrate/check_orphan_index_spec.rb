@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when there is an index of orphans' do
     let(:actual_dsl) { '' }
@@ -79,5 +78,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       }.to raise_error('Table `Xdept_manager` to create the index is not defined: dept_no,emp_no')
     }
   end
-end
 end

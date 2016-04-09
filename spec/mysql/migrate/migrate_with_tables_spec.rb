@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when with tables option (same)' do
     let(:current_schema) {
@@ -153,5 +152,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       RUBY
     }
   end
-end
 end

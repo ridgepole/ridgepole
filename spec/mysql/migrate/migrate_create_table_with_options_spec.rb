@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create table' do
     let(:expected_dsl) {
@@ -27,5 +26,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       RUBY
     }
   end
-end
 end
