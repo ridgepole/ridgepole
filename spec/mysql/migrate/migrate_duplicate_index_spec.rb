@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when index already defined' do
     let(:dsl) {
@@ -23,5 +22,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       }.to raise_error('Index `salaries(emp_no)` already defined')
     }
   end
-end
 end

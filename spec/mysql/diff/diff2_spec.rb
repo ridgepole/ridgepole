@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client.diff' do
   context 'when change column' do
     let(:tmpdir) { Dir.mktmpdir }
@@ -182,5 +181,4 @@ describe 'Ridgepole::Client.diff' do
       FileUtils.remove_entry_secure(tmpdir)
     end
   end
-end
 end

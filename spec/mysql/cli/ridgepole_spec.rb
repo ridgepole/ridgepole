@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'ridgepole' do
   let(:differ) { false }
   let(:conf) { "'" + JSON.dump(conn_spec) + "'" }
@@ -399,5 +398,4 @@ describe 'ridgepole' do
       end
     end
   end
-end
 end

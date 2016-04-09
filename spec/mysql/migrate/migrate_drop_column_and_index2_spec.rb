@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop column and index (2)' do
     let(:actual_dsl) {
@@ -150,5 +149,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
     }
   end
-end
 end

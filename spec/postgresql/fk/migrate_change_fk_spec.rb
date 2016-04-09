@@ -1,4 +1,3 @@
-if postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change fk' do
     let(:actual_dsl) {
@@ -58,5 +57,4 @@ add_foreign_key "child", "parent", name: "child_ibfk_1"
       expect(subject.dump.delete_empty_lines).to eq expected_dsl.strip_heredoc.strip.delete_empty_lines
     }
   end
-end
 end

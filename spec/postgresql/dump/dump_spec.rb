@@ -1,4 +1,3 @@
-if postgresql?
 describe 'Ridgepole::Client#dump' do
   context 'when there is a tables' do
     before { restore_tables }
@@ -72,5 +71,4 @@ describe 'Ridgepole::Client#dump' do
       RUBY
     }
   end
-end
 end

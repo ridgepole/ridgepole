@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when rename table' do
     let(:actual_dsl) {
@@ -223,5 +222,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       }.to_not raise_error
     }
   end
-end
 end

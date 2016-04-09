@@ -1,4 +1,3 @@
-if postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column' do
     let(:actual_dsl) {
@@ -216,5 +215,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(sql).to eq("ALTER TABLE \"dept_emp\" ADD \"emp_no2\" integer NOT NULL")
     }
   end
-end
 end

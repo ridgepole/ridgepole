@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column (int/noop) (1)' do
     let(:actual_dsl) {
@@ -119,5 +118,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(sql).to eq("ALTER TABLE `dept_emp` ADD `emp_no2` int#{if_mysql_awesome_enabled('', '(11)')} NOT NULL AFTER `emp_no`")
     }
   end
-end
 end

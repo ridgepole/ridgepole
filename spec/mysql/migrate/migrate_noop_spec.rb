@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when no operation' do
     let(:actual_dsl) { '' }
@@ -235,5 +234,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       SQL
     }
   end
-end
 end
