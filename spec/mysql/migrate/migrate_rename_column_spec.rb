@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when rename column' do
     let(:actual_dsl) {
@@ -206,5 +205,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       }.to raise_error('Column `age` not found')
     }
   end
-end
 end

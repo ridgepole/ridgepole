@@ -1,4 +1,3 @@
-if postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when rename table' do
     let(:actual_dsl) {
@@ -195,5 +194,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
     }
   end
-end
 end

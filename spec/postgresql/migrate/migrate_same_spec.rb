@@ -1,4 +1,3 @@
-if postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when database and definition are same' do
     let(:dsl) {
@@ -80,5 +79,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to eq dsl.strip_heredoc.strip
     }
   end
-end
 end

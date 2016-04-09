@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change index' do
     let(:dsl) {
@@ -261,5 +260,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       }.to raise_error(/Index name 'emp_no' on table 'dept_emp' already exists/)
     }
   end
-end
 end

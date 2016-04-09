@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client.dump' do
   context 'when there is a tables' do
     before { restore_tables }
@@ -7,7 +6,7 @@ describe 'Ridgepole::Client.dump' do
     let(:options) {
       opts = {}
 
-      if mysql_awesome_enabled?
+      if condition(:mysql_awesome_enabled)
         opts[:enable_mysql_awesome] = true
         opts[:dump_without_table_options] = true
       else
@@ -25,7 +24,7 @@ describe 'Ridgepole::Client.dump' do
 
         add_index "clubs", ["name"], name: "idx_name", unique: true, using: :btree
 
-        create_table "departments", primary_key: "dept_no",#{mysql_awesome_enabled? ? ' id: :string, limit: 4,' : ''} force: :cascade do |t|
+        create_table "departments", primary_key: "dept_no",#{condition(:mysql_awesome_enabled) ? ' id: :string, limit: 4,' : ''} force: :cascade do |t|
           t.string "dept_name", limit: 40, null: false
         end
 
@@ -86,5 +85,4 @@ describe 'Ridgepole::Client.dump' do
       RUBY
     }
   end
-end
 end

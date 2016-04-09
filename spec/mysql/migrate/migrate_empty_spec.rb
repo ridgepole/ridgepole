@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when database is empty' do
     let(:actual_dsl) { '' }
@@ -103,5 +102,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       RUBY
     }
   end
-end
 end

@@ -1,4 +1,3 @@
-if postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column' do
     let(:actual_dsl) {
@@ -199,5 +198,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_falsey
     }
   end
-end
 end

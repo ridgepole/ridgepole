@@ -1,4 +1,3 @@
-if postgresql?
 describe 'Ridgepole::Client.diff' do
   context 'when change column' do
     let(:actual_dsl) {
@@ -149,5 +148,4 @@ describe 'Ridgepole::Client.diff' do
       RUBY
     }
   end
-end
 end

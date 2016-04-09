@@ -1,4 +1,3 @@
-if postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop index' do
     let(:dsl) {
@@ -121,5 +120,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump.each_line.select {|i| i !~ /\A\Z/ }.join).to eq expected_dsl.strip_heredoc.strip.each_line.select {|i| i !~ /\A\Z/ }.join
     }
   end
-end
 end

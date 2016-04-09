@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (no change)' do
     let(:actual_dsl) {
@@ -92,5 +91,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to eq expected_dsl.strip_heredoc.strip.gsub(/(\s*,\s*unsigned: false)?\s*,\s*null: true/, '')
     }
   end
-end
 end

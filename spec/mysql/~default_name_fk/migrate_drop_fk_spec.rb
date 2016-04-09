@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop fk' do
     let(:actual_dsl) {
@@ -110,5 +109,4 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       expect(subject.dump.strip).to eq ''
     }
   end
-end
 end

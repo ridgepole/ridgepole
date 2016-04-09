@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create index' do
     let(:dsl) {
@@ -122,5 +121,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump.delete_empty_lines).to eq expected_dsl.strip_heredoc.strip.delete_empty_lines
     }
   end
-end
 end

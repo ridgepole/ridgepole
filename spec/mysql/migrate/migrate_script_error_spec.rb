@@ -1,4 +1,3 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when there is an error in the script' do
     let(:actual_dsl) { '' }
@@ -87,5 +86,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       }.to raise_error(RuntimeError, errmsg)
     }
   end
-end
 end
