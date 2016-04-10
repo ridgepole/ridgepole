@@ -143,7 +143,7 @@ describe 'Ridgepole::Client.diff' do
     it {
       delta = subject.diff(actual_dsl, expected_dsl, enable_mysql_unsigned: true)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
+      expect(delta.script).to match_fuzzy <<-RUBY
         change_column("employee_clubs", "club_id", :integer, {:unsigned=>false, :null=>true, :default=>nil})
 
         change_column("employees", "last_name", :string, {:limit=>20, :default=>"XXX"})

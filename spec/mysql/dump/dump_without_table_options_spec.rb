@@ -1,32 +1,32 @@
 describe 'Ridgepole::Client#dump', condition: [:mysql_awesome_enabled] do
   let(:actual_dsl) {
-    <<-'RUBY'
+    <<-'EOS'
       create_table "books", unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='\"london\" bridge \"is\" falling \"down\"'" do |t|
         t.string   "title",      limit: 255, null: false
         t.integer  "author_id",  limit: 4,   null: false
         t.datetime "created_at"
         t.datetime "updated_at"
       end
-    RUBY
+    EOS
   }
 
   context 'when without table options' do
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "books", unsigned: true, force: :cascade do |t|
           t.string   "title",      limit: 255, null: false
           t.integer  "author_id",  limit: 4,   null: false
           t.datetime "created_at"
           t.datetime "updated_at"
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
 
     it {
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
 
@@ -35,7 +35,7 @@ describe 'Ridgepole::Client#dump', condition: [:mysql_awesome_enabled] do
     subject { client(dump_without_table_options: false) }
 
     it {
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
     }
   end
 end

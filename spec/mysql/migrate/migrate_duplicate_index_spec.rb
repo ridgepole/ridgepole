@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when index already defined' do
     let(:dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no",    null: false
           t.integer "salary",    null: false
@@ -11,7 +11,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
-      RUBY
+      EOS
     }
 
     subject { client }

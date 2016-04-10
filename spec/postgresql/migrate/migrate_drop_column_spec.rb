@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop column' do
     let(:actual_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
         end
@@ -65,11 +65,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "titles", ["emp_no"], name: "idx_titles_emp_no", using: :btree
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
         end
@@ -127,7 +127,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "titles", ["emp_no"], name: "idx_titles_emp_no", using: :btree
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -136,15 +136,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
 
     it {
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
+      expect(delta.script).to match_fuzzy <<-EOS
         add_column("dept_emp", "from_date", :date, {:null=>false, :after=>"dept_no"})
         add_column("dept_emp", "to_date", :date, {:null=>false, :after=>"from_date"})
 
@@ -153,14 +153,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_column("employees", "last_name", :string, {:limit=>16, :null=>false, :after=>"first_name"})
         add_column("employees", "hire_date", :date, {:null=>false, :after=>"last_name"})
-      RUBY
+      EOS
     }
 
     it {
       delta = client(:bulk_change => true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
-      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(delta.script).to match_fuzzy <<-EOS
         change_table("dept_emp", {:bulk => true}) do |t|
           t.remove("from_date")
           t.remove("to_date")
@@ -175,9 +175,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.remove("last_name")
           t.remove("hire_date")
         end
-      RUBY
+      EOS
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
 end

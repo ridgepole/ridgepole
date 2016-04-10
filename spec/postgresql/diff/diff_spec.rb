@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client.diff' do
   context 'when change column' do
     let(:actual_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
         end
@@ -65,11 +65,11 @@ describe 'Ridgepole::Client.diff' do
         end
 
         add_index "titles", ["emp_no"], name: "idx_titles_emp_no", using: :btree
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
         end
@@ -133,19 +133,19 @@ describe 'Ridgepole::Client.diff' do
         end
 
         add_index "titles", ["emp_no"], name: "idx_titles_emp_no", using: :btree
-      RUBY
+      EOS
     }
 
     subject { Ridgepole::Client }
 
     it {
-      delta = subject.diff(actual_dsl, expected_dsl, enable_mysql_unsigned: true)
+      delta = subject.diff(actual_dsl, expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
+      expect(delta.script).to match_fuzzy <<-EOS
         change_column("employee_clubs", "club_id", :integer, {:null=>true, :default=>nil})
 
         change_column("employees", "last_name", :string, {:limit=>20, :default=>"XXX"})
-      RUBY
+      EOS
     }
   end
 end

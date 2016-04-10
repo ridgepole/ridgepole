@@ -28,9 +28,9 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [:mysql_awesome_enabled
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
 
@@ -63,9 +63,9 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [:mysql_awesome_enabled
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
 
@@ -98,9 +98,9 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [:mysql_awesome_enabled
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
 
@@ -122,9 +122,9 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [:mysql_awesome_enabled
     it {
       delta = subject.diff(actual_dsl)
       expect(delta.differ?).to be_falsey
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
     }
 
     describe '#diff' do
