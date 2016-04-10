@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when database and definition are same' do
     let(:dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
         end
@@ -65,7 +65,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "titles", ["emp_no"], name: "idx_titles_emp_no", using: :btree
-      RUBY
+      EOS
     }
 
     before { restore_tables }
@@ -74,9 +74,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(dsl)
       expect(delta.differ?).to be_falsey
-      expect(subject.dump).to eq dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy dsl
       delta.migrate
-      expect(subject.dump).to eq dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy dsl
     }
   end
 end

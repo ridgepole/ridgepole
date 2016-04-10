@@ -28,7 +28,7 @@ describe 'Ridgepole::Client (with bigint pk)', condition: [:mysql_awesome_enable
 
     it {
       expect(show_create_table(:books)).to include '`id` bigint(20) NOT NULL AUTO_INCREMENT'
-      expect(subject.dump).to eq dsl2.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy dsl2
     }
   end
 
@@ -39,7 +39,7 @@ describe 'Ridgepole::Client (with bigint pk)', condition: [:mysql_awesome_enable
 
     it {
       expect(show_create_table(:books)).to include '`id` bigint(20) NOT NULL AUTO_INCREMENT'
-      expect(subject.dump).to eq dsl2.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy dsl2
     }
   end
 end
