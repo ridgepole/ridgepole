@@ -1,12 +1,23 @@
-unless postgresql?
 describe 'Ridgepole::Client#dump' do
+  let(:template_variables) {
+    opts = {
+      employees: {force: :cascade},
+    }
+
+    if condition(:mysql_awesome_enabled)
+      opts[:employees].unshift(id: :integer, limit: 4)
+    end
+
+    opts
+  }
+
   context 'when there is a tables (dump some tables)' do
     before { restore_tables }
     subject { client(tables: ['employees', 'salaries']) }
 
     it {
-      expect(subject.dump).to eq <<-RUBY.strip_heredoc.strip
-        create_table "employees", primary_key: "emp_no",#{if_mysql_awesome_enabled(' id: :integer, limit: 4,')} force: :cascade do |t|
+      expect(subject.dump).to match_fuzzy erbh(<<-EOS, template_variables)
+        create_table "employees", primary_key: "emp_no", <%= @employees.i %> do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -22,7 +33,7 @@ describe 'Ridgepole::Client#dump' do
         end
 
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
-      RUBY
+      EOS
     }
   end
 
@@ -40,8 +51,8 @@ describe 'Ridgepole::Client#dump' do
     }
 
     it {
-      expect(subject.dump).to eq <<-RUBY.strip_heredoc.strip
-        create_table "employees", primary_key: "emp_no",#{if_mysql_awesome_enabled(' id: :integer, limit: 4,')} force: :cascade do |t|
+      expect(subject.dump).to match_fuzzy erbh(<<-EOS, template_variables)
+        create_table "employees", primary_key: "emp_no", <%= @employees.i %> do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -57,8 +68,7 @@ describe 'Ridgepole::Client#dump' do
         end
 
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
-      RUBY
+      EOS
     }
   end
-end
 end

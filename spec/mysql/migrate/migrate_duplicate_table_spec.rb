@@ -1,8 +1,7 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when table already defined' do
     let(:dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date    "birth_date",                            null: false
           t.string  "first_name", limit: 14,                 null: false
@@ -22,7 +21,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "age",                   unsigned: true, null: false
           t.date    "updated_at"
         end
-      RUBY
+      EOS
     }
 
     subject { client }
@@ -33,5 +32,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       }.to raise_error('Table `employees` already defined')
     }
   end
-end
 end

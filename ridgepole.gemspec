@@ -25,6 +25,9 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'mysql2', '~> 0.3.20'
   spec.add_development_dependency 'pg'
   spec.add_development_dependency 'coveralls'
-  spec.add_development_dependency 'activerecord-mysql-awesome', '>= 0.0.7'
   spec.add_development_dependency 'appraisal'
+  spec.add_development_dependency 'rspec-match_fuzzy', '>= 0.1.2'
+  spec.add_development_dependency 'erbh'
+  spec.add_development_dependency 'hash_modern_inspect', '>= 0.1.1'
+  spec.add_development_dependency 'hash_order_helper', '>= 0.1.1'
 end

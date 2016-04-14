@@ -1,8 +1,7 @@
-if postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column' do
     let(:actual_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
         end
@@ -64,11 +63,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "titles", ["emp_no"], name: "idx_titles_emp_no", using: :btree
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
         end
@@ -130,7 +129,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "titles", ["emp_no"], name: "idx_titles_emp_no", using: :btree
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -139,26 +138,26 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip.gsub(/(\s*,\s*unsigned: false)?\s*,\s*null: true/, '')
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
 
     it {
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true, enable_mysql_unsigned: true)
+      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
+      expect(delta.script).to match_fuzzy <<-EOS
         change_column("employee_clubs", "club_id", :integer, {:null=>false, :default=>nil})
 
         change_column("employees", "last_name", :string, {:limit=>16, :default=>nil})
-      RUBY
+      EOS
     }
 
     it {
       delta = client(:bulk_change => true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
-      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(delta.script).to match_fuzzy <<-EOS
         change_table("employee_clubs", {:bulk => true}) do |t|
           t.change("club_id", :integer, {:null=>true, :default=>nil})
         end
@@ -166,29 +165,29 @@ describe 'Ridgepole::Client#diff -> migrate' do
         change_table("employees", {:bulk => true}) do |t|
           t.change("last_name", :string, {:limit=>20, :default=>"XXX"})
         end
-      RUBY
+      EOS
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip.gsub(/(\s*,\s*unsigned: false)?\s*,\s*null: true/, '')
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
 
   context 'when string/text without limit (no change)' do
     let(:actual_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
           t.text "desc"
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
           t.text "desc"
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -199,5 +198,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_falsey
     }
   end
-end
 end

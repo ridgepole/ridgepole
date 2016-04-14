@@ -1,8 +1,19 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
+  let(:template_variables) {
+    opts = {
+      unsigned: {}
+    }
+
+    if condition(:mysql_awesome_enabled)
+      opts[:unsigned] = {unsigned: true}
+    end
+
+    opts
+  }
+
   context 'when use timestamps (no change)' do
     let(:actual_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date",            null: false
           t.string   "first_name", limit: 14, null: false
@@ -12,11 +23,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "created_at",            null: false
           t.datetime "updated_at",            null: false
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
@@ -25,7 +36,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",             null: false
           t.timestamps
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -39,19 +50,19 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when use timestamps (change)' do
     let(:actual_dsl) {
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
+      erbh(<<-EOS, template_variables)
+        create_table "employees", primary_key: "emp_no", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
           t.string "gender",     limit: 1,  null: false
           t.date   "hire_date",             null: false
         end
-      RUBY
+      EOS
     }
 
     let(:dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
@@ -60,12 +71,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",             null: false
           t.timestamps
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
+      erbh(<<-EOS, template_variables)
+        create_table "employees", primary_key: "emp_no", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
           t.date     "birth_date",            null: false
           t.string   "first_name", limit: 14, null: false
           t.string   "last_name",  limit: 16, null: false
@@ -74,7 +85,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "created_at",            null: false
           t.datetime "updated_at",            null: false
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -83,15 +94,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip.gsub(/(\s*,\s*unsigned: false)?\s*,\s*null: true/, '')
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
 
   context 'when use references (no change)' do
     let(:actual_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date",            null: false
           t.string   "first_name", limit: 14, null: false
@@ -101,11 +112,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "products_id"
           t.integer "user_id"
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
@@ -114,7 +125,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",             null: false
           t.references :products, :user
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -128,7 +139,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when use references with polymorphic (no change)' do
     let(:actual_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date",            null: false
           t.string   "first_name", limit: 14, null: false
@@ -140,11 +151,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer  "user_id"
           t.string   "user_type"
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
@@ -153,7 +164,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",             null: false
           t.references :products, :user, polymorphic: true
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -167,19 +178,19 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when use references (change)' do
     let(:actual_dsl) {
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
+      erbh(<<-EOS, template_variables)
+        create_table "employees", primary_key: "emp_no", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
           t.string "gender",     limit: 1,  null: false
           t.date   "hire_date",             null: false
         end
-      RUBY
+      EOS
     }
 
     let(:dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
@@ -188,12 +199,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",             null: false
           t.references :products, :user
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
+      erbh(<<-EOS, template_variables)
+        create_table "employees", primary_key: "emp_no", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
           t.date    "birth_date",             null: false
           t.string  "first_name",  limit: 14, null: false
           t.string  "last_name",   limit: 16, null: false
@@ -202,7 +213,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "products_id", limit: 4
           t.integer "user_id",     limit: 4
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -211,27 +222,27 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip.gsub(/(\s*,\s*unsigned: false)?\s*,\s*null: true/, '')
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
 
   context 'when use references with polymorphic (change)' do
     let(:actual_dsl) {
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
+      erbh(<<-EOS, template_variables)
+        create_table "employees", primary_key: "emp_no", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
           t.string "gender",     limit: 1,  null: false
           t.date   "hire_date",             null: false
         end
-      RUBY
+      EOS
     }
 
     let(:dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
@@ -240,12 +251,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",             null: false
           t.references :products, :user, polymorphic: true
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
+      erbh(<<-EOS, template_variables)
+        create_table "employees", primary_key: "emp_no", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
           t.date    "birth_date",                null: false
           t.string  "first_name",    limit: 14,  null: false
           t.string  "last_name",     limit: 16,  null: false
@@ -256,7 +267,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "user_id",       limit: 4
           t.string  "user_type",     limit: 255
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -265,10 +276,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip.gsub(/(\s*,\s*unsigned: false)?\s*,\s*null: true/, '')
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
-end
 end

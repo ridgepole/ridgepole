@@ -1,9 +1,8 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'migrate with pre/post query' do
     let(:actual_dsl) { '' }
     let(:dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
         end
@@ -68,11 +67,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
         end
@@ -145,7 +144,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
-      RUBY
+      EOS
     }
 
     subject {
@@ -158,10 +157,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
-end
 end

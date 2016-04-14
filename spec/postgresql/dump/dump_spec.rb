@@ -1,11 +1,10 @@
-if postgresql?
 describe 'Ridgepole::Client#dump' do
   context 'when there is a tables' do
     before { restore_tables }
     subject { client }
 
     it {
-      expect(subject.dump).to eq <<-RUBY.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
         end
@@ -69,8 +68,7 @@ describe 'Ridgepole::Client#dump' do
         end
 
         add_index "titles", ["emp_no"], name: "idx_titles_emp_no", using: :btree
-      RUBY
+      EOS
     }
   end
-end
 end
