@@ -50,6 +50,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Support `t.index` ([pull#64](https://github.com/winebarrel/ridgepole/pull/64))
   * Remove migration_comments
   * Fix foreign key apply order
+* `>= 0.6.5`
+  * Fix rails version '>= 4.2', '< 6'
 
 ## Installation
 
