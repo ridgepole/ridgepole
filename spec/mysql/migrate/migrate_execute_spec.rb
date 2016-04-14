@@ -1,38 +1,52 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
+  let(:template_variables) {
+    opts = {
+      unsigned: {},
+      sql_int_type: 'int(11)',
+      test_schema: TEST_SCHEMA,
+    }
+
+    if condition(:mysql_awesome_enabled)
+      opts[:unsigned] = {unsigned: true}
+      opts[:sql_int_type] = 'int(10) unsigned'
+    end
+
+    opts
+  }
+
   context 'when execute' do
     let(:dsl) {
-      <<-RUBY
-        create_table "authors"#{unsigned_if_enabled}, force: :cascade do |t|
+      erbh(<<-EOS, template_variables)
+        create_table "authors", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
           t.string "name", limit: 255, null: false
         end
 
-        create_table "books"#{unsigned_if_enabled}, force: :cascade do |t|
+        create_table "books", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
           t.string  "title",     limit: 255, null: false
-          t.integer "author_id", limit: 4,   null: false#{unsigned_if_enabled}
+          t.integer "author_id", <%= {limit: 4, null: false}.push(@unsigned).i %>
         end
 
         add_index "books", ["author_id"], name: "idx_author_id", using: :btree
-      RUBY
+      EOS
     }
 
     let(:dsl_with_execute) {
-      <<-RUBY
+      erbh(<<-EOS, template_variables)
         create_table "authors", force: :cascade do |t|
           t.string "name", null: false
         end
 
         create_table "books", force: :cascade do |t|
           t.string  "title",                     null: false
-          t.integer "author_id", limit: 4,   null: false#{unsigned_if_enabled}
+          t.integer "author_id", <%= {limit: 4, null: false}.push(@unsigned).i %>
         end
 
         add_index "books", ["author_id"], name: "idx_author_id", using: :btree
 
         execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)") do |c|
-          c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = '#{TEST_SCHEMA}' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?
+          c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = '<%= @test_schema %>' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(dsl).migrate }
@@ -41,40 +55,40 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(dsl_with_execute)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump.delete_empty_lines).to eq dsl.strip_heredoc.strip.delete_empty_lines
+      expect(subject.dump).to match_fuzzy dsl
 
-      expect(show_create_table(:books).strip).to eq <<-SQL.strip_heredoc.strip
+      expect(show_create_table(:books)).to match_fuzzy erbh(<<-EOS, template_variables)
         CREATE TABLE `books` (
-          `id` #{if_mysql_awesome_enabled('int(10) unsigned', 'int(11)')} NOT NULL AUTO_INCREMENT,
+          `id` <%= @sql_int_type %> NOT NULL AUTO_INCREMENT,
           `title` varchar(255) NOT NULL,
-          `author_id` #{if_mysql_awesome_enabled('int(10) unsigned', 'int(11)')} NOT NULL,
+          `author_id` <%= @sql_int_type %> NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`) USING BTREE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-      SQL
+      EOS
 
       delta.migrate
 
-      expect(subject.dump.delete_empty_lines).to eq (dsl + (<<-RUBY)).strip_heredoc.strip.delete_empty_lines
+      expect(subject.dump).to match_fuzzy (dsl + (<<-EOS))
         add_foreign_key "books", "authors", name: "fk_author"
-      RUBY
+      EOS
 
-      expect(show_create_table(:books).strip).to eq <<-SQL.strip_heredoc.strip
+      expect(show_create_table(:books)).to match_fuzzy erbh(<<-EOS, template_variables)
         CREATE TABLE `books` (
-          `id` #{if_mysql_awesome_enabled('int(10) unsigned', 'int(11)')} NOT NULL AUTO_INCREMENT,
+          `id` <%= @sql_int_type %> NOT NULL AUTO_INCREMENT,
           `title` varchar(255) NOT NULL,
-          `author_id` #{if_mysql_awesome_enabled('int(10) unsigned', 'int(11)')} NOT NULL,
+          `author_id` <%= @sql_int_type %> NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`) USING BTREE,
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-      SQL
+      EOS
     }
   end
 
   context 'when not execute' do
     let(:dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "authors", force: :cascade do |t|
           t.string "name", limit: 255, null: false
         end
@@ -86,11 +100,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "books", ["author_id"], name: "idx_author_id", using: :btree
         add_foreign_key "books", "authors", name: "fk_author"
-      RUBY
+      EOS
     }
 
     let(:dsl_with_execute) {
-      <<-RUBY
+      erbh(<<-EOS, template_variables)
         create_table "authors", force: :cascade do |t|
           t.string "name", null: false
         end
@@ -103,11 +117,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         add_index "books", ["author_id"], name: "idx_author_id", using: :btree
 
         execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)") do |c|
-          c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = '#{TEST_SCHEMA}' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?
+          c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = '<%= @test_schema %>' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?
         end
 
         add_foreign_key "books", "authors", name: "fk_author"
-      RUBY
+      EOS
     }
 
     before { subject.diff(dsl_with_execute).migrate }
@@ -116,9 +130,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(dsl_with_execute)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump.delete_empty_lines).to eq dsl.strip_heredoc.strip.delete_empty_lines
+      expect(subject.dump).to match_fuzzy dsl
 
-      expect(show_create_table(:books).strip).to eq <<-SQL.strip_heredoc.strip
+      expect(show_create_table(:books)).to match_fuzzy erbh(<<-EOS, template_variables)
         CREATE TABLE `books` (
           `id` int(11) NOT NULL AUTO_INCREMENT,
           `title` varchar(255) NOT NULL,
@@ -127,13 +141,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
           KEY `idx_author_id` (`author_id`) USING BTREE,
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-      SQL
+      EOS
 
       migrated, out = delta.migrate
       expect(migrated).to be_falsey
-      expect(subject.dump.delete_empty_lines).to eq dsl.strip_heredoc.strip.delete_empty_lines
+      expect(subject.dump).to match_fuzzy dsl
 
-      expect(show_create_table(:books).strip).to eq <<-SQL.strip_heredoc.strip
+      expect(show_create_table(:books)).to match_fuzzy erbh(<<-EOS, template_variables)
         CREATE TABLE `books` (
           `id` int(11) NOT NULL AUTO_INCREMENT,
           `title` varchar(255) NOT NULL,
@@ -142,43 +156,43 @@ describe 'Ridgepole::Client#diff -> migrate' do
           KEY `idx_author_id` (`author_id`) USING BTREE,
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-      SQL
+      EOS
     }
   end
 
   context 'when execute (noop)' do
     let(:dsl) {
-      <<-RUBY
-        create_table "authors"#{unsigned_if_enabled}, force: :cascade do |t|
+      erbh(<<-EOS, template_variables)
+        create_table "authors", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
           t.string "name", limit: 255, null: false
         end
 
-        create_table "books"#{unsigned_if_enabled}, force: :cascade do |t|
+        create_table "books", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
           t.string  "title",     limit: 255, null: false
-          t.integer "author_id", limit: 4,   null: false#{unsigned_if_enabled}
+          t.integer "author_id", <%= {limit: 4, null: false}.push(@unsigned).i %>
         end
 
         add_index "books", ["author_id"], name: "idx_author_id", using: :btree
-      RUBY
+      EOS
     }
 
     let(:dsl_with_execute) {
-      <<-RUBY
+      erbh(<<-EOS, template_variables)
         create_table "authors", force: :cascade do |t|
           t.string "name", null: false
         end
 
         create_table "books", force: :cascade do |t|
           t.string  "title",                     null: false
-          t.integer "author_id", limit: 4,   null: false#{unsigned_if_enabled}
+          t.integer "author_id", <%= {limit: 4, null: false}.push(@unsigned).i %>
         end
 
         add_index "books", ["author_id"], name: "idx_author_id", using: :btree
 
         execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)") do |c|
-          c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = '#{TEST_SCHEMA}' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?
+          c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = '<%= @test_schema %>' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(dsl).migrate }
@@ -187,39 +201,39 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(dsl_with_execute)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump.delete_empty_lines).to eq dsl.strip_heredoc.strip.delete_empty_lines
+      expect(subject.dump).to match_fuzzy dsl
 
-      expect(show_create_table(:books).strip).to eq <<-SQL.strip_heredoc.strip
+      expect(show_create_table(:books)).to match_fuzzy erbh(<<-EOS, template_variables)
         CREATE TABLE `books` (
-          `id` #{if_mysql_awesome_enabled('int(10) unsigned', 'int(11)')} NOT NULL AUTO_INCREMENT,
+          `id` <%= @sql_int_type %> NOT NULL AUTO_INCREMENT,
           `title` varchar(255) NOT NULL,
-          `author_id` #{if_mysql_awesome_enabled('int(10) unsigned', 'int(11)')} NOT NULL,
+          `author_id` <%= @sql_int_type %> NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`) USING BTREE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-      SQL
+      EOS
 
       migrated, sql = delta.migrate(:noop => true)
       expect(migrated).to be_truthy
-      expect(subject.dump.delete_empty_lines).to eq dsl.strip_heredoc.strip.delete_empty_lines
+      expect(subject.dump).to match_fuzzy dsl
 
-      expect(sql.strip).to eq "ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)"
+      expect(sql).to match_fuzzy "ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)"
 
-      expect(show_create_table(:books).strip).to eq <<-SQL.strip_heredoc.strip
+      expect(show_create_table(:books)).to match_fuzzy erbh(<<-EOS, template_variables)
         CREATE TABLE `books` (
-          `id` #{if_mysql_awesome_enabled('int(10) unsigned', 'int(11)')} NOT NULL AUTO_INCREMENT,
+          `id` <%= @sql_int_type %> NOT NULL AUTO_INCREMENT,
           `title` varchar(255) NOT NULL,
-          `author_id` #{if_mysql_awesome_enabled('int(10) unsigned', 'int(11)')} NOT NULL,
+          `author_id` <%= @sql_int_type %> NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`) USING BTREE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-      SQL
+      EOS
     }
   end
 
   context 'when not execute (noop)' do
     let(:dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "authors", force: :cascade do |t|
           t.string "name", limit: 255, null: false
         end
@@ -231,11 +245,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "books", ["author_id"], name: "idx_author_id", using: :btree
         add_foreign_key "books", "authors", name: "fk_author"
-      RUBY
+      EOS
     }
 
     let(:dsl_with_execute) {
-      <<-RUBY
+      erbh(<<-EOS, template_variables)
         create_table "authors", force: :cascade do |t|
           t.string "name", null: false
         end
@@ -248,11 +262,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         add_index "books", ["author_id"], name: "idx_author_id", using: :btree
 
         execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)") do |c|
-          c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = '#{TEST_SCHEMA}' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?
+          c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = '<%= @test_schema %>' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?
         end
 
         add_foreign_key "books", "authors", name: "fk_author"
-      RUBY
+      EOS
     }
 
     before { subject.diff(dsl_with_execute).migrate }
@@ -261,9 +275,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(dsl_with_execute)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump.delete_empty_lines).to eq dsl.strip_heredoc.strip.delete_empty_lines
+      expect(subject.dump).to match_fuzzy dsl
 
-      expect(show_create_table(:books).strip).to eq <<-SQL.strip_heredoc.strip
+      expect(show_create_table(:books)).to match_fuzzy erbh(<<-EOS, template_variables)
         CREATE TABLE `books` (
           `id` int(11) NOT NULL AUTO_INCREMENT,
           `title` varchar(255) NOT NULL,
@@ -272,15 +286,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
           KEY `idx_author_id` (`author_id`) USING BTREE,
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-      SQL
+      EOS
 
       migrated, sql = delta.migrate(:noop => true)
       expect(migrated).to be_falsey
-      expect(subject.dump.delete_empty_lines).to eq dsl.strip_heredoc.strip.delete_empty_lines
+      expect(subject.dump).to match_fuzzy dsl
 
-      expect(sql.strip).to eq ""
+      expect(sql).to match_fuzzy ""
 
-      expect(show_create_table(:books).strip).to eq <<-SQL.strip_heredoc.strip
+      expect(show_create_table(:books)).to match_fuzzy erbh(<<-EOS, template_variables)
         CREATE TABLE `books` (
           `id` int(11) NOT NULL AUTO_INCREMENT,
           `title` varchar(255) NOT NULL,
@@ -289,8 +303,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           KEY `idx_author_id` (`author_id`) USING BTREE,
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-      SQL
+      EOS
     }
   end
-end
 end

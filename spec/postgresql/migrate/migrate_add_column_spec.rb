@@ -1,8 +1,7 @@
-if postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column' do
     let(:actual_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
         end
@@ -64,11 +63,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "titles", ["emp_no"], name: "idx_titles_emp_no", using: :btree
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
         end
@@ -133,7 +132,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "titles", ["emp_no"], name: "idx_titles_emp_no", using: :btree
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -142,27 +141,27 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
 
     it {
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
+      expect(delta.script).to match_fuzzy <<-EOS
         remove_column("employee_clubs", "any_col")
 
         remove_column("employees", "age")
         remove_column("employees", "updated_at")
-      RUBY
+      EOS
     }
 
     it {
       delta = client(:bulk_change => true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
-      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(delta.script).to match_fuzzy <<-EOS
         change_table("employee_clubs", {:bulk => true}) do |t|
           t.column("any_col", :string, {:limit=>255, :null=>false, :after=>"club_id"})
         end
@@ -171,26 +170,26 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.column("age", :integer, {:null=>false, :after=>"hire_date"})
           t.column("updated_at", :date, {:after=>"age"})
         end
-      RUBY
+      EOS
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
 
   context 'when add column (int/noop)' do
     let(:actual_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "dept_emp", id: false, force: :cascade do |t|
           t.integer "emp_no",              null: false
           t.string  "dept_no",   limit: 4, null: false
           t.date    "from_date",           null: false
           t.date    "to_date",             null: false
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "dept_emp", id: false, force: :cascade do |t|
           t.integer "emp_no",              null: false
           t.integer "emp_no2",             null: false
@@ -198,7 +197,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "from_date",           null: false
           t.date    "to_date",             null: false
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -207,14 +206,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       migrated, sql = delta.migrate(:noop => true)
       expect(migrated).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
 
-      sql = sql.each_line.map {|i| i.strip }.join("\n")
-      expect(sql).to eq("ALTER TABLE \"dept_emp\" ADD \"emp_no2\" integer NOT NULL")
+      expect(sql).to match_fuzzy("ALTER TABLE \"dept_emp\" ADD \"emp_no2\" integer NOT NULL")
     }
   end
-end
 end

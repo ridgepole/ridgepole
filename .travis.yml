@@ -1,10 +1,10 @@
 dist: trusty
 sudo: required
 language: ruby
-cache: bundler
+cache:
+  - bundler
+  - apt
 rvm:
-  - 2.0.0
-  - 2.1.8
   - 2.2.4
   - 2.3.0
 before_install:
@@ -20,6 +20,7 @@ script:
   - bundle exec rake
 gemfile:
   - gemfiles/activerecord_4.2.gemfile
+  #- gemfiles/activerecord_5.0.gemfile
 env:
   matrix:
     - ENABLE_MYSQL_AWESOME=0

@@ -1,4 +1,3 @@
-unless postgresql?
 describe Ridgepole::Config do
   subject { Ridgepole::Config.load(config, env) }
 
@@ -85,5 +84,4 @@ describe Ridgepole::Config do
       }.to raise_error Errno::ENOENT
     }
   end
-end
 end

@@ -1,17 +1,13 @@
 $: << File.expand_path('..', __FILE__)
 
-def travis?
-  !!ENV['TRAVIS']
-end
+require 'spec_const'
+require 'spec_condition'
+require 'cli_helper'
 
-if travis?
-  require 'simplecov'
-  require 'coveralls'
+require 'processing_for_travis'
 
-  SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-  SimpleCov.start do
-    add_filter "spec/"
-  end
+if condition(:mysql_awesome_enabled, :activerecord_5)
+  raise "Cannot use activerecord-mysql-awesome on ActiveRecord 5.0"
 end
 
 require 'ridgepole'
@@ -21,248 +17,159 @@ require 'string_ext'
 require 'open3'
 require 'tempfile'
 require 'json'
+require 'rspec/match_fuzzy'
+require 'erbh'
+require 'hash_modern_inspect'
+require 'hash_order_helper'
 
-TEST_MYSQL_HOST = '127.0.0.1'
-TEST_MYSQL_PORT = 3306
-TEST_MYSQL_USER = 'root'
-TEST_MYSQL_PASS = 'password'
+include ERBh
 
-MYSQL_CLI = "MYSQL_PWD=#{TEST_MYSQL_PASS} mysql -h #{TEST_MYSQL_HOST} -P #{TEST_MYSQL_PORT} -u #{TEST_MYSQL_USER}"
-
-TEST_PG_HOST = '127.0.0.1'
-TEST_PG_PORT = 5432
-TEST_PG_USER = 'postgres'
-TEST_PG_PASS = 'password'
-
-PG_CLI_OPTS = "PGPASSWORD=#{TEST_PG_PASS} %s -h #{TEST_PG_HOST} -p #{TEST_PG_PORT} -U #{TEST_PG_USER}"
-PG_PSQL = PG_CLI_OPTS % 'psql'
-PG_CREATEDB = PG_CLI_OPTS % 'createdb'
-PG_DUMP = PG_CLI_OPTS % 'pg_dump'
-
-TEST_SCHEMA = 'ridgepole_test'
-
-if ENV['DEBUG']
-  ActiveRecord::Migration.verbose = true
-  logger = Ridgepole::Logger.instance
-  logger.level = ::Logger::DEBUG
-  ActiveRecord::Base.logger = logger
-else
-  ActiveRecord::Migration.verbose = false
-  Ridgepole::Logger.instance.level = ::Logger::ERROR
+class Hash
+  alias i modern_inspect_without_brace
 end
 
 RSpec.configure do |config|
-  config.before(:each) do
+  config.before(:all) do
+    if condition(:debug)
+      ActiveRecord::Migration.verbose = true
+      logger = Ridgepole::Logger.instance
+      logger.level = ::Logger::DEBUG
+      ActiveRecord::Base.logger = logger
+    else
+      ActiveRecord::Migration.verbose = false
+      Ridgepole::Logger.instance.level = ::Logger::ERROR
+    end
+  end
+
+  config.before(:each) do |example|
+    if example.metadata[:condition]
+      skip unless condition(*example.metadata[:condition])
+    end
+
+    case example.metadata[:file_path]
+    when /mysql/
+      skip if condition(:postgresql)
+    when /postgresql/
+      skip unless condition(:postgresql)
+    end
+
     restore_database
   end
 end
 
-def restore_database
-  if postgresql?
-    restore_database_postgresql
-  else
-    restore_database_mysql
-  end
-end
-
-def system_raise_on_fail(*args)
-  unless system(*args)
-    raise RuntimeError.new("Failed to run: #{args}")
-  end
-end
-
-def restore_database_mysql
-  sql_file = File.expand_path('../mysql/ridgepole_test_database.sql', __FILE__)
-  system_raise_on_fail("#{MYSQL_CLI} < #{sql_file}")
-end
-
-def restore_database_postgresql
-  sql_file = File.expand_path('../postgresql/ridgepole_test_database.sql', __FILE__)
-  system("#{PG_CREATEDB} ridgepole_test 2>/dev/null")
-  system_raise_on_fail("#{PG_PSQL} ridgepole_test --set ON_ERROR_STOP=off -q -f #{sql_file} 2>/dev/null")
-end
-
-def restore_tables
-  if postgresql?
-    restore_tables_postgresql
-  else
-    restore_tables_mysql
-  end
-end
-
-def restore_tables_mysql
-  sql_file = File.expand_path('../mysql/ridgepole_test_tables.sql', __FILE__)
-  system_raise_on_fail("#{MYSQL_CLI} < #{sql_file}")
-end
-
-def restore_tables_postgresql
-  sql_file = File.expand_path('../postgresql/ridgepole_test_tables.sql', __FILE__)
-  system_raise_on_fail("#{PG_PSQL} ridgepole_test -q -f #{sql_file} 2>/dev/null")
-end
-
-def client(options = {}, config = {})
-  config = conn_spec(config)
-
-  default_options = {
-    :debug => !!ENV['DEBUG'],
-  }
-
-  if mysql_awesome_enabled?
-    default_options[:enable_mysql_awesome] = true
-    default_options[:dump_without_table_options] = true
+module SpecHelper
+  def restore_database
+    if condition(:postgresql)
+      restore_database_postgresql
+    else
+      restore_database_mysql
+    end
   end
 
-  options = default_options.merge(options)
-
-  Ridgepole::Client.new(config, options)
-end
-
-def conn_spec(config = {})
-  if postgresql?
-    {
-      adapter: 'postgresql',
-      database: TEST_SCHEMA,
-      host: TEST_PG_HOST,
-      port: TEST_PG_PORT,
-      username: TEST_PG_USER,
-      password: TEST_PG_PASS,
-    }.merge(config)
-  else
-    {
-      adapter: 'mysql2',
-      database: TEST_SCHEMA,
-      host: TEST_MYSQL_HOST,
-      port: TEST_MYSQL_PORT,
-      username: TEST_MYSQL_USER,
-      password: TEST_MYSQL_PASS,
-    }.merge(config)
+  def system_raise_on_fail(*args)
+    unless system(*args)
+      raise "Failed to run: #{args}"
+    end
   end
-end
 
-def show_create_table(table_name)
-  if postgresql?
-    show_create_table_postgresql(table_name)
-  else
-    show_create_table_mysql(table_name)
+  def restore_database_mysql
+    sql_file = File.expand_path('../mysql/ridgepole_test_database.sql', __FILE__)
+    system_raise_on_fail("#{MYSQL_CLI} < #{sql_file}")
   end
-end
 
-def show_create_table_mysql(table_name)
-  raw_conn = ActiveRecord::Base.connection.raw_connection
-  raw_conn.query("SHOW CREATE TABLE `#{table_name}`").first[1]
-end
+  def restore_database_postgresql
+    sql_file = File.expand_path('../postgresql/ridgepole_test_database.sql', __FILE__)
+    system("#{PG_CREATEDB} ridgepole_test 2>/dev/null")
+    system_raise_on_fail("#{PG_PSQL} ridgepole_test --set ON_ERROR_STOP=off -q -f #{sql_file} 2>/dev/null")
+  end
 
-def show_create_table_postgresql(table_name)
-  `#{PG_DUMP} --schema-only #{TEST_SCHEMA} --table=#{table_name} | awk '/^CREATE TABLE/,/);/{print} /^CREATE INDEX/{print}'`.strip
-end
+  def restore_tables
+    if condition(:postgresql)
+      restore_tables_postgresql
+    else
+      restore_tables_mysql
+    end
+  end
 
-def default_cli_hook
-  <<-RUBY.strip_heredoc
-    require 'ridgepole'
+  def restore_tables_mysql
+    sql_file = File.expand_path('../mysql/ridgepole_test_tables.sql', __FILE__)
+    system_raise_on_fail("#{MYSQL_CLI} < #{sql_file}")
+  end
 
-    class Ridgepole::Delta
-      def initialize(*args);
-      end
-      def migrate(*args)
-        puts "Ridgepole::Delta#migrate"
-        [#{differ}, "create_table :table do\\nend"]
-      end
-      def script
-        puts "Ridgepole::Delta#script"
+  def restore_tables_postgresql
+    sql_file = File.expand_path('../postgresql/ridgepole_test_tables.sql', __FILE__)
+    system_raise_on_fail("#{PG_PSQL} ridgepole_test -q -f #{sql_file} 2>/dev/null")
+  end
 
-        "create_table :table do\\nend"
-      end
-      def differ?
-        puts "Ridgepole::Delta#differ?"
-        #{differ}
-      end
+  def client(options = {}, config = {})
+    config = conn_spec(config)
+    default_options = {debug: condition(:debug)}
+
+    if condition(:mysql_awesome_enabled)
+      default_options[:enable_mysql_awesome] = true
+      default_options[:dump_without_table_options] = true
     end
 
-    class Ridgepole::Client
-      def initialize(*args)
-        puts "Ridgepole::Client#initialize([\#{args.map {|i| i.kind_of?(File) ? i.path : i.inspect}.join(', ')}])"
-      end
-      def dump
-        puts "Ridgepole::Client#dump"
-      end
-      def diff(*args)
-        puts "Ridgepole::Client#diff"
-        Ridgepole::Delta.new
-      end
-      class << self
-        def diff(*args)
-          puts "Ridgepole::Client.diff([\#{args.map {|i| i.kind_of?(File) ? i.path : i.inspect}.join(', ')}])"
-          Ridgepole::Delta.new
-        end
-        def dump(args)
-          puts "Ridgepole::Client.dump"
-        end
-      end
+    options = default_options.merge(options)
+
+    Ridgepole::Client.new(config, options)
+  end
+
+  def conn_spec(config = {})
+    if condition(:postgresql)
+      {
+        adapter: 'postgresql',
+        database: TEST_SCHEMA,
+        host: TEST_PG_HOST,
+        port: TEST_PG_PORT,
+        username: TEST_PG_USER,
+        password: TEST_PG_PASS,
+      }.merge(config)
+    else
+      {
+        adapter: 'mysql2',
+        database: TEST_SCHEMA,
+        host: TEST_MYSQL_HOST,
+        port: TEST_MYSQL_PORT,
+        username: TEST_MYSQL_USER,
+        password: TEST_MYSQL_PASS,
+      }.merge(config)
     end
-  RUBY
-end
+  end
 
-def run_cli(options = {})
-  args = options[:args] || []
-  hook = options[:hook] || default_cli_hook
-  path = File.expand_path('../../bin/ridgepole', __FILE__)
+  def show_create_table(table_name)
+    if condition(:postgresql)
+      show_create_table_postgresql(table_name)
+    else
+      show_create_table_mysql(table_name)
+    end
+  end
 
-  Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.rb']) do |f|
-    f.puts(hook)
-    f.puts(File.read(path))
-    f.flush
+  def show_create_table_mysql(table_name)
+    raw_conn = ActiveRecord::Base.connection.raw_connection
+    raw_conn.query("SHOW CREATE TABLE `#{table_name}`").first[1]
+  end
 
-    cmd = ([:ruby, f.path] + args).join(' ')
-    Open3.capture2e(cmd)
+  def show_create_table_postgresql(table_name)
+    `#{PG_DUMP} --schema-only #{TEST_SCHEMA} --table=#{table_name} | awk '/^CREATE TABLE/,/);/{print} /^CREATE INDEX/{print}'`.strip
+  end
+
+  def tempfile(basename, content = '')
+    begin
+      path = `mktemp /tmp/#{basename}.XXXXXX`
+      open(path, 'wb') {|f| f << content }
+      FileUtils.chmod(0777, path)
+      yield(path)
+    ensure
+      FileUtils.rm_f(path) if path
+    end
+  end
+
+  def run_ridgepole(*args)
+    Dir.chdir(File.expand_path('../..', __FILE__)) do
+      cmd = [:bundle, :exec, './bin/ridgepole'] + args
+      Open3.capture2e(cmd.join(' '))
+    end
   end
 end
-
-def tempfile(basename, content = '')
-  begin
-    path = `mktemp /tmp/#{basename}.XXXXXX`
-    open(path, 'wb') {|f| f << content }
-    FileUtils.chmod(0777, path)
-    yield(path)
-  ensure
-    FileUtils.rm_f(path) if path
-  end
-end
-
-def mysql_awesome_enabled?
-  ENV['ENABLE_MYSQL_AWESOME'] == '1'
-end
-
-def postgresql?
-  ENV['POSTGRESQL'] == '1'
-end
-
-def if_mysql_awesome_enabled(then_str, else_str = '')
-  if mysql_awesome_enabled?
-    then_str
-  else
-    else_str
-  end
-end
-
-def unsigned_if_enabled(prefix = ', ', suffix = '')
-  if_mysql_awesome_enabled("#{prefix}unsigned: true#{suffix}")
-end
-
-def unsigned_false_if_enabled(prefix = ', ', suffix = '')
-  if_mysql_awesome_enabled("#{prefix}unsigned: false#{suffix}")
-end
-
-def unsigned_if_enabled2(prefix = ', ', suffix = '')
-  if_mysql_awesome_enabled("#{prefix}:unsigned=>true#{suffix}")
-end
-
-def unsigned_false_if_enabled2(prefix = ', ', suffix = '')
-  if_mysql_awesome_enabled("#{prefix}:unsigned=>false#{suffix}")
-end
-
-def run_ridgepole(*args)
-  Dir.chdir(File.expand_path('../..', __FILE__)) do
-    cmd = [:bundle, :exec, './bin/ridgepole'] + args
-    Open3.capture2e(cmd.join(' '))
-  end
-end
+include SpecHelper
