@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when rename table' do
     let(:actual_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
         end
@@ -65,11 +65,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "titles", ["emp_no"], name: "idx_titles_emp_no", using: :btree
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
         end
@@ -133,7 +133,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "titles", ["emp_no"], name: "idx_titles_emp_no", using: :btree
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -142,23 +142,23 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip.gsub(/, renamed_from: 'employees'/, '')
+      expect(subject.dump).to match_fuzzy expected_dsl.gsub(/, renamed_from: 'employees'/, '')
     }
 
     it {
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
+      expect(delta.script).to match_fuzzy <<-EOS
         rename_table("employees2", "employees")
-      RUBY
+      EOS
     }
   end
 
   context 'when rename table (dry-run)' do
     let(:actual_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
@@ -167,11 +167,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "employees", ["first_name"], name: "first_name", using: :btree
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "employees2", primary_key: "emp_no", force: :cascade, renamed_from: 'employees' do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
@@ -180,7 +180,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "employees2", ["first_name"], name: "first_name", using: :btree
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -189,9 +189,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate(noop: true)
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
     }
   end
 end

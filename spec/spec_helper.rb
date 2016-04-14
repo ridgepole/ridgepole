@@ -17,6 +17,16 @@ require 'string_ext'
 require 'open3'
 require 'tempfile'
 require 'json'
+require 'rspec/match_fuzzy'
+require 'erbh'
+require 'hash_modern_inspect'
+require 'hash_order_helper'
+
+include ERBh
+
+class Hash
+  alias i modern_inspect_without_brace
+end
 
 RSpec.configure do |config|
   config.before(:all) do
@@ -153,30 +163,6 @@ module SpecHelper
     ensure
       FileUtils.rm_f(path) if path
     end
-  end
-
-  def if_mysql_awesome_enabled(then_str, else_str = '')
-    if condition(:mysql_awesome_enabled)
-      then_str
-    else
-      else_str
-    end
-  end
-
-  def unsigned_if_enabled(prefix = ', ', suffix = '')
-    if_mysql_awesome_enabled("#{prefix}unsigned: true#{suffix}")
-  end
-
-  def unsigned_false_if_enabled(prefix = ', ', suffix = '')
-    if_mysql_awesome_enabled("#{prefix}unsigned: false#{suffix}")
-  end
-
-  def unsigned_if_enabled2(prefix = ', ', suffix = '')
-    if_mysql_awesome_enabled("#{prefix}:unsigned=>true#{suffix}")
-  end
-
-  def unsigned_false_if_enabled2(prefix = ', ', suffix = '')
-    if_mysql_awesome_enabled("#{prefix}:unsigned=>false#{suffix}")
   end
 
   def run_ridgepole(*args)

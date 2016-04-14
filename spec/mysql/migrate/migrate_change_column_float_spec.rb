@@ -1,25 +1,25 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change float column' do
     let(:actual_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no",    limit: 4,  null: false
           t.float   "salary",    limit: 24, null: false
           t.date    "from_date",            null: false
           t.date    "to_date",              null: false
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no",               null: false
           t.float   "salary",               null: false
           t.date    "from_date",            null: false
           t.date    "to_date",              null: false
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -28,33 +28,33 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
     }
   end
 
   context 'when change float column (no change)' do
     let(:actual_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no",               null: false
           t.float   "salary",    limit: 24, null: false
           t.date    "from_date",            null: false
           t.date    "to_date",              null: false
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no",               null: false
           t.float   "salary",               null: false
           t.date    "from_date",            null: false
           t.date    "to_date",              null: false
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }

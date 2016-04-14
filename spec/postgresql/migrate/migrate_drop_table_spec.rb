@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop table' do
     let(:dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
         end
@@ -65,7 +65,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "titles", ["emp_no"], name: "idx_titles_emp_no", using: :btree
-      RUBY
+      EOS
     }
 
     let(:actual_dsl) { dsl }
@@ -82,16 +82,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump.each_line.select {|i| i !~ /\A\Z/ }.join).to eq expected_dsl.strip_heredoc.strip.each_line.select {|i| i !~ /\A\Z/ }.join
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
 
     it {
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
-        create_table("clubs", {#{unsigned_if_enabled2('')}}) do |t|
+      expect(delta.script).to match_fuzzy <<-EOS
+        create_table("clubs", {}) do |t|
           t.string("name", {:limit=>255, :default=>"", :null=>false})
         end
         add_index("clubs", ["name"], {:name=>"idx_name", :unique=>true, :using=>:btree})
@@ -108,7 +108,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string("last_name", {:limit=>16, :null=>false})
           t.date("hire_date", {:null=>false})
         end
-      RUBY
+      EOS
     }
   end
 end

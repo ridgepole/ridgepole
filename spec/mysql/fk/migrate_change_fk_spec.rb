@@ -52,9 +52,9 @@ add_foreign_key "child", "parent", name: "child_ibfk_1"
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump.delete_empty_lines).to eq sorted_actual_dsl.strip_heredoc.strip.delete_empty_lines
+      expect(subject.dump).to match_fuzzy sorted_actual_dsl
       delta.migrate
-      expect(subject.dump.delete_empty_lines).to eq expected_dsl.strip_heredoc.strip.delete_empty_lines
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
 end
