@@ -1,9 +1,9 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when default:0 -> (emply)' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4,  default: 0, null: false
+          t.integer "emp_no",    <%= i limit(4) + {default: 0, null: false} %>
           t.float   "salary",    limit: 24,             null: false
           t.date    "from_date",                        null: false
           t.date    "to_date",                          null: false
@@ -23,9 +23,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:result_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4
+          t.integer "emp_no",    <%= i limit(4) %>
           t.float   "salary",    limit: 24, null: false
           t.date    "from_date",            null: false
           t.date    "to_date",              null: false
@@ -47,9 +47,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when default:0 -> (emply with null:false)' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4,  default: 0, null: false
+          t.integer "emp_no",    <%= i limit(4) + {default: 0, null: false} %>
           t.float   "salary",    limit: 24,             null: false
           t.date    "from_date",                        null: false
           t.date    "to_date",                          null: false
@@ -58,9 +58,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4,  null: false
+          t.integer "emp_no",    <%= i limit(4) + {null: false} %>
           t.float   "salary",    limit: 24, null: false
           t.date    "from_date",            null: false
           t.date    "to_date",              null: false
@@ -82,9 +82,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when default:0 -> default:0' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4,  default: 0, null: false
+          t.integer "emp_no",    <%= i limit(4) + {default: 0, null: false} %>
           t.float   "salary",    limit: 24,             null: false
           t.date    "from_date",                        null: false
           t.date    "to_date",                          null: false
@@ -103,9 +103,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when default:0 -> default:0/null:true' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4,  default: 0, null: false
+          t.integer "emp_no",    <%= i limit(4) + {default: 0, null: false} %>
           t.float   "salary",    limit: 24,             null: false
           t.date    "from_date",                        null: false
           t.date    "to_date",                          null: false
@@ -125,9 +125,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:result_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4,  default: 0
+          t.integer "emp_no",    <%= i limit(4) + {default: 0} %>
           t.float   "salary",    limit: 24,             null: false
           t.date    "from_date",                        null: false
           t.date    "to_date",                          null: false
@@ -149,9 +149,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when default:0/null:true -> default:nil/null:false' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4,  default: 0
+          t.integer "emp_no",    <%= i limit(4) + {default: 0} %>
           t.float   "salary",    limit: 24,             null: false
           t.date    "from_date",                        null: false
           t.date    "to_date",                          null: false
@@ -160,9 +160,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4,  null: false
+          t.integer "emp_no",    <%= i limit(4) + {null: false} %>
           t.float   "salary",    limit: 24, null: false
           t.date    "from_date",            null: false
           t.date    "to_date",              null: false
@@ -171,9 +171,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:result_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4,  default: 0, null: false
+          t.integer "emp_no",    <%= i limit(4) + {default: 0, null: false} %>
           t.float   "salary",    limit: 24,             null: false
           t.date    "from_date",                        null: false
           t.date    "to_date",                          null: false

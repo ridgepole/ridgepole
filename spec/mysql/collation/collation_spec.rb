@@ -1,25 +1,25 @@
-describe 'Ridgepole::Client#diff -> migrate', condition: [:mysql_awesome_enabled] do
+describe 'Ridgepole::Client#diff -> migrate', condition: [:mysql_awesome_enabled, :activerecord_5] do
   context 'when change column (add collation)' do
     let(:actual_dsl) {
-      <<-RUBY
+      erbh(<<-EOS)
         create_table "employee_clubs", unsigned: true, force: :cascade do |t|
-          t.integer "emp_no",  limit: 4,     null: false
-          t.integer "club_id", limit: 4,     null: false, unsigned: true
-          t.string  "string",  limit: 255,   null: false
+          t.integer "emp_no",  <%= i limit(4) + {null: false} %>
+          t.integer "club_id", <%= i limit(4) + {null: false, unsigned: true} %>
+          t.string  "string",  <%= i limit(255) + {null: false, collation: "ascii_bin"} %>
           t.text    "text",    limit: 65535, null: false
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      erbh(<<-EOS)
         create_table "employee_clubs", unsigned: true, force: :cascade do |t|
-          t.integer "emp_no",  limit: 4,     null: false
-          t.integer "club_id", limit: 4,     null: false, unsigned: true
-          t.string  "string",  limit: 255,   null: false,                 collation: "ascii_bin"
+          t.integer "emp_no",  <%= i limit(4) + {null: false} %>
+          t.integer "club_id", <%= i limit(4) + {null: false, unsigned: true} %>
+          t.string  "string",  <%= i limit(255) + {null: false, collation: "ascii_bin"} %>
           t.text    "text",    limit: 65535, null: false,                 collation: "utf8mb4_bin"
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -36,25 +36,25 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [:mysql_awesome_enabled
 
   context 'when change column (delete collation)' do
     let(:actual_dsl) {
-      <<-RUBY
+      erbh(<<-EOS)
         create_table "employee_clubs", unsigned: true, force: :cascade do |t|
-          t.integer "emp_no",  limit: 4,     null: false
-          t.integer "club_id", limit: 4,     null: false, unsigned: true
-          t.string  "string",  limit: 255,   null: false,                 collation: "ascii_bin"
+          t.integer "emp_no",  <%= i limit(4) + {null: false} %>
+          t.integer "club_id", <%= i limit(4) + {null: false, unsigned: true} %>
+          t.string  "string",  <%= i limit(255) + {null: false, collation: "ascii_bin"} %>
           t.text    "text",    limit: 65535, null: false,                 collation: "utf8mb4_bin"
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      erbh(<<-EOS)
         create_table "employee_clubs", unsigned: true, force: :cascade do |t|
-          t.integer "emp_no",  limit: 4,     null: false
-          t.integer "club_id", limit: 4,     null: false, unsigned: true
-          t.string  "string",  limit: 255,   null: false
+          t.integer "emp_no",  <%= i limit(4) + {null: false} %>
+          t.integer "club_id", <%= i limit(4) + {null: false, unsigned: true} %>
+          t.string  "string",  <%= i limit(255) + {null: false, collation: "ascii_bin"} %>
           t.text    "text",    limit: 65535, null: false
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -71,25 +71,25 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [:mysql_awesome_enabled
 
   context 'when change column (change collation)' do
     let(:actual_dsl) {
-      <<-RUBY
+      erbh(<<-EOS)
         create_table "employee_clubs", unsigned: true, force: :cascade do |t|
-          t.integer "emp_no",  limit: 4,     null: false
-          t.integer "club_id", limit: 4,     null: false, unsigned: true
-          t.string  "string",  limit: 255,   null: false,                 collation: "ascii_bin"
+          t.integer "emp_no",  <%= i limit(4) + {null: false} %>
+          t.integer "club_id", <%= i limit(4) + {null: false, unsigned: true} %>
+          t.string  "string",  <%= i limit(255) + {null: false, collation: "ascii_bin"} %>
           t.text    "text",    limit: 65535, null: false,                 collation: "utf8mb4_bin"
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      erbh(<<-EOS)
         create_table "employee_clubs", unsigned: true, force: :cascade do |t|
-          t.integer "emp_no",  limit: 4,     null: false
-          t.integer "club_id", limit: 4,     null: false, unsigned: true
-          t.string  "string",  limit: 255,   null: false,                 collation: "utf8mb4_bin"
+          t.integer "emp_no",  <%= i limit(4) + {null: false} %>
+          t.integer "club_id", <%= i limit(4) + {null: false, unsigned: true} %>
+          t.string  "string",  <%= i limit(255) + {null: false, collation: "utf8mb4_bin"} %>
           t.text    "text",    limit: 65535, null: false,                 collation: "ascii_bin"
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -106,14 +106,14 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [:mysql_awesome_enabled
 
   context 'when change column (no change collation)' do
     let(:actual_dsl) {
-      <<-RUBY
+      erbh(<<-EOS)
         create_table "employee_clubs", unsigned: true, force: :cascade do |t|
-          t.integer "emp_no",  limit: 4,     null: false
-          t.integer "club_id", limit: 4,     null: false, unsigned: true
-          t.string  "string",  limit: 255,   null: false,                 collation: "ascii_bin"
+          t.integer "emp_no",  <%= i limit(4) + {null: false} %>
+          t.integer "club_id", <%= i limit(4) + {null: false, unsigned: true} %>
+          t.string  "string",  <%= i limit(255) + {null: false, collation: "ascii_bin"} %>
           t.text    "text",    limit: 65535, null: false,                 collation: "utf8mb4_bin"
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -133,7 +133,9 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [:mysql_awesome_enabled
           f.puts(actual_dsl)
           f.flush
 
-          out, status = run_ridgepole('--diff', "'#{JSON.dump(conn_spec)}'", f.path, '--enable-mysql-awesome', '--dump-without-table-options')
+          opts = ['--dump-without-table-options']
+          opts << '--enable-mysql-awesome' if condition(:mysql_awesome_enabled)
+          out, status = run_ridgepole('--diff', "'#{JSON.dump(conn_spec)}'", f.path, *opts)
 
           expect(out).to be_empty
           expect(status.success?).to be_truthy

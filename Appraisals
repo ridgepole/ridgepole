@@ -4,5 +4,5 @@ appraise "activerecord-4.2" do
 end
 
 appraise 'activerecord-5.0' do
-  gem 'activerecord', '>= 5.0.0.beta3'
+  gem 'activerecord', '>= 5.0.0.beta4'
 end

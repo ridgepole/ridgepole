@@ -1,11 +1,13 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   let(:template_variables) {
     opts = {
-      unsigned: {}
+      parent_id_opts: {},
     }
 
     if condition(:mysql_awesome_enabled)
-      opts[:unsigned] = {unsigned: true}
+      opts.merge!(
+        parent_id_opts: {unsigned: true}
+      )
     end
 
     opts
@@ -14,13 +16,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create fk' do
     let(:actual_dsl) {
       erbh(<<-EOS, template_variables)
-create_table "child", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
-  t.integer "parent_id", <%= {limit: 4}.push(@unsigned).i %>
+create_table "child", force: :cascade do |t|
+  t.integer "parent_id", <%= i limit(4) + @parent_id_opts %>
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
-create_table "parent", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
+create_table "parent", <%= i unsigned(true) + {force: :cascade} %> do |t|
 end
       EOS
     }
@@ -65,29 +67,29 @@ add_foreign_key "child", "parent", name: "child_ibfk_1"
 
   context 'when create fk when create table' do
     let(:dsl) {
-      <<-EOS
+      erbh(<<-EOS, template_variables)
 create_table "child", force: :cascade do |t|
-  t.integer "parent_id"
+  t.integer "parent_id", <%= i limit(4) + @parent_id_opts %>
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
 add_foreign_key "child", "parent", name: "child_ibfk_1"
 
-create_table "parent", force: :cascade do |t|
+create_table "parent", <%= i unsigned(true) + {force: :cascade} %> do |t|
 end
       EOS
     }
 
     let(:sorted_dsl) {
-      <<-EOS
+      erbh(<<-EOS, template_variables)
 create_table "child", force: :cascade do |t|
-  t.integer "parent_id", limit: 4
+  t.integer "parent_id", <%= i limit(4) + @parent_id_opts %>
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
-create_table "parent", force: :cascade do |t|
+create_table "parent", <%= i unsigned(true) + {force: :cascade} %> do |t|
 end
 
 add_foreign_key "child", "parent", name: "child_ibfk_1"
@@ -107,12 +109,12 @@ add_foreign_key "child", "parent", name: "child_ibfk_1"
 
   context 'already defined' do
     let(:dsl) {
-      <<-EOS
+      erbh(<<-EOS, template_variables)
 create_table "child", force: :cascade do |t|
   t.integer "parent_id", unsigned: true
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
 add_foreign_key "child", "parent", name: "child_ibfk_1"
 
@@ -134,12 +136,12 @@ end
 
   context 'no name' do
     let(:dsl) {
-      <<-EOS
+      erbh(<<-EOS, template_variables)
 create_table "child", force: :cascade do |t|
   t.integer "parent_id", unsigned: true
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
 add_foreign_key "child", "parent"
 
