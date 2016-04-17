@@ -19,11 +19,15 @@ class Ridgepole::Client
     end
 
     if @options[:mysql_use_alter]
-      require 'ridgepole/ext/abstract_mysql_adapter'
+      require 'ridgepole/ext/abstract_mysql_adapter/use_alter_index'
     end
 
     if @options[:dumb_with_default_fk_name]
       require 'ridgepole/ext/schema_dumper'
+    end
+
+    if ActiveRecord::VERSION::MAJOR >= 5 and @options[:dump_without_table_options]
+      require 'ridgepole/ext/abstract_mysql_adapter/disable_table_options'
     end
   end
 

@@ -16,9 +16,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "employees", force: :cascade do |t|
-          t.string   "ext_column",      limit: 255, null: false
+          t.string   "ext_column",      <%= i limit(255) + {null: false} %>
           t.date     "birth_date",                  null: false
           t.string   "first_name",      limit: 14,  null: false
           t.string   "last_name",       limit: 16,  null: false
@@ -76,9 +76,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "employees", primary_key: "emp_id", force: :cascade do |t|
-          t.string   "ext_column",      limit: 255, null: false
+          t.string   "ext_column",      <%= i limit(255) + {null: false} %>
           t.date     "birth_date",                  null: false
           t.string   "first_name",      limit: 14,  null: false
           t.string   "last_name",       limit: 16,  null: false
@@ -136,9 +136,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "employees", id: false, force: :cascade do |t|
-          t.string   "ext_column",      limit: 255, null: false
+          t.string   "ext_column",      <%= i limit(255) + {null: false} %>
           t.date     "birth_date",                  null: false
           t.string   "first_name",      limit: 14,  null: false
           t.string   "last_name",       limit: 16,  null: false
@@ -194,9 +194,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "employees", primary_key: "emp_id", force: :cascade do |t|
-          t.string   "ext_column",      limit: 255, null: false
+          t.string   "ext_column",      <%= i limit(255) + {null: false} %>
           t.date     "birth_date",                  null: false
           t.string   "first_name",      limit: 14,  null: false
           t.string   "last_name",       limit: 16,  null: false

@@ -4,7 +4,7 @@ describe 'Ridgepole::Client.diff' do
 
     let(:actual_dsl) {
       open("#{tmpdir}/file1.required", 'w') do |f|
-        f.puts <<-RUBY
+        f.puts <<-EOS
           create_table "clubs", force: :cascade do |t|
             t.string "name", default: "", null: false
           end
@@ -36,12 +36,12 @@ describe 'Ridgepole::Client.diff' do
 
           add_index "dept_manager", ["dept_no"], name: "dept_no", using: :btree
           add_index "dept_manager", ["emp_no"], name: "emp_no", using: :btree
-        RUBY
+        EOS
       end
 
       f = open("#{tmpdir}/file1", 'w+')
 
-      f.puts <<-RUBY
+      f.puts <<-EOS
         require "file1.required"
 
         create_table "employee_clubs", force: :cascade do |t|
@@ -76,7 +76,7 @@ describe 'Ridgepole::Client.diff' do
         end
 
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
-      RUBY
+      EOS
 
       f.flush
       f.rewind
@@ -85,7 +85,7 @@ describe 'Ridgepole::Client.diff' do
 
     let(:expected_dsl) {
       open("#{tmpdir}/file2.required", 'w') do |f|
-        f.puts <<-RUBY
+        f.puts <<-EOS
           create_table "clubs", force: :cascade do |t|
             t.string "name", default: "", null: false
           end
@@ -117,12 +117,12 @@ describe 'Ridgepole::Client.diff' do
 
           add_index "dept_manager", ["dept_no"], name: "dept_no", using: :btree
           add_index "dept_manager", ["emp_no"], name: "emp_no", using: :btree
-        RUBY
+        EOS
       end
 
       f = open("#{tmpdir}/file2", 'w+')
 
-      f.puts <<-RUBY
+      f.puts <<-EOS
         require "file2.required"
 
         create_table "employee_clubs", force: :cascade do |t|
@@ -157,7 +157,7 @@ describe 'Ridgepole::Client.diff' do
         end
 
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
-      RUBY
+      EOS
 
       f.flush
       f.rewind
@@ -169,12 +169,12 @@ describe 'Ridgepole::Client.diff' do
     it {
       delta = subject.diff(actual_dsl, expected_dsl, enable_mysql_unsigned: true)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to match_fuzzy <<-RUBY
+      expect(delta.script).to match_fuzzy <<-EOS
         change_column("employee_clubs", "club_id", :integer, {:unsigned=>false, :null=>true, :default=>nil})
 
         change_column("employees", "last_name", :string, {:limit=>20, :default=>"XXX"})
         change_column("employees", "gender", :string, {:limit=>2, :null=>false, :default=>nil})
-      RUBY
+      EOS
     }
 
     after do

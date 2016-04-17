@@ -1,19 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  let(:template_variables) {
-    opts = {
-      unsigned: {}
-    }
-
-    if condition(:mysql_awesome_enabled)
-      opts[:unsigned] = {unsigned: true}
-    end
-
-    opts
-  }
-
   context 'when change column (no change)' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
@@ -22,12 +10,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",             null: false
         end
 
-        add_index "employees", ["gender"], name: "gender", using: :btree
+        <%= add_index "employees", ["gender"], name: "gender", using: :btree %>
       EOS
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table :employees, primary_key: :emp_no, force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
@@ -36,7 +24,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   :hire_date,              null: false
         end
 
-        add_index :employees, :gender, name: :gender, using: :btree
+        <%= add_index :employees, :gender, name: :gender, using: :btree %>
       EOS
     }
 
@@ -51,8 +39,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when change column (change)' do
     let(:actual_dsl) {
-      erbh(<<-EOS, template_variables)
-        create_table "employees", primary_key: "emp_no", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
+      erbh(<<-EOS)
+        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -60,12 +48,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",             null: false
         end
 
-        add_index "employees", ["gender"], name: "gender", using: :btree
+        <%= add_index "employees", ["gender"], name: "gender", using: :btree %>
       EOS
     }
 
     let(:dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table :employees, primary_key: :emp_no, force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
@@ -74,13 +62,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   :hire_date2,             null: false
         end
 
-        add_index :employees, :last_name, name: :last_name, using: :btree
+        <%= add_index :employees, :last_name, name: :last_name, using: :btree %>
       EOS
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS, template_variables)
-        create_table "employees", primary_key: "emp_no", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
+      erbh(<<-EOS)
+        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -88,7 +76,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date2",            null: false
         end
 
-        add_index "employees", ["last_name"], name: "last_name", using: :btree
+        <%= add_index "employees", ["last_name"], name: "last_name", using: :btree %>
       EOS
     }
 

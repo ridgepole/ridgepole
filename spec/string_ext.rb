@@ -1,4 +1,5 @@
 class String
+  # TODO: must be remove
   def delete_create_table(name)
     new_def = []
     in_block = false
@@ -18,6 +19,7 @@ class String
     new_def.delete_add_index(name)
   end
 
+  # TODO: must be remove
   def delete_add_index(name, columns = nil)
     new_def = []
     in_block = false

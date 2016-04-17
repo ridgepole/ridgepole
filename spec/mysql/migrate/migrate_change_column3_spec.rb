@@ -1,16 +1,4 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  let(:template_variables) {
-    opts = {
-      unsigned: {}
-    }
-
-    if condition(:mysql_awesome_enabled)
-      opts[:unsigned] = {unsigned: true}
-    end
-
-    opts
-  }
-
   context 'when use timestamps (no change)' do
     let(:actual_dsl) {
       <<-EOS
@@ -50,8 +38,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when use timestamps (change)' do
     let(:actual_dsl) {
-      erbh(<<-EOS, template_variables)
-        create_table "employees", primary_key: "emp_no", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
+      erbh(<<-EOS)
+        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -75,8 +63,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS, template_variables)
-        create_table "employees", primary_key: "emp_no", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
+      erbh(<<-EOS)
+        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
           t.date     "birth_date",            null: false
           t.string   "first_name", limit: 14, null: false
           t.string   "last_name",  limit: 16, null: false
@@ -178,8 +166,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when use references (change)' do
     let(:actual_dsl) {
-      erbh(<<-EOS, template_variables)
-        create_table "employees", primary_key: "emp_no", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
+      erbh(<<-EOS)
+        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -203,15 +191,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS, template_variables)
-        create_table "employees", primary_key: "emp_no", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
+      erbh(<<-EOS)
+        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
           t.date    "birth_date",             null: false
           t.string  "first_name",  limit: 14, null: false
           t.string  "last_name",   limit: 16, null: false
           t.string  "gender",      limit: 1,  null: false
           t.date    "hire_date",              null: false
-          t.integer "products_id", limit: 4
-          t.integer "user_id",     limit: 4
+          t.integer "products_id", <%= i limit(4) %>
+          t.integer "user_id", <%= i limit(4) %>
         end
       EOS
     }
@@ -230,8 +218,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when use references with polymorphic (change)' do
     let(:actual_dsl) {
-      erbh(<<-EOS, template_variables)
-        create_table "employees", primary_key: "emp_no", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
+      erbh(<<-EOS)
+        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -255,17 +243,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS, template_variables)
-        create_table "employees", primary_key: "emp_no", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
+      erbh(<<-EOS)
+        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
           t.date    "birth_date",                null: false
           t.string  "first_name",    limit: 14,  null: false
           t.string  "last_name",     limit: 16,  null: false
           t.string  "gender",        limit: 1,   null: false
           t.date    "hire_date",                 null: false
-          t.integer "products_id",   limit: 4
-          t.string  "products_type", limit: 255
-          t.integer "user_id",       limit: 4
-          t.string  "user_type",     limit: 255
+          t.integer "products_id",   <%= i limit(4) %>
+          t.string  "products_type", <%= i limit(255) %>
+          t.integer "user_id",       <%= i limit(4) %>
+          t.string  "user_type",     <%= i limit(255) %>
         end
       EOS
     }

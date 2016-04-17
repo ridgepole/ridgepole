@@ -1,12 +1,12 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create fk' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
 create_table "child", force: :cascade do |t|
   t.integer "parent_id"
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
 create_table "parent", force: :cascade do |t|
 end
@@ -53,7 +53,7 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
 
   context 'when create fk when create table' do
     let(:dsl) {
-      <<-EOS
+      erbh(<<-EOS)
 # Define parent before child
 create_table "parent", force: :cascade do |t|
 end
@@ -62,19 +62,19 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id", unsigned: true
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
 add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       EOS
     }
 
     let(:sorted_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
 create_table "child", force: :cascade do |t|
   t.integer "parent_id"
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
 create_table "parent", force: :cascade do |t|
 end
@@ -97,7 +97,7 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
 
   context 'already defined' do
     let(:dsl) {
-      <<-EOS
+      erbh(<<-EOS)
 # Define parent before child
 create_table "parent", force: :cascade do |t|
 end
@@ -106,7 +106,7 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id", unsigned: true
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
 add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
 
@@ -125,7 +125,7 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
 
   context 'no name' do
     let(:dsl) {
-      <<-EOS
+      erbh(<<-EOS)
 # Define parent before child
 create_table "parent", force: :cascade do |t|
 end
@@ -134,7 +134,7 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id", unsigned: true
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
 add_foreign_key "child", "parent"
       EOS
@@ -151,7 +151,7 @@ add_foreign_key "child", "parent"
 
   context 'orphan fk' do
     let(:dsl) {
-      <<-EOS
+      erbh(<<-EOS)
 # Define parent before child
 create_table "parent", force: :cascade do |t|
 end

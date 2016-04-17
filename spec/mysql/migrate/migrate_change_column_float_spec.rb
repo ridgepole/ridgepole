@@ -1,9 +1,9 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change float column' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4,  null: false
+          t.integer "emp_no",    <%= i limit(4) + {null: false} %>
           t.float   "salary",    limit: 24, null: false
           t.date    "from_date",            null: false
           t.date    "to_date",              null: false
