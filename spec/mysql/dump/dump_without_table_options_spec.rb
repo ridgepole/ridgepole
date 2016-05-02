@@ -1,9 +1,23 @@
-describe 'Ridgepole::Client#dump', condition: [:mysql_awesome_enabled] do
+describe 'Ridgepole::Client#dump', condition: [:mysql_awesome_enabled, :activerecord_5] do
+  let(:template_variables) {
+    opts = {
+      table_comment: {comment: '"london" bridge "is" falling "down"'},
+    }
+
+    if condition(:activerecord_4)
+      opts.merge!(
+        table_comment: {}
+      )
+    end
+
+    opts
+  }
+
   let(:actual_dsl) {
-    <<-'EOS'
+    erbh(<<-'EOS', template_variables)
       create_table "books", unsigned: true, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='\"london\" bridge \"is\" falling \"down\"'" do |t|
-        t.string   "title",      limit: 255, null: false
-        t.integer  "author_id",  limit: 4,   null: false
+        t.string   "title",      <%= i limit(255) + {null: false} %>
+        t.integer  "author_id",  <%= i limit(4) + {null: false} %>
         t.datetime "created_at"
         t.datetime "updated_at"
       end
@@ -12,10 +26,10 @@ describe 'Ridgepole::Client#dump', condition: [:mysql_awesome_enabled] do
 
   context 'when without table options' do
     let(:expected_dsl) {
-      <<-EOS
-        create_table "books", unsigned: true, force: :cascade do |t|
-          t.string   "title",      limit: 255, null: false
-          t.integer  "author_id",  limit: 4,   null: false
+      erbh(<<-EOS, template_variables)
+        create_table "books", <%= i({unsigned: true, force: :cascade} + @table_comment) %> do |t|
+          t.string   "title",      <%= i limit(255) + {null: false} %>
+          t.integer  "author_id",  <%= i limit(4) + {null: false} %>
           t.datetime "created_at"
           t.datetime "updated_at"
         end
@@ -35,7 +49,11 @@ describe 'Ridgepole::Client#dump', condition: [:mysql_awesome_enabled] do
     subject { client(dump_without_table_options: false) }
 
     it {
-      expect(subject.dump).to match_fuzzy actual_dsl
+      if condition(:activerecord_5)
+        skip
+      else
+        expect(subject.dump).to match_fuzzy actual_dsl
+      end
     }
   end
 end

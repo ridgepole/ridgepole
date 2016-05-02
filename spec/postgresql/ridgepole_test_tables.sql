@@ -70,3 +70,6 @@ CREATE TABLE titles (
   PRIMARY KEY (emp_no,title,from_date)
 );
 CREATE INDEX idx_titles_emp_no ON titles (emp_no);
+
+DROP TABLE IF EXISTS child;
+DROP TABLE IF EXISTS parent;

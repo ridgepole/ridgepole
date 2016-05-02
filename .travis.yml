@@ -20,7 +20,7 @@ script:
   - bundle exec rake
 gemfile:
   - gemfiles/activerecord_4.2.gemfile
-  #- gemfiles/activerecord_5.0.gemfile
+  - gemfiles/activerecord_5.0.gemfile
 env:
   matrix:
     - ENABLE_MYSQL_AWESOME=0

@@ -4,8 +4,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
       sql_int_type: 'int(11)',
     }
 
-    if condition(:mysql_awesome_enabled)
-      opts[:sql_int_type] = 'int'
+    if condition(:mysql_awesome_enabled, :activerecord_5)
+      opts.merge!(
+        sql_int_type: 'int'
+      )
     end
 
     opts
@@ -13,9 +15,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when add column (int/noop) (1)' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS, template_variables)
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4, null: false
+          t.integer "emp_no",    <%= i limit(4) + {null: false} %>
           t.string  "dept_no",   limit: 4, null: false
           t.date    "from_date",           null: false
           t.date    "to_date",             null: false
@@ -52,9 +54,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when add column (int/noop) (2)' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS, template_variables)
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4, null: false
+          t.integer "emp_no",    <%= i limit(4) + {null: false} %>
           t.string  "dept_no",   limit: 4, null: false
           t.date    "from_date",           null: false
           t.date    "to_date",             null: false
@@ -91,9 +93,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when add column (int/noop) (3)' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS, template_variables)
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4, null: false
+          t.integer "emp_no",    <%= i limit(4) + {null: false} %>
           t.string  "dept_no",   limit: 4, null: false
           t.date    "from_date",           null: false
           t.date    "to_date",             null: false

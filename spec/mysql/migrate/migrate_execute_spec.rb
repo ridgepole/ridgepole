@@ -1,13 +1,11 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   let(:template_variables) {
     opts = {
-      unsigned: {},
       sql_int_type: 'int(11)',
       test_schema: TEST_SCHEMA,
     }
 
     if condition(:mysql_awesome_enabled)
-      opts[:unsigned] = {unsigned: true}
       opts[:sql_int_type] = 'int(10) unsigned'
     end
 
@@ -17,16 +15,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when execute' do
     let(:dsl) {
       erbh(<<-EOS, template_variables)
-        create_table "authors", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
-          t.string "name", limit: 255, null: false
+        create_table "authors", <%= i unsigned(true) + {force: :cascade} %> do |t|
+          t.string "name", <%= i limit(255) + {null: false} %>
         end
 
-        create_table "books", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
-          t.string  "title",     limit: 255, null: false
-          t.integer "author_id", <%= {limit: 4, null: false}.push(@unsigned).i %>
+        create_table "books", <%= i unsigned(true) + {force: :cascade} %> do |t|
+          t.string  "title",     <%= i limit(255) + {null: false} %>
+          t.integer "author_id", <%= i limit(4) + {null: false} + unsigned(true) %>
         end
 
-        add_index "books", ["author_id"], name: "idx_author_id", using: :btree
+        <%= add_index "books", ["author_id"], name: "idx_author_id", using: :btree %>
       EOS
     }
 
@@ -38,10 +36,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         create_table "books", force: :cascade do |t|
           t.string  "title",                     null: false
-          t.integer "author_id", <%= {limit: 4, null: false}.push(@unsigned).i %>
+          t.integer "author_id", <%= i limit(4) + {null: false} + unsigned(true) %>
         end
 
-        add_index "books", ["author_id"], name: "idx_author_id", using: :btree
+        <%= add_index "books", ["author_id"], name: "idx_author_id", using: :btree %>
 
         execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)") do |c|
           c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = '<%= @test_schema %>' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?
@@ -88,17 +86,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when not execute' do
     let(:dsl) {
-      <<-EOS
+      erbh(<<-EOS, template_variables)
         create_table "authors", force: :cascade do |t|
-          t.string "name", limit: 255, null: false
+          t.string "name", <%= i limit(255) + {null: false} %>
         end
 
         create_table "books", force: :cascade do |t|
-          t.string  "title",     limit: 255, null: false
-          t.integer "author_id", limit: 4,   null: false
+          t.string  "title",     <%= i limit(255) + {null: false} %>
+          t.integer "author_id", <%= i limit(4) + {null: false} %>
         end
 
-        add_index "books", ["author_id"], name: "idx_author_id", using: :btree
+        <%= add_index "books", ["author_id"], name: "idx_author_id", using: :btree %>
         add_foreign_key "books", "authors", name: "fk_author"
       EOS
     }
@@ -111,10 +109,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         create_table "books", force: :cascade do |t|
           t.string  "title",                     null: false
-          t.integer "author_id", limit: 4,   null: false
+          t.integer "author_id", <%= i limit(4) + {null: false} %>
         end
 
-        add_index "books", ["author_id"], name: "idx_author_id", using: :btree
+        <%= add_index "books", ["author_id"], name: "idx_author_id", using: :btree %>
 
         execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)") do |c|
           c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = '<%= @test_schema %>' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?
@@ -163,16 +161,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when execute (noop)' do
     let(:dsl) {
       erbh(<<-EOS, template_variables)
-        create_table "authors", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
-          t.string "name", limit: 255, null: false
+        create_table "authors", <%= i unsigned(true) + {force: :cascade} %> do |t|
+          t.string "name", <%= i limit(255) + {null: false} %>
         end
 
-        create_table "books", <%= {force: :cascade}.unshift(@unsigned).i %> do |t|
-          t.string  "title",     limit: 255, null: false
-          t.integer "author_id", <%= {limit: 4, null: false}.push(@unsigned).i %>
+        create_table "books", <%= i unsigned(true) + {force: :cascade} %> do |t|
+          t.string  "title",     <%= i limit(255) + {null: false} %>
+          t.integer "author_id", <%= i limit(4) + {null: false} + unsigned(true) %>
         end
 
-        add_index "books", ["author_id"], name: "idx_author_id", using: :btree
+        <%= add_index "books", ["author_id"], name: "idx_author_id", using: :btree %>
       EOS
     }
 
@@ -184,10 +182,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         create_table "books", force: :cascade do |t|
           t.string  "title",                     null: false
-          t.integer "author_id", <%= {limit: 4, null: false}.push(@unsigned).i %>
+          t.integer "author_id", <%= i limit(4) + {null: false} + unsigned(true) %>
         end
 
-        add_index "books", ["author_id"], name: "idx_author_id", using: :btree
+        <%= add_index "books", ["author_id"], name: "idx_author_id", using: :btree %>
 
         execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)") do |c|
           c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = '<%= @test_schema %>' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?
@@ -233,17 +231,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when not execute (noop)' do
     let(:dsl) {
-      <<-EOS
+      erbh(<<-EOS, template_variables)
         create_table "authors", force: :cascade do |t|
-          t.string "name", limit: 255, null: false
+          t.string "name", <%= i limit(255) + {null: false} %>
         end
 
         create_table "books", force: :cascade do |t|
-          t.string  "title",     limit: 255, null: false
-          t.integer "author_id", limit: 4,   null: false
+          t.string  "title",     <%= i limit(255) + {null: false} %>
+          t.integer "author_id", <%= i limit(4) + {null: false} %>
         end
 
-        add_index "books", ["author_id"], name: "idx_author_id", using: :btree
+        <%= add_index "books", ["author_id"], name: "idx_author_id", using: :btree %>
         add_foreign_key "books", "authors", name: "fk_author"
       EOS
     }
@@ -256,10 +254,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         create_table "books", force: :cascade do |t|
           t.string  "title",                     null: false
-          t.integer "author_id", limit: 4,   null: false
+          t.integer "author_id", <%= i limit(4) + {null: false} %>
         end
 
-        add_index "books", ["author_id"], name: "idx_author_id", using: :btree
+        <%= add_index "books", ["author_id"], name: "idx_author_id", using: :btree %>
 
         execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)") do |c|
           c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = '<%= @test_schema %>' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?

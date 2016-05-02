@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change fk' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
 create_table "parent", force: :cascade do |t|
 end
 
@@ -9,19 +9,19 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id"
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
 add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc", on_delete: :cascade
       EOS
     }
 
     let(:sorted_actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
 create_table "child", force: :cascade do |t|
-  t.integer "parent_id", limit: 4
+  t.integer "parent_id", <%= i limit(4) %>
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
 create_table "parent", force: :cascade do |t|
 end
@@ -31,12 +31,12 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc", on_delete: :casc
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
 create_table "child", force: :cascade do |t|
-  t.integer "parent_id", limit: 4
+  t.integer "parent_id", <%= i limit(4) %>
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
 create_table "parent", force: :cascade do |t|
 end
@@ -54,6 +54,12 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_fuzzy sorted_actual_dsl
       delta.migrate
+
+      # XXX:
+      if condition(:activerecord_5)
+        ActiveRecord::Base.connection.send(:create_table_info_cache).clear
+      end
+
       expect(subject.dump).to match_fuzzy expected_dsl
     }
   end

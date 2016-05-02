@@ -6,14 +6,15 @@ require 'cli_helper'
 
 require 'processing_for_travis'
 
-if condition(:mysql_awesome_enabled, :activerecord_5)
-  raise "Cannot use activerecord-mysql-awesome on ActiveRecord 5.0"
+if condition [:mysql_awesome_enabled, :activerecord_5]
+  warn 'warning: Cannot use activerecord-mysql-awesome on ActiveRecord 5.0'
+  exit 0
 end
 
 require 'ridgepole'
 require 'ridgepole/cli/config'
-require 'active_support/core_ext/string/strip'
-require 'string_ext'
+require 'active_support/core_ext'
+require 'string_ext' # TODO: must be remove
 require 'open3'
 require 'tempfile'
 require 'json'
@@ -22,11 +23,7 @@ require 'erbh'
 require 'hash_modern_inspect'
 require 'hash_order_helper'
 
-include ERBh
-
-class Hash
-  alias i modern_inspect_without_brace
-end
+require 'erb_helper'
 
 RSpec.configure do |config|
   config.before(:all) do
@@ -42,8 +39,8 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do |example|
-    if example.metadata[:condition]
-      skip unless condition(*example.metadata[:condition])
+    if conds = example.metadata[:condition]
+      skip unless conds.any? {|c| condition(*c) }
     end
 
     case example.metadata[:file_path]
@@ -107,6 +104,10 @@ module SpecHelper
 
     if condition(:mysql_awesome_enabled)
       default_options[:enable_mysql_awesome] = true
+      default_options[:dump_without_table_options] = true
+    end
+
+    if condition(:activerecord_5)
       default_options[:dump_without_table_options] = true
     end
 
