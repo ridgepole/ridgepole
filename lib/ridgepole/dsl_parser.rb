@@ -19,7 +19,7 @@ class Ridgepole::DSLParser
       end
 
       TYPES = [
-        # https://github.com/winebarrel/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/abstract/schema_definitions.rb#L274
+        # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/abstract/schema_definitions.rb#L274
         :string,
         :text,
         :integer,
@@ -33,7 +33,7 @@ class Ridgepole::DSLParser
         :binary,
         :boolean,
 
-        # https://github.com/winebarrel/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/postgresql_adapter.rb#L79
+        # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/postgresql_adapter.rb#L79
         :daterange,
         :numrange,
         :tsrange,
@@ -58,11 +58,46 @@ class Ridgepole::DSLParser
         :bit,
         :bit_varying,
         :money,
-      ]
+      ].uniq
 
       TYPES.each do |column_type|
         define_method column_type do |*args|
           options = args.extract_options!
+          column_names = args
+          column_names.each {|name| column(name, column_type, options) }
+        end
+      end
+
+      ALIAS_TYPES = {
+        # https://github.com/rails/rails/blob/v5.0.0.rc1/activerecord/lib/active_record/connection_adapters/mysql/schema_definitions.rb
+        tinyblob: [:blob, {limit: 255}],
+        mediumblob: [:binary, {limit: 16777215}],
+        longblob: [:binary, {limit: 4294967295}],
+        tinytext: [:text, {limit: 255}],
+        mediumtext: [:text, {limit: 16777215}],
+        longtext: [:text, {limit: 4294967295}],
+        unsigned_integer: [:integer, {unsigned: true}],
+        unsigned_bigint: [:bigint, {unsigned: true}],
+        unsigned_float: [:float, {limit: 24, unsigned: true}],
+        unsigned_decimal: [:decimal, {precision: 10, unsigned: true}],
+      }
+
+      # XXX:
+      def blob(*args)
+        options = args.extract_options!
+        options = {limit: 65535}.merge(options)
+        column_names = args
+
+        column_names.each do |name|
+          column_type = (0..0xff).include?(options[:limit]) ? :blob : :binary
+          column(name, column_type, options)
+        end
+      end
+
+      ALIAS_TYPES.each do |alias_type, (column_type, default_options)|
+        define_method alias_type do |*args|
+          options = args.extract_options!
+          options = default_options.merge(options)
           column_names = args
           column_names.each {|name| column(name, column_type, options) }
         end
