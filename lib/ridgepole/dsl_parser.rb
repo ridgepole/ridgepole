@@ -19,7 +19,7 @@ class Ridgepole::DSLParser
       end
 
       TYPES = [
-        # https://github.com/winebarrel/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/abstract/schema_definitions.rb#L274
+        # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/abstract/schema_definitions.rb#L274
         :string,
         :text,
         :integer,
@@ -33,7 +33,7 @@ class Ridgepole::DSLParser
         :binary,
         :boolean,
 
-        # https://github.com/winebarrel/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/postgresql_adapter.rb#L79
+        # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/postgresql_adapter.rb#L79
         :daterange,
         :numrange,
         :tsrange,
