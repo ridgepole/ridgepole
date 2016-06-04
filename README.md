@@ -52,6 +52,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Fix foreign key apply order
 * `>= 0.6.5`
   * Fix rails version '>= 4.2', '< 6'
+  * Support new types ([pull#84](https://github.com/winebarrel/ridgepole/pull/84))
 
 ## Installation
 
