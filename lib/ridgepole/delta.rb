@@ -227,7 +227,7 @@ create_table(#{table_name.inspect}, #{options.inspect}) do |t|
       normalize_limit(column_type, column_options)
 
       buf.puts(<<-EOS)
-  t.#{column_type}(#{column_name.inspect}, #{column_options.inspect})
+  t.#{column_type}(#{column_name.inspect}, #{inspect_column_options(column_options)})
       EOS
     end
 
@@ -320,11 +320,11 @@ drop_table(#{table_name.inspect})
 
     if @options[:bulk_change]
       buf.puts(<<-EOS)
-  t.column(#{column_name.inspect}, #{type.inspect}, #{options.inspect})
+  t.column(#{column_name.inspect}, #{type.inspect}, #{inspect_column_options(options)})
       EOS
     else
       buf.puts(<<-EOS)
-add_column(#{table_name.inspect}, #{column_name.inspect}, #{type.inspect}, #{options.inspect})
+add_column(#{table_name.inspect}, #{column_name.inspect}, #{type.inspect}, #{inspect_column_options(options)})
       EOS
     end
   end
@@ -347,11 +347,11 @@ rename_column(#{table_name.inspect}, #{from_column_name.inspect}, #{to_column_na
 
     if @options[:bulk_change]
       buf.puts(<<-EOS)
-  t.change(#{column_name.inspect}, #{type.inspect}, #{options.inspect})
+  t.change(#{column_name.inspect}, #{type.inspect}, #{inspect_column_options(options)})
       EOS
     else
       buf.puts(<<-EOS)
-change_column(#{table_name.inspect}, #{column_name.inspect}, #{type.inspect}, #{options.inspect})
+change_column(#{table_name.inspect}, #{column_name.inspect}, #{type.inspect}, #{inspect_column_options(options)})
       EOS
     end
   end
@@ -444,5 +444,21 @@ remove_foreign_key(#{table_name.inspect}, #{target.inspect})
   def normalize_limit(column_type, column_options)
     default_limit = Ridgepole::DefaultsLimit.default_limit(column_type, @options)
     column_options[:limit] ||= default_limit if default_limit
+  end
+
+  def inspect_column_options(options)
+    options = options.dup
+
+    if options[:default].kind_of?(Proc)
+      proc_default = options.delete(:default)
+      proc_default = ":default=>proc{#{proc_default.call.inspect}}"
+      options_inspect = options.inspect
+      options_inspect.sub!(/\}\z/, '')
+      options_inspect << ', ' if options_inspect !~ /\{\z/
+      options_inspect << proc_default << '}'
+      options_inspect
+    else
+      options.inspect
+    end
   end
 end

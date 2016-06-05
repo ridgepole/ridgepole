@@ -26,6 +26,10 @@ env:
     - ENABLE_MYSQL_AWESOME=0
     - ENABLE_MYSQL_AWESOME=1
     - POSTGRESQL=1
+matrix:
+  exclude:
+    - env: ENABLE_MYSQL_AWESOME=1
+      gemfile: gemfiles/activerecord_5.0.gemfile
 services:
   - docker
 addons:
