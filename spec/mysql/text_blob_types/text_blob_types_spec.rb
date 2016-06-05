@@ -62,8 +62,6 @@ describe 'Ridgepole::Client (with new text/blob types)', condition: [:activereco
     end
 
     it do
-      puts subject.dump
-
       delta = subject.diff(<<-EOS)
         create_table :foos do |t|
           t.blob             :blob
