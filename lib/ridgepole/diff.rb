@@ -114,7 +114,7 @@ class Ridgepole::Diff
         normalize_column_options!(from_attrs)
         normalize_column_options!(to_attrs)
 
-        if from_attrs != to_attrs
+        unless compare_column_attrs(from_attrs, to_attrs)
           definition_delta[:change] ||= {}
           to_attrs = fix_change_column_options(table_name, from_attrs, to_attrs)
           definition_delta[:change][column_name] = to_attrs
@@ -322,7 +322,6 @@ class Ridgepole::Diff
     end
   end
 
-
   # XXX: MySQL only?
   # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/abstract_mysql_adapter.rb#L760
   # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/abstract/schema_creation.rb#L102
@@ -346,5 +345,17 @@ class Ridgepole::Diff
     end
 
     to_attrs
+  end
+
+  def compare_column_attrs(attrs1, attrs2)
+    attrs1 = attrs1.merge(:options => attrs1.fetch(:options, {}).dup)
+    attrs2 = attrs2.merge(:options => attrs2.fetch(:options, {}).dup)
+
+    if attrs1[:options][:default].kind_of?(Proc) and attrs2[:options][:default].kind_of?(Proc)
+      attrs1[:options][:default] = attrs1[:options][:default].call
+      attrs2[:options][:default] = attrs2[:options][:default].call
+    end
+
+    attrs1 == attrs2
   end
 end
