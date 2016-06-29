@@ -202,7 +202,7 @@ add_index "child", ["parent_id"], name: "par_ind", using: :btree
 add_foreign_key "child", "parent", name: "child_ibfk_1"
 ```
 
-## Collation
+## Collation/Charset
 You can use the column collation by passing `--enable-mysql-awesome` ([activerecord-mysql-awesome](https://github.com/kamipo/activerecord-mysql-awesome) is required)
 
 ```ruby
@@ -213,6 +213,12 @@ create_table "articles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSE
   t.datetime "updated_at"
 end
 ```
+
+Charset:
+
+activerecord 5.0.0 and activerecord-mysql-awesome dumps a collation rather than charset because it does not determine the default collation for charset. Specifying a collation for each column would work if it is possible.
+
+See `mysql> show character set;` to find charset / collation pair for your system.
 
 ## Execute
 ```ruby
