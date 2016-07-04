@@ -184,6 +184,15 @@ class Ridgepole::DSLParser
         raise "Index `#{table_name}(#{idx})` already defined"
       end
 
+      if options[:length].is_a?(Numeric)
+        index_length = options[:length]
+        options[:length] = {}
+
+        column_name.each do |col|
+          options[:length][col] = index_length
+        end
+      end
+
       @__definition[table_name][:indices][idx] = {
         :column_name => column_name,
         :options => options,
