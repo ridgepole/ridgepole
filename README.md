@@ -54,6 +54,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Fix rails version `'>= 4.2', '< 6'`
   * Support new types ([pull#84](https://github.com/winebarrel/ridgepole/pull/84))
   * Support `default: -> { ... }` ([pull#85](https://github.com/winebarrel/ridgepole/pull/85))
+  * Support DDL Comment (Rails5 only)
 
 ## Installation
 
