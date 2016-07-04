@@ -10,7 +10,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",             null: false
         end
 
-        <%= add_index "employee_clubs", ["first_name", "last_name"], name: "idx_first_name_last_name", length: {"first_name"=>10, "last_name"=>10}, using: :btree %>
+        <%= add_index "employees", ["first_name", "last_name"], name: "idx_first_name_last_name", length: {"first_name"=>10, "last_name"=>10}, using: :btree %>
       EOS
     }
 
@@ -24,7 +24,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",             null: false
         end
 
-        <%= add_index "employee_clubs", ["first_name", "last_name"], name: "idx_first_name_last_name", length: 10, using: :btree %>
+        <%= add_index "employees", ["first_name", "last_name"], name: "idx_first_name_last_name", length: 10, using: :btree %>
       EOS
     }
 
@@ -61,14 +61,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date",             null: false
         end
 
-        <%= add_index "employee_clubs", ["first_name", "last_name"], name: "idx_first_name_last_name", length: 10, using: :btree %>
+        <%= add_index "employees", ["first_name", "last_name"], name: "idx_first_name_last_name", length: 10, using: :btree %>
       EOS
     }
 
     let(:actual_dsl_plus_index) {
       erbh(<<-EOS)
         #{actual_dsl}
-        <%= add_index "employee_clubs", ["first_name", "last_name"], name: "idx_first_name_last_name", length: {"first_name"=>10, "last_name"=>10}, using: :btree %>
+        <%= add_index "employees", ["first_name", "last_name"], name: "idx_first_name_last_name", length: {"first_name"=>10, "last_name"=>10}, using: :btree %>
       EOS
     }
 
