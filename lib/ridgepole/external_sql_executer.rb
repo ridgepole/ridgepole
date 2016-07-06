@@ -23,6 +23,8 @@ class Ridgepole::ExternalSqlExecuter
             readable.each do |f|
               begin
                 data = f.read_nonblock(1024)
+                next if data.nil?
+                data.chomp!
 
                 if f == stderr
                   @logger.warn("[WARNING] #{script_basename}: #{data}")
