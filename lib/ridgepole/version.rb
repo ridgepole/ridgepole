@@ -1,3 +1,3 @@
 module Ridgepole
-  VERSION = '0.6.5.beta5'
+  VERSION = '0.6.5.beta6'
 end
