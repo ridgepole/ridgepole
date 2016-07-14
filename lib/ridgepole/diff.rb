@@ -1,6 +1,7 @@
 class Ridgepole::Diff
   def initialize(options = {})
     @options = options
+    @logger = Ridgepole::Logger.instance
   end
 
   def diff(from, to, options = {})
@@ -20,6 +21,12 @@ class Ridgepole::Diff
       next unless target?(table_name)
 
       if (from_attrs = from.delete(table_name))
+        @logger.verbose_info("#   #{table_name}")
+
+        unless (attrs_delta = diff_inspect(from_attrs, to_attrs)).empty?
+          @logger.verbose_info(attrs_delta)
+        end
+
         scan_change(table_name, from_attrs, to_attrs, delta)
       else
         delta[:add] ||= {}
@@ -357,5 +364,15 @@ class Ridgepole::Diff
     end
 
     attrs1 == attrs2
+  end
+
+  def diff_inspect(obj1, obj2, options = {})
+    diffy = Diffy::Diff.new(
+      obj1.pretty_inspect,
+      obj2.pretty_inspect,
+      :diff => '-u'
+    )
+
+    diffy.to_s(:text).gsub(/\s+\z/m, '')
   end
 end

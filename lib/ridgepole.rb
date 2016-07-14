@@ -1,5 +1,6 @@
 require 'logger'
 require 'open3'
+require 'pp'
 require 'shellwords'
 require 'singleton'
 require 'stringio'
@@ -7,6 +8,8 @@ require 'stringio'
 require 'active_record'
 require 'active_support'
 require 'active_support/core_ext'
+
+require 'diffy'
 
 module Ridgepole; end
 
