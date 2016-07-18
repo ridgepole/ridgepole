@@ -1,4 +1,8 @@
 describe 'Ridgepole::Client.diff' do
+  before do
+    allow(Ridgepole::Diff).to receive(:postgresql?).and_return(true)
+  end
+
   context 'when change column' do
     let(:actual_dsl) {
       <<-EOS
@@ -147,5 +151,58 @@ describe 'Ridgepole::Client.diff' do
         change_column("employees", "last_name", :string, {:limit=>20, :default=>"XXX"})
       EOS
     }
+  end
+
+  describe 'column position warning' do
+    subject { Ridgepole::Client }
+
+    context 'when adding a column to the last' do
+      let(:actual_dsl) { <<-EOS }
+      create_table "users", force: :cascade do |t|
+        t.string "name", null: false
+      end
+      EOS
+
+      let(:expected_dsl) { <<-EOS }
+      create_table "users", force: :cascade do |t|
+        t.string "name", null: false
+        t.datetime "created_at", null: false
+        t.datetime "updated_at", null: false
+      end
+      EOS
+
+      it "doesn't warn anything" do
+        expect(Ridgepole::Logger.instance).to_not receive(:warn)
+        delta = subject.diff(actual_dsl, expected_dsl)
+        expect(delta).to be_differ
+        expect(delta.script).to_not include('after')
+      end
+    end
+
+    context 'when adding a column to the middle' do
+      let(:actual_dsl) { <<-EOS }
+      create_table "users", force: :cascade do |t|
+        t.datetime "created_at", null: false
+      end
+      EOS
+
+      let(:expected_dsl) { <<-EOS }
+      create_table "users", force: :cascade do |t|
+        t.string "name", null: false
+        t.integer "age", null: false
+        t.datetime "created_at", null: false
+        t.datetime "updated_at", null: false
+      end
+      EOS
+
+      it 'warns position' do
+        expect(Ridgepole::Logger.instance).to receive(:warn).with(/PostgreSQL doesn't support adding a new column .* users\.name/)
+        expect(Ridgepole::Logger.instance).to receive(:warn).with(/PostgreSQL doesn't support adding a new column .* users\.age/)
+        expect(Ridgepole::Logger.instance).to_not receive(:warn)
+        delta = subject.diff(actual_dsl, expected_dsl)
+        expect(delta).to be_differ
+        expect(delta.script).to_not include('after')
+      end
+    end
   end
 end
