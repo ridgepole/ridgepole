@@ -22,3 +22,4 @@ Schemafile
 _site/
 config.yml
 /gemfiles/*.lock
+*.swp
