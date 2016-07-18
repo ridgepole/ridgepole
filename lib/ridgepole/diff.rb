@@ -94,6 +94,11 @@ class Ridgepole::Diff
   end
 
   def scan_options_change(table_name, from, to, table_delta)
+    from = (from || {}).dup
+    to = (to || {}).dup
+
+    normalize_default_proc_options!(from, to)
+
     unless from == to
       Ridgepole::Logger.instance.warn("[WARNING] No difference of schema configuration for table `#{table_name}` but table options differ.")
       Ridgepole::Logger.instance.warn("  from: #{from}")
@@ -357,13 +362,15 @@ class Ridgepole::Diff
   def compare_column_attrs(attrs1, attrs2)
     attrs1 = attrs1.merge(:options => attrs1.fetch(:options, {}).dup)
     attrs2 = attrs2.merge(:options => attrs2.fetch(:options, {}).dup)
-
-    if attrs1[:options][:default].kind_of?(Proc) and attrs2[:options][:default].kind_of?(Proc)
-      attrs1[:options][:default] = attrs1[:options][:default].call
-      attrs2[:options][:default] = attrs2[:options][:default].call
-    end
-
+    normalize_default_proc_options!(attrs1[:options], attrs2[:options])
     attrs1 == attrs2
+  end
+
+  def normalize_default_proc_options!(opts1, opts2)
+    if opts1[:default].kind_of?(Proc) and opts2[:default].kind_of?(Proc)
+      opts1[:default] = opts1[:default].call
+      opts2[:default] = opts2[:default].call
+    end
   end
 
   def diff_inspect(obj1, obj2, options = {})
