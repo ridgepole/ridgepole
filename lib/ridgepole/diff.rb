@@ -147,6 +147,18 @@ class Ridgepole::Diff
       priv_column_name = column_name
     end
 
+    if self.class.postgresql?
+      added_size = 0
+      to.reverse_each.with_index do |(column_name, to_attrs), i|
+        if to_attrs[:options].delete(:after)
+          if added_size != i
+            @logger.warn("[WARNING] PostgreSQL doesn't support adding a new column except for the last position. #{table_name}.#{column_name} will be added to the last.")
+          end
+          added_size += 1
+        end
+      end
+    end
+
     unless @options[:merge]
       from.each do |column_name, from_attrs|
         definition_delta[:delete] ||= {}
@@ -381,5 +393,9 @@ class Ridgepole::Diff
     )
 
     diffy.to_s(:text).gsub(/\s+\z/m, '')
+  end
+
+  def self.postgresql?
+    defined?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter) && ActiveRecord::Base.connection.is_a?(ActiveRecord::ConnectionAdapters::PostgreSQLAdapter)
   end
 end

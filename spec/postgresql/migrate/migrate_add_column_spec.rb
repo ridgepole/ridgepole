@@ -163,12 +163,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_fuzzy actual_dsl
       expect(delta.script).to match_fuzzy <<-EOS
         change_table("employee_clubs", {:bulk => true}) do |t|
-          t.column("any_col", :string, {:limit=>255, :null=>false, :after=>"club_id"})
+          t.column("any_col", :string, {:limit=>255, :null=>false})
         end
 
         change_table("employees", {:bulk => true}) do |t|
-          t.column("age", :integer, {:null=>false, :after=>"hire_date"})
-          t.column("updated_at", :date, {:after=>"age"})
+          t.column("age", :integer, {:null=>false})
+          t.column("updated_at", :date, {})
         end
       EOS
       delta.migrate
