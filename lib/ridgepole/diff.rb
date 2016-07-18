@@ -168,7 +168,7 @@ class Ridgepole::Diff
           modified_indices = []
 
           from_indices.each do |name, attrs|
-            if attrs[:column_name].delete(column_name)
+            if attrs[:column_name].is_a?(Array) && attrs[:column_name].delete(column_name)
               modified_indices << name
             end
           end
@@ -181,7 +181,7 @@ class Ridgepole::Diff
           end
 
           from_indices.reject! do |name, attrs|
-            attrs[:column_name].empty?
+            attrs[:column_name].is_a?(Array) && attrs[:column_name].empty?
           end
         end
       end
@@ -303,6 +303,10 @@ class Ridgepole::Diff
   end
 
   def columns_all_include?(expected_columns, actual_columns, table_options)
+    unless expected_columns.is_a?(Array)
+      return true
+    end
+
     if table_options[:id] != false
       actual_columns = actual_columns + [(table_options[:primary_key] || 'id').to_s]
     end
