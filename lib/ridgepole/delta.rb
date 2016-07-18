@@ -218,7 +218,7 @@ class Ridgepole::Delta
     indices = attrs[:indices] || {}
 
     buf.puts(<<-EOS)
-create_table(#{table_name.inspect}, #{options.inspect}) do |t|
+create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(options)}) do |t|
     EOS
 
     definition.each do |column_name, column_attrs|
@@ -227,7 +227,7 @@ create_table(#{table_name.inspect}, #{options.inspect}) do |t|
       normalize_limit(column_type, column_options)
 
       buf.puts(<<-EOS)
-  t.#{column_type}(#{column_name.inspect}, #{inspect_column_options(column_options)})
+  t.#{column_type}(#{column_name.inspect}, #{inspect_options_include_default_proc(column_options)})
       EOS
     end
 
@@ -320,11 +320,11 @@ drop_table(#{table_name.inspect})
 
     if @options[:bulk_change]
       buf.puts(<<-EOS)
-  t.column(#{column_name.inspect}, #{type.inspect}, #{inspect_column_options(options)})
+  t.column(#{column_name.inspect}, #{type.inspect}, #{inspect_options_include_default_proc(options)})
       EOS
     else
       buf.puts(<<-EOS)
-add_column(#{table_name.inspect}, #{column_name.inspect}, #{type.inspect}, #{inspect_column_options(options)})
+add_column(#{table_name.inspect}, #{column_name.inspect}, #{type.inspect}, #{inspect_options_include_default_proc(options)})
       EOS
     end
   end
@@ -347,11 +347,11 @@ rename_column(#{table_name.inspect}, #{from_column_name.inspect}, #{to_column_na
 
     if @options[:bulk_change]
       buf.puts(<<-EOS)
-  t.change(#{column_name.inspect}, #{type.inspect}, #{inspect_column_options(options)})
+  t.change(#{column_name.inspect}, #{type.inspect}, #{inspect_options_include_default_proc(options)})
       EOS
     else
       buf.puts(<<-EOS)
-change_column(#{table_name.inspect}, #{column_name.inspect}, #{type.inspect}, #{inspect_column_options(options)})
+change_column(#{table_name.inspect}, #{column_name.inspect}, #{type.inspect}, #{inspect_options_include_default_proc(options)})
       EOS
     end
   end
@@ -446,7 +446,7 @@ remove_foreign_key(#{table_name.inspect}, #{target.inspect})
     column_options[:limit] ||= default_limit if default_limit
   end
 
-  def inspect_column_options(options)
+  def inspect_options_include_default_proc(options)
     options = options.dup
 
     if options[:default].kind_of?(Proc)
