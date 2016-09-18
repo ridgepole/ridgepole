@@ -156,8 +156,8 @@ class Ridgepole::DSLParser
       table_name = table_name.to_s
       table_definition = TableDefinition.new(table_name, self)
 
-      [:primary_key].each do |key|
-        options[key] = options[key].to_s if options[key]
+      if (primary_key = options[:primary_key]) and not primary_key.is_a?(Array)
+        options[:primary_key] = primary_key.to_s
       end
 
       yield(table_definition)
