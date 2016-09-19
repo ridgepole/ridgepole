@@ -56,6 +56,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Support `default: -> { ... }` ([pull#85](https://github.com/winebarrel/ridgepole/pull/85))
   * Support DDL Comment (Rails5 only)
   * Output schema diff when pass `--verbose`
+  * Support composite primary key (Rails5 only / [pull#97](https://github.com/winebarrel/ridgepole/pull/97))
 
 ## Installation
 
