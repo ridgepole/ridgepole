@@ -115,10 +115,10 @@ class Ridgepole::Diff
     # for reverse option
     scan_column_rename(to, from, definition_delta)
 
-    if table_options[:primary_key].nil?
-      priv_column_name = (table_options[:id] == false) ? nil : 'id'
+    if table_options[:id] == false or table_options[:primary_key].is_a?(Array)
+      priv_column_name = nil
     else
-      priv_column_name = table_options[:primary_key]
+      priv_column_name = table_options[:primary_key] || 'id'
     end
 
     to.each do |column_name, to_attrs|
@@ -307,7 +307,7 @@ class Ridgepole::Diff
       return true
     end
 
-    if table_options[:id] != false
+    if table_options[:id] != false and not table_options[:primary_key].is_a?(Array)
       actual_columns = actual_columns + [(table_options[:primary_key] || 'id').to_s]
     end
 
