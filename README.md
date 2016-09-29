@@ -205,6 +205,10 @@ add_index "child", ["parent_id"], name: "par_ind", using: :btree
 add_foreign_key "child", "parent", name: "child_ibfk_1"
 ```
 
+**Notice:** It is recommended to give a name to the index explicitly.
+
+Please pass `--dump-with-default-fk-name` option if you want to use the nameless index.
+
 ## Collation/Charset
 You can use the column collation by passing `--enable-mysql-awesome` ([activerecord-mysql-awesome](https://github.com/kamipo/activerecord-mysql-awesome) is required)
 
