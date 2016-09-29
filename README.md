@@ -9,6 +9,16 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 [![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=master)](https://travis-ci.org/winebarrel/ridgepole)
 [![Coverage Status](https://coveralls.io/repos/winebarrel/ridgepole/badge.svg?branch=master)](https://coveralls.io/r/winebarrel/ridgepole?branch=master)
 
+**Important**
+
+Please don't use the following nameless fk:
+
+```ruby 
+add_foreign_key :articles, :authors # without `name:`
+```
+
+**It is highly recommended to give a name to the fk explicitly.**
+
 **Notice**
 
 * `>= 0.4.8`
@@ -205,7 +215,7 @@ add_index "child", ["parent_id"], name: "par_ind", using: :btree
 add_foreign_key "child", "parent", name: "child_ibfk_1"
 ```
 
-**Notice:** It is recommended to give a name to the index explicitly.
+**Notice:** **It is highly recommended to give a name to the fk explicitly.**
 
 Please pass `--dump-with-default-fk-name` option if you want to use the nameless index.
 
