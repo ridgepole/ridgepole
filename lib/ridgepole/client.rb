@@ -43,7 +43,7 @@ class Ridgepole::Client
     logger.verbose_info('# Parse DSL')
     expected_definition, expected_execute = @parser.parse(dsl, opts)
     logger.verbose_info('# Load tables')
-    current_definition, current_execute = @parser.parse(@dumper.dump)
+    current_definition, current_execute = @parser.parse(@dumper.dump, opts)
     logger.verbose_info('# Compare definitions')
     @diff.diff(current_definition, expected_definition, :execute => expected_execute)
   end
