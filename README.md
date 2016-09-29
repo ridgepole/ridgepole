@@ -19,6 +19,8 @@ add_foreign_key :articles, :authors # without `name:`
 
 **It is highly recommended to give a name to the fk explicitly.**
 
+![](https://cdn.pbrd.co/images/8Ymz6nU5x.gif)
+
 **Notice**
 
 * `>= 0.4.8`
