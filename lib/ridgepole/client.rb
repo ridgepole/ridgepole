@@ -22,7 +22,7 @@ class Ridgepole::Client
       require 'ridgepole/ext/abstract_mysql_adapter/use_alter_index'
     end
 
-    if @options[:dumb_with_default_fk_name]
+    if @options[:dumb_with_default_fk_name] || @options[:dump_with_default_fk_name]
       require 'ridgepole/ext/schema_dumper'
     end
 
