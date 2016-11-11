@@ -21,7 +21,7 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
     }
 
     before { subject.diff(actual_dsl).migrate }
-    subject { client(dumb_with_default_fk_name: true) }
+    subject { client(dump_with_default_fk_name: true) }
 
     it {
       delta = subject.diff(expected_dsl)
@@ -32,7 +32,7 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
     }
 
     it {
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true, default_int_limit: 4, dumb_with_default_fk_name: true)
+      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true, default_int_limit: 4, dump_with_default_fk_name: true)
       expect(delta.differ?).to be_truthy
       expect(delta.script).to match_fuzzy <<-EOS
         remove_foreign_key("child", {:name=>"fk_rails_e74ce85cbc"})
@@ -40,7 +40,7 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
     }
 
     it {
-      delta = client(bulk_change: true, dumb_with_default_fk_name: true).diff(expected_dsl)
+      delta = client(bulk_change: true, dump_with_default_fk_name: true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_fuzzy actual_dsl
       expect(delta.script).to match_fuzzy <<-EOS
@@ -84,7 +84,7 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       EOS
     }
 
-    subject { client(dumb_with_default_fk_name: true) }
+    subject { client(dump_with_default_fk_name: true) }
 
     it {
       delta = subject.diff(dsl)
@@ -114,7 +114,7 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       EOS
     }
 
-    subject { client(dumb_with_default_fk_name: true) }
+    subject { client(dump_with_default_fk_name: true) }
 
     it {
       expect {
@@ -140,7 +140,7 @@ add_foreign_key "child", "parent"
       EOS
     }
 
-    subject { client(dumb_with_default_fk_name: true) }
+    subject { client(dump_with_default_fk_name: true) }
 
     it {
       expect {
@@ -160,7 +160,7 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       EOS
     }
 
-    subject { client(dumb_with_default_fk_name: true) }
+    subject { client(dump_with_default_fk_name: true) }
 
     it {
       expect {

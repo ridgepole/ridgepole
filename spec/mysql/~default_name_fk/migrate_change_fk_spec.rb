@@ -47,7 +47,7 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
 
     before { subject.diff(actual_dsl).migrate }
 
-    subject { client(dumb_with_default_fk_name: true) }
+    subject { client(dump_with_default_fk_name: true) }
 
     it {
       delta = subject.diff(expected_dsl)
