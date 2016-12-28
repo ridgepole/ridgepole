@@ -5,8 +5,9 @@ cache:
   - bundler
   - apt
 rvm:
-  - 2.2.4
-  - 2.3.1
+  - 2.2.5
+  - 2.3.3
+  - 2.4.0
 before_install:
   - gem install bundler
 before_script:
@@ -18,8 +19,7 @@ before_script:
   - for i in {1..60}; do mysql_ping && break; sleep 1; done
   - for i in {1..60}; do pg_ping && break; sleep 1; done
 script:
-  #- bundle exec rake
-  - bundle exec rspec -b
+  - bundle exec rake
 gemfile:
   - gemfiles/activerecord_4.2.gemfile
   - gemfiles/activerecord_5.0.gemfile
