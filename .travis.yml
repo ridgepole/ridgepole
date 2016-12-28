@@ -18,7 +18,8 @@ before_script:
   - for i in {1..60}; do mysql_ping && break; sleep 1; done
   - for i in {1..60}; do pg_ping && break; sleep 1; done
 script:
-  - bundle exec rake --trace
+  #- bundle exec rake
+  - bundle exec rspec -b
 gemfile:
   - gemfiles/activerecord_4.2.gemfile
   - gemfiles/activerecord_5.0.gemfile
