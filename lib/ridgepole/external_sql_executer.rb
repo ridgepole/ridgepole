@@ -31,7 +31,7 @@ class Ridgepole::ExternalSqlExecuter
                 else
                   @logger.info("#{script_basename}: #{data}")
                 end
-              rescue EOFError => e
+              rescue EOFError
                 files.delete f
               end
             end
