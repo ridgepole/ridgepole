@@ -54,12 +54,6 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_fuzzy sorted_actual_dsl
       delta.migrate
-
-      # XXX:
-      if condition(:activerecord_5)
-        ActiveRecord::Base.connection.send(:create_table_info_cache).clear
-      end
-
       expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
