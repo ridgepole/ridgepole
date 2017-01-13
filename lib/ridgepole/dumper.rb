@@ -30,17 +30,24 @@ class Ridgepole::Dumper
       ActiveRecord::SchemaDumper.ignore_tables.clear
     end
 
-    dsl = stream.string.lines.select {|line|
+    dsl = stream.string.lines.select do |line|
       line !~ /\A#/ &&
       line !~ /\AActiveRecord::Schema\.define/ &&
       line !~ /\Aend/
-    }.map {|line|
-      if @options[:dump_without_table_options] and line =~ /\A  create_table /
-        line.gsub(/, options: ("(?:[^"]|\")*")/, '')
-      else
-        line
+    end
+
+    # XXX: for activerecord-mysql-awesome
+    if ActiveRecord::VERSION::MAJOR < 5
+      dsl = dsl.map do |line|
+        if @options[:dump_without_table_options] and line =~ /\A  create_table /
+          line.gsub(/, options: ("(?:[^"]|\")*")/, '')
+        else
+          line
+        end
       end
-    }.join.strip_heredoc
+    end
+
+    dsl = dsl.join.strip_heredoc
 
     definitions = []
 

@@ -11,6 +11,10 @@ end
 
 ERBh.define_method(:add_index) do |table_name, column_name, options|
   if condition(:activerecord_5)
+    if options[:length].is_a?(Hash)
+      options[:length] = options[:length].symbolize_keys
+    end
+
     @_erbout.sub!(/\bend\s*\z/, '')
 
     <<-EOS

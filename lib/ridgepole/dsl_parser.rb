@@ -195,6 +195,11 @@ class Ridgepole::DSLParser
         column_name.each do |col|
           options[:length][col] = index_length
         end
+
+        # XXX: fix for https://github.com/rails/rails/commit/5025fd3a99c68f95bdd6fd43f382c62e9653236b
+        if ActiveRecord::VERSION::MAJOR >= 6 or (ActiveRecord::VERSION::MAJOR == 5 and (ActiveRecord::VERSION::MINOR >= 1 or ActiveRecord::VERSION::TINY >= 1))
+          options[:length] = options[:length].symbolize_keys
+        end
       end
 
       @__definition[table_name][:indices][idx] = {

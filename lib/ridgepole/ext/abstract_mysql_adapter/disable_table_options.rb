@@ -5,7 +5,9 @@ module Ridgepole
     module AbstractMysqlAdapter
       module DisableTableOptions
         def table_options(table_name)
-          nil
+          options = super
+          options.delete(:options)
+          options
         end
       end
     end
