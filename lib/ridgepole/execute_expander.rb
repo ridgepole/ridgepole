@@ -16,7 +16,7 @@ class Ridgepole::ExecuteExpander
         if sql =~ /\A(SELECT|SHOW)\b/i
           begin
             super(sql, name)
-          rescue => e
+          rescue
             Stub.new
           end
         else

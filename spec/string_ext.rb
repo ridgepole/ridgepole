@@ -1,4 +1,5 @@
 class String
+  # TODO: must be remove
   def delete_create_table(name)
     new_def = []
     in_block = false
@@ -18,6 +19,7 @@ class String
     new_def.delete_add_index(name)
   end
 
+  # TODO: must be remove
   def delete_add_index(name, columns = nil)
     new_def = []
     in_block = false
@@ -34,18 +36,5 @@ class String
     new_def = new_def.join
     raise 'must not happen' if new_def =~ /^\s*add_index\s+#{args}/m
     new_def
-  end
-
-  def gsub_surely(pattern, replace)
-    old_str = self.dup
-    new_str = self.gsub(pattern, replace)
-    raise 'must not happen' if old_str == new_str
-    new_str
-  end
-
-  def delete_empty_lines
-    self.each_line.select {|line|
-      line !~ /\A\s*\Z/
-    }.join
   end
 end

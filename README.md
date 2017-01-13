@@ -9,6 +9,18 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 [![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=master)](https://travis-ci.org/winebarrel/ridgepole)
 [![Coverage Status](https://coveralls.io/repos/winebarrel/ridgepole/badge.svg?branch=master)](https://coveralls.io/r/winebarrel/ridgepole?branch=master)
 
+**Important**
+
+Please don't use the following nameless fk:
+
+```ruby 
+add_foreign_key :articles, :authors # without `name:`
+```
+
+**It is highly recommended to give a name to the fk explicitly.**
+
+![](https://cdn.pbrd.co/images/8Ymz6nU5x.gif)
+
 **Notice**
 
 * `>= 0.4.8`
@@ -50,6 +62,13 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Support `t.index` ([pull#64](https://github.com/winebarrel/ridgepole/pull/64))
   * Remove migration_comments
   * Fix foreign key apply order
+* `>= 0.6.5`
+  * Fix rails version `'>= 4.2', '< 6'`
+  * Support new types ([pull#84](https://github.com/winebarrel/ridgepole/pull/84))
+  * Support `default: -> { ... }` ([pull#85](https://github.com/winebarrel/ridgepole/pull/85))
+  * Support DDL Comment (Rails5 only)
+  * Output schema diff when pass `--verbose`
+  * Support composite primary key (Rails5 only / [pull#97](https://github.com/winebarrel/ridgepole/pull/97))
 
 ## Installation
 
@@ -198,7 +217,11 @@ add_index "child", ["parent_id"], name: "par_ind", using: :btree
 add_foreign_key "child", "parent", name: "child_ibfk_1"
 ```
 
-## Collation
+**Notice:** **It is highly recommended to give a name to the fk explicitly.**
+
+Please pass `--dump-with-default-fk-name` option if you want to use the nameless index.
+
+## Collation/Charset
 You can use the column collation by passing `--enable-mysql-awesome` ([activerecord-mysql-awesome](https://github.com/kamipo/activerecord-mysql-awesome) is required)
 
 ```ruby
@@ -209,6 +232,12 @@ create_table "articles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSE
   t.datetime "updated_at"
 end
 ```
+
+Charset:
+
+activerecord 5.0.0 and activerecord-mysql-awesome dumps a collation rather than charset because it does not determine the default collation for charset. Specifying a collation for each column would work if it is possible.
+
+See `mysql> show character set;` to find charset / collation pair for your system.
 
 ## Execute
 ```ruby
@@ -312,6 +341,28 @@ Apply `Schemafile`
 -- add_index("dept_manager", ["emp_no"], {:name=>"emp_no2", :using=>:btree})
    (23.4ms)  ALTER TABLE `dept_manager` ADD  INDEX `emp_no2` USING btree (`emp_no`)
    -> 0.0243s
+```
+
+## Running tests
+
+```sh
+docker-compose up -d
+bundle install
+bundle exec appraisal install
+bundle exec appraisal activerecord-4.2 rake
+# ENABLE_MYSQL_AWESOME=1 bundle exec appraisal activerecord-4.2 rake
+# POSTGRESQL=1 bundle exec appraisal activerecord-4.2 rake
+```
+
+**Notice:** mysql-client/postgresql-client is required.
+
+### on OS X (docker-machine & VirtualBox)
+
+Port forwarding is required.
+
+```sh
+VBoxManage controlvm default natpf1 "mysql,tcp,127.0.0.1,3306,,3306"
+VBoxManage controlvm default natpf1 "psql,tcp,127.0.0.1,5432,,5432"
 ```
 
 ## Demo

@@ -7,16 +7,42 @@ class Ridgepole::ExternalSqlExecuter
   def execute(sql)
     cmd = Shellwords.join([@script, sql, JSON.dump(ActiveRecord::Base.connection_config)])
     @logger.info("Execute #{@script}")
+    script_basename = File.basename(@script)
 
-    out, err, status = Open3.capture3(cmd)
-    out.strip!
-    err.strip!
+    Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
+      stdin.close_write
+      files = [stdout, stderr]
 
-    @logger.info("#{@script}: #{out}") unless out.empty?
-    @logger.warn("[WARNING] #{@script}: #{err}") unless err.empty?
+      begin
+        until files.empty?
+          ready = IO.select(files)
 
-    unless status.success?
-      raise "`#{@script}` execution failed"
+          if ready
+            readable = ready[0]
+
+            readable.each do |f|
+              begin
+                data = f.read_nonblock(1024)
+                next if data.nil?
+                data.chomp!
+
+                if f == stderr
+                  @logger.warn("[WARNING] #{script_basename}: #{data}")
+                else
+                  @logger.info("#{script_basename}: #{data}")
+                end
+              rescue EOFError
+                files.delete f
+              end
+            end
+          end
+        end
+      rescue EOFError
+      end
+
+      unless wait_thr.value.success?
+        raise "`#{@script}` execution failed"
+      end
     end
   end
 end

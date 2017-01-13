@@ -1,9 +1,8 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (binary: blob -> varbinary)' do
     let(:actual_dsl) {
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
+      erbh(<<-EOS)
+        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
           t.date     "birth_date",                    null: false
           t.string   "first_name",      limit: 14,    null: false
           t.string   "last_name",       limit: 16,    null: false
@@ -13,12 +12,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at",                    null: false
           t.binary   "registered_name", limit: 65535
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
+      erbh(<<-EOS)
+        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
           t.date     "birth_date",                  null: false
           t.string   "first_name",      limit: 14,  null: false
           t.string   "last_name",       limit: 16,  null: false
@@ -28,7 +27,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at",                  null: false
           t.binary   "registered_name", limit: 255
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -37,16 +36,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip.gsub(/(\s*,\s*unsigned: false)?\s*,\s*null: true/, '')
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
 
   context 'when change column (binary: varbinary -> blob)' do
     let(:actual_dsl) {
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
+      erbh(<<-EOS)
+        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
           t.date     "birth_date",                  null: false
           t.string   "first_name",      limit: 14,  null: false
           t.string   "last_name",       limit: 16,  null: false
@@ -56,12 +55,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at",                  null: false
           t.binary   "registered_name", limit: 255
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
-        create_table "employees", primary_key: "emp_no"#{unsigned_if_enabled}, force: :cascade do |t|
+      erbh(<<-EOS)
+        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
           t.date     "birth_date",                    null: false
           t.string   "first_name",      limit: 14,    null: false
           t.string   "last_name",       limit: 16,    null: false
@@ -71,7 +70,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at",                    null: false
           t.binary   "registered_name", limit: 65535
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -80,15 +79,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip.gsub(/(\s*,\s*unsigned: false)?\s*,\s*null: true/, '')
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
 
   context 'when change column (binary without limit)' do
     let(:actual_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date",                  null: false
           t.string   "first_name",      limit: 14,  null: false
@@ -99,11 +98,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at",                  null: false
           t.binary   "registered_name", limit: 65535
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date",                    null: false
           t.string   "first_name",      limit: 14,    null: false
@@ -114,7 +113,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at",                    null: false
           t.binary   "registered_name"
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -125,5 +124,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_falsey
     }
   end
-end
 end

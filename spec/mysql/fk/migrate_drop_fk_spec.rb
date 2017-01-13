@@ -1,39 +1,52 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
+  let(:template_variables) {
+    opts = {
+      parent_id_opts: {},
+    }
+
+    if condition(:mysql_awesome_enabled)
+      opts.merge!(
+        parent_id_opts: {unsigned: true}
+      )
+    end
+
+    opts
+  }
+
   context 'when drop fk' do
     let(:actual_dsl) {
-      <<-RUBY
-create_table "parent", force: :cascade do |t|
+      erbh(<<-EOS, template_variables)
+create_table "parent", <%= i unsigned(true) + {force: :cascade} %> do |t|
 end
 
 create_table "child", force: :cascade do |t|
-  t.integer "parent_id"
+  t.integer "parent_id", <%= i limit(4) + @parent_id_opts %>
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
 add_foreign_key "child", "parent", name: "child_ibfk_1"
-      RUBY
+      EOS
     }
 
     let(:sorted_actual_dsl) {
-      expected_dsl + (<<-RUBY)
+      expected_dsl + (<<-EOS)
 
 add_foreign_key "child", "parent", name: "child_ibfk_1"
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      erbh(<<-EOS, template_variables)
 create_table "child", force: :cascade do |t|
-  t.integer "parent_id", limit: 4
+  t.integer "parent_id", <%= i limit(4) + @parent_id_opts %>
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
-create_table "parent", force: :cascade do |t|
+create_table "parent", <%= i unsigned(true) + {force: :cascade} %> do |t|
 end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -42,61 +55,61 @@ end
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq sorted_actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy sorted_actual_dsl
       delta.migrate
-      expect(subject.dump.each_line.select {|i| i !~ /\A\Z/ }.join).to eq expected_dsl.strip_heredoc.strip.each_line.select {|i| i !~ /\A\Z/ }.join
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
 
     it {
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true, default_int_limit: 4)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
+      expect(delta.script).to match_fuzzy <<-EOS
         add_foreign_key("child", "parent", {:name=>"child_ibfk_1"})
-      RUBY
+      EOS
     }
 
     it {
       delta = client(bulk_change: true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq sorted_actual_dsl.strip_heredoc.strip
-      expect(delta.script).to eq <<-RUBY.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy sorted_actual_dsl
+      expect(delta.script).to match_fuzzy <<-EOS
         remove_foreign_key("child", {:name=>"child_ibfk_1"})
-      RUBY
+      EOS
       delta.migrate
-      expect(subject.dump.each_line.select {|i| i !~ /\A\Z/ }.join).to eq expected_dsl.strip_heredoc.strip.each_line.select {|i| i !~ /\A\Z/ }.join
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
 
   context 'when drop fk when drop table' do
     let(:dsl) {
-      <<-RUBY
-create_table "parent", force: :cascade do |t|
+      erbh(<<-EOS, template_variables)
+create_table "parent", <%= i unsigned(true) + {force: :cascade} %> do |t|
 end
 
 
 create_table "child", force: :cascade do |t|
-  t.integer "parent_id"
+  t.integer "parent_id", <%= i limit(4) + @parent_id_opts %>
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
 add_foreign_key "child", "parent", name: "child_ibfk_1"
-      RUBY
+      EOS
     }
 
     let(:sorted_dsl) {
-      <<-RUBY
+      erbh(<<-EOS, template_variables)
 create_table "child", force: :cascade do |t|
-  t.integer "parent_id", limit: 4
+  t.integer "parent_id", <%= i limit(4) + @parent_id_opts %>
 end
 
-add_index "child", ["parent_id"], name: "par_id", using: :btree
+<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
 
-create_table "parent", force: :cascade do |t|
+create_table "parent", <%= i unsigned(true) + {force: :cascade} %> do |t|
 end
 
 add_foreign_key "child", "parent", name: "child_ibfk_1"
-      RUBY
+      EOS
     }
 
     before { subject.diff(dsl).migrate }
@@ -105,10 +118,9 @@ add_foreign_key "child", "parent", name: "child_ibfk_1"
     it {
       delta = subject.diff('')
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq sorted_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy sorted_dsl
       delta.migrate
-      expect(subject.dump.strip).to eq ''
+      expect(subject.dump).to match_fuzzy ''
     }
   end
-end
 end

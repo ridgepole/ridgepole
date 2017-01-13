@@ -10,14 +10,14 @@ class Ridgepole::Dumper
     ignore_tables = @options[:ignore_tables]
 
     if target_tables
-      conn.tables.each do |tbl|
+      conn.data_sources.each do |tbl|
         next if target_tables.include?(tbl)
         ActiveRecord::SchemaDumper.ignore_tables << tbl
       end
     end
 
     if ignore_tables
-      conn.tables.each do |tbl|
+      conn.data_sources.each do |tbl|
         if ignore_tables.any? {|i| i =~ tbl } and not (target_tables and target_tables.include?(tbl))
           ActiveRecord::SchemaDumper.ignore_tables << tbl
         end

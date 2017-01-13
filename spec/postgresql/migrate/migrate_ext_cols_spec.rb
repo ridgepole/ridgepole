@@ -1,8 +1,7 @@
-if postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column (ext cols)' do
     let(:actual_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "items", force: :cascade do |t|
           t.string   "name"
           t.integer  "price"
@@ -10,11 +9,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "created_at",  null: false
           t.datetime "updated_at",  null: false
         end
-      RUBY
+      EOS
     }
 
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "items", force: :cascade do |t|
           t.string      "name"
           t.integer     "price"
@@ -46,7 +45,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.bit_varying "bit varying"
           t.money       "money",                 scale: 2
         end
-      RUBY
+      EOS
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -55,11 +54,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expected_dsl.sub!('t.bigint      "bigint"', 't.integer     "bigint",      limit: 8')
-      expect(subject.dump).to eq expected_dsl.strip_heredoc.strip
+      if condition(:activerecord_4)
+        expected_dsl.sub!('t.bigint      "bigint"', 't.integer     "bigint",      limit: 8')
+      end
+      expect(subject.dump).to match_fuzzy expected_dsl
     }
   end
-end
 end

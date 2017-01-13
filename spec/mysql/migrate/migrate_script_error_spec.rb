@@ -1,9 +1,8 @@
-unless postgresql?
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when there is an error in the script' do
     let(:actual_dsl) { '' }
     let(:expected_dsl) {
-      <<-RUBY
+      <<-EOS
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
         end
@@ -68,7 +67,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
-      RUBY
+      EOS
     }
 
     subject { client }
@@ -76,7 +75,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to eq actual_dsl.strip_heredoc.strip
+      expect(subject.dump).to match_fuzzy actual_dsl
 
       errmsg = Regexp.new(Regexp.escape <<-EOS.strip)
         33: add_index("employee_clubs", ["emp_no", "Xclub_id"], {:name=>"idx_emp_no_club_id", :using=>:btree})
@@ -87,5 +86,4 @@ describe 'Ridgepole::Client#diff -> migrate' do
       }.to raise_error(RuntimeError, errmsg)
     }
   end
-end
 end
