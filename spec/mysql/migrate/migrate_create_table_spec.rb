@@ -7,15 +7,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
       titles_pk: {primary_key: ["emp_no", "title", "from_date"]},
     }
 
-    if condition(:activerecord_4)
-      opts.merge!(
-        dept_manager_pk: {id: false},
-        dept_emp_pk: {id: false},
-        salaries_pk: {id: false},
-        titles_pk: {id: false}
-      )
-    end
-
     opts
   }
 

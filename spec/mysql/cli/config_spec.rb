@@ -11,7 +11,7 @@ describe Ridgepole::Config do
       YAML
     }
     let(:env) { 'development' }
-    it {
+    specify {
       expect(subject['adapter']).to eq "mysql2"
       expect(subject['encoding']).to eq "utf8"
       expect(subject['database']).to eq "blog"
@@ -29,7 +29,7 @@ describe Ridgepole::Config do
       YAML
     }
     let(:env) { 'development' }
-    it {
+    specify {
       expect(subject['adapter']).to eq "mysql2"
       expect(subject['encoding']).to eq "utf8"
       expect(subject['database']).to eq "blog_3"
@@ -41,7 +41,7 @@ describe Ridgepole::Config do
     let(:config) {
       <<-YAML.strip_heredoc
         development:
-          adapter: sqlite
+          adapter: sqlspecifye
           database: db/sample.db
         production:
           adapter: mysql2
@@ -53,8 +53,8 @@ describe Ridgepole::Config do
 
     context 'in development env' do
       let(:env) { 'development' }
-      it {
-        expect(subject['adapter']).to eq "sqlite"
+      specify {
+        expect(subject['adapter']).to eq "sqlspecifye"
         expect(subject['database']).to eq "db/sample.db"
         expect(subject['username']).to be_nil
       }
@@ -62,7 +62,7 @@ describe Ridgepole::Config do
 
     context 'in production env' do
       let(:env) { 'production' }
-      it {
+      specify {
         expect(subject['adapter']).to eq "mysql2"
         expect(subject['encoding']).to eq "utf8"
         expect(subject['database']).to eq "blog"
@@ -101,7 +101,7 @@ describe Ridgepole::Config do
 
     let(:env) { 'development' }
 
-    it {
+    specify {
       expect {
         subject
       }.to raise_error 'Invalid config: "database.yml"'

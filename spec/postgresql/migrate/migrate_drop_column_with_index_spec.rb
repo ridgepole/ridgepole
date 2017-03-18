@@ -148,7 +148,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = client(:bulk_change => true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_fuzzy actual_dsl
-      expect(delta.script).to match_fuzzy <<-EOS
+      expect(delta.script).to match_fuzzy erbh(<<-EOS)
 change_table("dept_emp", {:bulk => true}) do |t|
   t.remove("emp_no")
   t.remove("from_date")
@@ -163,7 +163,7 @@ end
 
 change_table("employee_clubs", {:bulk => true}) do |t|
   t.remove("club_id")
-  t.index(["emp_no"], {:name=>"idx_employee_clubs_emp_no", :using=>:btree})
+  t.index(["emp_no"], <%= {:name=>"idx_employee_clubs_emp_no"} + cond(5.0, using: :btree) %>)
 end
 
 change_table("employees", {:bulk => true}) do |t|

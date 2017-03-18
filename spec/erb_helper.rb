@@ -10,25 +10,29 @@ ERBh.define_method(:i) do |obj|
 end
 
 ERBh.define_method(:add_index) do |table_name, column_name, options|
-  if condition(:activerecord_5)
-    if options[:length].is_a?(Hash)
-      options[:length] = options[:length].symbolize_keys
-    end
-
-    @_erbout.sub!(/\bend\s*\z/, '')
-
-    <<-EOS
-        t.index #{column_name.inspect}, #{options.modern_inspect_without_brace}
-      end
-    EOS
-  else
-    "add_index #{table_name.inspect}, #{column_name.inspect}, #{options.modern_inspect_without_brace}"
+  if options[:length].is_a?(Hash)
+    options[:length] = options[:length].symbolize_keys
   end
+
+  @_erbout.sub!(/\bend\s*\z/, '')
+
+  # XXX:
+  if not condition('5.0') and options[:using] == :btree
+    options.delete(:using)
+  end
+
+  # XXX:
+  if options.has_key?(:force_using)
+    options[:using] = options.delete(:force_using)
+  end
+
+  <<-EOS
+      t.index #{column_name.inspect}, #{options.modern_inspect_without_brace}
+    end
+  EOS
 end
 
 ERBh.define_method(:unsigned) do |value, *conds|
-  conds = [:mysql_awesome_enabled] if conds.empty?
-
   if condition(*conds)
     {unsigned: value}
   else
@@ -37,11 +41,17 @@ ERBh.define_method(:unsigned) do |value, *conds|
 end
 
 ERBh.define_method(:limit) do |value, *conds|
-  conds = [:activerecord_4] if conds.empty?
-
   if condition(*conds)
     {limit: value}
   else
     {}
+  end
+end
+
+ERBh.define_method(:cond) do |conds, m, e = nil|
+  if condition(*Array(conds))
+    m
+  else
+    e || (m.class.new rescue nil)
   end
 end

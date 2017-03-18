@@ -7,7 +7,7 @@ describe 'ridgepole' do
   end
 
   context 'when help' do
-    it do
+    specify do
       out, status = run_cli(:args => ['-h'])
       out = out.gsub(/Usage: .*\n/, '')
 
@@ -55,7 +55,7 @@ describe 'ridgepole' do
   end
 
   context 'when export' do
-    it 'not split' do
+    specify 'not split' do
       out, status = run_cli(:args => ['-c', conf, '-e', conf, conf])
 
       expect(status.success?).to be_truthy
@@ -66,7 +66,7 @@ describe 'ridgepole' do
       EOS
     end
 
-    it 'not split with outfile' do
+    specify 'not split with outfile' do
       Tempfile.open("#{File.basename __FILE__}.#{$$}") do |f|
         out, status = run_cli(:args => ['-c', conf, '-e', '-o', f.path])
 
@@ -79,7 +79,7 @@ describe 'ridgepole' do
       end
     end
 
-    it 'not split with output stdout' do
+    specify 'not split with output stdout' do
       out, status = run_cli(:args => ['-c', conf, '-e', '-o', '-'])
 
       expect(status.success?).to be_truthy
@@ -90,7 +90,7 @@ describe 'ridgepole' do
       EOS
     end
 
-    it 'split' do
+    specify 'split' do
       out, status = run_cli(:args => ['-c', conf, '-e', '--split'])
 
       expect(status.success?).to be_truthy
@@ -102,7 +102,7 @@ describe 'ridgepole' do
       EOS
     end
 
-    it 'split with outdir' do
+    specify 'split with outdir' do
       Tempfile.open("#{File.basename __FILE__}.#{$$}") do |f|
         out, status = run_cli(:args => ['-c', conf, '-e', '--split', '-o', f.path, conf, conf])
 
@@ -118,7 +118,7 @@ describe 'ridgepole' do
   end
 
   context 'when apply' do
-    it 'apply' do
+    specify 'apply' do
       out, status = run_cli(:args => ['-c', conf, '-a'])
 
       expect(status.success?).to be_truthy
@@ -132,7 +132,7 @@ describe 'ridgepole' do
       EOS
     end
 
-    it 'apply with conf file' do
+    specify 'apply with conf file' do
       Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
         conf_file.puts <<-EOS
           adapter: mysql2
@@ -154,7 +154,7 @@ describe 'ridgepole' do
       end
     end
 
-    it 'apply with conf file (production)' do
+    specify 'apply with conf file (production)' do
       Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
         conf_file.puts <<-EOS
           development:
@@ -180,7 +180,7 @@ describe 'ridgepole' do
       end
     end
 
-    it 'dry-run' do
+    specify 'dry-run' do
       out, status = run_cli(:args => ['-c', conf, '-a', '--dry-run'])
 
       expect(status.success?).to be_truthy
@@ -196,7 +196,7 @@ describe 'ridgepole' do
     context 'when differ true' do
       let(:differ) { true }
 
-      it 'apply' do
+      specify 'apply' do
         out, status = run_cli(:args => ['-c', conf, '-a'])
 
         expect(status.success?).to be_truthy
@@ -209,7 +209,7 @@ describe 'ridgepole' do
         EOS
       end
 
-      it 'dry-run' do
+      specify 'dry-run' do
         out, status = run_cli(:args => ['-c', conf, '-a', '--dry-run'])
 
         expect(status.success?).to be_truthy
@@ -232,7 +232,7 @@ describe 'ridgepole' do
   end
 
   context 'when diff' do
-    it do
+    specify do
       out, status = run_cli(:args => ['-c', conf, '-d', conf, conf])
 
       expect(status.success?).to be_truthy
@@ -246,7 +246,7 @@ describe 'ridgepole' do
     context 'when differ true' do
       let(:differ) { true }
 
-      it do
+      specify do
         out, status = run_cli(:args => ['-c', conf, '-d', conf, conf])
 
         # Exit code 1 if there is a difference
@@ -269,7 +269,7 @@ describe 'ridgepole' do
     end
 
     context 'when config file' do
-      it '.yml' do
+      specify '.yml' do
         Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
           conf_file.puts <<-EOS
             adapter: mysql2
@@ -289,7 +289,7 @@ describe 'ridgepole' do
         end
       end
 
-      it '.yml (file2)' do
+      specify '.yml (file2)' do
         Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
           conf_file.puts <<-EOS
             adapter: mysql2
@@ -309,7 +309,7 @@ describe 'ridgepole' do
         end
       end
 
-      it '.yml (development)' do
+      specify '.yml (development)' do
         Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
           conf_file.puts <<-EOS
             development:
@@ -333,7 +333,7 @@ describe 'ridgepole' do
         end
       end
 
-      it '.yml (production)' do
+      specify '.yml (production)' do
         Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
           conf_file.puts <<-EOS
             development:
@@ -357,7 +357,7 @@ describe 'ridgepole' do
         end
       end
 
-      it '.yaml' do
+      specify '.yaml' do
         Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yaml']) do |conf_file|
           conf_file.puts <<-EOS
             adapter: mysql2
@@ -377,7 +377,7 @@ describe 'ridgepole' do
         end
       end
 
-      it '.rb' do
+      specify '.rb' do
         Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.rb']) do |conf_file|
           conf_file.puts <<-EOS
             create_table :table do

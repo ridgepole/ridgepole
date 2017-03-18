@@ -36,17 +36,6 @@ class Ridgepole::Dumper
       line !~ /\Aend/
     end
 
-    # XXX: for activerecord-mysql-awesome
-    if ActiveRecord::VERSION::MAJOR < 5
-      dsl = dsl.map do |line|
-        if @options[:dump_without_table_options] and line =~ /\A  create_table /
-          line.gsub(/, options: ("(?:[^"]|\")*")/, '')
-        else
-          line
-        end
-      end
-    end
-
     dsl = dsl.join.strip_heredoc
 
     definitions = []

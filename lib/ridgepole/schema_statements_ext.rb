@@ -2,7 +2,7 @@ require 'active_record/connection_adapters/abstract/schema_statements'
 
 module Ridgepole
   module SchemaStatementsExt
-    def index_name_exists?(table_name, column_name, options = {})
+    def index_name_exists?(table_name, column_name, default = nil)
       if Ridgepole::ExecuteExpander.noop
         caller_methods = caller.map {|i| i =~ /:\d+:in `(.+)'/ ? $1 : '' }
         if caller_methods.any? {|i| i =~ /\Aremove_index/ }

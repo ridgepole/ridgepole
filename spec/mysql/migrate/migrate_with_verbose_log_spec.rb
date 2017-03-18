@@ -51,12 +51,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         "#   employees",
       ]
 
-
-      if condition(:mysql_awesome_enabled)
-        expected_verbose_infos << "   {\"birth_date\"=>{:type=>:date, :options=>{:null=>false}},\n    \"first_name\"=>{:type=>:string, :options=>{:limit=>14, :null=>false}},\n    \"last_name\"=>{:type=>:string, :options=>{:limit=>16, :null=>false}},\n-   \"gender\"=>{:type=>:string, :options=>{:limit=>1, :null=>false}},\n+   \"gender2\"=>{:type=>:string, :options=>{:limit=>1, :null=>false}},\n    \"hire_date\"=>{:type=>:date, :options=>{:null=>false}}},\n  :options=>{:primary_key=>\"emp_no\", :unsigned=>true}}"
-      else
-        expected_verbose_infos << "   {\"birth_date\"=>{:type=>:date, :options=>{:null=>false}},\n    \"first_name\"=>{:type=>:string, :options=>{:limit=>14, :null=>false}},\n    \"last_name\"=>{:type=>:string, :options=>{:limit=>16, :null=>false}},\n-   \"gender\"=>{:type=>:string, :options=>{:limit=>1, :null=>false}},\n+   \"gender2\"=>{:type=>:string, :options=>{:limit=>1, :null=>false}},\n    \"hire_date\"=>{:type=>:date, :options=>{:null=>false}}},\n  :options=>{:primary_key=>\"emp_no\"}}"
-      end
+      expected_verbose_infos << "   {\"birth_date\"=>{:type=>:date, :options=>{:null=>false}},\n    \"first_name\"=>{:type=>:string, :options=>{:limit=>14, :null=>false}},\n    \"last_name\"=>{:type=>:string, :options=>{:limit=>16, :null=>false}},\n-   \"gender\"=>{:type=>:string, :options=>{:limit=>1, :null=>false}},\n+   \"gender2\"=>{:type=>:string, :options=>{:limit=>1, :null=>false}},\n    \"hire_date\"=>{:type=>:date, :options=>{:null=>false}}},\n  :options=>{:primary_key=>\"emp_no\"}}"
 
       expect(verbose_infos).to match_array expected_verbose_infos
     }

@@ -1,4 +1,4 @@
-describe 'Ridgepole::Client (with new text/blob types)', condition: [:activerecord_5] do
+describe 'Ridgepole::Client (with new text/blob types)' do
   context 'when use new types' do
     subject { client }
 
@@ -22,9 +22,9 @@ describe 'Ridgepole::Client (with new text/blob types)', condition: [:activereco
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy <<-EOS
+      expect(subject.dump).to match_fuzzy erbh(<<-EOS)
         create_table "foos", force: :cascade do |t|
-          t.binary  "blob",             limit: 65535
+          t.binary  "blob",             <%= i cond('5.0', limit: 65535) %>
           t.blob    "tiny_blob",        limit: 255
           t.binary  "medium_blob",      limit: 16777215
           t.binary  "long_blob",        limit: 4294967295

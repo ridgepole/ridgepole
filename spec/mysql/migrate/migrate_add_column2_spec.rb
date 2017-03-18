@@ -4,11 +4,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
       sql_int_type: 'int(11)',
     }
 
-    if condition(:mysql_awesome_enabled, :activerecord_5)
-      opts.merge!(
-        sql_int_type: 'int'
-      )
-    end
+    opts.merge!(
+      sql_int_type: 'int'
+    )
 
     opts
   }

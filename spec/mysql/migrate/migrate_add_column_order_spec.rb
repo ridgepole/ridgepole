@@ -1,23 +1,9 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  let(:template_variables) {
-    opts = {
-      sql_int_type: 'int(11)',
-    }
-
-    if condition(:mysql_awesome_enabled, :activerecord_5)
-      opts.merge!(
-        sql_int_type: 'int'
-      )
-    end
-
-    opts
-  }
-
   context 'when add column to first' do
     let(:actual_dsl) {
-      erbh(<<-EOS, template_variables)
+      erbh(<<-EOS)
         create_table "dept_emp", force: :cascade do |t|
-          t.integer "emp_no",    <%= i limit(4) + {null: false} %>
+          t.integer "emp_no",    null: false
           t.string  "dept_no",   limit: 4, null: false
           t.date    "from_date",           null: false
           t.date    "to_date",             null: false
@@ -26,10 +12,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS, template_variables)
+      erbh(<<-EOS)
         create_table "dept_emp", force: :cascade do |t|
-          t.integer "emp_no0",   <%= i limit(4) + {null: false} %>
-          t.integer "emp_no",    <%= i limit(4) + {null: false} %>
+          t.integer "emp_no0",   null: false
+          t.integer "emp_no",    null: false
           t.string  "dept_no",   limit: 4, null: false
           t.date    "from_date",           null: false
           t.date    "to_date",             null: false
@@ -47,9 +33,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_fuzzy expected_dsl
 
-      expect(show_create_table_mysql('dept_emp')).to match_fuzzy <<-EOS
+      expect(show_create_table_mysql('dept_emp')).to match_fuzzy erbh(<<-EOS)
         CREATE TABLE `dept_emp` (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
+          `id` <%= cond(5.1, 'bigint(20)', 'int(11)') %> NOT NULL AUTO_INCREMENT,
           `emp_no0` int(11) NOT NULL,
           `emp_no` int(11) NOT NULL,
           `dept_no` varchar(4) NOT NULL,
@@ -63,9 +49,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when add column to first (no id)' do
     let(:actual_dsl) {
-      erbh(<<-EOS, template_variables)
+      erbh(<<-EOS)
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no",    <%= i limit(4) + {null: false} %>
+          t.integer "emp_no",    null: false
           t.string  "dept_no",   limit: 4, null: false
           t.date    "from_date",           null: false
           t.date    "to_date",             null: false
@@ -74,10 +60,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS, template_variables)
+      erbh(<<-EOS)
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no0",   <%= i limit(4) + {null: false} %>
-          t.integer "emp_no",    <%= i limit(4) + {null: false} %>
+          t.integer "emp_no0",   null: false
+          t.integer "emp_no",    null: false
           t.string  "dept_no",   limit: 4, null: false
           t.date    "from_date",           null: false
           t.date    "to_date",             null: false
@@ -109,7 +95,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when add column to first (with pk)' do
     let(:actual_dsl) {
-      erbh(<<-EOS, template_variables)
+      erbh(<<-EOS)
         create_table "dept_emp", primary_key: "emp_no", force: :cascade do |t|
           t.string  "dept_no",   limit: 4, null: false
           t.date    "from_date",           null: false
@@ -119,9 +105,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS, template_variables)
+      erbh(<<-EOS)
         create_table "dept_emp", primary_key: "emp_no", force: :cascade do |t|
-          t.integer "emp_no0",   <%= i limit(4) + {null: false} %>
+          t.integer "emp_no0",   null: false
           t.string  "dept_no",   limit: 4, null: false
           t.date    "from_date",           null: false
           t.date    "to_date",             null: false
@@ -139,9 +125,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_fuzzy expected_dsl
 
-      expect(show_create_table_mysql('dept_emp')).to match_fuzzy <<-EOS
+      expect(show_create_table_mysql('dept_emp')).to match_fuzzy erbh(<<-EOS)
         CREATE TABLE `dept_emp` (
-          `emp_no` int(11) NOT NULL AUTO_INCREMENT,
+          `emp_no` <%= cond(5.1, 'bigint(20)', 'int(11)') %> NOT NULL AUTO_INCREMENT,
           `emp_no0` int(11) NOT NULL,
           `dept_no` varchar(4) NOT NULL,
           `from_date` date NOT NULL,
@@ -154,7 +140,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when add column to first (with multiple pk)' do
     let(:actual_dsl) {
-      erbh(<<-EOS, template_variables)
+      erbh(<<-EOS)
         create_table "dept_emp", primary_key: ["emp_no1", "emp_no2"], force: :cascade do |t|
           t.integer "emp_no1",             null: false
           t.integer "emp_no2",             null: false
@@ -166,7 +152,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS, template_variables)
+      erbh(<<-EOS)
         create_table "dept_emp", primary_key: ["emp_no1", "emp_no2"], force: :cascade do |t|
           t.integer "emp_no1",             null: false
           t.integer "emp_no2",             null: false
@@ -182,8 +168,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
     subject { client }
 
     it {
-      skip if condition(:activerecord_4)
-
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_fuzzy actual_dsl
@@ -206,7 +190,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when add column to first (with multiple pk2)' do
     let(:actual_dsl) {
-      erbh(<<-EOS, template_variables)
+      erbh(<<-EOS)
         create_table "dept_emp", primary_key: ["emp_no1", "emp_no2"], force: :cascade do |t|
           t.integer "emp_no1",             null: false
           t.integer "emp_no2",             null: false
@@ -218,7 +202,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS, template_variables)
+      erbh(<<-EOS)
         create_table "dept_emp", primary_key: ["emp_no1", "emp_no2"], force: :cascade do |t|
           t.integer "emp_no0",             null: false
           t.integer "emp_no1",             null: false
@@ -234,8 +218,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
     subject { client }
 
     it {
-      skip if condition(:activerecord_4)
-
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_fuzzy actual_dsl

@@ -147,8 +147,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = Ridgepole::Client.diff(current_schema, dsl, ignore_tables: [/^salaries$/], reverse: true, enable_mysql_awesome: true)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to match_fuzzy <<-EOS
-        change_column("employees", "first_name", :string, {:limit=>14, :null=>false, :default=>nil, :unsigned=>false})
+      expect(delta.script).to match_fuzzy erbh(<<-EOS)
+        change_column("employees", "first_name", :string, <%= {:limit=>14, :null=>false, :default=>nil, :unsigned=>false} + cond('5.1', comment: nil) %>)
       EOS
     }
   end
@@ -234,8 +234,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = Ridgepole::Client.diff(current_schema, dsl, ignore_tables: [/^salaries$/], reverse: true, enable_mysql_awesome: true)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to match_fuzzy <<-EOS
-        change_column("employees", "first_name", :string, {:limit=>14, :null=>false, :default=>nil, :unsigned=>false})
+      expect(delta.script).to match_fuzzy erbh(<<-EOS)
+        change_column("employees", "first_name", :string, <%= {:limit=>14, :null=>false, :default=>nil, :unsigned=>false} + cond('5.1', comment: nil) %>)
       EOS
     }
   end
@@ -321,8 +321,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = Ridgepole::Client.diff(current_schema, dsl, ignore_tables: [/^salaries$/], reverse: true, enable_mysql_awesome: true)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to match_fuzzy <<-EOS
-        change_column("employees", "first_name", :string, {:limit=>14, :null=>false, :default=>nil, :unsigned=>false})
+      expect(delta.script).to match_fuzzy erbh(<<-EOS)
+        change_column("employees", "first_name", :string, <%= {:limit=>14, :null=>false, :default=>nil, :unsigned=>false} + cond('5.1', comment: nil) %>)
       EOS
     }
   end

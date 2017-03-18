@@ -2,7 +2,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop fk' do
     let(:actual_dsl) {
       erbh(<<-EOS)
-create_table "parent", force: :cascade do |t|
+create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
 end
 
 create_table "child", force: :cascade do |t|
@@ -28,9 +28,9 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id", <%= i limit(4) %>
 end
 
-<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
+<%= add_index "child", ["parent_id"], {name: "par_id"} + cond('5.0', using: :btree) %>
 
-create_table "parent", force: :cascade do |t|
+create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
 end
       EOS
     }
@@ -69,7 +69,7 @@ end
   context 'when drop fk when drop table' do
     let(:dsl) {
       erbh(<<-EOS)
-create_table "parent", force: :cascade do |t|
+create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
 end
 
 
@@ -89,9 +89,9 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id", <%= i limit(4) %>
 end
 
-<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
+<%= add_index "child", ["parent_id"], {name: "par_id"} + cond('5.0', using: :btree) %>
 
-create_table "parent", force: :cascade do |t|
+create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
 end
 
 add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"

@@ -1,4 +1,4 @@
-describe 'Ridgepole::Client#diff -> migrate', condition: [:activerecord_5] do
+describe 'Ridgepole::Client#diff -> migrate' do
   subject { client }
 
   before do
@@ -6,18 +6,18 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [:activerecord_5] do
   end
 
   context 'when drop column from table containing an expression index' do
-    let(:actual_dsl) { <<-EOS }
+    let(:actual_dsl) { erbh(<<-EOS) }
       create_table "users", force: :cascade do |t|
         t.string "name", null: false
         t.datetime "created_at", null: false
-        t.index "lower((name)::text)", name: "index_users_on_lower_name", using: :btree
+        t.index "lower((name)::text)", <%= i({name: "index_users_on_lower_name"} + cond(5.0, using: :btree)) %>
       end
     EOS
 
-    let(:expected_dsl) { <<-EOS }
+    let(:expected_dsl) { erbh(<<-EOS) }
       create_table "users", force: :cascade do |t|
         t.string "name", null: false
-        t.index "lower((name)::text)", name: "index_users_on_lower_name", using: :btree
+        t.index "lower((name)::text)", <%= i({name: "index_users_on_lower_name"} + cond(5.0, using: :btree)) %>
       end
     EOS
 
@@ -32,10 +32,10 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [:activerecord_5] do
   end
 
   context 'when drop expression index' do
-    let(:actual_dsl) { <<-EOS }
+    let(:actual_dsl) { erbh(<<-EOS) }
       create_table "users", force: :cascade do |t|
         t.string "name", null: false
-        t.index "lower((name)::text)", name: "index_users_on_lower_name", using: :btree
+        t.index "lower((name)::text)", <%= i({name: "index_users_on_lower_name"} + cond(5.0, using: :btree)) %>
       end
     EOS
 

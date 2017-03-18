@@ -14,6 +14,7 @@ require 'diffy'
 module Ridgepole; end
 
 require 'ridgepole/client'
+require 'ridgepole/connection_adapters'
 require 'ridgepole/default_limit'
 require 'ridgepole/delta'
 require 'ridgepole/diff'

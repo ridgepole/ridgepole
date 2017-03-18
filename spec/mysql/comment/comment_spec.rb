@@ -1,23 +1,23 @@
-describe 'Ridgepole::Client#diff -> migrate', condition: [:activerecord_5] do
+describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (add comment)' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no",                null: false
           t.integer "club_id",               null: false
           t.string  "string",                null: false
-          t.text    "text",    limit: 65535, null: false
+          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false
         end
       EOS
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no",                null: false, comment: "any comment"
           t.integer "club_id",               null: false, comment: "any comment2"
           t.string  "string",                null: false, comment: "any comment3"
-          t.text    "text",    limit: 65535, null: false, comment: "any comment4"
+          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false, comment: "any comment4"
         end
       EOS
     }
@@ -36,23 +36,23 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [:activerecord_5] do
 
   context 'when change column (delete comment)' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no",                null: false, comment: "any comment"
           t.integer "club_id",               null: false, comment: "any comment2"
           t.string  "string",                null: false, comment: "any comment3"
-          t.text    "text",    limit: 65535, null: false, comment: "any comment4"
+          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false, comment: "any comment4"
         end
       EOS
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no",                null: false
           t.integer "club_id",               null: false
           t.string  "string",                null: false
-          t.text    "text",    limit: 65535, null: false
+          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false
         end
       EOS
     }
@@ -71,23 +71,23 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [:activerecord_5] do
 
   context 'when change column (change comment)' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no",                null: false, comment: "any comment"
           t.integer "club_id",               null: false, comment: "any comment2"
           t.string  "string",                null: false, comment: "any comment3"
-          t.text    "text",    limit: 65535, null: false, comment: "any comment4"
+          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false, comment: "any comment4"
         end
       EOS
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no",                null: false, comment: "other comment"
           t.integer "club_id",               null: false, comment: "other comment2"
           t.string  "string",                null: false, comment: "other comment3"
-          t.text    "text",    limit: 65535, null: false, comment: "other comment4"
+          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false, comment: "other comment4"
         end
       EOS
     }
@@ -106,12 +106,12 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [:activerecord_5] do
 
   context 'when change column (no change comment)' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no",                null: false, comment: "any comment"
           t.integer "club_id",               null: false, comment: "any comment2"
           t.string  "string",                null: false, comment: "any comment3"
-          t.text    "text",    limit: 65535, null: false, comment: "any comment4"
+          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false, comment: "any comment4"
         end
       EOS
     }
@@ -130,12 +130,12 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [:activerecord_5] do
 
   context 'when create table (with comment)' do
     let(:expected_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade, comment: "table comment" do |t|
           t.integer "emp_no",                null: false, comment: "other comment"
           t.integer "club_id",               null: false, comment: "other comment2"
           t.string  "string",                null: false, comment: "other comment3"
-          t.text    "text",    limit: 65535, null: false, comment: "other comment4"
+          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false, comment: "other comment4"
         end
       EOS
     }
@@ -153,12 +153,12 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [:activerecord_5] do
 
   context 'when drop table (with comment)' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade, comment: "table comment" do |t|
           t.integer "emp_no",                null: false, comment: "other comment"
           t.integer "club_id",               null: false, comment: "other comment2"
           t.string  "string",                null: false, comment: "other comment3"
-          t.text    "text",    limit: 65535, null: false, comment: "other comment4"
+          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false, comment: "other comment4"
         end
       EOS
     }

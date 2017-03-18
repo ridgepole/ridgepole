@@ -2,14 +2,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change fk' do
     let(:actual_dsl) {
       erbh(<<-EOS)
-create_table "parent", force: :cascade do |t|
+create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
 end
 
 create_table "child", force: :cascade do |t|
   t.integer "parent_id"
 end
 
-<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
+<%= add_index "child", ["parent_id"], {name: "par_id"} + cond('5.0', using: :btree) %>
 
 add_foreign_key "child", "parent", name: "child_ibfk_1", on_delete: :cascade
       EOS
@@ -18,12 +18,12 @@ add_foreign_key "child", "parent", name: "child_ibfk_1", on_delete: :cascade
     let(:sorted_actual_dsl) {
       erbh(<<-EOS)
 create_table "child", force: :cascade do |t|
-  t.integer "parent_id" <%= condition(:activerecord_4) ? ', limit: 4' : '' %>
+  t.integer "parent_id"
 end
 
-<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
+<%= add_index "child", ["parent_id"], {name: "par_id"} + cond('5.0', using: :btree) %>
 
-create_table "parent", force: :cascade do |t|
+create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
 end
 
 add_foreign_key "child", "parent", name: "child_ibfk_1", on_delete: :cascade
@@ -33,12 +33,12 @@ add_foreign_key "child", "parent", name: "child_ibfk_1", on_delete: :cascade
     let(:expected_dsl) {
       erbh(<<-EOS)
 create_table "child", force: :cascade do |t|
-  t.integer "parent_id" <%= condition(:activerecord_4) ? ', limit: 4' : '' %>
+  t.integer "parent_id"
 end
 
-<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
+<%= add_index "child", ["parent_id"], {name: "par_id"} + cond('5.0', using: :btree) %>
 
-create_table "parent", force: :cascade do |t|
+create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
 end
 
 add_foreign_key "child", "parent", name: "child_ibfk_1"

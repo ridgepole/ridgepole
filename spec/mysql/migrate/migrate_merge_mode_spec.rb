@@ -4,9 +4,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       unsigned: {}
     }
 
-    if condition(:mysql_awesome_enabled)
-      opts[:unsigned] = {unsigned: true}
-    end
+    opts[:unsigned] = {unsigned: true}
 
     opts
   }

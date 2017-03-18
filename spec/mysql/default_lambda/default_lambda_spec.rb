@@ -1,4 +1,4 @@
-describe 'Ridgepole::Client (use default:lambda)', condition: [:activerecord_5] do
+describe 'Ridgepole::Client (use default:lambda)' do
   context 'when create table with default:lambda' do
     subject { client }
 
@@ -62,9 +62,9 @@ describe 'Ridgepole::Client (use default:lambda)', condition: [:activerecord_5] 
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy <<-EOS
+      expect(subject.dump).to match_fuzzy erbh(<<-EOS)
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", default: '1970-01-01 00:00:00', null: false
+          t.datetime "bar", default: <%= cond('5.1', '"1970-01-01 00:00:00"', "'1970-01-01 00:00:00'") %>, null: false
         end
       EOS
     end

@@ -1,14 +1,14 @@
-describe 'Ridgepole::Client#diff -> migrate', condition: [:activerecord_5] do
+describe 'Ridgepole::Client#diff -> migrate' do
   subject { client }
 
   context 'when add_index contains expression' do
     let(:actual_dsl) { '' }
-    let(:expected_dsl) { <<-EOS }
+    let(:expected_dsl) { erbh(<<-EOS) }
       create_table "users", force: :cascade do |t|
         t.string "name", null: false
         t.datetime "created_at", null: false
         t.datetime "updated_at", null: false
-        t.index "lower((name)::text)", name: "index_users_on_lower_name", using: :btree
+        t.index "lower((name)::text)", <%= i({name: "index_users_on_lower_name"} + cond(5.0, using: :btree)) %>
       end
     EOS
 

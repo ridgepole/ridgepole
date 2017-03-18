@@ -1,4 +1,4 @@
-describe 'Ridgepole::Client#diff -> migrate', condition: [:activerecord_5] do
+describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create table with default proc' do
     let(:dsl) { '' }
 

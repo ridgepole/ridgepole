@@ -6,11 +6,6 @@ require 'cli_helper'
 
 require 'processing_for_travis'
 
-if condition [:mysql_awesome_enabled, :activerecord_5]
-  warn 'warning: Cannot use activerecord-mysql-awesome on ActiveRecord 5.0'
-  exit 0
-end
-
 require 'ridgepole'
 require 'ridgepole/cli/config'
 require 'active_support/core_ext'
@@ -40,7 +35,7 @@ RSpec.configure do |config|
 
   config.before(:each) do |example|
     if conds = example.metadata[:condition]
-      skip unless conds.any? {|c| condition(*c) }
+      skip unless Array(conds).any? {|c| condition(*c) }
     end
 
     case example.metadata[:file_path]
@@ -101,15 +96,7 @@ module SpecHelper
   def client(options = {}, config = {})
     config = conn_spec(config)
     default_options = {debug: condition(:debug)}
-
-    if condition(:mysql_awesome_enabled)
-      default_options[:enable_mysql_awesome] = true
-      default_options[:dump_without_table_options] = true
-    end
-
-    if condition(:activerecord_5)
-      default_options[:dump_without_table_options] = true
-    end
+    default_options[:dump_without_table_options] = true
 
     options = default_options.merge(options)
 
