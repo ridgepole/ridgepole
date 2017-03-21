@@ -22,10 +22,11 @@ class Ridgepole::Delta
 
   def script
     buf = StringIO.new
-    buf_for_fk = StringIO.new
+    buf_for_add_fk = StringIO.new
+    buf_for_remove_fk = StringIO.new
 
     (@delta[:add] || {}).each do |table_name, attrs|
-      append_create_table(table_name, attrs, buf, buf_for_fk)
+      append_create_table(table_name, attrs, buf, buf_for_add_fk)
     end
 
     (@delta[:rename] || {}).each do |table_name, attrs|
@@ -33,14 +34,14 @@ class Ridgepole::Delta
     end
 
     (@delta[:change] || {}).each do |table_name, attrs|
-      append_change(table_name, attrs, buf, buf_for_fk)
+      append_change(table_name, attrs, buf, buf_for_add_fk, buf_for_remove_fk)
     end
 
     (@delta[:delete] || {}).each do |table_name, attrs|
       append_drop_table(table_name, attrs, buf)
     end
 
-    (buf.string.strip + "\n\n" + buf_for_fk.string.strip).strip
+    (buf_for_remove_fk.string.strip + "\n\n" + buf.string.strip + "\n\n" + buf_for_add_fk.string.strip).strip
   end
 
   def differ?
@@ -269,7 +270,7 @@ drop_table(#{table_name.inspect})
     buf.puts
   end
 
-  def append_change(table_name, attrs, buf, buf_for_fk)
+  def append_change(table_name, attrs, buf, buf_for_add_fk, buf_for_remove_fk)
     definition = attrs[:definition] || {}
     indices = attrs[:indices] || {}
     foreign_keys = attrs[:foreign_keys] || {}
@@ -282,11 +283,12 @@ drop_table(#{table_name.inspect})
     end
 
     unless foreign_keys.empty?
-      append_change_foreign_keys(table_name, foreign_keys, buf_for_fk, @options)
+      append_change_foreign_keys(table_name, foreign_keys, buf_for_add_fk, buf_for_remove_fk, @options)
     end
 
     buf.puts
-    buf_for_fk.puts
+    buf_for_add_fk.puts
+    buf_for_remove_fk.puts
   end
 
   def append_change_table(table_name, buf)
@@ -409,13 +411,13 @@ remove_index(#{table_name.inspect}, #{target.inspect})
     end
   end
 
-  def append_change_foreign_keys(table_name, delta, buf, options)
+  def append_change_foreign_keys(table_name, delta, buf_for_add, buf_for_remove, options)
     (delta[:delete] || {}).each do |foreign_key_name, attrs|
-      append_remove_foreign_key(table_name, foreign_key_name, attrs, buf, options)
+      append_remove_foreign_key(table_name, foreign_key_name, attrs, buf_for_remove, options)
     end
 
     (delta[:add] || {}).each do |foreign_key_name, attrs|
-      append_add_foreign_key(table_name, foreign_key_name, attrs, buf, options)
+      append_add_foreign_key(table_name, foreign_key_name, attrs, buf_for_add, options)
     end
   end
 
