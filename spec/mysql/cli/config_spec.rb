@@ -71,6 +71,21 @@ describe Ridgepole::Config do
     end
   end
 
+  context 'when passed DATABASE_URL' do
+    let(:config) { "DATABASE_URL" }
+    let(:env) { 'development' }
+    before {
+      allow(ENV).to receive(:[]).with("DATABASE_URL").and_return("mysql2://root:1234@127.0.0.1/blog")
+    }
+
+    it {
+      expect(subject['adapter']).to eq "mysql2"
+      expect(subject['database']).to eq "blog"
+      expect(subject['username']).to eq "root"
+      expect(subject['password']).to eq "1234"
+    }
+  end
+
   context 'when passed unexisting yaml' do
     let(:config) {
       'database.yml'
