@@ -227,7 +227,7 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
       normalize_limit(column_type, column_options)
 
       buf.puts(<<-EOS)
-  t.#{column_type}(#{column_name.inspect}, #{inspect_options_include_default_proc(column_options)})
+  t.column(#{column_name.inspect}, :#{column_type.to_s.inspect}, #{inspect_options_include_default_proc(column_options)})
       EOS
     end
 
