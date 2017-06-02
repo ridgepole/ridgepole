@@ -69,6 +69,10 @@ add_foreign_key :articles, :authors # without `name:`
   * Support DDL Comment (Rails5 only)
   * Output schema diff when pass `--verbose`
   * Support composite primary key (Rails5 only / [pull#97](https://github.com/winebarrel/ridgepole/pull/97))
+* `>= 0.6.6`
+  * Use `t.column` for migration ([pull#114](https://github.com/winebarrel/ridgepole/pull/114))
+  * Support DATABASE_URL format ([pull#118](https://github.com/winebarrel/ridgepole/pull/118))
+  * Add Ruby2.4 CI ([pull#119](https://github.com/winebarrel/ridgepole/pull/119))
 
 ## Installation
 
