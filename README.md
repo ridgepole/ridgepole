@@ -138,7 +138,7 @@ encoding: utf8
 database: blog
 username: root
 
-$ ridgepole -c config.yml --export -o Schemafile # or `ridgepole -c '{adapter: mysql2, database: blog}' ...`
+$ ridgepole -c config.yml --export -o Schemafile # or `ridgepole -c '{adapter: mysql2, database: blog}' or `DATABASE_URL=mysql2://root@127.0.0.1/blog ridgepole -c DATABASE_URL` ...
 Export Schema to `Schemafile`
 
 $ cat Schemafile
