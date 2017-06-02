@@ -71,6 +71,29 @@ describe Ridgepole::Config do
     end
   end
 
+  context 'when passed yaml file' do
+    let(:config) {
+      <<-YAML.strip_heredoc
+        adapter: mysql2
+        encoding: utf8
+        database: blog
+        username: root
+      YAML
+    }
+    let(:env) { 'development' }
+    it {
+      Tempfile.create("database.yml") do |f|
+        f.puts config
+        f.flush
+
+        expect(subject['adapter']).to eq "mysql2"
+        expect(subject['encoding']).to eq "utf8"
+        expect(subject['database']).to eq "blog"
+        expect(subject['username']).to eq "root"
+      end
+    }
+  end
+
   context 'when passed unexisting yaml' do
     let(:config) {
       'database.yml'
@@ -81,7 +104,19 @@ describe Ridgepole::Config do
     it {
       expect {
         subject
-      }.to raise_error Errno::ENOENT
+      }.to raise_error 'Invalid config: "database.yml"'
+    }
+  end
+
+  context 'when passed DATABASE_URL' do
+    let(:config) { 'mysql2://root:1234@127.0.0.1/blog' }
+    let(:env) { 'development' }
+
+    it {
+      expect(subject['adapter']).to eq "mysql2"
+      expect(subject['database']).to eq "blog"
+      expect(subject['username']).to eq "root"
+      expect(subject['password']).to eq "1234"
     }
   end
 end

@@ -4,15 +4,16 @@ require 'yaml'
 class Ridgepole::Config
   class << self
     def load(config, env = 'development')
-      parsed_config = if File.exist?(config)
-                        parse_config_file(config)
-                      else
-                        YAML.load(ERB.new(config).result)
-                      end
+      if File.exist?(config)
+        parsed_config = parse_config_file(config)
+      elsif (expanded = File.expand_path(config)) and File.exist?(expanded)
+        parsed_config = parse_config_file(expanded)
+      else
+        parsed_config = YAML.load(ERB.new(config).result)
+      end
 
       unless parsed_config.kind_of?(Hash)
-        config = File.expand_path(config)
-        parse_config = parse_config_file(config)
+        parsed_config = parse_database_url(config)
       end
 
       if parsed_config.has_key?(env.to_s)
@@ -28,5 +29,21 @@ class Ridgepole::Config
       yaml = ERB.new(File.read(path)).result
       YAML.load(yaml)
     end
-  end # of class methods
+
+    def parse_database_url(config)
+      uri = URI.parse(config)
+
+      if [uri.scheme, uri.user, uri.password, uri.host, uri.path].any? {|i| i.nil? }
+        raise "Invalid config: #{config.inspect}"
+      end
+
+      {
+        'adapter'  => uri.scheme,
+        'username' => uri.user,
+        'password' => uri.password,
+        'host'     => uri.host,
+        'database' => uri.path.sub(%r|\A/|, ''),
+      }
+     end
+   end # of class methods
 end
