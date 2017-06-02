@@ -13,7 +13,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 
 Please don't use the following nameless fk:
 
-```ruby 
+```ruby
 add_foreign_key :articles, :authors # without `name:`
 ```
 
@@ -138,7 +138,9 @@ encoding: utf8
 database: blog
 username: root
 
-$ ridgepole -c config.yml --export -o Schemafile # or `ridgepole -c '{adapter: mysql2, database: blog}' ...`
+$ ridgepole -c config.yml --export -o Schemafile
+# or `ridgepole -c '{adapter: mysql2, database: blog}' ...`
+# or `ridgepole -c 'mysql2://root:3306@127.0.0.1/blog' ...`
 Export Schema to `Schemafile`
 
 $ cat Schemafile
