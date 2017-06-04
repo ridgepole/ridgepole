@@ -26,9 +26,7 @@ class Ridgepole::Client
       require 'ridgepole/ext/schema_dumper'
     end
 
-    if ActiveRecord::VERSION::MAJOR >= 5 and @options[:dump_without_table_options]
-      require 'ridgepole/ext/abstract_mysql_adapter/disable_table_options'
-    end
+    require 'ridgepole/ext/abstract_mysql_adapter/disable_table_options'
   end
 
   def dump(&block)

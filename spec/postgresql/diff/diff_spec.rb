@@ -171,6 +171,9 @@ describe 'Ridgepole::Client.diff' do
       end
       EOS
 
+      # XXX:
+      before { client }
+
       it "doesn't warn anything" do
         expect(Ridgepole::Logger.instance).to_not receive(:warn)
         delta = subject.diff(actual_dsl, expected_dsl)
@@ -194,6 +197,9 @@ describe 'Ridgepole::Client.diff' do
         t.datetime "updated_at", null: false
       end
       EOS
+
+      # XXX:
+      before { client }
 
       it 'warns position' do
         expect(Ridgepole::Logger.instance).to receive(:warn).with(/PostgreSQL doesn't support adding a new column .* users\.name/)

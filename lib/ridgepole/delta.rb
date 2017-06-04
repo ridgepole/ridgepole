@@ -345,6 +345,11 @@ rename_column(#{table_name.inspect}, #{from_column_name.inspect}, #{to_column_na
     type = attrs.fetch(:type)
     options = attrs[:options] || {}
 
+    # Fix for https://github.com/rails/rails/commit/7f0567b43b73b1bd1a16bfac9cd32fcbf1321b51
+    if Ridgepole::ConnectionAdapters.mysql? and ActiveRecord::VERSION::STRING !~ /\A5\.0\./
+      options[:comment] = nil unless options.has_key?(:comment)
+    end
+
     if @options[:bulk_change]
       buf.puts(<<-EOS)
   t.change(#{column_name.inspect}, #{type.inspect}, #{inspect_options_include_default_proc(options)})

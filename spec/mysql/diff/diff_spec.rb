@@ -140,14 +140,17 @@ describe 'Ridgepole::Client.diff' do
 
     subject { Ridgepole::Client }
 
-    it {
-      delta = subject.diff(actual_dsl, expected_dsl, enable_mysql_unsigned: true)
-      expect(delta.differ?).to be_truthy
-      expect(delta.script).to match_fuzzy <<-EOS
-        change_column("employee_clubs", "club_id", :integer, {:unsigned=>false, :null=>true, :default=>nil})
+    # XXX: for AR 5.1
+    before { client }
 
-        change_column("employees", "last_name", :string, {:limit=>20, :default=>"XXX"})
-        change_column("employees", "gender", :string, {:limit=>2, :null=>false, :default=>nil})
+    it {
+      delta = subject.diff(actual_dsl, expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(delta.script).to match_fuzzy erbh(<<-EOS)
+        change_column("employee_clubs", "club_id", :integer, <%= {:unsigned=>false, :null=>true, :default=>nil} + cond(5.1, comment: nil) %>)
+
+        change_column("employees", "last_name", :string, <%= {:limit=>20, :default=>"XXX"} + cond(5.1, comment: nil) %>)
+        change_column("employees", "gender", :string, <%= {:limit=>2, :null=>false, :default=>nil} + cond(5.1, comment: nil) %>)
       EOS
     }
   end

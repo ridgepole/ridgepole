@@ -56,9 +56,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      if condition(:activerecord_4)
-        expected_dsl.sub!('t.bigint      "bigint"', 't.integer     "bigint",      limit: 8')
-      end
       expect(subject.dump).to match_fuzzy expected_dsl
     }
   end

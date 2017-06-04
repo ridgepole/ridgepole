@@ -1,45 +1,45 @@
-describe 'Ridgepole::Client (with bigint pk)', condition: [:mysql_awesome_enabled, :activerecord_5] do
-  let(:dsl1) {
-    erbh(<<-EOS)
+describe 'Ridgepole::Client (with bigint pk)', condition: '5.0.' do
+  let(:id_primary_key_create_table) {
+    <<-RUBY
       create_table "books", id: :primary_key, limit: 8, force: :cascade do |t|
-        t.string   "title",      <%= i limit(255) + {null: false} %>
-        t.integer  "author_id",  <%= i limit(4) + {null: false} %>
+        t.string   "title",      null: false
+        t.integer  "author_id",  null: false
         t.datetime "created_at"
         t.datetime "updated_at"
       end
-    EOS
+    RUBY
   }
 
-  let(:dsl2) {
-    erbh(<<-EOS)
+  let(:id_bigint_create_table) {
+    <<-RUBY
       create_table "books", id: :bigint, force: :cascade do |t|
-        t.string   "title",      <%= i limit(255) + {null: false} %>
-        t.integer  "author_id",  <%= i limit(4) + {null: false} %>
+        t.string   "title",      null: false
+        t.integer  "author_id",  null: false
         t.datetime "created_at"
         t.datetime "updated_at"
       end
-    EOS
+    RUBY
   }
 
   context 'when with limit:8' do
     subject { client }
 
-    before { subject.diff(dsl1).migrate }
+    before { subject.diff(id_primary_key_create_table).migrate }
 
     it {
       expect(show_create_table(:books)).to include '`id` bigint(20) NOT NULL AUTO_INCREMENT'
-      expect(subject.dump).to match_fuzzy dsl2
+      expect(subject.dump).to match_fuzzy id_bigint_create_table
     }
   end
 
   context 'when with id:bigint' do
     subject { client }
 
-    before { subject.diff(dsl2).migrate }
+    before { subject.diff(id_bigint_create_table).migrate }
 
     it {
       expect(show_create_table(:books)).to include '`id` bigint(20) NOT NULL AUTO_INCREMENT'
-      expect(subject.dump).to match_fuzzy dsl2
+      expect(subject.dump).to match_fuzzy id_bigint_create_table
     }
   end
 end

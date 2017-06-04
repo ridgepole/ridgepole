@@ -6,9 +6,9 @@ create_table "child", <%= i unsigned(true) + {force: :cascade} %> do |t|
   t.integer "parent_id", <%= i limit(4) + unsigned(true) %>
 end
 
-<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
+<%= add_index "child", ["parent_id"], {name: "par_id"} + cond('5.0', using: :btree) %>
 
-create_table "parent", <%= i unsigned(true) + {force: :cascade} %> do |t|
+create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
 end
       EOS
     }
@@ -55,14 +55,14 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
     let(:dsl) {
       erbh(<<-EOS)
 # Define parent before child
-create_table "parent", force: :cascade do |t|
+create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
 end
 
 create_table "child", force: :cascade do |t|
   t.integer "parent_id"
 end
 
-<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
+<%= add_index "child", ["parent_id"], {name: "par_id"} + cond('5.0', using: :btree) %>
 
 add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       EOS
@@ -75,9 +75,9 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id", <%= i limit(4) %>
 end
 
-<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
+<%= add_index "child", ["parent_id"], {name: "par_id"} + cond('5.0', using: :btree) %>
 
-create_table "parent", force: :cascade do |t|
+create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
 end
 
 add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
@@ -99,14 +99,14 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
     let(:dsl) {
       erbh(<<-EOS)
 # Define parent before child
-create_table "parent", force: :cascade do |t|
+create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
 end
 
 create_table "child", force: :cascade do |t|
   t.integer "parent_id", unsigned: true
 end
 
-<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
+<%= add_index "child", ["parent_id"], {name: "par_id"} + cond('5.0', using: :btree) %>
 
 add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
 
@@ -127,7 +127,7 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
     let(:dsl) {
       erbh(<<-EOS)
 # Define parent before child
-create_table "parent", force: :cascade do |t|
+create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
 end
 
 create_table "child", force: :cascade do |t|
@@ -153,7 +153,7 @@ add_foreign_key "child", "parent"
     let(:dsl) {
       erbh(<<-EOS)
 # Define parent before child
-create_table "parent", force: :cascade do |t|
+create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
 end
 
 add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
