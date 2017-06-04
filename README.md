@@ -73,6 +73,9 @@ add_foreign_key :articles, :authors # without `name:`
   * Use `t.column` for migration ([pull#114](https://github.com/winebarrel/ridgepole/pull/114))
   * Support DATABASE_URL format ([pull#118](https://github.com/winebarrel/ridgepole/pull/118))
   * Add Ruby2.4 CI ([pull#119](https://github.com/winebarrel/ridgepole/pull/119))
+* `>= 0.7.0`
+  * Remove Rails 4.x support
+  * Add Rails 5.1 support
 
 ## Installation
 
