@@ -3,10 +3,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    null: false
-          t.integer "salary",    null: false
+          t.integer "emp_no", null: false
+          t.integer "salary", null: false
           t.date    "from_date", null: false
-          t.date    "to_date",   null: false
+          t.date    "to_date", null: false
         end
 
         <%= add_index "salaries", ["emp_no"], name: "emp_no", using: :btree %>
@@ -16,10 +16,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    null: false
-          t.integer "salary",    null: false
+          t.integer "emp_no", null: false
+          t.integer "salary", null: false
           t.date    "from_date", null: false
-          t.date    "to_date",   null: false
+          t.date    "to_date", null: false
         end
 
         <%= add_index "salaries", ["emp_no"], name: "emp_no" %>
@@ -39,10 +39,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    null: false
-          t.integer "salary",    null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no", null: false
+          t.integer "salary", null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
 
         <%= add_index "salaries", ["emp_no"], name: "emp_no", using: :btree %>
@@ -52,10 +52,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:dsl) {
       erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    null: false
-          t.integer "salary",    null: false
+          t.integer "emp_no", null: false
+          t.integer "salary", null: false
           t.date    "from_date", null: false
-          t.date    "to_date",   null: false
+          t.date    "to_date", null: false
         end
 
         <%= add_index "salaries", ["salary"], using: :hash %>
@@ -65,10 +65,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    null: false
-          t.integer "salary",    null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no", null: false
+          t.integer "salary", null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
 
         <%= add_index "salaries", ["salary"], name: "index_salaries_on_salary", using: :hash %>
@@ -77,10 +77,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     before { subject.diff( <<-EOS).migrate }
       create_table "salaries", id: false, force: :cascade do |t|
-        t.integer "emp_no",    null: false
-        t.integer "salary",    null: false
-        t.date    "from_date",           null: false
-        t.date    "to_date",             null: false
+        t.integer "emp_no", null: false
+        t.integer "salary", null: false
+        t.date    "from_date", null: false
+        t.date    "to_date", null: false
       end
 
       add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
@@ -101,10 +101,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    null: false
-          t.integer "salary",    null: false
+          t.integer "emp_no", null: false
+          t.integer "salary", null: false
           t.date    "from_date", null: false
-          t.date    "to_date",   null: false
+          t.date    "to_date", null: false
         end
 
         <%= add_index "salaries", ["emp_no"], name: "emp_no", using: :btree %>
@@ -114,10 +114,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    null: false
-          t.integer "salary",    null: false
+          t.integer "emp_no", null: false
+          t.integer "salary", null: false
           t.date    "from_date", null: false
-          t.date    "to_date",   null: false
+          t.date    "to_date", null: false
         end
 
         <%= add_index "salaries", ["emp_no"], using: :btree %>
@@ -137,10 +137,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    null: false
-          t.integer "salary",    null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no", null: false
+          t.integer "salary", null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
 
         <%= add_index "salaries", ["emp_no"], name: "emp_no", using: :btree %>
@@ -150,10 +150,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:dsl) {
       erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    null: false
-          t.integer "salary",    null: false
+          t.integer "emp_no", null: false
+          t.integer "salary", null: false
           t.date    "from_date", null: false
-          t.date    "to_date",   null: false
+          t.date    "to_date", null: false
         end
 
         <%= add_index "salaries", ["salary"], using: :btree %>
@@ -163,10 +163,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    null: false
-          t.integer "salary",    null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no", null: false
+          t.integer "salary", null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
 
         <%= add_index "salaries", ["salary"], name: "index_salaries_on_salary", using: :btree %>

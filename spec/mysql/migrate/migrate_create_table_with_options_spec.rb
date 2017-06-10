@@ -3,7 +3,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       <<-EOS
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no",  null: false, unsigned: true
+          t.integer "emp_no", null: false, unsigned: true
           t.integer "club_id", null: false, unsigned: true
         end
 

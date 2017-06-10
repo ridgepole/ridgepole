@@ -3,13 +3,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date     "birth_date",            null: false
+          t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name",  limit: 16, null: false
-          t.string   "gender",     limit: 1,  null: false
-          t.date     "hire_date",             null: false
-          t.datetime "created_at",            null: false
-          t.datetime "updated_at",            null: false
+          t.string   "last_name", limit: 16, null: false
+          t.string   "gender", limit: 1, null: false
+          t.date     "hire_date", null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
         end
       EOS
     }
@@ -17,11 +17,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date   "birth_date",            null: false
+          t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name",  limit: 16, null: false
-          t.string "gender",     limit: 1,  null: false
-          t.date   "hire_date",             null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
           t.timestamps
         end
       EOS
@@ -39,12 +39,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when use timestamps (change)' do
     let(:actual_dsl) {
       erbh(<<-EOS)
-        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
-          t.date   "birth_date",            null: false
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+          t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name",  limit: 16, null: false
-          t.string "gender",     limit: 1,  null: false
-          t.date   "hire_date",             null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
         end
       EOS
     }
@@ -52,11 +52,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:dsl) {
       <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date   "birth_date",            null: false
+          t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name",  limit: 16, null: false
-          t.string "gender",     limit: 1,  null: false
-          t.date   "hire_date",             null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
           t.timestamps
         end
       EOS
@@ -64,14 +64,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) {
       erbh(<<-EOS)
-        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
-          t.date     "birth_date",            null: false
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+          t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name",  limit: 16, null: false
-          t.string   "gender",     limit: 1,  null: false
-          t.date     "hire_date",             null: false
-          t.datetime "created_at",            null: false
-          t.datetime "updated_at",            null: false
+          t.string   "last_name", limit: 16, null: false
+          t.string   "gender", limit: 1, null: false
+          t.date     "hire_date", null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
         end
       EOS
     }
@@ -92,11 +92,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date     "birth_date",            null: false
+          t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name",  limit: 16, null: false
-          t.string   "gender",     limit: 1,  null: false
-          t.date     "hire_date",             null: false
+          t.string   "last_name", limit: 16, null: false
+          t.string   "gender", limit: 1, null: false
+          t.date     "hire_date", null: false
           t.integer "products_id"
           t.integer "user_id"
         end
@@ -106,11 +106,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date   "birth_date",            null: false
+          t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name",  limit: 16, null: false
-          t.string "gender",     limit: 1,  null: false
-          t.date   "hire_date",             null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
           t.references :products, :user
         end
       EOS
@@ -129,11 +129,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date     "birth_date",            null: false
+          t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name",  limit: 16, null: false
-          t.string   "gender",     limit: 1,  null: false
-          t.date     "hire_date",             null: false
+          t.string   "last_name", limit: 16, null: false
+          t.string   "gender", limit: 1, null: false
+          t.date     "hire_date", null: false
           t.integer  "products_id"
           t.string   "products_type"
           t.integer  "user_id"
@@ -145,11 +145,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date   "birth_date",            null: false
+          t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name",  limit: 16, null: false
-          t.string "gender",     limit: 1,  null: false
-          t.date   "hire_date",             null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
           t.references :products, :user, polymorphic: true
         end
       EOS
@@ -167,12 +167,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when use references (change)' do
     let(:actual_dsl) {
       erbh(<<-EOS)
-        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
-          t.date   "birth_date",            null: false
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+          t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name",  limit: 16, null: false
-          t.string "gender",     limit: 1,  null: false
-          t.date   "hire_date",             null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
         end
       EOS
     }
@@ -180,11 +180,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:dsl) {
       <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date   "birth_date",            null: false
+          t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name",  limit: 16, null: false
-          t.string "gender",     limit: 1,  null: false
-          t.date   "hire_date",             null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
           t.references :products, :user
         end
       EOS
@@ -192,14 +192,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) {
       erbh(<<-EOS)
-        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
-          t.date    "birth_date",             null: false
-          t.string  "first_name",  limit: 14, null: false
-          t.string  "last_name",   limit: 16, null: false
-          t.string  "gender",      limit: 1,  null: false
-          t.date    "hire_date",              null: false
-          t.integer "products_id", <%= i limit(4) %>
-          t.integer "user_id", <%= i limit(4) %>
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+          t.date    "birth_date", null: false
+          t.string  "first_name", limit: 14, null: false
+          t.string  "last_name", limit: 16, null: false
+          t.string  "gender", limit: 1, null: false
+          t.date    "hire_date", null: false
+          t.integer "products_id"
+          t.integer "user_id"
         end
       EOS
     }
@@ -219,12 +219,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when use references with polymorphic (change)' do
     let(:actual_dsl) {
       erbh(<<-EOS)
-        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
-          t.date   "birth_date",            null: false
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+          t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name",  limit: 16, null: false
-          t.string "gender",     limit: 1,  null: false
-          t.date   "hire_date",             null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
         end
       EOS
     }
@@ -232,11 +232,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:dsl) {
       <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date   "birth_date",            null: false
+          t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name",  limit: 16, null: false
-          t.string "gender",     limit: 1,  null: false
-          t.date   "hire_date",             null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
           t.references :products, :user, polymorphic: true
         end
       EOS
@@ -244,16 +244,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) {
       erbh(<<-EOS)
-        create_table "employees", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
-          t.date    "birth_date",                null: false
-          t.string  "first_name",    limit: 14,  null: false
-          t.string  "last_name",     limit: 16,  null: false
-          t.string  "gender",        limit: 1,   null: false
-          t.date    "hire_date",                 null: false
-          t.integer "products_id",   <%= i limit(4) %>
-          t.string  "products_type", <%= i limit(255) %>
-          t.integer "user_id",       <%= i limit(4) %>
-          t.string  "user_type",     <%= i limit(255) %>
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+          t.date    "birth_date", null: false
+          t.string  "first_name", limit: 14, null: false
+          t.string  "last_name", limit: 16, null: false
+          t.string  "gender", limit: 1, null: false
+          t.date    "hire_date", null: false
+          t.integer "products_id"
+          t.string  "products_type"
+          t.integer "user_id"
+          t.string  "user_type"
         end
       EOS
     }

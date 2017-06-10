@@ -6,8 +6,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string   "name"
           t.integer  "price"
           t.text     "description"
-          t.datetime "created_at",  null: false
-          t.datetime "updated_at",  null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
         end
       EOS
     }
@@ -18,8 +18,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string      "name"
           t.integer     "price"
           t.text        "description"
-          t.datetime    "created_at",                      null: false
-          t.datetime    "updated_at",                      null: false
+          t.datetime    "created_at", null: false
+          t.datetime    "updated_at", null: false
           t.daterange   "daterange"
           t.numrange    "numrange"
           t.tsrange     "tsrange"
@@ -41,9 +41,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.ltree       "ltree"
           t.citext      "citext"
           t.point       "point"
-          t.bit         "bit",         limit: 1
+          t.bit         "bit", limit: 1
           t.bit_varying "bit varying"
-          t.money       "money",                 scale: 2
+          t.money       "money", scale: 2
         end
       EOS
     }

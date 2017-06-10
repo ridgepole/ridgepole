@@ -9,7 +9,6 @@ require 'processing_for_travis'
 require 'ridgepole'
 require 'ridgepole/cli/config'
 require 'active_support/core_ext'
-require 'string_ext' # TODO: must be remove
 require 'open3'
 require 'tempfile'
 require 'json'

@@ -3,13 +3,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date     "birth_date",            null: false
+          t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name",  limit: 16, null: false
-          t.string   "gender",     limit: 1,  null: false
-          t.date     "hire_date",             null: false
-          t.datetime "created_at",            null: false
-          t.datetime "updated_at",            null: false
+          t.string   "last_name", limit: 16, null: false
+          t.string   "gender", limit: 1, null: false
+          t.date     "hire_date", null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
           t.boolean  "registered"
         end
       EOS
@@ -18,13 +18,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date     "birth_date",            null: false
+          t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name",  limit: 16, null: false
-          t.string   "gender",     limit: 1,  null: false
-          t.date     "hire_date",             null: false
-          t.datetime "created_at",            null: false
-          t.datetime "updated_at",            null: false
+          t.string   "last_name", limit: 16, null: false
+          t.string   "gender", limit: 1, null: false
+          t.date     "hire_date", null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
           t.boolean  "registered"
         end
       EOS
@@ -43,13 +43,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date     "birth_date",            null: false
+          t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name",  limit: 16, null: false
-          t.string   "gender",     limit: 1,  null: false
-          t.date     "hire_date",             null: false
-          t.datetime "created_at",            null: false
-          t.datetime "updated_at",            null: false
+          t.string   "last_name", limit: 16, null: false
+          t.string   "gender", limit: 1, null: false
+          t.date     "hire_date", null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
           t.boolean  "registered"
         end
       EOS
@@ -58,13 +58,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date     "birth_date",            null: false
+          t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name",  limit: 16, null: false
-          t.string   "gender",     limit: 1,  null: false
-          t.date     "hire_date",             null: false
-          t.datetime "created_at",            null: false
-          t.datetime "updated_at",            null: false
+          t.string   "last_name", limit: 16, null: false
+          t.string   "gender", limit: 1, null: false
+          t.date     "hire_date", null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
           t.boolean  "registered", limit: 1
         end
       EOS
