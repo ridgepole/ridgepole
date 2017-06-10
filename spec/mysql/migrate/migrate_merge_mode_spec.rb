@@ -156,7 +156,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     subject { client(merge: true) }
 
     it {
-      delta = subject.diff(expected_dsl.delete_create_table('clubs'))
+      delta = subject.diff(expected_dsl.gsub(/create_table "clubs".+\n\s*t\..+\n\s*end/, ""))
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
