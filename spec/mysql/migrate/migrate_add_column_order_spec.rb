@@ -3,10 +3,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "dept_emp", force: :cascade do |t|
-          t.integer "emp_no",    null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no", null: false
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
       EOS
     }
@@ -14,11 +14,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "dept_emp", force: :cascade do |t|
-          t.integer "emp_no0",   null: false
-          t.integer "emp_no",    null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no0", null: false
+          t.integer "emp_no", null: false
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
       EOS
     }
@@ -51,10 +51,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no",    null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no", null: false
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
       EOS
     }
@@ -62,11 +62,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no0",   null: false
-          t.integer "emp_no",    null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no0", null: false
+          t.integer "emp_no", null: false
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
       EOS
     }
@@ -97,9 +97,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "dept_emp", primary_key: "emp_no", force: :cascade do |t|
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
       EOS
     }
@@ -107,10 +107,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "dept_emp", primary_key: "emp_no", force: :cascade do |t|
-          t.integer "emp_no0",   null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no0", null: false
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
       EOS
     }
@@ -142,11 +142,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "dept_emp", primary_key: ["emp_no1", "emp_no2"], force: :cascade do |t|
-          t.integer "emp_no1",             null: false
-          t.integer "emp_no2",             null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no1", null: false
+          t.integer "emp_no2", null: false
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
       EOS
     }
@@ -154,12 +154,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "dept_emp", primary_key: ["emp_no1", "emp_no2"], force: :cascade do |t|
-          t.integer "emp_no1",             null: false
-          t.integer "emp_no2",             null: false
-          t.integer "emp_no0",             null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no1", null: false
+          t.integer "emp_no2", null: false
+          t.integer "emp_no0", null: false
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
       EOS
     }
@@ -192,11 +192,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "dept_emp", primary_key: ["emp_no1", "emp_no2"], force: :cascade do |t|
-          t.integer "emp_no1",             null: false
-          t.integer "emp_no2",             null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no1", null: false
+          t.integer "emp_no2", null: false
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
       EOS
     }
@@ -204,12 +204,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "dept_emp", primary_key: ["emp_no1", "emp_no2"], force: :cascade do |t|
-          t.integer "emp_no0",             null: false
-          t.integer "emp_no1",             null: false
-          t.integer "emp_no2",             null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no0", null: false
+          t.integer "emp_no1", null: false
+          t.integer "emp_no2", null: false
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
       EOS
     }

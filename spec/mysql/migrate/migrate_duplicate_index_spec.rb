@@ -3,10 +3,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:dsl) {
       <<-EOS
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no",    null: false
-          t.integer "salary",    null: false
+          t.integer "emp_no", null: false
+          t.integer "salary", null: false
           t.date    "from_date", null: false
-          t.date    "to_date",   null: false
+          t.date    "to_date", null: false
         end
 
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree

@@ -3,13 +3,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date     "birth_date",                    null: false
-          t.string   "first_name",      limit: 14,    null: false
-          t.string   "last_name",       limit: 16,    null: false
-          t.string   "gender",          limit: 1,     null: false
-          t.date     "hire_date",                     null: false
-          t.datetime "created_at",                    null: false
-          t.datetime "updated_at",                    null: false
+          t.date     "birth_date", null: false
+          t.string   "first_name", limit: 14, null: false
+          t.string   "last_name", limit: 16, null: false
+          t.string   "gender", limit: 1, null: false
+          t.date     "hire_date", null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
           t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
         end
       EOS
@@ -18,13 +18,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date     "birth_date",                  null: false
-          t.string   "first_name",      limit: 14,  null: false
-          t.string   "last_name",       limit: 16,  null: false
-          t.string   "gender",          limit: 1,   null: false
-          t.date     "hire_date",                   null: false
-          t.datetime "created_at",                  null: false
-          t.datetime "updated_at",                  null: false
+          t.date     "birth_date", null: false
+          t.string   "first_name", limit: 14, null: false
+          t.string   "last_name", limit: 16, null: false
+          t.string   "gender", limit: 1, null: false
+          t.date     "hire_date", null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
           t.binary   "registered_name", limit: 255
         end
       EOS
@@ -46,13 +46,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date     "birth_date",                  null: false
-          t.string   "first_name",      limit: 14,  null: false
-          t.string   "last_name",       limit: 16,  null: false
-          t.string   "gender",          limit: 1,   null: false
-          t.date     "hire_date",                   null: false
-          t.datetime "created_at",                  null: false
-          t.datetime "updated_at",                  null: false
+          t.date     "birth_date", null: false
+          t.string   "first_name", limit: 14, null: false
+          t.string   "last_name", limit: 16, null: false
+          t.string   "gender", limit: 1, null: false
+          t.date     "hire_date", null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
           t.binary   "registered_name", limit: 255
         end
       EOS
@@ -61,13 +61,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date     "birth_date",                    null: false
-          t.string   "first_name",      limit: 14,    null: false
-          t.string   "last_name",       limit: 16,    null: false
-          t.string   "gender",          limit: 1,     null: false
-          t.date     "hire_date",                     null: false
-          t.datetime "created_at",                    null: false
-          t.datetime "updated_at",                    null: false
+          t.date     "birth_date", null: false
+          t.string   "first_name", limit: 14, null: false
+          t.string   "last_name", limit: 16, null: false
+          t.string   "gender", limit: 1, null: false
+          t.date     "hire_date", null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
           t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
         end
       EOS
@@ -89,13 +89,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date     "birth_date",                  null: false
-          t.string   "first_name",      limit: 14,  null: false
-          t.string   "last_name",       limit: 16,  null: false
-          t.string   "gender",          limit: 1,   null: false
-          t.date     "hire_date",                   null: false
-          t.datetime "created_at",                  null: false
-          t.datetime "updated_at",                  null: false
+          t.date     "birth_date", null: false
+          t.string   "first_name", limit: 14, null: false
+          t.string   "last_name", limit: 16, null: false
+          t.string   "gender", limit: 1, null: false
+          t.date     "hire_date", null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
           t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
         end
       EOS
@@ -104,13 +104,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date     "birth_date",                    null: false
-          t.string   "first_name",      limit: 14,    null: false
-          t.string   "last_name",       limit: 16,    null: false
-          t.string   "gender",          limit: 1,     null: false
-          t.date     "hire_date",                     null: false
-          t.datetime "created_at",                    null: false
-          t.datetime "updated_at",                    null: false
+          t.date     "birth_date", null: false
+          t.string   "first_name", limit: 14, null: false
+          t.string   "last_name", limit: 16, null: false
+          t.string   "gender", limit: 1, null: false
+          t.date     "hire_date", null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
           t.binary   "registered_name"
         end
       EOS

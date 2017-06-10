@@ -3,10 +3,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no",                null: false
-          t.integer "club_id",               null: false
-          t.string  "string",                null: false
-          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false
+          t.integer "emp_no", null: false
+          t.integer "club_id", null: false
+          t.string  "string", null: false
+          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false
         end
       EOS
     }
@@ -14,10 +14,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no",                null: false, comment: "any comment"
-          t.integer "club_id",               null: false, comment: "any comment2"
-          t.string  "string",                null: false, comment: "any comment3"
-          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false, comment: "any comment4"
+          t.integer "emp_no", null: false, comment: "any comment"
+          t.integer "club_id", null: false, comment: "any comment2"
+          t.string  "string", null: false, comment: "any comment3"
+          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "any comment4"
         end
       EOS
     }
@@ -38,10 +38,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no",                null: false, comment: "any comment"
-          t.integer "club_id",               null: false, comment: "any comment2"
-          t.string  "string",                null: false, comment: "any comment3"
-          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false, comment: "any comment4"
+          t.integer "emp_no", null: false, comment: "any comment"
+          t.integer "club_id", null: false, comment: "any comment2"
+          t.string  "string", null: false, comment: "any comment3"
+          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "any comment4"
         end
       EOS
     }
@@ -49,10 +49,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no",                null: false
-          t.integer "club_id",               null: false
-          t.string  "string",                null: false
-          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false
+          t.integer "emp_no", null: false
+          t.integer "club_id", null: false
+          t.string  "string", null: false
+          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false
         end
       EOS
     }
@@ -73,10 +73,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no",                null: false, comment: "any comment"
-          t.integer "club_id",               null: false, comment: "any comment2"
-          t.string  "string",                null: false, comment: "any comment3"
-          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false, comment: "any comment4"
+          t.integer "emp_no", null: false, comment: "any comment"
+          t.integer "club_id", null: false, comment: "any comment2"
+          t.string  "string", null: false, comment: "any comment3"
+          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "any comment4"
         end
       EOS
     }
@@ -84,10 +84,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no",                null: false, comment: "other comment"
-          t.integer "club_id",               null: false, comment: "other comment2"
-          t.string  "string",                null: false, comment: "other comment3"
-          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false, comment: "other comment4"
+          t.integer "emp_no", null: false, comment: "other comment"
+          t.integer "club_id", null: false, comment: "other comment2"
+          t.string  "string", null: false, comment: "other comment3"
+          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "other comment4"
         end
       EOS
     }
@@ -108,10 +108,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no",                null: false, comment: "any comment"
-          t.integer "club_id",               null: false, comment: "any comment2"
-          t.string  "string",                null: false, comment: "any comment3"
-          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false, comment: "any comment4"
+          t.integer "emp_no", null: false, comment: "any comment"
+          t.integer "club_id", null: false, comment: "any comment2"
+          t.string  "string", null: false, comment: "any comment3"
+          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "any comment4"
         end
       EOS
     }
@@ -132,10 +132,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade, comment: "table comment" do |t|
-          t.integer "emp_no",                null: false, comment: "other comment"
-          t.integer "club_id",               null: false, comment: "other comment2"
-          t.string  "string",                null: false, comment: "other comment3"
-          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false, comment: "other comment4"
+          t.integer "emp_no", null: false, comment: "other comment"
+          t.integer "club_id", null: false, comment: "other comment2"
+          t.string  "string", null: false, comment: "other comment3"
+          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "other comment4"
         end
       EOS
     }
@@ -155,10 +155,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "employee_clubs", force: :cascade, comment: "table comment" do |t|
-          t.integer "emp_no",                null: false, comment: "other comment"
-          t.integer "club_id",               null: false, comment: "other comment2"
-          t.string  "string",                null: false, comment: "other comment3"
-          t.text    "text",    <%= i cond('5.0.', limit: 65535) %>, null: false, comment: "other comment4"
+          t.integer "emp_no", null: false, comment: "other comment"
+          t.integer "club_id", null: false, comment: "other comment2"
+          t.string  "string", null: false, comment: "other comment3"
+          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "other comment4"
         end
       EOS
     }

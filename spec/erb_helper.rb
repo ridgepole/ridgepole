@@ -17,7 +17,7 @@ ERBh.define_method(:add_index) do |table_name, column_name, options|
   @_erbout.sub!(/\bend\s*\z/, '')
 
   # XXX:
-  if not condition('5.0') and options[:using] == :btree
+  if not condition(5.0) and options[:using] == :btree
     options.delete(:using)
   end
 
@@ -30,22 +30,6 @@ ERBh.define_method(:add_index) do |table_name, column_name, options|
       t.index #{column_name.inspect}, #{options.modern_inspect_without_brace}
     end
   EOS
-end
-
-ERBh.define_method(:unsigned) do |value, *conds|
-  if condition(*conds)
-    {unsigned: value}
-  else
-    {}
-  end
-end
-
-ERBh.define_method(:limit) do |value, *conds|
-  if condition(*conds)
-    {limit: value}
-  else
-    {}
-  end
 end
 
 ERBh.define_method(:cond) do |conds, m, e = nil|

@@ -6,9 +6,9 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id"
 end
 
-<%= add_index "child", ["parent_id"], {name: "par_id"} + cond('5.0', using: :btree) %>
+<%= add_index "child", ["parent_id"], {name: "par_id"} + cond(5.0, using: :btree) %>
 
-create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
+create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
 end
       EOS
     }
@@ -58,11 +58,11 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id"
 end
 
-<%= add_index "child", ["parent_id"], {name: "par_id"} + cond('5.0', using: :btree) %>
+<%= add_index "child", ["parent_id"], {name: "par_id"} + cond(5.0, using: :btree) %>
 
 add_foreign_key "child", "parent", name: "child_ibfk_1"
 
-create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
+create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
 end
       EOS
     }
@@ -73,9 +73,9 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id"
 end
 
-<%= add_index "child", ["parent_id"], {name: "par_id"} + cond('5.0', using: :btree) %>
+<%= add_index "child", ["parent_id"], {name: "par_id"} + cond(5.0, using: :btree) %>
 
-create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
+create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
 end
 
 add_foreign_key "child", "parent", name: "child_ibfk_1"
@@ -100,13 +100,13 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id", unsigned: true
 end
 
-<%= add_index "child", ["parent_id"], {name: "par_id"} + cond('5.0', using: :btree) %>
+<%= add_index "child", ["parent_id"], {name: "par_id"} + cond(5.0, using: :btree) %>
 
 add_foreign_key "child", "parent", name: "child_ibfk_1"
 
 add_foreign_key "child", "parent", name: "child_ibfk_1"
 
-create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
+create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
 end
       EOS
     }
@@ -127,11 +127,11 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id", unsigned: true
 end
 
-<%= add_index "child", ["parent_id"], {name: "par_id"} + cond('5.0', using: :btree) %>
+<%= add_index "child", ["parent_id"], {name: "par_id"} + cond(5.0, using: :btree) %>
 
 add_foreign_key "child", "parent"
 
-create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
+create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
 end
       EOS
     }
@@ -150,7 +150,7 @@ end
       erbh(<<-EOS)
 add_foreign_key "child", "parent", name: "child_ibfk_1"
 
-create_table "parent", <%= i cond('5.1', id: :integer) %>, force: :cascade do |t|
+create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
 end
       EOS
     }

@@ -1,24 +1,24 @@
-describe 'Ridgepole::Client (with bigint pk)', condition: '5.0.' do
+describe 'Ridgepole::Client (with bigint pk)', condition: 5.0 do
   let(:id_primary_key_create_table) {
-    <<-RUBY
+    <<-EOS
       create_table "books", id: :primary_key, limit: 8, force: :cascade do |t|
-        t.string   "title",      null: false
-        t.integer  "author_id",  null: false
+        t.string   "title", null: false
+        t.integer  "author_id", null: false
         t.datetime "created_at"
         t.datetime "updated_at"
       end
-    RUBY
+    EOS
   }
 
   let(:id_bigint_create_table) {
-    <<-RUBY
+    <<-EOS
       create_table "books", id: :bigint, force: :cascade do |t|
-        t.string   "title",      null: false
-        t.integer  "author_id",  null: false
+        t.string   "title", null: false
+        t.integer  "author_id", null: false
         t.datetime "created_at"
         t.datetime "updated_at"
       end
-    RUBY
+    EOS
   }
 
   context 'when with limit:8' do

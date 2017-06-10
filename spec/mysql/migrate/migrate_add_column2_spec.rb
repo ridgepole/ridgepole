@@ -15,10 +15,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS, template_variables)
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no",    <%= i limit(4) + {null: false} %>
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no", null: false
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
       EOS
     }
@@ -26,11 +26,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       <<-EOS
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4, null: false
-          t.integer "emp_no2",             null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no", limit: 4, null: false
+          t.integer "emp_no2", null: false
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
       EOS
     }
@@ -54,10 +54,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS, template_variables)
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no",    <%= i limit(4) + {null: false} %>
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no", null: false
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
       EOS
     }
@@ -65,11 +65,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       <<-EOS
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4, null: false
-          t.integer "emp_no2",             null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no", limit: 4, null: false
+          t.integer "emp_no2", null: false
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
       EOS
     }
@@ -93,10 +93,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) {
       erbh(<<-EOS, template_variables)
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no",    <%= i limit(4) + {null: false} %>
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no", null: false
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
       EOS
     }
@@ -104,11 +104,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       <<-EOS
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no",    limit: 4, null: false
-          t.integer "emp_no2",   limit: 4, null: false
-          t.string  "dept_no",   limit: 4, null: false
-          t.date    "from_date",           null: false
-          t.date    "to_date",             null: false
+          t.integer "emp_no", limit: 4, null: false
+          t.integer "emp_no2", limit: 4, null: false
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
         end
       EOS
     }

@@ -7,7 +7,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", <%= i cond(5.1, id: :integer) + {force: :cascad} %>e do |t|
-          t.string  "title",     null: false
+          t.string  "title", null: false
           t.integer "author_id", null: false
         end
 
@@ -22,7 +22,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", <%= i cond(5.1, id: :integer) + {force: :cascad} %>e do |t|
-          t.string  "title",                     null: false
+          t.string  "title", null: false
           t.integer "author_id", null: false
         end
 
@@ -79,7 +79,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", <%= i cond(5.1, id: :integer) + {force: :cascad} %>e do |t|
-          t.string  "title",     null: false
+          t.string  "title", null: false
           t.integer "author_id", null: false
         end
 
@@ -95,7 +95,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", <%= i cond(5.1, id: :integer) + {force: :cascad} %>e do |t|
-          t.string  "title",                     null: false
+          t.string  "title", null: false
           t.integer "author_id", null: false
         end
 
@@ -153,7 +153,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", <%= i cond(5.1, id: :integer) + {force: :cascad} %>e do |t|
-          t.string  "title",     null: false
+          t.string  "title", null: false
           t.integer "author_id", null: false
         end
 
@@ -168,7 +168,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", <%= i cond(5.1, id: :integer) + {force: :cascad} %>e do |t|
-          t.string  "title",                     null: false
+          t.string  "title", null: false
           t.integer "author_id", null: false
         end
 
@@ -224,7 +224,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", <%= i cond(5.1, id: :integer) + {force: :cascad} %>e do |t|
-          t.string  "title",     null: false
+          t.string  "title", null: false
           t.integer "author_id", null: false
         end
 
@@ -240,7 +240,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", <%= i cond(5.1, id: :integer) + {force: :cascad} %>e do |t|
-          t.string  "title",                     null: false
+          t.string  "title", null: false
           t.integer "author_id", null: false
         end
 
