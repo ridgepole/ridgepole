@@ -127,14 +127,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         <%= add_index "salaries", ["emp_no"], name: "emp_no", using: :btree %>
 
-        create_table "titles", id: false, force: :cascade do |t|
+        create_table "titles2", id: false, force: :cascade, renamed_from: :titles do |t|
           t.integer "emp_no", null: false
           t.string  "title", limit: 50, null: false
           t.date    "from_date", null: false
           t.date    "to_date"
         end
 
-        <%= add_index "titles", ["emp_no"], name: "emp_no", using: :btree %>
+        <%= add_index "titles2", ["emp_no"], name: "emp_no", using: :btree %>
       EOS
     }
 
@@ -146,7 +146,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
-      expect(subject.dump).to match_fuzzy expected_dsl.gsub(/, renamed_from: 'employees'/, '')
+      expect(subject.dump).to match_fuzzy expected_dsl.gsub(/, renamed_from: ('employees'|:titles)/, '')
     }
 
     it {
@@ -154,6 +154,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(delta.script).to match_fuzzy <<-EOS
         rename_table("employees2", "employees")
+        rename_table("titles2", "titles")
       EOS
     }
   end
@@ -170,6 +171,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         <%= add_index "employees", ["first_name"], name: "first_name", using: :btree %>
+
+        create_table "employees3", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
+          t.date   "birth_date",            null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name",  limit: 16, null: false
+          t.string "gender",     limit: 1,  null: false
+          t.date   "hire_date",             null: false
+        end
+
+        <%= add_index "employees3", ["first_name"], name: "first_name", using: :btree %>
       EOS
     }
 
@@ -184,6 +195,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         <%= add_index "employees2", ["first_name"], name: "first_name", using: :btree %>
+
+        create_table "employees4", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %>, renamed_from: :employees3 do |t|
+          t.date   "birth_date",            null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name",  limit: 16, null: false
+          t.string "gender",     limit: 1,  null: false
+          t.date   "hire_date",             null: false
+        end
+
+        <%= add_index "employees4", ["first_name"], name: "first_name", using: :btree %>
       EOS
     }
 
