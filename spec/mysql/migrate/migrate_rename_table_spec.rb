@@ -172,7 +172,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         <%= add_index "employees", ["first_name"], name: "first_name", using: :btree %>
 
-        create_table "employees3", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %> do |t|
+        create_table "employees3", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
@@ -196,7 +196,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         <%= add_index "employees2", ["first_name"], name: "first_name", using: :btree %>
 
-        create_table "employees4", primary_key: "emp_no", <%= i unsigned(true) + {force: :cascade} %>, renamed_from: :employees3 do |t|
+        create_table "employees4", primary_key: "emp_no", force: :cascade, renamed_from: :employees3 do |t|
           t.date   "birth_date",            null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name",  limit: 16, null: false
