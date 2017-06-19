@@ -120,7 +120,7 @@ Usage: ridgepole [options]
         --with-apply
     -o, --output SCHEMAFILE
     -t, --tables TABLES
-        --ignore-tables TABLES
+        --ignore-tables REGEX_LIST
         --enable-mysql-awesome
         --mysql-use-alter
         --dump-without-table-options
