@@ -77,6 +77,7 @@ add_foreign_key :articles, :authors # without `name:`
   * Remove Rails 4.x support
   * Add Rails 5.1 support
   * Remove `--enable-mysql-awesome` option
+  * Add `--skip-drop-table` option
 
 ## Installation
 
@@ -126,6 +127,7 @@ Usage: ridgepole [options]
         --dump-without-table-options
         --dump-with-default-fk-name
         --index-removed-drop-column
+        --skip-drop-table
     -r, --require LIBS
         --log-file LOG_FILE
         --verbose

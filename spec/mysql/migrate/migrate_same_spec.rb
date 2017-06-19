@@ -74,7 +74,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       delta = subject.diff(dsl)
-      puts delta.script
       expect(delta.differ?).to be_falsey
       expect(subject.dump).to match_fuzzy dsl
       delta.migrate

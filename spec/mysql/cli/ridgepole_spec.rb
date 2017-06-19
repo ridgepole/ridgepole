@@ -44,6 +44,7 @@ describe 'ridgepole' do
             --dump-without-table-options
             --dump-with-default-fk-name
             --index-removed-drop-column
+            --skip-drop-table
         -r, --require LIBS
             --log-file LOG_FILE
             --verbose
