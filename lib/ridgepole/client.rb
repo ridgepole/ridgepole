@@ -14,10 +14,6 @@ class Ridgepole::Client
     @parser = Ridgepole::DSLParser.new(@options)
     @diff = Ridgepole::Diff.new(@options)
 
-    if @options[:enable_mysql_awesome]
-      require 'activerecord/mysql/awesome/base'
-    end
-
     if @options[:mysql_use_alter]
       require 'ridgepole/ext/abstract_mysql_adapter/use_alter_index'
     end

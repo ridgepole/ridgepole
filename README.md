@@ -76,6 +76,7 @@ add_foreign_key :articles, :authors # without `name:`
 * `>= 0.7.0`
   * Remove Rails 4.x support
   * Add Rails 5.1 support
+  * Remove `--enable-mysql-awesome` option
 
 ## Installation
 
@@ -121,7 +122,6 @@ Usage: ridgepole [options]
     -o, --output SCHEMAFILE
     -t, --tables TABLES
         --ignore-tables REGEX_LIST
-        --enable-mysql-awesome
         --mysql-use-alter
         --dump-without-table-options
         --dump-with-default-fk-name
@@ -358,9 +358,8 @@ Apply `Schemafile`
 docker-compose up -d
 bundle install
 bundle exec appraisal install
-bundle exec appraisal activerecord-4.2 rake
-# ENABLE_MYSQL_AWESOME=1 bundle exec appraisal activerecord-4.2 rake
-# POSTGRESQL=1 bundle exec appraisal activerecord-4.2 rake
+bundle exec appraisal activerecord-5.1 rake
+# POSTGRESQL=1 bundle exec appraisal activerecord-5.1 rake
 ```
 
 **Notice:** mysql-client/postgresql-client is required.

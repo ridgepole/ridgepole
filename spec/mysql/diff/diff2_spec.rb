@@ -175,8 +175,8 @@ describe 'Ridgepole::Client.diff' do
       expect(delta.script).to match_fuzzy erbh(<<-EOS)
         change_column("employee_clubs", "club_id", :integer, <%= {:unsigned=>false, :null=>true, :default=>nil} + cond(5.1, comment: nil) %>)
 
-        change_column("employees", "last_name", :string, <%= {:limit=>20, :default=>"XXX"} + cond(5.1, comment: nil) %>)
-        change_column("employees", "gender", :string, <%= {:limit=>2, :null=>false, :default=>nil} + cond(5.1, comment: nil) %>)
+        change_column("employees", "last_name", :string, <%= {:limit=>20, :default=>"XXX", :unsigned=>false} + cond(5.1, comment: nil) %>)
+        change_column("employees", "gender", :string, <%= {:limit=>2, :null=>false, :default=>nil, :unsigned=>false} + cond(5.1, comment: nil) %>)
       EOS
     }
 

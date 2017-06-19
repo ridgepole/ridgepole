@@ -295,7 +295,7 @@ class Ridgepole::Diff
       opts[:default] = nil
     end
 
-    if @options[:enable_mysql_awesome]
+    if Ridgepole::ConnectionAdapters.mysql?
       opts[:unsigned] = false unless opts.has_key?(:unsigned)
     end
   end
