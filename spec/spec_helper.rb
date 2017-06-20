@@ -3,6 +3,7 @@ $: << File.expand_path('..', __FILE__)
 require 'spec_const'
 require 'spec_condition'
 require 'cli_helper'
+require 'hide_pending_formatter'
 
 require 'processing_for_travis'
 

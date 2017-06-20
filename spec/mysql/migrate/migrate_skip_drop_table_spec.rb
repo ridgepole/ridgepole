@@ -1,5 +1,5 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when marge table' do
+  context 'when skil drop table' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "clubs", force: :cascade do |t|
@@ -143,7 +143,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     before { subject.diff(actual_dsl).migrate }
-    subject { client(merge: true) }
+    subject { client(skip_drop_table: true) }
 
     it {
       delta = subject.diff(expected_dsl.gsub(/create_table "clubs".+\n\s*t\..+\n\s*end/, ""))
@@ -155,7 +155,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     it {
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, merge: true, reverse: true)
+      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, skip_drop_table: true, reverse: true)
       expect(delta.differ?).to be_falsey
     }
   end

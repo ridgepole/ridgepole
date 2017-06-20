@@ -34,7 +34,7 @@ class Ridgepole::Diff
       end
     end
 
-    unless @options[:merge]
+    unless @options[:merge] or @options[:skip_drop_table]
       from.each do |table_name, from_attrs|
         next unless target?(table_name)
 
