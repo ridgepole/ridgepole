@@ -78,6 +78,7 @@ add_foreign_key :articles, :authors # without `name:`
   * Add Rails 5.1 support
   * Remove `--enable-mysql-awesome` option
   * Add `--skip-drop-table` option
+  * Support foreign key without name
 
 ## Installation
 
