@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'mysql2', '~> 0.3.20'
   spec.add_development_dependency 'pg'
   spec.add_development_dependency 'coveralls'
-  spec.add_development_dependency 'appraisal'
+  spec.add_development_dependency 'appraisal', '>= 2.2.0'
   spec.add_development_dependency 'rspec-match_fuzzy', '>= 0.1.3'
   spec.add_development_dependency 'erbh', '>= 0.1.2'
   spec.add_development_dependency 'hash_modern_inspect', '>= 0.1.1'
