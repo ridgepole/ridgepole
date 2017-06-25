@@ -8,9 +8,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
+          t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: { first_name: 10, last_name: 10 }, <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "employees", ["first_name", "last_name"], name: "idx_first_name_last_name", length: {"first_name"=>10, "last_name"=>10}, using: :btree %>
       EOS
     }
 
@@ -22,9 +21,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
+          t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: 10, <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "employees", ["first_name", "last_name"], name: "idx_first_name_last_name", length: 10, using: :btree %>
       EOS
     }
 
@@ -40,7 +38,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when change index (length is Numeric) / Update' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      <<-EOS
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
@@ -59,16 +57,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
+          t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: 10, <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "employees", ["first_name", "last_name"], name: "idx_first_name_last_name", length: 10, using: :btree %>
       EOS
     }
 
     let(:actual_dsl_plus_index) {
-      erbh(<<-EOS)
-        #{actual_dsl}
-        <%= add_index "employees", ["first_name", "last_name"], name: "idx_first_name_last_name", length: {"first_name"=>10, "last_name"=>10}, using: :btree %>
+      actual_dsl.sub(/\bend\b/, erbh(<<-EOS))
+          t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: { first_name: 10, last_name: 10 }, <%= i cond(5.0, using: :btree) %>
+        end
       EOS
     }
 

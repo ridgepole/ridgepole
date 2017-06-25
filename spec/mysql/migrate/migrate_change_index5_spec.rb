@@ -7,9 +7,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
+          t.index ["emp_no", "id"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "salaries", ["emp_no", "id"], name: "emp_no", using: :btree %>
       EOS
     }
 
@@ -20,9 +19,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
+          t.index ["emp_no", "id"], name: "emp_no", unique: false, <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "salaries", ["emp_no", "id"], name: "emp_no", unique: false, using: :btree %>
       EOS
     }
 
@@ -43,9 +41,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
+          t.index ["emp_no", "id"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "salaries", ["emp_no", "id"], name: "emp_no", using: :btree %>
       EOS
     }
 
@@ -56,9 +53,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
+          t.index ["emp_no", "id"], name: "emp_no", unique: true, <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "salaries", ["emp_no", "id"], name: "emp_no", unique: true, using: :btree %>
       EOS
     }
 
