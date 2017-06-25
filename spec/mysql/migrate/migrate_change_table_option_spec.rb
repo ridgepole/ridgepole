@@ -28,9 +28,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     subject { client }
 
     it {
-      expect(Ridgepole::Logger.instance).to receive(:warn).with("[WARNING] No difference of schema configuration for table `employees` but table options differ.")
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(erbh(%Q!  from: {:primary_key=>"emp_no"}!))
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(erbh(%Q!    to: {:primary_key=>"emp_no2"}!))
+      expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-EOS)
+[WARNING] No difference of schema configuration for table `employees` but table options differ.
+  from: {:primary_key=>"emp_no"}
+    to: {:primary_key=>"emp_no2"}
+      EOS
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_falsey
       expect(subject.dump).to match_fuzzy actual_dsl
@@ -39,9 +41,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     it {
-      expect(Ridgepole::Logger.instance).to receive(:warn).with("[WARNING] No difference of schema configuration for table `employees` but table options differ.")
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(erbh(%Q!  from: {:primary_key=>"emp_no2"}!))
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(erbh(%Q!    to: {:primary_key=>"emp_no"}!))
+      expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-EOS)
+[WARNING] No difference of schema configuration for table `employees` but table options differ.
+  from: {:primary_key=>"emp_no2"}
+    to: {:primary_key=>"emp_no"}
+      EOS
       delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
       expect(delta.differ?).to be_falsey
     }

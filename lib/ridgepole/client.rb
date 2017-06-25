@@ -22,7 +22,9 @@ class Ridgepole::Client
       require 'ridgepole/ext/schema_dumper'
     end
 
-    require 'ridgepole/ext/abstract_mysql_adapter/disable_table_options'
+    if @options[:dump_without_table_options]
+      require 'ridgepole/ext/abstract_mysql_adapter/disable_table_options'
+    end
   end
 
   def dump(&block)

@@ -130,6 +130,7 @@ Usage: ridgepole [options]
         --dump-with-default-fk-name
         --index-removed-drop-column
         --skip-drop-table
+        --change-table-options
     -r, --require LIBS
         --log-file LOG_FILE
         --verbose
