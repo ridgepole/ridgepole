@@ -57,6 +57,9 @@ class Ridgepole::DSLParser
       :bit,
       :bit_varying,
       :money,
+
+      # https://github.com/rails/rails/blob/v5.1.1/activerecord/lib/active_record/connection_adapters/abstract/schema_definitions.rb#L184
+      :virtual
     ].uniq
 
     TYPES.each do |column_type|

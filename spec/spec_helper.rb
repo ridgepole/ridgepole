@@ -39,6 +39,8 @@ RSpec.configure do |config|
     end
 
     case example.metadata[:file_path]
+    when /mysql57/
+      skip unless condition(:mysql57)
     when /mysql/
       skip if condition(:postgresql)
     when /postgresql/
