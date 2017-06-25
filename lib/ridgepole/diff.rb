@@ -111,7 +111,7 @@ class Ridgepole::Diff
     end
 
     unless from == to
-      @logger.warn <<-EOS
+      @logger.warn(<<-EOS)
 [WARNING] No difference of schema configuration for table `#{table_name}` but table options differ.
   from: #{from}
     to: #{to}
