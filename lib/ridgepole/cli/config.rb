@@ -42,6 +42,7 @@ class Ridgepole::Config
         'username' => uri.user,
         'password' => uri.password,
         'host'     => uri.host,
+        'port'     => uri.port,
         'database' => uri.path.sub(%r|\A/|, ''),
       }
      end
