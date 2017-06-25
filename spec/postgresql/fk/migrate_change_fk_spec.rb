@@ -9,7 +9,7 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id"
 end
 
-<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
+<%= add_index "child", ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
 
 add_foreign_key "child", "parent", name: "child_ibfk_1", on_delete: :cascade
       EOS
@@ -21,7 +21,7 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id"
 end
 
-<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
+<%= add_index "child", ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
 
 create_table "parent", force: :cascade do |t|
 end
@@ -36,7 +36,7 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id"
 end
 
-<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
+<%= add_index "child", ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
 
 create_table "parent", force: :cascade do |t|
 end
@@ -68,7 +68,7 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id"
 end
 
-<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
+<%= add_index "child", ["parent_id"], <%= i({name: "par_id", using: :btree %>
 
 add_foreign_key "child", "parent", on_delete: :cascade
       EOS
@@ -80,7 +80,7 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id"
 end
 
-<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
+<%= add_index "child", ["parent_id"], <%= i({name: "par_id", using: :btree %>
 
 create_table "parent", force: :cascade do |t|
 end
@@ -95,7 +95,7 @@ create_table "child", force: :cascade do |t|
   t.integer "parent_id"
 end
 
-<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
+<%= add_index "child", ["parent_id"], <%= i({name: "par_id", using: :btree %>
 
 create_table "parent", force: :cascade do |t|
 end

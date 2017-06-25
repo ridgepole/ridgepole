@@ -7,22 +7,20 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
+          t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "salaries", ["emp_no"], name: "emp_no", using: :btree %>
       EOS
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      <<-EOS
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
+          t.index ["emp_no"], name: "emp_no"
         end
-
-        <%= add_index "salaries", ["emp_no"], name: "emp_no" %>
       EOS
     }
 
@@ -43,39 +41,36 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
+          t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "salaries", ["emp_no"], name: "emp_no", using: :btree %>
       EOS
     }
 
     let(:dsl) {
-      erbh(<<-EOS)
+      <<-EOS
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
+          t.index ["salary"], using: :hash
         end
-
-        <%= add_index "salaries", ["salary"], using: :hash %>
       EOS
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      <<-EOS
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
+          t.index ["salary"], name: "index_salaries_on_salary", using: :hash
         end
-
-        <%= add_index "salaries", ["salary"], name: "index_salaries_on_salary", using: :hash %>
       EOS
     }
 
-    before { subject.diff( <<-EOS).migrate }
+    before { subject.diff(<<-EOS).migrate }
       create_table "salaries", id: false, force: :cascade do |t|
         t.integer "emp_no", null: false
         t.integer "salary", null: false
@@ -105,9 +100,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
+          t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "salaries", ["emp_no"], name: "emp_no", using: :btree %>
       EOS
     }
 
@@ -118,9 +112,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
+          t.index ["emp_no"], <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "salaries", ["emp_no"], using: :btree %>
       EOS
     }
 
@@ -141,9 +134,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
+          t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "salaries", ["emp_no"], name: "emp_no", using: :btree %>
       EOS
     }
 
@@ -154,9 +146,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
+          t.index ["salary"], <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "salaries", ["salary"], using: :btree %>
       EOS
     }
 
@@ -167,9 +158,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
+          t.index ["salary"], name: "index_salaries_on_salary", <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "salaries", ["salary"], name: "index_salaries_on_salary", using: :btree %>
       EOS
     }
 

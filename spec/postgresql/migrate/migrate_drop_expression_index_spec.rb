@@ -10,14 +10,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
       create_table "users", force: :cascade do |t|
         t.string "name", null: false
         t.datetime "created_at", null: false
-        t.index "lower((name)::text)", <%= i({name: "index_users_on_lower_name"} + cond(5.0, using: :btree)) %>
+        t.index "lower((name)::text)", name: "index_users_on_lower_name", <%= i cond(5.0, using: :btree) %>
       end
     EOS
 
     let(:expected_dsl) { erbh(<<-EOS) }
       create_table "users", force: :cascade do |t|
         t.string "name", null: false
-        t.index "lower((name)::text)", <%= i({name: "index_users_on_lower_name"} + cond(5.0, using: :btree)) %>
+        t.index "lower((name)::text)", name: "index_users_on_lower_name", <%= i cond(5.0, using: :btree) %>
       end
     EOS
 
@@ -35,7 +35,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) { erbh(<<-EOS) }
       create_table "users", force: :cascade do |t|
         t.string "name", null: false
-        t.index "lower((name)::text)", <%= i({name: "index_users_on_lower_name"} + cond(5.0, using: :btree)) %>
+        t.index "lower((name)::text)", name: "index_users_on_lower_name", <%= i cond(5.0, using: :btree) %>
       end
     EOS
 

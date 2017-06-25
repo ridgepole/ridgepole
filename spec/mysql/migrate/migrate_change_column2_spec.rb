@@ -8,9 +8,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
+          t.index ["gender"], name: "gender", <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "employees", ["gender"], name: "gender", using: :btree %>
       EOS
     }
 
@@ -22,9 +21,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   :hire_date, null: false
+          t.index :gender, name: :gender, <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index :employees, :gender, name: :gender, using: :btree %>
       EOS
     }
 
@@ -46,9 +44,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
+          t.index ["gender"], name: "gender", <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "employees", ["gender"], name: "gender", using: :btree %>
       EOS
     }
 
@@ -60,9 +57,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   :hire_date2, null: false
+          t.index :last_name, name: :last_name, <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index :employees, :last_name, name: :last_name, using: :btree %>
       EOS
     }
 
@@ -74,9 +70,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date2", null: false
+          t.index ["last_name"], name: "last_name", <%= i cond(5.0, using: :btree) %>
         end
-
-        <%= add_index "employees", ["last_name"], name: "last_name", using: :btree %>
       EOS
     }
 
