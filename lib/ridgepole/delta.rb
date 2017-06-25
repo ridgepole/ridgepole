@@ -272,7 +272,6 @@ drop_table(#{table_name.inspect})
   def append_change_table_options(table_name, table_options, buf)
     # XXX: MySQL only
     buf.puts(<<-EOS)
-
 execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name)} #{table_options}"
     EOS
 
