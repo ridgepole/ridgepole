@@ -26,7 +26,8 @@ gemfile:
   - gemfiles/activerecord_5.1.gemfile
 env:
   matrix:
-    - POSTGRESQL=0
+    - MYSQL56=1
+    - MYSQL57=1
     - POSTGRESQL=1
 services:
   - docker
