@@ -80,6 +80,7 @@ add_foreign_key :articles, :authors # without `name:`
   * Add `--skip-drop-table` option
   * Support foreign key without name
   * Support MySQL JSON Type and Generated Columns
+  * Add `--mysql-change-table-options` option
 
 ## Installation
 
@@ -130,7 +131,7 @@ Usage: ridgepole [options]
         --dump-with-default-fk-name
         --index-removed-drop-column
         --skip-drop-table
-        --change-table-options
+        --mysql-change-table-options
     -r, --require LIBS
         --log-file LOG_FILE
         --verbose
