@@ -59,7 +59,10 @@ class Ridgepole::DSLParser
       :money,
 
       # https://github.com/rails/rails/blob/v5.1.1/activerecord/lib/active_record/connection_adapters/abstract/schema_definitions.rb#L184
-      :virtual
+      :virtual,
+
+      # https://github.com/rails/rails/blob/v5.0.4/activerecord/lib/active_record/connection_adapters/abstract_mysql_adapter.rb#L53
+      :json,
     ].uniq
 
     TYPES.each do |column_type|

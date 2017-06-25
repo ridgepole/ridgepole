@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
   context 'when change virtual column' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      <<-EOS
         create_table "books", force: :cascade do |t|
           t.string   "title"
           t.virtual "upper_title", type: :string, null: false, as: "upper(`title`)"
@@ -13,7 +13,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      <<-EOS
         create_table "books", force: :cascade do |t|
           t.string   "title"
           t.virtual "upper_title", type: :string, null: false, as: "length(`title`)"

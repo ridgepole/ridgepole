@@ -1,22 +1,20 @@
-describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
+describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add virtual column' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "books", force: :cascade do |t|
-          t.string  "title"
-          t.index ["title"], name: "index_books_on_title"
+          t.string  "title", null: false
+          t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
         end
       EOS
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "books", force: :cascade do |t|
-          t.string   "title"
-          t.virtual  "upper_title", type: :string, as: "upper(`title`)"
-          t.virtual  "title_length", type: :integer, as: "length(`title`)", stored: true
-          t.index ["title"], name: "index_books_on_title"
-          t.index ["title_length"], name: "index_books_on_title_length"
+          t.string  "title", null: false
+          t.json    "attrs", null: false
+          t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
         end
       EOS
     }
