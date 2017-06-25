@@ -75,16 +75,12 @@ class Ridgepole::DSLParser
     end
 
     def add_foreign_key(from_table, to_table, options = {})
-      unless options[:name]
-        raise "Foreign key name in `#{from_table}` is undefined"
-      end
-
       from_table = from_table.to_s
       to_table = to_table.to_s
-      options[:name] = options[:name].to_s
+      options[:name] = options[:name].to_s if options[:name]
       @__definition[from_table] ||= {}
       @__definition[from_table][:foreign_keys] ||= {}
-      idx = options[:name]
+      idx = options[:name] || [from_table, to_table]
 
       if @__definition[from_table][:foreign_keys][idx]
         raise "Foreign Key `#{from_table}(#{idx})` already defined"
