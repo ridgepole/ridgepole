@@ -78,9 +78,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     subject { client }
 
     it {
-      expect(Ridgepole::Logger.instance).to receive(:warn).with("[WARNING] No difference of schema configuration for table `users` but table options differ.")
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(erbh(%Q!  from: {:id=>:uuid, :default=>"uuid_generate_v1()"}!))
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(erbh(%Q!    to: {:id=>:uuid, :default=>"uuid_generate_v4()"}!))
+      expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-EOS)
+[WARNING] No difference of schema configuration for table `users` but table options differ.
+  from: {:id=>:uuid, :default=>"uuid_generate_v1()"}
+    to: {:id=>:uuid, :default=>"uuid_generate_v4()"}
+      EOS
 
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_falsey

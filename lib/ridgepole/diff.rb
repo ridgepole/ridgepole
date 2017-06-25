@@ -101,10 +101,21 @@ class Ridgepole::Diff
 
     normalize_default_proc_options!(from, to)
 
+    from_options = from[:options] || {}
+    to_options = to[:options] || {}
+
+    if @options[:mysql_change_table_options] and from_options != to_options and Ridgepole::ConnectionAdapters.mysql?
+      from.delete(:options)
+      to.delete(:options)
+      table_delta[:table_options] = to_options
+    end
+
     unless from == to
-      Ridgepole::Logger.instance.warn("[WARNING] No difference of schema configuration for table `#{table_name}` but table options differ.")
-      Ridgepole::Logger.instance.warn("  from: #{from}")
-      Ridgepole::Logger.instance.warn("    to: #{to}")
+      @logger.warn <<-EOS
+[WARNING] No difference of schema configuration for table `#{table_name}` but table options differ.
+  from: #{from}
+    to: #{to}
+      EOS
     end
   end
 
