@@ -123,32 +123,6 @@ add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
     }
   end
 
-  context 'no name' do
-    let(:dsl) {
-      erbh(<<-EOS)
-# Define parent before child
-create_table "parent", force: :cascade do |t|
-end
-
-create_table "child", force: :cascade do |t|
-  t.integer "parent_id", unsigned: true
-end
-
-<%= add_index "child", ["parent_id"], name: "par_id", using: :btree %>
-
-add_foreign_key "child", "parent"
-      EOS
-    }
-
-    subject { client(dump_with_default_fk_name: true) }
-
-    it {
-      expect {
-        subject.diff(dsl)
-      }.to raise_error('Foreign key name in `child` is undefined')
-    }
-  end
-
   context 'orphan fk' do
     let(:dsl) {
       erbh(<<-EOS)
