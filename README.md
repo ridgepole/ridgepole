@@ -79,6 +79,7 @@ add_foreign_key :articles, :authors # without `name:`
   * Remove `--enable-mysql-awesome` option
   * Add `--skip-drop-table` option
   * Support foreign key without name
+  * Support MySQL JSON Type and Generated Columns
 
 ## Installation
 
