@@ -244,8 +244,8 @@ end
     end
 
     unless (foreign_keys = attrs[:foreign_keys] || {}).empty?
-      foreign_keys.each do |foreign_key_name, foreign_key_attrs|
-        append_add_foreign_key(table_name, foreign_key_name, foreign_key_attrs, buf_for_fk, @options)
+      foreign_keys.each do |_, foreign_key_attrs|
+        append_add_foreign_key(table_name, foreign_key_attrs, buf_for_fk, @options)
       end
     end
 
@@ -415,16 +415,16 @@ remove_index(#{table_name.inspect}, #{target.inspect})
   end
 
   def append_change_foreign_keys(table_name, delta, buf, options)
-    (delta[:delete] || {}).each do |foreign_key_name, attrs|
-      append_remove_foreign_key(table_name, foreign_key_name, attrs, buf, options)
+    (delta[:delete] || {}).each do |_, attrs|
+      append_remove_foreign_key(table_name, attrs, buf, options)
     end
 
-    (delta[:add] || {}).each do |foreign_key_name, attrs|
-      append_add_foreign_key(table_name, foreign_key_name, attrs, buf, options)
+    (delta[:add] || {}).each do |_, attrs|
+      append_add_foreign_key(table_name, attrs, buf, options)
     end
   end
 
-  def append_add_foreign_key(table_name, foreign_key_name, attrs, buf, options)
+  def append_add_foreign_key(table_name, attrs, buf, options)
     to_table = attrs.fetch(:to_table)
     attrs_options = attrs[:options] || {}
 
@@ -433,9 +433,15 @@ add_foreign_key(#{table_name.inspect}, #{to_table.inspect}, #{attrs_options.insp
     EOS
   end
 
-  def append_remove_foreign_key(table_name, foreign_key_name, attrs, buf, options)
+  def append_remove_foreign_key(table_name, attrs, buf, options)
     attrs_options = attrs[:options] || {}
-    target = {:name => attrs_options.fetch(:name)}
+    fk_name = attrs_options[:name]
+
+    if fk_name
+      target = {:name => fk_name}
+    else
+      target = attrs.fetch(:to_table)
+    end
 
     buf.puts(<<-EOS)
 remove_foreign_key(#{table_name.inspect}, #{target.inspect})

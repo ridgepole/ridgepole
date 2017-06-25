@@ -323,29 +323,29 @@ class Ridgepole::Diff
     to = (to || {}).dup
     foreign_keys_delta = {}
 
-    to.each do |foreign_key_name, to_attrs|
-      from_attrs = from.delete(foreign_key_name)
+    to.each do |foreign_key_name_or_tables, to_attrs|
+      from_attrs = from.delete(foreign_key_name_or_tables)
 
       if from_attrs
         if from_attrs != to_attrs
           foreign_keys_delta[:add] ||= {}
-          foreign_keys_delta[:add][foreign_key_name] = to_attrs
+          foreign_keys_delta[:add][foreign_key_name_or_tables] = to_attrs
 
           unless options[:merge]
             foreign_keys_delta[:delete] ||= {}
-            foreign_keys_delta[:delete][foreign_key_name] = from_attrs
+            foreign_keys_delta[:delete][foreign_key_name_or_tables] = from_attrs
           end
         end
       else
         foreign_keys_delta[:add] ||= {}
-        foreign_keys_delta[:add][foreign_key_name] = to_attrs
+        foreign_keys_delta[:add][foreign_key_name_or_tables] = to_attrs
       end
     end
 
     unless options[:merge]
-      from.each do |foreign_key_name, from_attrs|
+      from.each do |foreign_key_name_or_tables, from_attrs|
         foreign_keys_delta[:delete] ||= {}
-        foreign_keys_delta[:delete][foreign_key_name] = from_attrs
+        foreign_keys_delta[:delete][foreign_key_name_or_tables] = from_attrs
       end
     end
 
