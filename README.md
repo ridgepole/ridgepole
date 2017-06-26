@@ -81,6 +81,7 @@ add_foreign_key :articles, :authors # without `name:`
   * Support foreign key without name
   * Support MySQL JSON Type and Generated Columns
   * Add `--mysql-change-table-options` option
+  * Pass config from env
 
 ## Installation
 
@@ -153,7 +154,8 @@ username: root
 
 $ ridgepole -c config.yml --export -o Schemafile
 # or `ridgepole -c '{adapter: mysql2, database: blog}' ...`
-# or `ridgepole -c 'mysql2://root:3306@127.0.0.1/blog' ...`
+# or `ridgepole -c 'mysql2://root:pass@127.0.0.1:3306/blog' ...`
+# or `export DB_URL='mysql2://...'; ridgepole -c env:DB_URL ...`
 Export Schema to `Schemafile`
 
 $ cat Schemafile

@@ -109,14 +109,33 @@ describe Ridgepole::Config do
   end
 
   context 'when passed DATABASE_URL' do
-    let(:config) { 'mysql2://root:1234@127.0.0.1/blog' }
+    let(:config) { 'mysql2://root:pass@127.0.0.1:3307/blog' }
     let(:env) { 'development' }
 
     it {
       expect(subject['adapter']).to eq "mysql2"
       expect(subject['database']).to eq "blog"
       expect(subject['username']).to eq "root"
-      expect(subject['password']).to eq "1234"
+      expect(subject['password']).to eq "pass"
+      expect(subject['port']).to eq 3307
+    }
+  end
+
+  context 'when passed DATABASE_URL from ENV' do
+    let(:config) { 'env:DATABASE_URL' }
+    let(:env) { 'development' }
+
+    before {
+      allow(ENV).to receive(:fetch).with('DATABASE_URL').
+        and_return('mysql2://root:pass@127.0.0.1:3307/blog')
+    }
+
+    it {
+      expect(subject['adapter']).to eq "mysql2"
+      expect(subject['database']).to eq "blog"
+      expect(subject['username']).to eq "root"
+      expect(subject['password']).to eq "pass"
+      expect(subject['port']).to eq 3307
     }
   end
 end
