@@ -208,4 +208,76 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_fuzzy ''
     }
   end
+
+  context 'when drop fk with parent table' do
+    let(:actual_dsl) {
+      erbh(<<-EOS)
+        create_table "child", force: :cascade do |t|
+          t.integer "parent_id"
+          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+        end
+
+        create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
+        end
+
+        add_foreign_key "child", "parent", name: "child_ibfk_1"
+      EOS
+    }
+
+    let(:expected_dsl) {
+      erbh(<<-EOS)
+        create_table "child", force: :cascade do |t|
+          t.integer "parent_id"
+          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+        end
+      EOS
+    }
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_fuzzy actual_dsl
+      delta.migrate
+      expect(subject.dump).to match_fuzzy expected_dsl
+    }
+  end
+
+  context 'when drop fk with parent table without name' do
+    let(:actual_dsl) {
+      erbh(<<-EOS)
+        create_table "child", force: :cascade do |t|
+          t.integer "parent_id"
+          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+        end
+
+        create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
+        end
+
+        add_foreign_key "child", "parent"
+      EOS
+    }
+
+    let(:expected_dsl) {
+      erbh(<<-EOS)
+        create_table "child", force: :cascade do |t|
+          t.integer "parent_id"
+          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+        end
+      EOS
+    }
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_fuzzy actual_dsl
+      delta.migrate
+      expect(subject.dump).to match_fuzzy expected_dsl
+    }
+  end
 end

@@ -71,6 +71,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Support MySQL JSON Type and Generated Columns
   * Add `--mysql-change-table-options` option
   * Pass config from env
+  * Fix change fk order
 
 ## Installation
 
