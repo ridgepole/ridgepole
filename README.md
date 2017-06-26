@@ -6,9 +6,11 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 (like Chef/Puppet)
 
 [![Gem Version](https://badge.fury.io/rb/ridgepole.svg)](http://badge.fury.io/rb/ridgepole)
-[![Edge Version](https://img.shields.io/badge/edge%20version-0.7.0.beta-green.svg)](https://rubygems.org/gems/ridgepole/versions/0.7.0.beta)
-[![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=master)](https://travis-ci.org/winebarrel/ridgepole)
-[![Coverage Status](https://coveralls.io/repos/winebarrel/ridgepole/badge.svg?branch=master)](https://coveralls.io/r/winebarrel/ridgepole?branch=master)
+[![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=0.6)](https://travis-ci.org/winebarrel/ridgepole)
+[![Coverage Status](https://coveralls.io/repos/github/winebarrel/ridgepole/badge.svg?branch=0.6)](https://coveralls.io/github/winebarrel/ridgepole?branch=0.6)
+[![Edge Version](https://img.shields.io/badge/edge%20version-0.7.0.beta-green.svg)](https://rubygems.org/gems/ridgepole/versions/0.7.0.beta2)
+[![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=0.7)](https://travis-ci.org/winebarrel/ridgepole)
+[![Coverage Status](https://coveralls.io/repos/github/winebarrel/ridgepole/badge.svg?branch=0.7)](https://coveralls.io/github/winebarrel/ridgepole?branch=0.7)
 
 **Notice**
 
