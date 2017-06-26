@@ -6,20 +6,9 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 (like Chef/Puppet)
 
 [![Gem Version](https://badge.fury.io/rb/ridgepole.svg)](http://badge.fury.io/rb/ridgepole)
+[![Edge Version](https://img.shields.io/badge/edge%20version-0.7.0.beta-green.svg)](https://rubygems.org/gems/ridgepole/versions/0.7.0.beta)
 [![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=master)](https://travis-ci.org/winebarrel/ridgepole)
 [![Coverage Status](https://coveralls.io/repos/winebarrel/ridgepole/badge.svg?branch=master)](https://coveralls.io/r/winebarrel/ridgepole?branch=master)
-
-**Important**
-
-Please don't use the following nameless fk:
-
-```ruby
-add_foreign_key :articles, :authors # without `name:`
-```
-
-**It is highly recommended to give a name to the fk explicitly.**
-
-![](https://cdn.pbrd.co/images/8Ymz6nU5x.gif)
 
 **Notice**
 
@@ -233,10 +222,6 @@ add_index "child", ["parent_id"], name: "par_ind", using: :btree
 
 add_foreign_key "child", "parent", name: "child_ibfk_1"
 ```
-
-**Notice:** **It is highly recommended to give a name to the fk explicitly.**
-
-Please pass `--dump-with-default-fk-name` option if you want to use the nameless index.
 
 ## Collation/Charset
 You can use the column collation by passing `--enable-mysql-awesome` ([activerecord-mysql-awesome](https://github.com/kamipo/activerecord-mysql-awesome) is required)
