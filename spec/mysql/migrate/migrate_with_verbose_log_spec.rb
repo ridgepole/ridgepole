@@ -45,7 +45,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         "#   employees",
         "# Compare definitions",
         "#   employees",
-        " {:definition=>\n   {\"birth_date\"=>{:options=>{:null=>false}, :type=>:date},\n    \"first_name\"=>{:options=>{:limit=>14, :null=>false}, :type=>:string},\n-   \"gender\"=>{:options=>{:limit=>1, :null=>false}, :type=>:string},\n+   \"gender2\"=>{:options=>{:limit=>1, :null=>false}, :type=>:string},\n    \"hire_date\"=>{:options=>{:null=>false}, :type=>:date},\n    \"last_name\"=>{:options=>{:limit=>16, :null=>false}, :type=>:string}},\n  :options=>{:primary_key=>\"emp_no\"}}",
+        "   {\"birth_date\"=>{:type=>:date, :options=>{:null=>false}},\n    \"first_name\"=>{:type=>:string, :options=>{:limit=>14, :null=>false}},\n    \"last_name\"=>{:type=>:string, :options=>{:limit=>16, :null=>false}},\n-   \"gender\"=>{:type=>:string, :options=>{:limit=>1, :null=>false}},\n+   \"gender2\"=>{:type=>:string, :options=>{:limit=>1, :null=>false}},\n    \"hire_date\"=>{:type=>:date, :options=>{:null=>false}}},\n  :options=>{:primary_key=>\"emp_no\"}}",
         "# Load tables",
         "#   employees",
         "# Load tables",
