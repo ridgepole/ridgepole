@@ -10,6 +10,7 @@ require 'active_support'
 require 'active_support/core_ext'
 
 require 'diffy'
+require 'pp_sort_hash'
 
 module Ridgepole; end
 
