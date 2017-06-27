@@ -13,6 +13,11 @@ $stderr.sync = true
 Version = Ridgepole::VERSION
 DEFAULT_FILENAME = 'Schemafile'
 
+MAGIC_COMMENT = <<-EOS
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+EOS
+
 COLUMN_TYPES = {
   :boolean => :bool,
   :integer => :int,
@@ -170,6 +175,7 @@ begin
         FileUtils.mkdir_p(schema_dir)
 
         open(schema_file, 'wb') do |f|
+          f.puts MAGIC_COMMENT
           f.puts definition
         end
       end
@@ -177,6 +183,8 @@ begin
       logger.info("  write `#{output_file}`")
 
       open(output_file, 'wb') do |f|
+        f.puts MAGIC_COMMENT
+
         requires.each do |require_path|
           f.puts "require '#{require_path}'"
         end
@@ -187,7 +195,10 @@ begin
         puts client.dump
       else
         logger.info("Export Schema to `#{output_file}`")
-        open(output_file, 'wb') {|f| f.puts client.dump }
+        open(output_file, 'wb') do |f|
+          f.puts MAGIC_COMMENT
+          f.puts client.dump
+        end
       end
     end
   when :apply
