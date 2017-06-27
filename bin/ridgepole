@@ -35,6 +35,7 @@ exit_code = 0
 options = {
   :dry_run => false,
   :debug   => false,
+  :color   => $stdout.tty?,
 }
 
 set_mode = proc do |m|
@@ -119,6 +120,7 @@ ARGV.options do |opt|
     opt.on(''  , '--log-file LOG_FILE')               {|v| options[:log_file] = v                               }
     opt.on(''  , '--verbose')                         {    Ridgepole::Logger.verbose = true                     }
     opt.on(''  , '--debug')                           {    options[:debug] = true                               }
+    opt.on(''  , '--[no-]color')                      {|v| options[:color] = v                                  }
 
     opt.on('-v', '--version') {
       puts opt.ver
@@ -145,6 +147,7 @@ begin
   client = Ridgepole::Client.new(Ridgepole::Config.load(config, env), options) if config
 
   ActiveRecord::Base.logger = logger
+  ActiveRecord::Base.colorize_logging = options[:color]
 
   case mode
   when :export

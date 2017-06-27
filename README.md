@@ -130,6 +130,7 @@ Usage: ridgepole [options]
         --log-file LOG_FILE
         --verbose
         --debug
+        --[no-]color
     -v, --version
 ```
 

@@ -413,7 +413,7 @@ class Ridgepole::Diff
       :diff => '-u'
     )
 
-    diffy.to_s(:text).gsub(/\s+\z/m, '')
+    diffy.to_s(@options[:color] ? :color : :text).gsub(/\s+\z/m, '')
   end
 
 end
