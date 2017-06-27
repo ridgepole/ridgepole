@@ -10,10 +10,10 @@ require 'active_support'
 require 'active_support/core_ext'
 
 require 'diffy'
-require 'pp_sort_hash'
 
 module Ridgepole; end
 
+require 'ridgepole/ext/pp_sort_hash'
 require 'ridgepole/client'
 require 'ridgepole/connection_adapters'
 require 'ridgepole/default_limit'
