@@ -46,6 +46,7 @@ describe 'ridgepole' do
             --index-removed-drop-column
             --skip-drop-table
             --mysql-change-table-options
+            --check-relation-type DEF_PK
         -r, --require LIBS
             --log-file LOG_FILE
             --verbose
