@@ -9,7 +9,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 [![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=0.6)](https://travis-ci.org/winebarrel/ridgepole)
 [![Coverage Status](https://coveralls.io/repos/github/winebarrel/ridgepole/badge.svg?branch=0.6)](https://coveralls.io/github/winebarrel/ridgepole?branch=0.6)
 
-[![Edge Version](https://img.shields.io/badge/edge_version-0.7.0.beta7-brightgreen.svg)](https://rubygems.org/gems/ridgepole/versions/0.7.0.beta7)
+[![Edge Version](https://img.shields.io/badge/edge_version-0.7.0.beta8-brightgreen.svg)](https://rubygems.org/gems/ridgepole/versions/0.7.0.beta8)
 [![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=0.7)](https://travis-ci.org/winebarrel/ridgepole)
 [![Coverage Status](https://coveralls.io/repos/github/winebarrel/ridgepole/badge.svg?branch=0.7)](https://coveralls.io/github/winebarrel/ridgepole?branch=0.7)
 
@@ -75,6 +75,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Add `--mysql-change-table-options` option
   * Pass config from env
   * Fix change fk order
+  * Add `--check-relation-type` option
 
 ## Installation
 
@@ -349,6 +350,31 @@ Apply `Schemafile`
 -- add_index("dept_manager", ["emp_no"], {:name=>"emp_no2", :using=>:btree})
    (23.4ms)  ALTER TABLE `dept_manager` ADD  INDEX `emp_no2` USING btree (`emp_no`)
    -> 0.0243s
+```
+
+## Relation column type check
+
+```ruby
+create_table "employees", force: :cascade do |t|
+  t.integer "emp_no", null: false
+  t.string  "first_name", limit: 14, null: false
+  t.string  "last_name", limit: 16, null: false
+end
+
+create_table "dept_manager", force: :cascade do |t|
+  t.integer "employee_id"
+  t.string  "dept_no", limit: 4, null: false
+end
+```
+
+```sh
+$ ridgepole -a -c database.yml --check-relation-type bigint # default primary key type (e.g. `<5.1`: integer, `>=5.1`: bigint for MySQL)
+Apply `Schemafile`
+...
+[WARNING] Relation column type is different.
+              employees.id: bigint
+  dept_manager.employee_id: integer
+...
 ```
 
 ## Running tests
