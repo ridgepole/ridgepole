@@ -467,18 +467,31 @@ class Ridgepole::Diff
         next unless parent_table_info
 
         table_options = parent_table_info.fetch(:options)
-        pk_type = table_options[:id] || @options[:check_relation_type].to_sym
-        child_column_type = column_attrs[:type]
 
-        if pk_type != child_column_type
+        parent_column_info = {
+          :type => table_options[:id] || @options[:check_relation_type].to_sym,
+          :unsigned => table_options[:unsigned],
+        }
+
+        child_column_info = {
+          :type => column_attrs[:type],
+          :unsigned => column_attrs.fetch(:options, {})[:unsigned],
+        }
+
+        parent_column_info.delete(:unsigned) unless parent_column_info[:unsigned]
+        child_column_info.delete(:unsigned) unless child_column_info[:unsigned]
+
+        if parent_column_info != child_column_info
           parent_label = "#{parent_table}.id"
           child_label = "#{child_table}.#{column_name}"
           label_len = [parent_label.length, child_label.length].max
+          parent_column_info_str = parent_column_info.inspect.slice(1...-1)
+          child_column_info_str = child_column_info.inspect.slice(1...-1)
 
           @logger.warn(<<-EOS % [label_len, parent_label, label_len, child_label])
 [WARNING] Relation column type is different.
-  %*s: #{pk_type}
-  %*s: #{child_column_type}
+  %*s: #{parent_column_info_str}
+  %*s: #{child_column_info_str}
           EOS
         end
       end

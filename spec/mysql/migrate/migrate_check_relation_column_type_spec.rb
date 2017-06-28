@@ -45,8 +45,66 @@ describe 'Ridgepole::Client#diff -> migrate', 5.1 do
     it {
       expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-EOS)
 [WARNING] Relation column type is different.
-              employees.id: bigint
-  dept_manager.employee_id: integer
+              employees.id: :type=>:bigint
+  dept_manager.employee_id: :type=>:integer
+      EOS
+
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_fuzzy actual_dsl
+      delta.migrate
+      expect(subject.dump).to match_fuzzy expected_dsl
+    }
+  end
+
+  context 'with unsigned warning' do
+    let(:actual_dsl) {
+      erbh(<<-EOS)
+        create_table "dept_manager", force: :cascade do |t|
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
+        end
+
+        create_table "employees", id: :bigint, unsigned: true, force: :cascade do |t|
+          t.integer "emp_no", null: false
+          t.date    "birth_date", null: false
+          t.string  "first_name", limit: 14, null: false
+          t.string  "last_name", limit: 16, null: false
+          t.string  "gender", limit: 1, null: false
+          t.date    "hire_date", null: false
+        end
+      EOS
+    }
+
+    let(:expected_dsl) {
+      erbh(<<-EOS)
+        create_table "dept_manager", force: :cascade do |t|
+          t.bigint "employee_id"
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
+        end
+
+        create_table "employees", id: :bigint, unsigned: true, force: :cascade do |t|
+          t.integer "emp_no", null: false
+          t.date    "birth_date", null: false
+          t.string  "first_name", limit: 14, null: false
+          t.string  "last_name", limit: 16, null: false
+          t.string  "gender", limit: 1, null: false
+          t.date    "hire_date", null: false
+        end
+      EOS
+    }
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client(check_relation_type: 'bigint') }
+
+    it {
+      expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-EOS)
+[WARNING] Relation column type is different.
+              employees.id: :type=>:bigint, :unsigned=>true
+  dept_manager.employee_id: :type=>:bigint
       EOS
 
       delta = subject.diff(expected_dsl)
@@ -87,6 +145,59 @@ describe 'Ridgepole::Client#diff -> migrate', 5.1 do
         end
 
         create_table "employees", force: :cascade do |t|
+          t.integer "emp_no", null: false
+          t.date    "birth_date", null: false
+          t.string  "first_name", limit: 14, null: false
+          t.string  "last_name", limit: 16, null: false
+          t.string  "gender", limit: 1, null: false
+          t.date    "hire_date", null: false
+        end
+      EOS
+    }
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client(check_relation_type: 'bigint') }
+
+    it {
+      expect(Ridgepole::Logger.instance).to_not receive(:warn)
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_fuzzy actual_dsl
+      delta.migrate
+      expect(subject.dump).to match_fuzzy expected_dsl
+    }
+  end
+
+  context 'with unsigned warning' do
+    let(:actual_dsl) {
+      erbh(<<-EOS)
+        create_table "dept_manager", force: :cascade do |t|
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
+        end
+
+        create_table "employees", id: :bigint, unsigned: true, force: :cascade do |t|
+          t.integer "emp_no", null: false
+          t.date    "birth_date", null: false
+          t.string  "first_name", limit: 14, null: false
+          t.string  "last_name", limit: 16, null: false
+          t.string  "gender", limit: 1, null: false
+          t.date    "hire_date", null: false
+        end
+      EOS
+    }
+
+    let(:expected_dsl) {
+      erbh(<<-EOS)
+        create_table "dept_manager", force: :cascade do |t|
+          t.bigint "employee_id", unsigned: true
+          t.string  "dept_no", limit: 4, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
+        end
+
+        create_table "employees", id: :bigint, unsigned: true, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.date    "birth_date", null: false
           t.string  "first_name", limit: 14, null: false
