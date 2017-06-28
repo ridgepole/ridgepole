@@ -13,11 +13,15 @@ class Ridgepole::Diff
     end
 
     delta = {}
+    relation_info = {}
+
     scan_table_rename(from, to, delta)
     # for reverse option
     scan_table_rename(to, from, delta)
 
     to.each do |table_name, to_attrs|
+      collect_relation_info!(table_name, to_attrs, relation_info)
+
       next unless target?(table_name)
 
       if (from_attrs = from.delete(table_name))
@@ -33,6 +37,8 @@ class Ridgepole::Diff
         delta[:add][table_name] = to_attrs
       end
     end
+
+    scan_relation_info(relation_info)
 
     unless @options[:merge] or @options[:skip_drop_table]
       from.each do |table_name, from_attrs|
@@ -419,4 +425,63 @@ class Ridgepole::Diff
     diffy.to_s(@options[:color] ? :color : :text).gsub(/\s+\z/m, '')
   end
 
+  def collect_relation_info!(table_name, table_attr, relation_info)
+    return unless @options[:check_relation_type]
+
+    attrs_by_column = {}
+    definition = table_attr[:definition] || {}
+
+    definition.each do |column_name, column_attrs|
+      if column_name =~ /\w+_id\z/
+        attrs_by_column[column_name] = column_attrs.dup
+      end
+    end
+
+    relation_info[table_name] = {
+      :options => table_attr[:options] || {},
+      :columns => attrs_by_column,
+    }
+  end
+
+  def scan_relation_info(relation_info)
+    return unless @options[:check_relation_type]
+
+    relation_info.each do |child_table, table_info|
+      next unless target?(child_table)
+
+      attrs_by_column = table_info.fetch(:columns)
+      parent_table_info = nil
+
+      attrs_by_column.each do |column_name, column_attrs|
+        parent_table = column_name.sub(/_id\z/, '')
+
+        [parent_table.pluralize, parent_table.singularize].each do |table_name|
+          parent_table_info = relation_info[table_name]
+
+          if parent_table_info
+            parent_table = table_name
+            break
+          end
+        end
+
+        next unless parent_table_info
+
+        table_options = parent_table_info.fetch(:options)
+        pk_type = table_options[:id] || @options[:check_relation_type].to_sym
+        child_column_type = column_attrs[:type]
+
+        if pk_type != child_column_type
+          parent_label = "#{parent_table}.id"
+          child_label = "#{child_table}.#{column_name}"
+          label_len = [parent_label.length, child_label.length].max
+
+          @logger.warn(<<-EOS % [label_len, parent_label, label_len, child_label])
+[WARNING] Relation column type is different.
+  %*s: #{pk_type}
+  %*s: #{child_column_type}
+          EOS
+        end
+      end
+    end
+  end
 end
