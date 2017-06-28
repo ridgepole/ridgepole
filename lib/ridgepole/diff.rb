@@ -402,6 +402,12 @@ class Ridgepole::Diff
     attrs1 = attrs1.merge(:options => attrs1.fetch(:options, {}).dup)
     attrs2 = attrs2.merge(:options => attrs2.fetch(:options, {}).dup)
     normalize_default_proc_options!(attrs1[:options], attrs2[:options])
+
+    if @options[:skip_column_comment_change]
+      attrs1.fetch(:options).delete(:comment)
+      attrs2.fetch(:options).delete(:comment)
+    end
+
     attrs1 == attrs2
   end
 

@@ -47,6 +47,7 @@ describe 'ridgepole' do
             --skip-drop-table
             --mysql-change-table-options
             --check-relation-type DEF_PK
+            --skip-column-comment-change
         -r, --require LIBS
             --log-file LOG_FILE
             --verbose

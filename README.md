@@ -76,6 +76,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Pass config from env
   * Fix change fk order
   * Add `--check-relation-type` option
+  * Add `--skip-column-comment-change` option
 
 ## Installation
 
@@ -128,6 +129,7 @@ Usage: ridgepole [options]
         --skip-drop-table
         --mysql-change-table-options
         --check-relation-type DEF_PK
+        --skip-column-comment-change
     -r, --require LIBS
         --log-file LOG_FILE
         --verbose
