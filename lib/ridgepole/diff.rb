@@ -478,8 +478,17 @@ class Ridgepole::Diff
           :unsigned => column_attrs.fetch(:options, {})[:unsigned],
         }
 
-        parent_column_info.delete(:unsigned) unless parent_column_info[:unsigned]
-        child_column_info.delete(:unsigned) unless child_column_info[:unsigned]
+        [parent_column_info, child_column_info].each do |column_info|
+          unless column_info[:unsigned]
+            column_info.delete(:unsigned)
+          end
+
+          # for PostgreSQL
+          column_info[:type] = {
+            :serial => :integer,
+            :bigserial => :bigint,
+          }.fetch(column_info[:type], column_info[:type])
+        end
 
         if parent_column_info != child_column_info
           parent_label = "#{parent_table}.id"
