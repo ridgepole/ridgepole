@@ -1,4 +1,4 @@
-describe 'Ridgepole::Client#diff -> migrate', 5.1 do
+describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
   context 'with warning' do
     let(:actual_dsl) {
       erbh(<<-EOS)
