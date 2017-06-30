@@ -21,6 +21,7 @@ EOS
 COLUMN_TYPES = {
   :boolean => :bool,
   :integer => :int,
+  :bigint  => :bigint,
   :float   => :float,
   :string  => :string,
   :text    => :text,

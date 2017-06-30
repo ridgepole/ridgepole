@@ -77,6 +77,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Fix change fk order
   * Add `--check-relation-type` option
   * Add `--skip-column-comment-change` option
+  * Add `--default-bigint-limit` option
 
 ## Installation
 
@@ -107,6 +108,7 @@ Usage: ridgepole [options]
         --bulk-change
         --default-bool-limit LIMIT
         --default-int-limit LIMIT
+        --default-bigint-limit LIMIT
         --default-float-limit LIMIT
         --default-string-limit LIMIT
         --default-text-limit LIMIT

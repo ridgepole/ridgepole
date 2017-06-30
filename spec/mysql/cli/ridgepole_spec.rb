@@ -25,6 +25,7 @@ describe 'ridgepole' do
             --bulk-change
             --default-bool-limit LIMIT
             --default-int-limit LIMIT
+            --default-bigint-limit LIMIT
             --default-float-limit LIMIT
             --default-string-limit LIMIT
             --default-text-limit LIMIT
