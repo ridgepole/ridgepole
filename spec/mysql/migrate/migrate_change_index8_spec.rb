@@ -21,7 +21,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: { "first_name" => 10, "last_name" => 10 }, <%= i cond(5.0, using: :btree) %>
+          t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: { "first_name" => 10, "last_name" => 10, "foo" => nil }, <%= i cond(5.0, using: :btree) %>
         end
       EOS
     }

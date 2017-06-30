@@ -67,7 +67,7 @@ class Ridgepole::DSLParser
       end
 
       if options[:length]
-        options[:length] = options[:length].symbolize_keys
+        options[:length] = options[:length].compact.symbolize_keys
       end
 
       @__definition[table_name][:indices][idx] = {
