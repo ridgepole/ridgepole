@@ -64,7 +64,9 @@ class Ridgepole::DSLParser
         column_name.each do |col|
           options[:length][col] = index_length
         end
+      end
 
+      if options[:length]
         options[:length] = options[:length].symbolize_keys
       end
 
