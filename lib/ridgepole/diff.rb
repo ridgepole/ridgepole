@@ -314,6 +314,10 @@ class Ridgepole::Diff
 
     if Ridgepole::ConnectionAdapters.mysql?
       opts[:unsigned] = false unless opts.has_key?(:unsigned)
+
+      if attrs[:type] == :integer and default_limit == Ridgepole::DefaultsLimit.default_limit(:bigint, @options)
+        attrs[:type] = :bigint
+      end
     end
   end
 
