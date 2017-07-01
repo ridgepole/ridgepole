@@ -115,6 +115,12 @@ class Ridgepole::Diff
       to.delete(:comment)
     end
 
+    [from, to].each do |table_attrs|
+      if table_attrs.has_key?(:default) and table_attrs[:default].nil?
+        table_attrs.delete(:default)
+      end
+    end
+
     if @options[:mysql_change_table_options] and from_options != to_options and Ridgepole::ConnectionAdapters.mysql?
       from.delete(:options)
       to.delete(:options)
