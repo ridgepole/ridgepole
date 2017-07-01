@@ -13,7 +13,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 [![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=0.7)](https://travis-ci.org/winebarrel/ridgepole)
 [![Coverage Status](https://coveralls.io/repos/github/winebarrel/ridgepole/badge.svg?branch=0.7)](https://coveralls.io/github/winebarrel/ridgepole?branch=0.7)
 
-**Notice**
+**ChangeLog**
 
 * `>= 0.4.8`
   * `activerecord-mysql-unsigned` is now optional. Please pass `--enable-mysql-unsigned` after you install [activerecord-mysql-unsigned](https://github.com/waka/activerecord-mysql-unsigned) if you want to use.
@@ -78,6 +78,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Add `--check-relation-type` option
   * Add `--skip-column-comment-change` option
   * Add `--default-bigint-limit` option
+  * Add `--ignore-table-comment` option
 
 ## Installation
 
@@ -131,6 +132,7 @@ Usage: ridgepole [options]
         --skip-drop-table
         --mysql-change-table-options
         --check-relation-type DEF_PK
+        --ignore-table-comment
         --skip-column-comment-change
     -r, --require LIBS
         --log-file LOG_FILE

@@ -110,6 +110,11 @@ class Ridgepole::Diff
     from_options = from[:options] || {}
     to_options = to[:options] || {}
 
+    if @options[:ignore_table_comment]
+      from.delete(:comment)
+      to.delete(:comment)
+    end
+
     if @options[:mysql_change_table_options] and from_options != to_options and Ridgepole::ConnectionAdapters.mysql?
       from.delete(:options)
       to.delete(:options)
