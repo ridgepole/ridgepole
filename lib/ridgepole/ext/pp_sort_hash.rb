@@ -4,6 +4,8 @@ module Ridgepole
       def pretty_print(q)
         q.group(1, '{', '}') {
           q.seplist(self.sort_by {|k, _| k.to_s } , nil, :each) {|k, v|
+            v = PpSortHash.extend_if_hash(v)
+
             q.group {
               q.pp k
               q.text '=>'
