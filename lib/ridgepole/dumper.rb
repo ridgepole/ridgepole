@@ -4,7 +4,6 @@ class Ridgepole::Dumper
   end
 
   def dump
-    stream = StringIO.new
     conn = ActiveRecord::Base.connection
     target_tables = @options[:tables]
     ignore_tables = @options[:ignore_tables]
@@ -24,7 +23,7 @@ class Ridgepole::Dumper
       end
     end
 
-    ActiveRecord::SchemaDumper.dump(conn, stream)
+    stream = dump_from(conn)
 
     if target_tables or ignore_tables
       ActiveRecord::SchemaDumper.ignore_tables.clear
@@ -79,5 +78,15 @@ class Ridgepole::Dumper
 
   def target?(table_name)
     not @options[:tables] or @options[:tables].include?(table_name)
+  end
+
+  def dump_from(conn)
+    stream = StringIO.new
+    conn.without_table_options(@options[:dump_without_table_options]) do
+      ActiveRecord::SchemaDumper.with_default_fk_name(@options[:dump_with_default_fk_name]) do
+        ActiveRecord::SchemaDumper.dump(conn, stream)
+      end
+    end
+    stream
   end
 end

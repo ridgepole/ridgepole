@@ -3,7 +3,26 @@ require 'active_record/schema_dumper'
 module Ridgepole
   module Ext
     module SchemaDumper
+      def self.prepended(klass)
+        @__with_default_fk_name = false
+        klass.extend ClassMethods
+      end
+
+      module ClassMethods
+        attr_reader :__with_default_fk_name
+
+        def with_default_fk_name(value)
+          prev_value = @__with_default_fk_name
+          @__with_default_fk_name = value
+          yield
+        ensure
+          @__with_default_fk_name = prev_value
+        end
+      end
+
       def foreign_keys(table, stream)
+        return super unless self.class.__with_default_fk_name
+
         if (foreign_keys = @connection.foreign_keys(table)).any?
           add_foreign_key_statements = foreign_keys.map do |foreign_key|
             parts = [

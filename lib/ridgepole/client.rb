@@ -17,14 +17,6 @@ class Ridgepole::Client
     if @options[:mysql_use_alter]
       require 'ridgepole/ext/abstract_mysql_adapter/use_alter_index'
     end
-
-    if @options[:dump_with_default_fk_name]
-      require 'ridgepole/ext/schema_dumper'
-    end
-
-    if @options[:dump_without_table_options]
-      require 'ridgepole/ext/abstract_mysql_adapter/disable_table_options'
-    end
   end
 
   def dump(&block)
