@@ -4,7 +4,7 @@ describe 'Ridgepole::Client (with new text/blob types)' do
 
     it do
       delta = subject.diff(<<-EOS)
-        create_table :foos do |t|
+        create_table :foos, id: :unsigned_integer do |t|
           t.blob             :blob
           t.tinyblob         :tiny_blob
           t.mediumblob       :medium_blob
@@ -23,7 +23,7 @@ describe 'Ridgepole::Client (with new text/blob types)' do
       delta.migrate
 
       expect(subject.dump).to match_fuzzy erbh(<<-EOS)
-        create_table "foos", force: :cascade do |t|
+        create_table "foos", id: :integer, unsigned: true, force: :cascade do |t|
           t.binary  "blob", <%= i cond(5.0, limit: 65535) %>
           t.blob    "tiny_blob", limit: 255
           t.binary  "medium_blob", limit: 16777215
