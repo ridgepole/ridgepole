@@ -13,7 +13,7 @@ require 'diffy'
 
 module Ridgepole; end
 
-require 'ridgepole/ext/abstract_mysql_adapter/disable_table_options'
+require 'ridgepole/ext/abstract_adapter/disable_table_options'
 require 'ridgepole/ext/pp_sort_hash'
 require 'ridgepole/ext/schema_dumper'
 require 'ridgepole/client'

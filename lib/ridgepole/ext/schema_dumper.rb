@@ -4,7 +4,6 @@ module Ridgepole
   module Ext
     module SchemaDumper
       def self.prepended(klass)
-        @__with_default_fk_name = false
         klass.extend ClassMethods
       end
 
@@ -12,11 +11,10 @@ module Ridgepole
         attr_reader :__with_default_fk_name
 
         def with_default_fk_name(value)
-          prev_value = @__with_default_fk_name
           @__with_default_fk_name = value
           yield
         ensure
-          @__with_default_fk_name = prev_value
+          remove_instance_variable(:@__with_default_fk_name)
         end
       end
 
