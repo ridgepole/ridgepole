@@ -30,6 +30,9 @@ class Ridgepole::Client
 
     logger.verbose_info('# Parse DSL')
     expected_definition, expected_execute = @parser.parse(dsl, opts)
+    expected_definition.each do |table, definition|
+      definition[:options][:options] ||= @options[:table_options] if @options[:table_options]
+    end
     logger.verbose_info('# Load tables')
     current_definition, _current_execute = @parser.parse(@dumper.dump, opts)
     logger.verbose_info('# Compare definitions')

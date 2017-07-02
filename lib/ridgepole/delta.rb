@@ -218,7 +218,6 @@ class Ridgepole::Delta
 
   def append_create_table(table_name, attrs, buf, post_buf_for_fk)
     options = attrs[:options] || {}
-    options[:options] ||= @options[:table_options] if @options[:table_options]
     definition = attrs[:definition] || {}
     indices = attrs[:indices] || {}
 
