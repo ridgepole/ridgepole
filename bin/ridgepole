@@ -145,7 +145,7 @@ ARGV.options do |opt|
   rescue => e
     $stderr.puts("[ERROR] #{e.message}")
 
-    unless e.kind_of?(OptionParser::InvalidOption)
+    unless e.kind_of?(OptionParser::ParseError)
       puts "\t" + e.backtrace.join("\n\t")
     end
 
