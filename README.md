@@ -391,6 +391,7 @@ bundle install
 bundle exec appraisal install
 bundle exec appraisal activerecord-5.1 rake
 # POSTGRESQL=1 bundle exec appraisal activerecord-5.1 rake
+# MYSQL57=1 bundle exec appraisal activerecord-5.1 rake
 ```
 
 **Notice:** mysql-client/postgresql-client is required.
