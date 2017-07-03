@@ -17,14 +17,6 @@ class Ridgepole::Client
     if @options[:mysql_use_alter]
       require 'ridgepole/ext/abstract_mysql_adapter/use_alter_index'
     end
-
-    if @options[:dump_with_default_fk_name]
-      require 'ridgepole/ext/schema_dumper'
-    end
-
-    if @options[:dump_without_table_options]
-      require 'ridgepole/ext/abstract_mysql_adapter/disable_table_options'
-    end
   end
 
   def dump(&block)
@@ -38,6 +30,9 @@ class Ridgepole::Client
 
     logger.verbose_info('# Parse DSL')
     expected_definition, expected_execute = @parser.parse(dsl, opts)
+    expected_definition.each do |table, definition|
+      definition[:options][:options] ||= @options[:table_options] if @options[:table_options]
+    end
     logger.verbose_info('# Load tables')
     current_definition, _current_execute = @parser.parse(@dumper.dump, opts)
     logger.verbose_info('# Compare definitions')
