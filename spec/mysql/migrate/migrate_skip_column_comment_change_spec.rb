@@ -31,7 +31,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       delta = subject.diff(expected_dsl)
-      puts delta.script
       expect(delta.differ?).to be_falsey
     }
   end
