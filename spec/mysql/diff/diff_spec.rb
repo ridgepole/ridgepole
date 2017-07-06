@@ -154,4 +154,13 @@ describe 'Ridgepole::Client.diff' do
       EOS
     }
   end
+
+  context 'without the target table' do
+    subject { Ridgepole::Client }
+
+    it {
+      expect(Ridgepole::Logger.instance).to receive(:warn).with(/definition is not found/)
+      subject.diff('', '', :tables => %w(some_table_name))
+    }
+  end
 end

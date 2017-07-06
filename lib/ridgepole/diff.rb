@@ -11,6 +11,7 @@ class Ridgepole::Diff
     if @options[:reverse]
       from, to = to, from
     end
+    check_table_existence(to)
 
     delta = {}
     relation_info = {}
@@ -526,6 +527,13 @@ class Ridgepole::Diff
           EOS
         end
       end
+    end
+  end
+
+  def check_table_existence(definition)
+    return unless @options[:tables]
+    @options[:tables].each do |table_name|
+      @logger.warn "[WARNING] '#{table_name}' definition is not found" unless definition.has_key?(table_name)
     end
   end
 end
