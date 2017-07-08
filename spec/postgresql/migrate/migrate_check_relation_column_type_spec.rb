@@ -45,8 +45,8 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
     it {
       expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-EOS)
 [WARNING] Relation column type is different.
-              employees.id: :type=>:integer
-  dept_manager.employee_id: :type=>:bigint
+              employees.id: {:type=>:integer}
+  dept_manager.employee_id: {:type=>:bigint}
       EOS
 
       delta = subject.diff(expected_dsl)
