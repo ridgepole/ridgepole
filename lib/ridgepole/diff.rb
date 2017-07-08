@@ -495,6 +495,7 @@ class Ridgepole::Diff
         next unless parent_table_info
 
         table_options = parent_table_info.fetch(:options)
+        next if table_options[:id] == false
 
         parent_column_info = {
           :type => table_options[:id] || @options[:check_relation_type].to_sym,
