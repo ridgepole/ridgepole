@@ -522,13 +522,11 @@ class Ridgepole::Diff
           parent_label = "#{parent_table}.id"
           child_label = "#{child_table}.#{column_name}"
           label_len = [parent_label.length, child_label.length].max
-          parent_column_info_str = parent_column_info.inspect.slice(1...-1)
-          child_column_info_str = child_column_info.inspect.slice(1...-1)
 
           @logger.warn(<<-EOS % [label_len, parent_label, label_len, child_label])
 [WARNING] Relation column type is different.
-  %*s: #{parent_column_info_str}
-  %*s: #{child_column_info_str}
+  %*s: #{parent_column_info}
+  %*s: #{child_column_info}
           EOS
         end
       end
