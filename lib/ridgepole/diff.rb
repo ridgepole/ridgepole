@@ -128,6 +128,11 @@ class Ridgepole::Diff
       table_delta[:table_options] = to_options
     end
 
+    if @options[:dump_without_table_options]
+      from.delete(:options)
+      to.delete(:options)
+    end
+
     unless from == to
       @logger.warn(<<-EOS)
 [WARNING] No difference of schema configuration for table `#{table_name}` but table options differ.
