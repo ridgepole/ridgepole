@@ -290,8 +290,9 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
 
     if not definition.empty? or not indices.empty?
       append_change_table(table_name, buf) do
+        append_delete_indices(table_name, indices, buf)
         append_change_definition(table_name, definition, buf)
-        append_change_indices(table_name, indices, buf)
+        append_add_indices(table_name, indices, buf)
       end
     end
 
@@ -392,13 +393,15 @@ remove_column(#{table_name.inspect}, #{column_name.inspect})
     end
   end
 
-  def append_change_indices(table_name, delta, buf)
-    (delta[:delete] || {}).each do |index_name, attrs|
-      append_remove_index(table_name, index_name, attrs, buf)
-    end
-
+  def append_add_indices(table_name, delta, buf)
     (delta[:add] || {}).each do |index_name, attrs|
       append_add_index(table_name, index_name, attrs, buf)
+    end
+  end
+
+  def append_delete_indices(table_name, delta, buf)
+    (delta[:delete] || {}).each do |index_name, attrs|
+      append_remove_index(table_name, index_name, attrs, buf)
     end
   end
 
