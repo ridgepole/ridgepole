@@ -134,38 +134,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_fuzzy expected_dsl.gsub(/, renamed_from: ('employees'|:titles)/, '')
     }
-
-    it {
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
-      expect(delta.differ?).to be_truthy
-      expect(delta.script).to match_fuzzy <<-EOS
-        rename_table("employees2", "employees")
-        rename_table("titles2", "titles")
-      EOS
-    }
-
-    context 'when rename table (reverse: true / already exist)' do
-      it {
-        expect(Ridgepole::Logger.instance).to receive(:warn).with("[WARNING] The table `titles2` has already been renamed to the table `titles`.")
-
-        delta = Ridgepole::Client.diff(actual_dsl, expected_dsl + <<-EOS, reverse: true)
-          create_table "titles", id: false, force: :cascade do |t|
-            t.integer "emp_no", null: false
-            t.string  "title", limit: 50, null: false
-            t.date    "from_date", null: false
-            t.date    "to_date"
-            t.index ["emp_no"], name: "emp_no"
-          end
-        EOS
-
-        expect(delta.differ?).to be_truthy
-
-        expect(delta.script).to match_fuzzy <<-EOS
-          rename_table("employees2", "employees")
-          drop_table("titles2")
-        EOS
-      }
-    end
   end
 
   context 'when rename table (dry-run)' do

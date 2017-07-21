@@ -39,16 +39,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_fuzzy actual_dsl
     }
-
-    it {
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-EOS)
-[WARNING] No difference of schema configuration for table `employees` but table options differ.
-  from: {:primary_key=>"emp_no2"}
-    to: {:primary_key=>"emp_no"}
-      EOS
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
-      expect(delta.differ?).to be_falsey
-    }
   end
 
   context 'when create_table options are different (ignore comment)' do

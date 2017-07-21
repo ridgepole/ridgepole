@@ -30,14 +30,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     it {
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true, default_int_limit: 4, dump_with_default_fk_name: true)
-      expect(delta.differ?).to be_truthy
-      expect(delta.script).to match_fuzzy <<-EOS
-        remove_foreign_key("child", {:name=>"fk_rails_e74ce85cbc"})
-      EOS
-    }
-
-    it {
       delta = client(bulk_change: true, dump_with_default_fk_name: true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_fuzzy actual_dsl

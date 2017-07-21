@@ -79,6 +79,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Add `--skip-column-comment-change` option
   * Add `--default-bigint-limit` option
   * Add `--ignore-table-comment` option
+  * Remove `--reverse` option
 
 ## Installation
 
@@ -120,7 +121,6 @@ Usage: ridgepole [options]
         --split
         --split-with-dir
     -d, --diff DSL1 DSL2
-        --reverse
         --with-apply
     -o, --output SCHEMAFILE
     -t, --tables TABLES
@@ -287,34 +287,6 @@ You can also compare databases and files.
 
 ```sh
 $ ridgepole --diff config.yml file1.schema
-remove_column("articles", "author")
-```
-
-### Reverse diff
-```sh
-$ cat file1.schema
-create_table "articles", force: :cascade do |t|
-  t.string   "title"
-  t.text     "text"
-  t.datetime "created_at"
-  t.datetime "updated_at"
-end
-
-$ cat file2.schema
-create_table "articles", force: :cascade do |t|
-  t.string   "title"
-  t.text     "desc", renamed_from: "text"
-  t.text     "author"
-  t.datetime "created_at"
-  t.datetime "updated_at"
-end
-
-$ ridgepole --diff file1.schema file2.schema
-add_column("articles", "author", :text, {:after=>"title"})
-rename_column("articles", "text", "desc")
-
-$ ridgepole --diff file1.schema file2.schema --reverse
-rename_column("articles", "desc", "text")
 remove_column("articles", "author")
 ```
 

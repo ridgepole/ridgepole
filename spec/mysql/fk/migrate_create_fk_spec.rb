@@ -30,14 +30,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     it {
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true, default_int_limit: 4)
-      expect(delta.differ?).to be_truthy
-      expect(delta.script).to match_fuzzy <<-EOS
-        remove_foreign_key("child", {:name=>"child_ibfk_1"})
-      EOS
-    }
-
-    it {
       delta = client(bulk_change: true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_fuzzy actual_dsl
@@ -143,14 +135,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_fuzzy actual_dsl
       delta.migrate
       expect(subject.dump).to match_fuzzy expected_dsl
-    }
-
-    it {
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true, default_int_limit: 4)
-      expect(delta.differ?).to be_truthy
-      expect(delta.script).to match_fuzzy <<-EOS
-        remove_foreign_key("child", "parent")
-      EOS
     }
 
     it {

@@ -111,7 +111,6 @@ ARGV.options do |opt|
       ARGV.shift
       diff_files = [diff_arg1, diff_arg2]
     }
-    opt.on('',   '--reverse')                                    {    options[:reverse] = true                             }
     opt.on('',   '--with-apply')                                 {    diff_with_apply = true                               }
     opt.on('-o', '--output SCHEMAFILE')                          {|v| output_file = v                                      }
     opt.on('-t', '--tables TABLES', Array)                       {|v| options[:tables] = v                                 }

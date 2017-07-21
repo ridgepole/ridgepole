@@ -134,10 +134,5 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_fuzzy expected_dsl.gsub(/\s*,\s*renamed_from:.*$/, '')
     }
-
-    it {
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
-      expect(delta.differ?).to be_falsey
-    }
   end
 end

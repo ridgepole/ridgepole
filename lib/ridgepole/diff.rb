@@ -8,17 +8,12 @@ class Ridgepole::Diff
     from = (from || {}).deep_dup
     to = (to || {}).deep_dup
 
-    if @options[:reverse]
-      from, to = to, from
-    end
     check_table_existence(to)
 
     delta = {}
     relation_info = {}
 
     scan_table_rename(from, to, delta)
-    # for reverse option
-    scan_table_rename(to, from, delta)
 
     to.each do |table_name, to_attrs|
       collect_relation_info!(table_name, to_attrs, relation_info)
@@ -64,31 +59,19 @@ class Ridgepole::Diff
       if (from_table_name = (to_attrs[:options] || {}).delete(:renamed_from))
         from_table_name = from_table_name.to_s if from_table_name
 
-        if @options[:reverse]
-          src_table = table_name
-          dst_table = from_table_name
-          already_renamed = !!to[dst_table]
-          src_table_exist = !!to[src_table] # Maybe always true
-        else
-          src_table = from_table_name
-          dst_table = table_name
-          already_renamed = !!from[dst_table]
-          src_table_exist = !!from[src_table]
-        end
-
         # Already renamed
-        if already_renamed
-          @logger.warn("[WARNING] The table `#{src_table}` has already been renamed to the table `#{dst_table}`.")
+        if from[table_name]
+          @logger.warn("[WARNING] The table `#{from_table_name}` has already been renamed to the table `#{table_name}`.")
           next
         end
 
-        unless src_table_exist
-          @logger.warn("[WARNING] The table `#{src_table}` to be renamed does not exist.")
+        unless from[from_table_name]
+          @logger.warn("[WARNING] The table `#{from_table_name}` to be renamed does not exist.")
           next
         end
 
         delta[:rename] ||= {}
-        delta[:rename][dst_table] = src_table
+        delta[:rename][table_name] = from_table_name
 
         from.delete(from_table_name)
         to.delete(table_name)
@@ -158,8 +141,6 @@ class Ridgepole::Diff
     definition_delta = {}
 
     scan_column_rename(from, to, definition_delta)
-    # for reverse option
-    scan_column_rename(to, from, definition_delta)
 
     if table_options[:id] == false or table_options[:primary_key].is_a?(Array)
       priv_column_name = nil
@@ -251,12 +232,7 @@ class Ridgepole::Diff
         end
 
         definition_delta[:rename] ||= {}
-
-        if @options[:reverse]
-          definition_delta[:rename][from_column_name] = column_name
-        else
-          definition_delta[:rename][column_name] = from_column_name
-        end
+        definition_delta[:rename][column_name] = from_column_name
 
         from.delete(from_column_name)
         to.delete(column_name)
