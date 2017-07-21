@@ -79,6 +79,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Add `--skip-column-comment-change` option
   * Add `--default-bigint-limit` option
   * Add `--ignore-table-comment` option
+* `>= 0.7.1`
   * Remove `--reverse` option
 
 ## Installation
