@@ -64,21 +64,31 @@ class Ridgepole::Diff
       if (from_table_name = (to_attrs[:options] || {}).delete(:renamed_from))
         from_table_name = from_table_name.to_s if from_table_name
 
-        # Already renamed
-        next if from[table_name]
+        if @options[:reverse]
+          src_table = table_name
+          dst_table = from_table_name
+          already_renamed = !!to[dst_table]
+          src_table_exist = !!to[src_table] # Maybe always true
+        else
+          src_table = from_table_name
+          dst_table = table_name
+          already_renamed = !!from[dst_table]
+          src_table_exist = !!from[src_table]
+        end
 
-        # No existence checking because there is that the table to be read is limited
-        #unless from.has_key?(from_table_name)
-        #  raise "Table `#{from_table_name}` not found"
-        #end
+        # Already renamed
+        if already_renamed
+          @logger.warn("[WARNING] The table `#{src_table}` has already been renamed to the table `#{dst_table}`.")
+          next
+        end
+
+        unless src_table_exist
+          @logger.warn("[WARNING] The table `#{src_table}` to be renamed does not exist.")
+          next
+        end
 
         delta[:rename] ||= {}
-
-        if @options[:reverse]
-          delta[:rename][from_table_name] = table_name
-        else
-          delta[:rename][table_name] = from_table_name
-        end
+        delta[:rename][dst_table] = src_table
 
         from.delete(from_table_name)
         to.delete(table_name)
