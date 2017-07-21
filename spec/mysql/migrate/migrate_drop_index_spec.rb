@@ -135,18 +135,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     it {
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
-      expect(delta.differ?).to be_truthy
-      expect(delta.script).to match_fuzzy erbh(<<-EOS)
-        add_index("clubs", ["name"], <%= {:name=>"idx_name", :unique=>true} + cond(5.0, using: :btree) %>)
-
-        add_index("employee_clubs", ["emp_no", "club_id"], <%= {:name=>"idx_emp_no_club_id"} + cond(5.0, using: :btree) %>)
-
-        add_index("titles", ["emp_no"], <%= {:name=>"emp_no"} + cond(5.0, using: :btree) %>)
-      EOS
-    }
-
-    it {
       delta = client(:bulk_change => true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_fuzzy actual_dsl

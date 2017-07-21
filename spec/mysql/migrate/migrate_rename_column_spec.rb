@@ -136,18 +136,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     it {
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
-      expect(delta.differ?).to be_truthy
-      expect(delta.script).to match_fuzzy <<-EOS
-       rename_column("dept_emp", "from_date2", "from_date")
-
-       rename_column("dept_manager", "to_date2", "to_date")
-
-       rename_column("employees", "gender2", "gender")
-      EOS
-    }
-
-    it {
       delta = client(:bulk_change => true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_fuzzy actual_dsl

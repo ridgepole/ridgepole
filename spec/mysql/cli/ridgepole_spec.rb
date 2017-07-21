@@ -36,7 +36,6 @@ describe 'ridgepole' do
             --split
             --split-with-dir
         -d, --diff DSL1 DSL2
-            --reverse
             --with-apply
         -o, --output SCHEMAFILE
         -t, --tables TABLES

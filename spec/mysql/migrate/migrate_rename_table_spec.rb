@@ -134,15 +134,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_fuzzy expected_dsl.gsub(/, renamed_from: ('employees'|:titles)/, '')
     }
-
-    it {
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
-      expect(delta.differ?).to be_truthy
-      expect(delta.script).to match_fuzzy <<-EOS
-        rename_table("employees2", "employees")
-        rename_table("titles2", "titles")
-      EOS
-    }
   end
 
   context 'when rename table (dry-run)' do
@@ -219,10 +210,30 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     it {
-      # No existence checking because there is that the table to be read is limited
-      expect {
-        subject.diff(dsl)
-      }.to_not raise_error
+      expect(Ridgepole::Logger.instance).to receive(:warn).with("[WARNING] The table `not_employees` to be renamed does not exist.")
+      subject.diff(dsl)
+    }
+  end
+
+  context 'when rename table (already exist)' do
+    before { subject.diff(dsl).migrate }
+    subject { client }
+
+    let(:dsl) {
+      erbh(<<-EOS)
+        create_table "employees2", primary_key: "emp_no", force: :cascade, renamed_from: 'employees' do |t|
+          t.date   "birth_date", null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
+        end
+      EOS
+    }
+
+    it {
+      expect(Ridgepole::Logger.instance).to receive(:warn).with("[WARNING] The table `employees` has already been renamed to the table `employees2`.")
+      subject.diff(dsl)
     }
   end
 end

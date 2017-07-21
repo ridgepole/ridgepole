@@ -116,29 +116,5 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_fuzzy expected_dsl
     }
-
-    it {
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
-      expect(delta.differ?).to be_truthy
-      expect(delta.script).to match_fuzzy erbh(<<-EOS)
-        create_table("clubs", {}) do |t|
-          t.column("name", :"string", {:limit=>255, :default=>"", :null=>false})
-        end
-        add_index("clubs", ["name"], <%= {:name=>"idx_name", :unique=>true} + cond(5.0, using: :btree) %>)
-
-        create_table("employee_clubs", {}) do |t|
-          t.column("emp_no", :"integer", {:null=>false})
-          t.column("club_id", :"integer", {:null=>false})
-        end
-        add_index("employee_clubs", ["emp_no", "club_id"], <%= {:name=>"idx_employee_clubs_emp_no_club_id"} + cond(5.0, using: :btree) %>)
-
-        create_table("employees", {:primary_key=>"emp_no"}) do |t|
-          t.column("birth_date", :"date", {:null=>false})
-          t.column("first_name", :"string", {:limit=>14, :null=>false})
-          t.column("last_name", :"string", {:limit=>16, :null=>false})
-          t.column("hire_date", :"date", {:null=>false})
-        end
-      EOS
-    }
   end
 end

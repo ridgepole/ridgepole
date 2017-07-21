@@ -8,17 +8,12 @@ class Ridgepole::Diff
     from = (from || {}).deep_dup
     to = (to || {}).deep_dup
 
-    if @options[:reverse]
-      from, to = to, from
-    end
     check_table_existence(to)
 
     delta = {}
     relation_info = {}
 
     scan_table_rename(from, to, delta)
-    # for reverse option
-    scan_table_rename(to, from, delta)
 
     to.each do |table_name, to_attrs|
       collect_relation_info!(table_name, to_attrs, relation_info)
@@ -65,20 +60,18 @@ class Ridgepole::Diff
         from_table_name = from_table_name.to_s if from_table_name
 
         # Already renamed
-        next if from[table_name]
+        if from[table_name]
+          @logger.warn("[WARNING] The table `#{from_table_name}` has already been renamed to the table `#{table_name}`.")
+          next
+        end
 
-        # No existence checking because there is that the table to be read is limited
-        #unless from.has_key?(from_table_name)
-        #  raise "Table `#{from_table_name}` not found"
-        #end
+        unless from[from_table_name]
+          @logger.warn("[WARNING] The table `#{from_table_name}` to be renamed does not exist.")
+          next
+        end
 
         delta[:rename] ||= {}
-
-        if @options[:reverse]
-          delta[:rename][from_table_name] = table_name
-        else
-          delta[:rename][table_name] = from_table_name
-        end
+        delta[:rename][table_name] = from_table_name
 
         from.delete(from_table_name)
         to.delete(table_name)
@@ -148,8 +141,6 @@ class Ridgepole::Diff
     definition_delta = {}
 
     scan_column_rename(from, to, definition_delta)
-    # for reverse option
-    scan_column_rename(to, from, definition_delta)
 
     if table_options[:id] == false or table_options[:primary_key].is_a?(Array)
       priv_column_name = nil
@@ -241,12 +232,7 @@ class Ridgepole::Diff
         end
 
         definition_delta[:rename] ||= {}
-
-        if @options[:reverse]
-          definition_delta[:rename][from_column_name] = column_name
-        else
-          definition_delta[:rename][column_name] = from_column_name
-        end
+        definition_delta[:rename][column_name] = from_column_name
 
         from.delete(from_column_name)
         to.delete(column_name)

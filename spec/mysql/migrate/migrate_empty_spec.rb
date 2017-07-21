@@ -72,27 +72,5 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_fuzzy expected_dsl
     }
-
-    it {
-      delta = Ridgepole::Client.diff(actual_dsl, expected_dsl, reverse: true)
-      expect(delta.differ?).to be_truthy
-      expect(delta.script).to match_fuzzy <<-EOS
-        drop_table("clubs")
-
-        drop_table("departments")
-
-        drop_table("dept_emp")
-
-        drop_table("dept_manager")
-
-        drop_table("employee_clubs")
-
-        drop_table("employees")
-
-        drop_table("salaries")
-
-        drop_table("titles")
-      EOS
-    }
   end
 end
