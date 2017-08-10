@@ -1,6 +1,7 @@
 class Ridgepole::Dumper
   def initialize(options = {})
     @options = options
+    @logger = Ridgepole::Logger.instance
   end
 
   def dump
@@ -27,6 +28,13 @@ class Ridgepole::Dumper
 
     if target_tables or ignore_tables
       ActiveRecord::SchemaDumper.ignore_tables.clear
+    end
+
+    stream.string.lines.each_cons(2) do |line|
+      if line.first =~ /\A# Could not dump/
+        @logger.warn("[WARNING] #{line.shift.sub(/\A# /, '').chomp}")
+        @logger.warn(line.shift.sub(/\A#/, '').chomp)
+      end
     end
 
     dsl = stream.string.lines.select do |line|
