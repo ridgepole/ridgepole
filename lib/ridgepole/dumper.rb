@@ -30,10 +30,10 @@ class Ridgepole::Dumper
       ActiveRecord::SchemaDumper.ignore_tables.clear
     end
 
-    stream.string.lines.each_cons(2) do |line|
-      if line.first =~ /\A# Could not dump/
-        @logger.warn("[WARNING] #{line.shift.sub(/\A# /, '').chomp}")
-        @logger.warn(line.shift.sub(/\A#/, '').chomp)
+    stream.string.lines.each_cons(2) do |first_line, second_line|
+      if first_line =~ /\A# Could not dump/
+        @logger.warn("[WARNING] #{first_line.sub(/\A# /, '').chomp}")
+        @logger.warn(second_line.sub(/\A#/, '').chomp)
       end
     end
 
