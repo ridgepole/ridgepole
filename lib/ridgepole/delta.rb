@@ -284,14 +284,16 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
 
   def append_change(table_name, attrs, buf, pre_buf_for_fk, post_buf_for_fk)
     definition = attrs[:definition] || {}
+    primary_key_definition = attrs[:primary_key_definition] || {}
     indices = attrs[:indices] || {}
     foreign_keys = attrs[:foreign_keys] || {}
     table_options = attrs[:table_options]
 
-    if not definition.empty? or not indices.empty?
+    if not definition.empty? or not indices.empty? or not primary_key_definition.empty?
       append_change_table(table_name, buf) do
         append_delete_indices(table_name, indices, buf)
         append_change_definition(table_name, definition, buf)
+        append_change_definition(table_name, primary_key_definition, buf)
         append_add_indices(table_name, indices, buf)
       end
     end
