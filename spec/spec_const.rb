@@ -1,11 +1,11 @@
-TEST_MYSQL_HOST = '127.0.0.1'
+TEST_MYSQL_HOST = ENV['DOCKER_HOST'] ? ENV['DOCKER_HOST'].gsub(%r{\Atcp://|:\d+\z}, '') : '127.0.0.1'
 TEST_MYSQL_PORT = ENV['MYSQL57'] == '1' ? 13317 : 13316
 TEST_MYSQL_USER = 'root'
 TEST_MYSQL_PASS = 'password'
 
 MYSQL_CLI = "mysql -h #{TEST_MYSQL_HOST} -P #{TEST_MYSQL_PORT} -u #{TEST_MYSQL_USER} -p#{TEST_MYSQL_PASS} 2>/dev/null"
 
-TEST_PG_HOST = '127.0.0.1'
+TEST_PG_HOST = ENV['DOCKER_HOST'] ? ENV['DOCKER_HOST'].gsub(%r{\Atcp://|:\d+\z}, '') : '127.0.0.1'
 TEST_PG_PORT = 15442
 TEST_PG_USER = 'postgres'
 TEST_PG_PASS = 'password'
