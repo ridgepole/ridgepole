@@ -1,4 +1,6 @@
 class Ridgepole::Diff
+  PRIMARY_KEY_OPTIONS = %i(id limit default null precision scale collation unsigned comment).freeze
+
   def initialize(options = {})
     @options = options
     @logger = Ridgepole::Logger.instance
@@ -126,6 +128,21 @@ class Ridgepole::Diff
       to.delete(:options)
     end
 
+    pk_attrs = build_primary_key_attrs_if_changed(from, to, table_name)
+    if pk_attrs
+      if @options[:allow_pk_change]
+        table_delta[:primary_key_definition] = {change: {id: pk_attrs}}
+      else
+        @logger.warn(<<-EOS)
+[WARNING] Primary key definition of `#{table_name}` differ but `allow_pk_change` option is false
+  from: #{from.slice(*PRIMARY_KEY_OPTIONS)}
+    to: #{to.slice(*PRIMARY_KEY_OPTIONS)}
+        EOS
+      end
+      from = from.except(*PRIMARY_KEY_OPTIONS)
+      to = to.except(*PRIMARY_KEY_OPTIONS)
+    end
+
     unless from == to
       @logger.warn(<<-EOS)
 [WARNING] No difference of schema configuration for table `#{table_name}` but table options differ.
@@ -133,6 +150,41 @@ class Ridgepole::Diff
     to: #{to}
       EOS
     end
+  end
+
+  def convert_to_primary_key_attrs(column_options)
+    options = column_options.dup
+
+    if options[:id]
+      type = options.delete(:id)
+    elsif Gem::Version.new(ActiveRecord::VERSION::STRING) >= Gem::Version.new('5.1')
+      type = :bigint
+    else
+      type = :integer
+    end
+
+    if [:integer, :bigint].include?(type) && !options.key?(:default)
+      options[:auto_increment] = true
+    end
+
+    {type: type, options: options}
+  end
+
+  def build_attrs_if_changed(to_attrs, from_attrs, table_name, primary_key: false)
+    normalize_column_options!(from_attrs, primary_key)
+    normalize_column_options!(to_attrs, primary_key)
+
+    unless compare_column_attrs(from_attrs, to_attrs)
+      new_to_attrs = fix_change_column_options(table_name, from_attrs, to_attrs)
+    end
+    new_to_attrs
+  end
+
+  def build_primary_key_attrs_if_changed(from, to, table_name)
+    from_column_attrs = convert_to_primary_key_attrs(from.slice(*PRIMARY_KEY_OPTIONS))
+    to_column_attrs = convert_to_primary_key_attrs(to.slice(*PRIMARY_KEY_OPTIONS))
+    return if from_column_attrs == to_column_attrs
+    build_attrs_if_changed(to_column_attrs, from_column_attrs, table_name, primary_key: true)
   end
 
   def scan_definition_change(from, to, from_indices, table_name, table_options, table_delta)
@@ -150,12 +202,9 @@ class Ridgepole::Diff
 
     to.each do |column_name, to_attrs|
       if (from_attrs = from.delete(column_name))
-        normalize_column_options!(from_attrs)
-        normalize_column_options!(to_attrs)
-
-        unless compare_column_attrs(from_attrs, to_attrs)
+        to_attrs = build_attrs_if_changed(to_attrs, from_attrs, table_name)
+        if to_attrs
           definition_delta[:change] ||= {}
-          to_attrs = fix_change_column_options(table_name, from_attrs, to_attrs)
           definition_delta[:change][column_name] = to_attrs
         end
       else
@@ -304,14 +353,14 @@ class Ridgepole::Diff
     end
   end
 
-  def normalize_column_options!(attrs)
+  def normalize_column_options!(attrs, primary_key = false)
     opts = attrs[:options]
-    opts[:null] = true unless opts.has_key?(:null)
+    opts[:null] = true if not opts.has_key?(:null) and not primary_key
     default_limit = Ridgepole::DefaultsLimit.default_limit(attrs[:type], @options)
     opts.delete(:limit) if opts[:limit] == default_limit
 
     # XXX: MySQL only?
-    if not opts.has_key?(:default)
+    if not opts.has_key?(:default) and not primary_key
       opts[:default] = nil
     end
 

@@ -53,7 +53,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
-  context 'when migrate table with default proc' do
+  context 'when migrate table with default proc change' do
     let(:actual_dsl) {
       erbh(<<-EOS)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v1()" }, force: :cascade do |t|
@@ -75,20 +75,36 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     before { subject.diff(actual_dsl).migrate }
-    subject { client }
+    subject { client(allow_pk_change: allow_pk_change) }
 
-    it {
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-EOS)
-[WARNING] No difference of schema configuration for table `users` but table options differ.
+    context 'when allow_pk_change option is false' do
+      let(:allow_pk_change) { false }
+
+      it {
+        expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-EOS)
+[WARNING] Primary key definition of `users` differ but `allow_pk_change` option is false
   from: {:id=>:uuid, :default=>"uuid_generate_v1()"}
     to: {:id=>:uuid, :default=>"uuid_generate_v4()"}
-      EOS
+        EOS
 
-      delta = subject.diff(expected_dsl)
-      expect(delta.differ?).to be_falsey
-      expect(subject.dump).to match_fuzzy actual_dsl
-      delta.migrate
-      expect(subject.dump).to match_fuzzy actual_dsl
-    }
+        delta = subject.diff(expected_dsl)
+        expect(delta.differ?).to be_falsey
+        expect(subject.dump).to match_fuzzy actual_dsl
+        delta.migrate
+        expect(subject.dump).to match_fuzzy actual_dsl
+      }
+    end
+
+    context 'when allow_pk_change option is true' do
+      let(:allow_pk_change) { true }
+
+      it {
+        delta = subject.diff(expected_dsl)
+        expect(delta.differ?).to be_truthy
+        expect(subject.dump).to match_fuzzy actual_dsl
+        delta.migrate
+        expect(subject.dump).to match_fuzzy expected_dsl
+      }
+    end
   end
 end

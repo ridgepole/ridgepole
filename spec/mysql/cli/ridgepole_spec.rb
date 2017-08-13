@@ -49,6 +49,7 @@ describe 'ridgepole' do
             --check-relation-type DEF_PK
             --ignore-table-comment
             --skip-column-comment-change
+            --allow-pk-change
         -r, --require LIBS
             --log-file LOG_FILE
             --verbose

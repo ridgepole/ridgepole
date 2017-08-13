@@ -124,6 +124,7 @@ ARGV.options do |opt|
     opt.on('',   '--check-relation-type DEF_PK')                 {|v| options[:check_relation_type] = v                    }
     opt.on('',   '--ignore-table-comment')                       {    options[:ignore_table_comment] = true                }
     opt.on('',   '--skip-column-comment-change')                 {    options[:skip_column_comment_change] = true          }
+    opt.on('',   '--allow-pk-change')                            {    options[:allow_pk_change] = true                     }
     opt.on('-r', '--require LIBS', Array)                        {|v| v.each {|i| require i }                              }
     opt.on(''  , '--log-file LOG_FILE')                          {|v| options[:log_file] = v                               }
     opt.on(''  , '--verbose')                                    {    Ridgepole::Logger.verbose = true                     }
