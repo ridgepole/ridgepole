@@ -1,4 +1,6 @@
 class Ridgepole::Diff
+  PRIMARY_KEY_OPTIONS = %i(id limit default null precision scale collation unsigned comment).freeze
+
   def initialize(options = {})
     @options = options
     @logger = Ridgepole::Logger.instance
@@ -126,14 +128,19 @@ class Ridgepole::Diff
       to.delete(:options)
     end
 
-    column_options = %i(id limit default null precision scale collation unsigned comment)
-    from_column_attrs = convert_to_primary_key_attrs(from.slice(*column_options))
-    to_column_attrs = convert_to_primary_key_attrs(to.slice(*column_options))
-    if from_column_attrs != to_column_attrs
-      from = from.except(*column_options)
-      to = to.except(*column_options)
-      attrs = build_attrs_if_changed(to_column_attrs, from_column_attrs, table_name, primary_key: true)
-      table_delta[:primary_key_definition] = {change: {id: attrs}} if attrs
+    pk_attrs = build_primary_key_attrs_if_changed(from, to, table_name)
+    if pk_attrs
+      if @options[:allow_pk_change]
+        table_delta[:primary_key_definition] = {change: {id: pk_attrs}}
+      else
+        @logger.warn(<<-EOS)
+[WARNING] Primary key definition of `#{table_name}` differ but `allow_pk_change` option is false
+  from: #{from.slice(*PRIMARY_KEY_OPTIONS)}
+    to: #{to.slice(*PRIMARY_KEY_OPTIONS)}
+        EOS
+      end
+      from = from.except(*PRIMARY_KEY_OPTIONS)
+      to = to.except(*PRIMARY_KEY_OPTIONS)
     end
 
     unless from == to
@@ -171,6 +178,13 @@ class Ridgepole::Diff
       new_to_attrs = fix_change_column_options(table_name, from_attrs, to_attrs)
     end
     new_to_attrs
+  end
+
+  def build_primary_key_attrs_if_changed(from, to, table_name)
+    from_column_attrs = convert_to_primary_key_attrs(from.slice(*PRIMARY_KEY_OPTIONS))
+    to_column_attrs = convert_to_primary_key_attrs(to.slice(*PRIMARY_KEY_OPTIONS))
+    return if from_column_attrs == to_column_attrs
+    build_attrs_if_changed(to_column_attrs, from_column_attrs, table_name, primary_key: true)
   end
 
   def scan_definition_change(from, to, from_indices, table_name, table_options, table_delta)
