@@ -90,15 +90,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when use references (no change)' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date     "birth_date", null: false
-          t.string   "first_name", limit: 14, null: false
-          t.string   "last_name", limit: 16, null: false
-          t.string   "gender", limit: 1, null: false
-          t.date     "hire_date", null: false
-          t.integer "products_id"
-          t.integer "user_id"
+          t.date   "birth_date", null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
+          t.<%= cond(5.1, 'bigint', 'integer') %> "products_id"
+          t.<%= cond(5.1, 'bigint', 'integer') %> "user_id"
         end
       EOS
     }
@@ -127,17 +127,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when use references with polymorphic (no change)' do
     let(:actual_dsl) {
-      <<-EOS
+      erbh(<<-EOS)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date     "birth_date", null: false
-          t.string   "first_name", limit: 14, null: false
-          t.string   "last_name", limit: 16, null: false
-          t.string   "gender", limit: 1, null: false
-          t.date     "hire_date", null: false
-          t.integer  "products_id"
-          t.string   "products_type"
-          t.integer  "user_id"
-          t.string   "user_type"
+          t.date   "birth_date", null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
+          t.<%= cond(5.1, 'bigint', 'integer') %> "products_id"
+          t.string "products_type"
+          t.<%= cond(5.1, 'bigint', 'integer') %> "user_id"
+          t.string "user_type"
         end
       EOS
     }
@@ -193,13 +193,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date    "birth_date", null: false
-          t.string  "first_name", limit: 14, null: false
-          t.string  "last_name", limit: 16, null: false
-          t.string  "gender", limit: 1, null: false
-          t.date    "hire_date", null: false
-          t.integer "products_id"
-          t.integer "user_id"
+          t.date   "birth_date", null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
+          t.<%= cond(5.1, 'bigint', 'integer') %> "products_id"
+          t.<%= cond(5.1, 'bigint', 'integer') %> "user_id"
         end
       EOS
     }
@@ -245,15 +245,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) {
       erbh(<<-EOS)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.date    "birth_date", null: false
-          t.string  "first_name", limit: 14, null: false
-          t.string  "last_name", limit: 16, null: false
-          t.string  "gender", limit: 1, null: false
-          t.date    "hire_date", null: false
-          t.integer "products_id"
-          t.string  "products_type"
-          t.integer "user_id"
-          t.string  "user_type"
+          t.date   "birth_date", null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
+          t.<%= cond(5.1, 'bigint', 'integer') %> "products_id"
+          t.string "products_type"
+          t.<%= cond(5.1, 'bigint', 'integer') %> "user_id"
+          t.string "user_type"
         end
       EOS
     }

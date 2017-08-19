@@ -17,6 +17,8 @@ class Ridgepole::DSLParser
       }
     end
 
+    DEFAULT_PRIMARY_KEY_TYPE = Gem::Version.new(ActiveRecord::VERSION::STRING) >= Gem::Version.new('5.1') ? :bigint : :integer
+
     TYPES = [
       # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/abstract/schema_definitions.rb#L274
       :string,
@@ -122,7 +124,7 @@ class Ridgepole::DSLParser
       options = args.extract_options!
       polymorphic = options.delete(:polymorphic)
       index_options = options.delete(:index)
-      type = options.delete(:type) || :integer
+      type = options.delete(:type) || DEFAULT_PRIMARY_KEY_TYPE
 
       args.each do |col|
         column("#{col}_id", type, options)
