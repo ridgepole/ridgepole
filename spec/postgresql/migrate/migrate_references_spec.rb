@@ -10,6 +10,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
           t.<%= cond(5.1, 'bigint', 'integer') %> "products_id"
           t.<%= cond(5.1, 'bigint', 'integer') %> "user_id"
+          t.index "products_id"
+          t.index "user_id"
         end
       EOS
     }
@@ -22,7 +24,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.references :products, :user
+          t.references :products, :user, index: true
         end
       EOS
     }
