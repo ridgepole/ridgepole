@@ -130,8 +130,8 @@ class Ridgepole::DSLParser
         column("#{col}_id", type, options)
         column("#{col}_type", :string, polymorphic.is_a?(Hash) ? polymorphic : options) if polymorphic
         if index_options
-          index("#{col}_id", index_options.is_a?(Hash) ? index_options : {})
-          index("#{col}_type", index_options.is_a?(Hash) ? index_options : {}) if polymorphic
+          columns = polymorphic ? ["#{col}_type", "#{col}_id"] : ["#{col}_id"]
+          index(columns, index_options.is_a?(Hash) ? index_options : {})
         end
       end
     end
