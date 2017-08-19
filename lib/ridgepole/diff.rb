@@ -157,10 +157,8 @@ class Ridgepole::Diff
 
     if options[:id]
       type = options.delete(:id)
-    elsif Gem::Version.new(ActiveRecord::VERSION::STRING) >= Gem::Version.new('5.1')
-      type = :bigint
     else
-      type = :integer
+      type = Ridgepole::DSLParser::TableDefinition::DEFAULT_PRIMARY_KEY_TYPE
     end
 
     if [:integer, :bigint].include?(type) && !options.key?(:default)
