@@ -123,15 +123,15 @@ class Ridgepole::DSLParser
     def references(*args)
       options = args.extract_options!
       polymorphic = options.delete(:polymorphic)
-      index_options = options.delete(:index)
+      index_options = options.has_key?(:index) ? options.delete(:index) : true
       type = options.delete(:type) || DEFAULT_PRIMARY_KEY_TYPE
 
       args.each do |col|
         column("#{col}_id", type, options)
         column("#{col}_type", :string, polymorphic.is_a?(Hash) ? polymorphic : options) if polymorphic
         if index_options
-          index("#{col}_id", index_options.is_a?(Hash) ? index_options : {})
-          index("#{col}_type", index_options.is_a?(Hash) ? index_options : {}) if polymorphic
+          columns = polymorphic ? ["#{col}_type", "#{col}_id"] : ["#{col}_id"]
+          index(columns, index_options.is_a?(Hash) ? index_options : {})
         end
       end
     end

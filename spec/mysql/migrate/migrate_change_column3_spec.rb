@@ -99,6 +99,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
           t.<%= cond(5.1, 'bigint', 'integer') %> "products_id"
           t.<%= cond(5.1, 'bigint', 'integer') %> "user_id"
+          t.index "products_id"
+          t.index "user_id"
         end
       EOS
     }
@@ -138,6 +140,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "products_type"
           t.<%= cond(5.1, 'bigint', 'integer') %> "user_id"
           t.string "user_type"
+          t.index ["products_type", "products_id"]
+          t.index ["user_type", "user_id"]
         end
       EOS
     }
@@ -200,6 +204,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
           t.<%= cond(5.1, 'bigint', 'integer') %> "products_id"
           t.<%= cond(5.1, 'bigint', 'integer') %> "user_id"
+          t.index ["products_id"], name: "index_employees_on_products_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["user_id"], name: "index_employees_on_user_id", <%= i cond(5.0, using: :btree) %>
         end
       EOS
     }
@@ -254,6 +260,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "products_type"
           t.<%= cond(5.1, 'bigint', 'integer') %> "user_id"
           t.string "user_type"
+          t.index ["products_type", "products_id"], name: "index_employees_on_products_type_and_products_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["user_type", "user_id"], name: "index_employees_on_user_type_and_user_id", <%= i cond(5.0, using: :btree) %>
         end
       EOS
     }
