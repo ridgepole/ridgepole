@@ -81,6 +81,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Add `--ignore-table-comment` option
 * `>= 0.7.1`
   * Remove `--reverse` option
+  * Add `--allow-pk-chang` option
 
 ## Installation
 
