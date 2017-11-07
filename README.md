@@ -137,6 +137,7 @@ Usage: ridgepole [options]
         --check-relation-type DEF_PK
         --ignore-table-comment
         --skip-column-comment-change
+        --create-table-with-index
     -r, --require LIBS
         --log-file LOG_FILE
         --verbose
