@@ -235,11 +235,17 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
       EOS
     end
 
+    if @options[:create_table_with_index] and not indices.empty?
+      indices.each do |index_name, index_attrs|
+        append_add_index(table_name, index_name, index_attrs, buf, true)
+      end
+    end
+
     buf.puts(<<-EOS)
 end
     EOS
 
-    unless indices.empty?
+    if not @options[:create_table_with_index] and not indices.empty?
       append_change_table(table_name, buf) do
         indices.each do |index_name, index_attrs|
           append_add_index(table_name, index_name, index_attrs, buf)
@@ -407,11 +413,11 @@ remove_column(#{table_name.inspect}, #{column_name.inspect})
     end
   end
 
-  def append_add_index(table_name, index_name, attrs, buf)
+  def append_add_index(table_name, index_name, attrs, buf, force_bulk_change = false)
     column_name = attrs.fetch(:column_name)
     options = attrs[:options] || {}
 
-    if @options[:bulk_change]
+    if force_bulk_change or @options[:bulk_change]
       buf.puts(<<-EOS)
   t.index(#{column_name.inspect}, #{options.inspect})
       EOS
