@@ -82,6 +82,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 * `>= 0.7.1`
   * Remove `--reverse` option
   * Add `--allow-pk-change` option
+  * Add `--create-table-with-index` option
 
 ## Installation
 

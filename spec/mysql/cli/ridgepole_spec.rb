@@ -50,6 +50,7 @@ describe 'ridgepole' do
             --ignore-table-comment
             --skip-column-comment-change
             --allow-pk-change
+            --create-table-with-index
         -r, --require LIBS
             --log-file LOG_FILE
             --verbose
