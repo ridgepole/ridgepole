@@ -83,6 +83,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Remove `--reverse` option
   * Add `--allow-pk-change` option
   * Add `--create-table-with-index` option
+  * Add `--mysql-dump-auto-increment` option (`rails >= 5.1`)
 
 ## Installation
 
@@ -138,6 +139,7 @@ Usage: ridgepole [options]
         --ignore-table-comment
         --skip-column-comment-change
         --create-table-with-index
+        --mysql-dump-auto-increment
     -r, --require LIBS
         --log-file LOG_FILE
         --verbose

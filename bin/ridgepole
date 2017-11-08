@@ -126,6 +126,15 @@ ARGV.options do |opt|
     opt.on('',   '--skip-column-comment-change')                 {    options[:skip_column_comment_change] = true          }
     opt.on('',   '--allow-pk-change')                            {    options[:allow_pk_change] = true                     }
     opt.on('',   '--create-table-with-index')                    {    options[:create_table_with_index] = true             }
+
+    opt.on('',   '--mysql-dump-auto-increment') {
+      if Gem::Version.new(ActiveRecord::VERSION::STRING) < Gem::Version.new('5.1')
+        raise OptionParser::InvalidOption, '`mysql-dump-auto-increment` is not available in `activerecord < 5.1`'
+      end
+
+      options[:mysql_dump_auto_increment] = true
+    }
+
     opt.on('-r', '--require LIBS', Array)                        {|v| v.each {|i| require i }                              }
     opt.on(''  , '--log-file LOG_FILE')                          {|v| options[:log_file] = v                               }
     opt.on(''  , '--verbose')                                    {    Ridgepole::Logger.verbose = true                     }
