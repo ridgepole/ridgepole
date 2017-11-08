@@ -17,6 +17,10 @@ class Ridgepole::Client
     if @options[:mysql_use_alter]
       require 'ridgepole/ext/abstract_mysql_adapter/use_alter_index'
     end
+
+    if @options[:mysql_dump_auto_increment]
+      require 'ridgepole/ext/abstract_mysql_adapter/dump_auto_increment'
+    end
   end
 
   def dump(&block)

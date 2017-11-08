@@ -1,0 +1,41 @@
+describe 'Ridgepole::Client#diff -> migrate (with index)' do
+  context 'when create table' do
+    let(:actual_dsl) { '' }
+
+    let(:expected_dsl) {
+      erbh(<<-EOS)
+        create_table "dept_emp", primary_key: ["emp_no", "dept_no"], force: :cascade do |t|
+          t.integer "emp_no", null: false
+          t.string  "dept_no", null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
+          t.index ["dept_no"], name: "dept_no", <%= i cond(5.0, using: :btree) %>
+          t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
+        end
+      EOS
+    }
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client(create_table_with_index: true) }
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+
+      expect(delta.script).to match_fuzzy <<-EOS
+        create_table("dept_emp", {:primary_key=>["emp_no", "dept_no"]}) do |t|
+          t.column("emp_no", :"integer", {:null=>false, :limit=>4})
+          t.column("dept_no", :"string", {:null=>false, :limit=>255})
+          t.column("from_date", :"date", {:null=>false})
+          t.column("to_date", :"date", {:null=>false})
+          t.index(["dept_no"], {:name=>"dept_no"})
+          t.index(["emp_no"], {:name=>"emp_no"})
+        end
+      EOS
+
+      expect(subject.dump).to match_fuzzy actual_dsl
+      delta.migrate
+      expect(subject.dump).to match_fuzzy expected_dsl
+    }
+  end
+end
