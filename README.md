@@ -139,6 +139,7 @@ Usage: ridgepole [options]
         --ignore-table-comment
         --skip-column-comment-change
         --create-table-with-index
+        --mysql-dump-auto-increment
     -r, --require LIBS
         --log-file LOG_FILE
         --verbose
