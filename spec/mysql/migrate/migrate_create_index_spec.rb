@@ -129,15 +129,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(subject.dump).to match_ruby actual_dsl
       delta.migrate
-      expect(subject.dump).to match_fuzzy expected_dsl
+      expect(subject.dump).to match_ruby expected_dsl
     }
 
     it {
       delta = client(:bulk_change => true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(subject.dump).to match_ruby actual_dsl
       expect(delta.script).to match_fuzzy erbh(<<-EOS)
         change_table("clubs", {:bulk => true}) do |t|
           t.index(["name"], <%= {:name=>"idx_name", :unique=>true} + cond(5.0, using: :btree) %>)
@@ -152,7 +152,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
       EOS
       delta.migrate
-      expect(subject.dump).to match_fuzzy expected_dsl
+      expect(subject.dump).to match_ruby expected_dsl
     }
   end
 end

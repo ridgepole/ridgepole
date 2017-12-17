@@ -129,15 +129,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(subject.dump).to match_ruby actual_dsl
       delta.migrate
-      expect(subject.dump).to match_fuzzy expected_dsl
+      expect(subject.dump).to match_ruby expected_dsl
     }
 
     it {
       delta = client(:bulk_change => true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(subject.dump).to match_ruby actual_dsl
       expect(delta.script).to match_fuzzy <<-EOS
         change_table("employee_clubs", {:bulk => true}) do |t|
           t.column("any_col", :string, {:limit=>255, :null=>false})
@@ -149,7 +149,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
       EOS
       delta.migrate
-      expect(subject.dump).to match_fuzzy expected_dsl
+      expect(subject.dump).to match_ruby expected_dsl
     }
   end
 
@@ -183,10 +183,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(subject.dump).to match_ruby actual_dsl
       migrated, sql = delta.migrate(:noop => true)
       expect(migrated).to be_truthy
-      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(subject.dump).to match_ruby actual_dsl
 
       expect(sql).to match_fuzzy("ALTER TABLE \"dept_emp\" ADD \"emp_no2\" integer NOT NULL")
     }

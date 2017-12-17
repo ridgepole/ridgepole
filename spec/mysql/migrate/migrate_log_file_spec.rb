@@ -113,9 +113,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
       tempfile("#{File.basename __FILE__}.#{$$}") do |path|
         delta = client(log_file: path).diff(expected_dsl)
         expect(delta.differ?).to be_truthy
-        expect(client.dump).to match_fuzzy actual_dsl
+        expect(client.dump).to match_ruby actual_dsl
         delta.migrate
-        expect(client.dump).to match_fuzzy expected_dsl
+        expect(client.dump).to match_ruby expected_dsl
         expect(File.size(path)).to be > 0
       end
     }

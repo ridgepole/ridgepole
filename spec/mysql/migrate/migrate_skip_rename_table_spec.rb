@@ -131,9 +131,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(Ridgepole::Logger.instance).to receive(:warn).with("[WARNING] The table `employees` has already been renamed to the table `employees2`.")
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_falsey
-      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(subject.dump).to match_ruby actual_dsl
       delta.migrate
-      expect(subject.dump).to match_fuzzy expected_dsl.gsub(/, renamed_from: 'employees'/, '')
+      expect(subject.dump).to match_ruby expected_dsl.gsub(/, renamed_from: 'employees'/, '')
     }
   end
 end

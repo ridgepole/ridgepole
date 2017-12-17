@@ -33,9 +33,9 @@ describe 'Ridgepole::Client#diff -> migrate (with index)' do
         end
       EOS
 
-      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(subject.dump).to match_ruby actual_dsl
       delta.migrate
-      expect(subject.dump).to match_fuzzy expected_dsl
+      expect(subject.dump).to match_ruby expected_dsl
     }
   end
 end

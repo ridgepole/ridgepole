@@ -17,7 +17,7 @@ describe 'Ridgepole::Client (with integer pk)', condition: 5.1 do
 
     specify {
       expect(show_create_table(:books)).to include '`id` int(11) NOT NULL AUTO_INCREMENT'
-      expect(subject.dump).to match_fuzzy dsl
+      expect(subject.dump).to match_ruby dsl
     }
   end
 
@@ -39,7 +39,7 @@ describe 'Ridgepole::Client (with integer pk)', condition: 5.1 do
 
     specify {
       expect(show_create_table(:books)).to include '`id` bigint(20) NOT NULL AUTO_INCREMENT'
-      expect(subject.dump).to match_fuzzy dsl
+      expect(subject.dump).to match_ruby dsl
     }
   end
 end

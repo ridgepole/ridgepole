@@ -40,7 +40,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_fuzzy sorted_actual_dsl
       delta.migrate
-      expect(subject.dump).to match_fuzzy expected_dsl
+      expect(subject.dump).to match_ruby expected_dsl
     }
 
     it {
@@ -51,7 +51,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         remove_foreign_key("child", {:name=>"child_ibfk_1"})
       EOS
       delta.migrate
-      expect(subject.dump).to match_fuzzy expected_dsl
+      expect(subject.dump).to match_ruby expected_dsl
     }
   end
 
@@ -137,7 +137,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_fuzzy sorted_actual_dsl
       delta.migrate
-      expect(subject.dump).to match_fuzzy expected_dsl
+      expect(subject.dump).to match_ruby expected_dsl
     }
 
     it {
@@ -148,7 +148,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         remove_foreign_key("child", "parent")
       EOS
       delta.migrate
-      expect(subject.dump).to match_fuzzy expected_dsl
+      expect(subject.dump).to match_ruby expected_dsl
     }
   end
 
