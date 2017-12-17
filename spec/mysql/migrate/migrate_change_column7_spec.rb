@@ -15,7 +15,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     subject { client }
 
     it {
-      expect(subject.dump).to match_fuzzy dsl.sub(/t.integer "emp_no", limit: 8/, 't.bigint "emp_no"')
+      expect(subject.dump).to match_ruby dsl.sub(/t.integer "emp_no", limit: 8/, 't.bigint "emp_no"')
       delta = subject.diff(dsl)
       expect(delta.differ?).to be_falsey
     }

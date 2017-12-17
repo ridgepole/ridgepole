@@ -128,15 +128,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(subject.dump).to match_ruby actual_dsl
       delta.migrate
-      expect(subject.dump).to match_fuzzy expected_dsl.gsub(/\s*,\s*renamed_from:.*$/, '')
+      expect(subject.dump).to match_ruby expected_dsl.gsub(/\s*,\s*renamed_from:.*$/, '')
     }
 
     it {
       delta = client(:bulk_change => true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(subject.dump).to match_ruby actual_dsl
       expect(delta.script).to match_fuzzy <<-EOS
         change_table("dept_emp", {:bulk => true}) do |t|
           t.rename("from_date", "from_date2")
@@ -147,7 +147,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
       EOS
       delta.migrate
-      expect(subject.dump).to match_fuzzy expected_dsl.gsub(/\s*,\s*renamed_from:.*$/, '')
+      expect(subject.dump).to match_ruby expected_dsl.gsub(/\s*,\s*renamed_from:.*$/, '')
     }
   end
 end

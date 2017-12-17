@@ -38,7 +38,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(dsl_with_execute)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to match_fuzzy dsl
+      expect(subject.dump).to match_ruby dsl
 
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-EOS)
         CREATE TABLE `books` (
@@ -111,7 +111,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(dsl_with_execute)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to match_fuzzy dsl
+      expect(subject.dump).to match_ruby dsl
 
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-EOS)
         CREATE TABLE `books` (
@@ -126,7 +126,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       migrated, out = delta.migrate
       expect(migrated).to be_falsey
-      expect(subject.dump).to match_fuzzy dsl
+      expect(subject.dump).to match_ruby dsl
 
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-EOS)
         CREATE TABLE `books` (
@@ -180,7 +180,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(dsl_with_execute)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to match_fuzzy dsl
+      expect(subject.dump).to match_ruby dsl
 
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-EOS)
         CREATE TABLE `books` (
@@ -194,7 +194,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       migrated, sql = delta.migrate(:noop => true)
       expect(migrated).to be_truthy
-      expect(subject.dump).to match_fuzzy dsl
+      expect(subject.dump).to match_ruby dsl
 
       expect(sql).to match_fuzzy "ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)"
 
@@ -252,7 +252,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(dsl_with_execute)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to match_fuzzy dsl
+      expect(subject.dump).to match_ruby dsl
 
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-EOS)
         CREATE TABLE `books` (
@@ -267,7 +267,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       migrated, sql = delta.migrate(:noop => true)
       expect(migrated).to be_falsey
-      expect(subject.dump).to match_fuzzy dsl
+      expect(subject.dump).to match_ruby dsl
 
       expect(sql).to match_fuzzy ""
 

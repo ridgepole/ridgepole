@@ -77,7 +77,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       migrated, sql = delta.migrate(:noop => true)
       expect(migrated).to be_truthy
-      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(subject.dump).to match_ruby actual_dsl
 
       expect(sql).to match_fuzzy erbh(<<-EOS)
         CREATE TABLE `clubs` (`id` <%= cond(5.1, 'bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `name` varchar(255) DEFAULT '' NOT NULL) ENGINE=InnoDB
@@ -105,7 +105,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       migrated, sql = delta.migrate(:noop => true)
       expect(migrated).to be_truthy
-      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(subject.dump).to match_ruby actual_dsl
 
       # XXX:
       expect(sql.gsub('`', '')).to match_fuzzy erbh(<<-EOS).gsub('`', '')
@@ -206,7 +206,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       migrated, sql = delta.migrate(:noop => true)
       expect(migrated).to be_truthy
-      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(subject.dump).to match_ruby actual_dsl
 
       expect(sql).to match_fuzzy erbh(<<-EOS)
         CREATE TABLE `clubs` (`id` <%= cond(5.1, 'bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `name` varchar(255) DEFAULT '' NOT NULL) ENGINE=InnoDB

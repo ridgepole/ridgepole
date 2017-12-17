@@ -26,7 +26,7 @@ describe 'Ridgepole::Client#dump' do
     subject { client }
 
     it {
-      expect(subject.dump).to match_fuzzy expected_dsl
+      expect(subject.dump).to match_ruby expected_dsl
     }
   end
 end

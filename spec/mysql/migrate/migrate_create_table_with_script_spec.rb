@@ -113,7 +113,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(subject.dump).to match_fuzzy actual_dsl
+      expect(subject.dump).to match_ruby actual_dsl
 
       script = <<-EOS
         echo "$1" | #{MYSQL_CLI} #{TEST_SCHEMA}
@@ -124,7 +124,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         delta.migrate(external_script: path)
       end
 
-      expect(subject.dump).to match_fuzzy expected_dsl
+      expect(subject.dump).to match_ruby expected_dsl
     }
   end
 end
