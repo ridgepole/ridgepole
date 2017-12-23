@@ -29,6 +29,13 @@ module SpecCondition
       ActiveRecord::VERSION::STRING =~ version_or_cond
     when Float
       ActiveRecord::VERSION::STRING.start_with?(version_or_cond.to_s)
+    when /\s+/
+      ar_version = Gem::Version.new(ActiveRecord::VERSION::STRING)
+
+      version_or_cond.split(',').all? do |ope_version|
+        ope, version = ope_version.strip.split(/\s+/, 2)
+        ar_version.send(ope, Gem::Version.new(version))
+      end
     when String
       ActiveRecord::VERSION::STRING.start_with?(version_or_cond)
     else

@@ -80,22 +80,22 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_ruby actual_dsl
 
       expect(sql).to match_fuzzy erbh(<<-EOS)
-        CREATE TABLE `clubs` (`id` <%= cond(5.1, 'bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `name` varchar(255) DEFAULT '' NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `clubs` (`id` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `name` varchar(255) DEFAULT '' NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE UNIQUE INDEX `idx_name` USING btree ON `clubs` (`name`)
-        CREATE TABLE `departments` (`dept_no` <%= cond(5.1, 'bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `dept_name` varchar(40) NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `departments` (`dept_no` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `dept_name` varchar(40) NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE UNIQUE INDEX `dept_name` USING btree ON `departments` (`dept_name`)
-        CREATE TABLE `dept_emp` (`emp_no` int NOT NULL, `dept_no` varchar(4) NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `dept_emp` (`emp_no` int NOT NULL, `dept_no` varchar(4) NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE  INDEX `dept_no` USING btree ON `dept_emp` (`dept_no`)
         CREATE  INDEX `emp_no` USING btree ON `dept_emp` (`emp_no`)
-        CREATE TABLE `dept_manager` (`dept_no` varchar(4) NOT NULL, `emp_no` int NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `dept_manager` (`dept_no` varchar(4) NOT NULL, `emp_no` int NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE  INDEX `dept_no` USING btree ON `dept_manager` (`dept_no`)
         CREATE  INDEX `emp_no` USING btree ON `dept_manager` (`emp_no`)
-        CREATE TABLE `employee_clubs` (`id` <%= cond(5.1, 'bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `emp_no` int unsigned NOT NULL, `club_id` int unsigned NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `employee_clubs` (`id` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `emp_no` int unsigned NOT NULL, `club_id` int unsigned NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE  INDEX `idx_emp_no_club_id` USING btree ON `employee_clubs` (`emp_no`, `club_id`)
-        CREATE TABLE `employees` (`emp_no` <%= cond(5.1, 'bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `birth_date` date NOT NULL, `first_name` varchar(14) NOT NULL, `last_name` varchar(16) NOT NULL, `gender` varchar(1) NOT NULL, `hire_date` date NOT NULL) ENGINE=InnoDB
-        CREATE TABLE `salaries` (`emp_no` int NOT NULL, `salary` int NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `employees` (`emp_no` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `birth_date` date NOT NULL, `first_name` varchar(14) NOT NULL, `last_name` varchar(16) NOT NULL, `gender` varchar(1) NOT NULL, `hire_date` date NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
+        CREATE TABLE `salaries` (`emp_no` int NOT NULL, `salary` int NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE  INDEX `emp_no` USING btree ON `salaries` (`emp_no`)
-        CREATE TABLE `titles` (`emp_no` int NOT NULL, `title` varchar(50) NOT NULL, `from_date` date NOT NULL, `to_date` date) ENGINE=InnoDB
+        CREATE TABLE `titles` (`emp_no` int NOT NULL, `title` varchar(50) NOT NULL, `from_date` date NOT NULL, `to_date` date) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE  INDEX `emp_no` USING btree ON `titles` (`emp_no`)
       EOS
     }
@@ -109,20 +109,20 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       # XXX:
       expect(sql.gsub('`', '')).to match_fuzzy erbh(<<-EOS).gsub('`', '')
-        CREATE TABLE `clubs` (`id` <%= cond(5.1, 'bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `name` varchar(255) DEFAULT '' NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `clubs` (`id` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `name` varchar(255) DEFAULT '' NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         ALTER TABLE `clubs` ADD UNIQUE INDEX `idx_name` USING btree (`name`)
-        CREATE TABLE `departments` (`dept_no` <%= cond(5.1, 'bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `dept_name` varchar(40) NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `departments` (`dept_no` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `dept_name` varchar(40) NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         ALTER TABLE `departments` ADD UNIQUE INDEX `dept_name` USING btree (`dept_name`)
-        CREATE TABLE `dept_emp` (`emp_no` int NOT NULL, `dept_no` varchar(4) NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `dept_emp` (`emp_no` int NOT NULL, `dept_no` varchar(4) NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         ALTER TABLE `dept_emp` ADD  INDEX `dept_no` USING btree (`dept_no`), ADD  INDEX `emp_no` USING btree (`emp_no`)
-        CREATE TABLE `dept_manager` (`dept_no` varchar(4) NOT NULL, `emp_no` int NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `dept_manager` (`dept_no` varchar(4) NOT NULL, `emp_no` int NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         ALTER TABLE `dept_manager` ADD  INDEX `dept_no` USING btree (`dept_no`), ADD  INDEX `emp_no` USING btree (`emp_no`)
-        CREATE TABLE `employee_clubs` (`id` <%= cond(5.1, 'bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `emp_no` int unsigned NOT NULL, `club_id` int unsigned NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `employee_clubs` (`id` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `emp_no` int unsigned NOT NULL, `club_id` int unsigned NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         ALTER TABLE `employee_clubs` ADD  INDEX `idx_emp_no_club_id` USING btree (`emp_no`, `club_id`)
-        CREATE TABLE `employees` (`emp_no` <%= cond(5.1, 'bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `birth_date` date NOT NULL, `first_name` varchar(14) NOT NULL, `last_name` varchar(16) NOT NULL, `gender` varchar(1) NOT NULL, `hire_date` date NOT NULL) ENGINE=InnoDB
-        CREATE TABLE `salaries` (`emp_no` int NOT NULL, `salary` int NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `employees` (`emp_no` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `birth_date` date NOT NULL, `first_name` varchar(14) NOT NULL, `last_name` varchar(16) NOT NULL, `gender` varchar(1) NOT NULL, `hire_date` date NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
+        CREATE TABLE `salaries` (`emp_no` int NOT NULL, `salary` int NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         ALTER TABLE `salaries` ADD  INDEX `emp_no` USING btree (`emp_no`)
-        CREATE TABLE `titles` (`emp_no` int NOT NULL, `title` varchar(50) NOT NULL, `from_date` date NOT NULL, `to_date` date) ENGINE=InnoDB
+        CREATE TABLE `titles` (`emp_no` int NOT NULL, `title` varchar(50) NOT NULL, `from_date` date NOT NULL, `to_date` date) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         ALTER TABLE `titles` ADD  INDEX `emp_no` USING btree (`emp_no`)
       EOS
     }
@@ -209,22 +209,22 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_ruby actual_dsl
 
       expect(sql).to match_fuzzy erbh(<<-EOS)
-        CREATE TABLE `clubs` (`id` <%= cond(5.1, 'bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `name` varchar(255) DEFAULT '' NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `clubs` (`id` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `name` varchar(255) DEFAULT '' NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE UNIQUE INDEX `idx_name` USING btree ON `clubs` (`name`)
-        CREATE TABLE `departments` (`dept_no` <%= cond(5.1, 'bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `dept_name` varchar(40) NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `departments` (`dept_no` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `dept_name` varchar(40) NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE UNIQUE INDEX `dept_name` USING btree ON `departments` (`dept_name`)
-        CREATE TABLE `dept_emp` (`emp_no` int NOT NULL, `dept_no` varchar(4) NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `dept_emp` (`emp_no` int NOT NULL, `dept_no` varchar(4) NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE  INDEX `dept_no` USING btree ON `dept_emp` (`dept_no`)
         CREATE  INDEX `emp_no` USING btree ON `dept_emp` (`emp_no`)
-        CREATE TABLE `dept_manager` (`dept_no` varchar(4) NOT NULL, `emp_no` int NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `dept_manager` (`dept_no` varchar(4) NOT NULL, `emp_no` int NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE  INDEX `dept_no` USING btree ON `dept_manager` (`dept_no`)
         CREATE  INDEX `emp_no` USING btree ON `dept_manager` (`emp_no`)
-        CREATE TABLE `employee_clubs` (`id` <%= cond(5.1, 'bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `emp_no` int unsigned NOT NULL, `club_id` int unsigned NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `employee_clubs` (`id` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `emp_no` int unsigned NOT NULL, `club_id` int unsigned NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE  INDEX `idx_emp_no_club_id` USING btree ON `employee_clubs` (`emp_no`, `club_id`)
-        CREATE TABLE `employees` (`emp_no` <%= cond(5.1, 'bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `birth_date` date NOT NULL, `first_name` varchar(14) NOT NULL, `last_name` varchar(16) NOT NULL, `gender` varchar(1) NOT NULL, `hire_date` date NOT NULL) ENGINE=InnoDB
-        CREATE TABLE `salaries` (`emp_no` int NOT NULL, `salary` int NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) ENGINE=InnoDB
+        CREATE TABLE `employees` (`emp_no` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `birth_date` date NOT NULL, `first_name` varchar(14) NOT NULL, `last_name` varchar(16) NOT NULL, `gender` varchar(1) NOT NULL, `hire_date` date NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
+        CREATE TABLE `salaries` (`emp_no` int NOT NULL, `salary` int NOT NULL, `from_date` date NOT NULL, `to_date` date NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE  INDEX `emp_no` USING btree ON `salaries` (`emp_no`)
-        CREATE TABLE `titles` (`emp_no` int NOT NULL, `title` varchar(50) NOT NULL, `from_date` date NOT NULL, `to_date` date) ENGINE=InnoDB
+        CREATE TABLE `titles` (`emp_no` int NOT NULL, `title` varchar(50) NOT NULL, `from_date` date NOT NULL, `to_date` date) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE  INDEX `emp_no` USING btree ON `titles` (`emp_no`)
       EOS
     }

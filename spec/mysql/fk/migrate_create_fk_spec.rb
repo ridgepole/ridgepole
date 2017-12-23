@@ -7,7 +7,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
       EOS
     }
@@ -51,7 +51,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
 
-        create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
       EOS
     }
@@ -63,7 +63,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
@@ -93,7 +93,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
 
-        create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
       EOS
     }
@@ -115,7 +115,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
       EOS
     }
@@ -154,7 +154,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-EOS)
         add_foreign_key "child", "parent", name: "child_ibfk_1"
 
-        create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
       EOS
     }

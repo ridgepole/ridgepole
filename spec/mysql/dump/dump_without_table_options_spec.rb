@@ -13,7 +13,7 @@ describe 'Ridgepole::Client#dump' do
   context 'when without table options' do
     let(:expected_dsl) {
       erbh(<<-EOS)
-        create_table "books", <%= i cond(5.1, id: :bigint) %>, unsigned: true, force: :cascade, comment: "\\"london\\" bridge \\"is\\" falling \\"down\\"" do |t|
+        create_table "books", <%= i cond('>= 5.1',id: :bigint) %>, unsigned: true, force: :cascade, comment: "\\"london\\" bridge \\"is\\" falling \\"down\\"" do |t|
           t.string   "title", null: false
           t.integer  "author_id", null: false
           t.datetime "created_at"

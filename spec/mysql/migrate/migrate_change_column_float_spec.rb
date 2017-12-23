@@ -27,10 +27,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       delta = subject.diff(expected_dsl)
-      expect(delta.differ?).to be_truthy
-      expect(subject.dump).to match_ruby actual_dsl
-      delta.migrate
-      expect(subject.dump).to match_ruby actual_dsl
+
+      if condition('< 5.2.0.beta2')
+        expect(delta.differ?).to be_truthy
+        expect(subject.dump).to match_ruby actual_dsl
+        delta.migrate
+        expect(subject.dump).to match_ruby actual_dsl
+      else
+        expect(delta.differ?).to be_falsy
+      end
     }
   end
 

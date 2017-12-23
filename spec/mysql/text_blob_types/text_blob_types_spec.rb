@@ -32,7 +32,7 @@ describe 'Ridgepole::Client (with new text/blob types)' do
           t.text    "medium_text", limit: 16777215
           t.text    "long_text", limit: 4294967295
           t.decimal "unsigned_decimal", precision: 10, unsigned: true
-          t.float   "unsigned_float", limit: 24, unsigned: true
+          t.float   "unsigned_float", <%= i cond('< 5.2.0.beta2', limit: 24) %>, unsigned: true
           t.bigint  "unsigned_bigint", unsigned: true
           t.integer "unsigned_integer", unsigned: true
         end

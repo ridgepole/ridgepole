@@ -1,11 +1,11 @@
 mysql:
-  image: "mysql:5.6"
+  image: "mysql:5.6.38"
   ports:
     - "13316:3306"
   environment:
     MYSQL_ROOT_PASSWORD: password
 mysql57:
-  image: "mysql:5.7"
+  image: "mysql:5.7.20"
   ports:
     - "13317:3306"
   environment:

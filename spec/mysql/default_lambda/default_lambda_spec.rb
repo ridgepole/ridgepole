@@ -62,9 +62,9 @@ describe 'Ridgepole::Client (use default:lambda)' do
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy erbh(<<-EOS)
+      expect(subject.dump).to match_ruby erbh(<<-EOS)
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", default: <%= cond(5.1, '"1970-01-01 00:00:00"', "'1970-01-01 00:00:00'") %>, null: false
+          t.datetime "bar", default: "1970-01-01 00:00:00", null: false
         end
       EOS
     end
