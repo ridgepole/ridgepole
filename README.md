@@ -84,6 +84,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Add `--allow-pk-change` option
   * Add `--create-table-with-index` option
   * Add `--mysql-dump-auto-increment` option (`rails >= 5.1`)
+* `>= 0.7.2`
+  * Support Rails 5.2
 
 ## Installation
 
