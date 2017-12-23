@@ -19,7 +19,7 @@ module Ridgepole
       end
 
       def foreign_keys(table, stream)
-        return super unless self.class.__with_default_fk_name
+        return super unless ActiveRecord::SchemaDumper.__with_default_fk_name
 
         if (foreign_keys = @connection.foreign_keys(table)).any?
           add_foreign_key_statements = foreign_keys.map do |foreign_key|
