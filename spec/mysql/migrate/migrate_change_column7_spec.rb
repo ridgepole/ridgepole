@@ -4,7 +4,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-EOS)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", limit: 8, null: false
-          t.float   "salary", limit: 24, null: false
+          t.float   "salary", <%= i cond('< 5.2.0.beta2', limit: 24) %>, null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end

@@ -141,12 +141,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_ruby actual_dsl
       expect(delta.script).to match_fuzzy erbh(<<-EOS)
         change_table("employee_clubs", {:bulk => true}) do |t|
-          t.change("club_id", :integer, <%= {:null=>true, :default=>nil, :unsigned=>false} + cond(5.1, comment: nil) %>)
+          t.change("club_id", :integer, <%= {:null=>true, :default=>nil, :unsigned=>false} + cond('>= 5.1',comment: nil) %>)
         end
 
         change_table("employees", {:bulk => true}) do |t|
-          t.change("last_name", :string, <%= {:limit=>20, :default=>"XXX", :unsigned=>false} + cond(5.1, comment: nil) %>)
-          t.change("gender", :string, <%= {:limit=>2, :null=>false, :default=>nil, :unsigned=>false} + cond(5.1, comment: nil) %>)
+          t.change("last_name", :string, <%= {:limit=>20, :default=>"XXX", :unsigned=>false} + cond('>= 5.1',comment: nil) %>)
+          t.change("gender", :string, <%= {:limit=>2, :null=>false, :default=>nil, :unsigned=>false} + cond('>= 5.1',comment: nil) %>)
         end
       EOS
       delta.migrate

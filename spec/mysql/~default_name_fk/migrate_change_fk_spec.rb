@@ -2,7 +2,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change fk' do
     let(:actual_dsl) {
       erbh(<<-EOS)
-        create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
         create_table "child", force: :cascade do |t|
@@ -21,7 +21,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
         add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc", on_delete: :cascade
@@ -35,7 +35,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        create_table "parent", <%= i cond(5.1, id: :integer) %>, force: :cascade do |t|
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
         add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"

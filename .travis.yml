@@ -6,9 +6,9 @@ cache:
   - bundler
   - apt
 rvm:
-  - 2.2.8
-  - 2.3.5
-  - 2.4.2
+  - 2.2.9
+  - 2.3.6
+  - 2.4.3
 before_install:
   - gem install bundler
 before_script:
@@ -26,6 +26,7 @@ script:
 gemfile:
   - gemfiles/activerecord_5.0.gemfile
   - gemfiles/activerecord_5.1.gemfile
+  - gemfiles/activerecord_5.2.gemfile
 env:
   matrix:
     - MYSQL56=1
