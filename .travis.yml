@@ -9,7 +9,9 @@ rvm:
   - 2.2.9
   - 2.3.6
   - 2.4.3
+  - 2.5.0
 before_install:
+  - gem update --system
   - gem install bundler
 before_script:
   - sudo service mysql stop
