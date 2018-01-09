@@ -277,7 +277,11 @@ add_index "books", ["author_id"], name: "idx_author_id", using: :btree
 
 execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)") do |c|
   # Execute SQL only if there is no foreign key
-  c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = 'bookshelf' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?
+  c.raw_connection.query(<<-SQL).each.length.zero?
+    SELECT 1 FROM information_schema.key_column_usage
+     WHERE TABLE_SCHEMA = 'bookshelf'
+       AND CONSTRAINT_NAME = 'fk_author' LIMIT 1
+  SQL
 end
 ```
 
