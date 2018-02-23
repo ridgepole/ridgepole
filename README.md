@@ -6,8 +6,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 (like Chef/Puppet)
 
 [![Gem Version](https://badge.fury.io/rb/ridgepole.svg)](http://badge.fury.io/rb/ridgepole)
-[![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=master)](https://travis-ci.org/winebarrel/ridgepole)
-[![Coverage Status](https://coveralls.io/repos/winebarrel/ridgepole/badge.svg?branch=master)](https://coveralls.io/r/winebarrel/ridgepole?branch=master)
+[![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=master)](https://travis-ci.org/winebarrel/ridgepole.svg?branch=0.6)
+[![Coverage Status](https://coveralls.io/repos/github/winebarrel/ridgepole/badge.svg?branch=0.6)](https://coveralls.io/github/winebarrel/ridgepole?branch=0.6)
 
 **Important**
 
