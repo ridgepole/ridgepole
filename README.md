@@ -5,10 +5,6 @@ Ridgepole is a tool to manage DB schema.
 It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.html#types-of-schema-dumps), and updates DB schema according to DSL.
 (like Chef/Puppet)
 
-[![Prev Version](https://img.shields.io/badge/prev_version-0.6.6-brightgreen.svg)](https://rubygems.org/gems/ridgepole/versions/0.7.0.rc1)
-[![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=0.6)](https://travis-ci.org/winebarrel/ridgepole)
-[![Coverage Status](https://coveralls.io/repos/github/winebarrel/ridgepole/badge.svg?branch=0.6)](https://coveralls.io/github/winebarrel/ridgepole?branch=0.6)
-
 [![Gem Version](https://badge.fury.io/rb/ridgepole.svg)](http://badge.fury.io/rb/ridgepole)
 [![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=0.7)](https://travis-ci.org/winebarrel/ridgepole)
 [![Coverage Status](https://coveralls.io/repos/github/winebarrel/ridgepole/badge.svg?branch=0.7)](https://coveralls.io/github/winebarrel/ridgepole?branch=0.7)
