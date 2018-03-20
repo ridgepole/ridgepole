@@ -11,28 +11,48 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when allow_pk_change option is false' do
     let(:allow_pk_change) { false }
-    let(:expected_dsl) {
-      erbh(<<-EOS)
-        create_table "employees", id: :bigint, unsigned: true, force: :cascade do |t|
-        end
-      EOS
-    }
 
-    it {
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-EOS)
+    context 'with difference' do
+      let(:expected_dsl) {
+        erbh(<<-EOS)
+          create_table "employees", id: :bigint, unsigned: true, force: :cascade do |t|
+          end
+        EOS
+      }
+
+      it {
+        expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-EOS)
 [WARNING] Primary key definition of `employees` differ but `allow_pk_change` option is false
   from: {:id=>:integer, :unsigned=>true}
     to: {:id=>:bigint, :unsigned=>true}
-      EOS
+        EOS
 
-      delta = subject.diff(expected_dsl)
-      expect(delta.differ?).to be_falsey
-      delta.migrate
-      expect(subject.dump).to match_ruby actual_dsl
-    }
+        delta = subject.diff(expected_dsl)
+        expect(delta.differ?).to be_falsey
+        delta.migrate
+        expect(subject.dump).to match_ruby actual_dsl
+      }
+    end
+
+    context 'with no difference' do
+      let(:actual_dsl) {
+        erbh(<<-EOS)
+          create_table "employees", unsigned: true, force: :cascade do |t|
+          end
+        EOS
+      }
+      let(:expected_dsl) { actual_dsl }
+
+      it {
+        expect(Ridgepole::Logger.instance).to_not receive(:warn)
+
+        delta = subject.diff(expected_dsl)
+        expect(delta.differ?).to be_falsey
+      }
+    end
   end
 
-  context 'when allow_pk_change option is false' do
+  context 'when allow_pk_change option is true' do
     let(:allow_pk_change) { true }
     let(:expected_dsl) {
       erbh(<<-EOS)

@@ -139,9 +139,9 @@ class Ridgepole::Diff
     to: #{to.slice(*PRIMARY_KEY_OPTIONS)}
         EOS
       end
-      from = from.except(*PRIMARY_KEY_OPTIONS)
-      to = to.except(*PRIMARY_KEY_OPTIONS)
     end
+    from = from.except(*PRIMARY_KEY_OPTIONS)
+    to = to.except(*PRIMARY_KEY_OPTIONS)
 
     unless from == to
       @logger.warn(<<-EOS)
