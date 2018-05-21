@@ -121,6 +121,7 @@ ARGV.options do |opt|
     opt.on('',   '--index-removed-drop-column')                  {    options[:index_removed_drop_column] = true           }
     opt.on('',   '--skip-drop-table')                            {    options[:skip_drop_table] = true                     }
     opt.on('',   '--mysql-change-table-options')                 {    options[:mysql_change_table_options] = true          }
+    opt.on('',   '--mysql-change-table-comment')                 {    options[:mysql_change_table_comment] = true          }
     opt.on('',   '--check-relation-type DEF_PK')                 {|v| options[:check_relation_type] = v                    }
     opt.on('',   '--ignore-table-comment')                       {    options[:ignore_table_comment] = true                }
     opt.on('',   '--skip-column-comment-change')                 {    options[:skip_column_comment_change] = true          }

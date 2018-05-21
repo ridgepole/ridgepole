@@ -117,10 +117,18 @@ class Ridgepole::Diff
       end
     end
 
-    if @options[:mysql_change_table_options] and from_options != to_options and Ridgepole::ConnectionAdapters.mysql?
-      from.delete(:options)
-      to.delete(:options)
-      table_delta[:table_options] = to_options
+    if Ridgepole::ConnectionAdapters.mysql?
+      if @options[:mysql_change_table_options] and from_options != to_options
+        from.delete(:options)
+        to.delete(:options)
+        table_delta[:table_options] = to_options
+      end
+
+      if @options[:mysql_change_table_comment] and from[:comment] != to[:comment]
+        from.delete(:comment)
+        to_comment = to.delete(:comment)
+        table_delta[:table_comment] = to_comment
+      end
     end
 
     if @options[:dump_without_table_options]
