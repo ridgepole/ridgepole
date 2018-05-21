@@ -288,12 +288,18 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
     buf.puts
   end
 
+  def append_change_table_comment(table_name, table_comment, buf)
+    comment_literal = "COMMENT=#{ActiveRecord::Base.connection.quote(table_comment)}"
+    append_change_table_options(table_name, comment_literal, buf)
+  end
+
   def append_change(table_name, attrs, buf, pre_buf_for_fk, post_buf_for_fk)
     definition = attrs[:definition] || {}
     primary_key_definition = attrs[:primary_key_definition] || {}
     indices = attrs[:indices] || {}
     foreign_keys = attrs[:foreign_keys] || {}
     table_options = attrs[:table_options]
+    table_comment = attrs[:table_comment]
 
     if not definition.empty? or not indices.empty? or not primary_key_definition.empty?
       append_change_table(table_name, buf) do
@@ -310,6 +316,10 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
 
     if table_options
       append_change_table_options(table_name, table_options, buf)
+    end
+
+    if table_comment
+      append_change_table_comment(table_name, table_comment, buf)
     end
 
     buf.puts
