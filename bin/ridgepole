@@ -239,7 +239,7 @@ begin
     else
       logger.verbose_info('# Update schema')
 
-      differ, out = delta.migrate(
+      differ, _out = delta.migrate(
         :external_script => options[:external_script],
         :alter_extra => options[:alter_extra]
       )
@@ -249,17 +249,17 @@ begin
       logger.info('No change')
     end
   when :diff
-    diff_files = diff_files.map do |file|
-      if File.exist?(file)
-        file_ext = File.extname(file)
+    diff_files = diff_files.map do |diff_file|
+      if File.exist?(diff_file)
+        file_ext = File.extname(diff_file)
 
         if %w(.yml .yaml).include?(file_ext)
-          Ridgepole::Config.load(file, env)
+          Ridgepole::Config.load(diff_file, env)
         else
-          File.open(file)
+          File.open(diff_file)
         end
       else
-        YAML.load(file)
+        YAML.load(diff_file)
       end
     end
 
@@ -270,7 +270,7 @@ begin
       differ = delta.differ?
 
       if differ
-        differ, out = delta.migrate
+        differ, _out = delta.migrate
       end
 
       if differ
