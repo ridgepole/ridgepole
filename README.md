@@ -82,6 +82,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Add `--mysql-dump-auto-increment` option (`rails >= 5.1`)
 * `>= 0.7.2`
   * Support Rails 5.2
+* `>= 0.7.3`
+  * Add `--mysql-change-table-comment option` ([pull#166](https://github.com/winebarrel/ridgepole/pull/166))
 
 ## Installation
 
@@ -133,6 +135,7 @@ Usage: ridgepole [options]
         --index-removed-drop-column
         --skip-drop-table
         --mysql-change-table-options
+        --mysql-change-table-comment
         --check-relation-type DEF_PK
         --ignore-table-comment
         --skip-column-comment-change
