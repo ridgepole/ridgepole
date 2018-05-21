@@ -1,5 +1,5 @@
 class Ridgepole::Diff
-  PRIMARY_KEY_OPTIONS = %i(id limit default null precision scale collation unsigned comment).freeze
+  PRIMARY_KEY_OPTIONS = %i(id limit default null precision scale collation unsigned).freeze
 
   def initialize(options = {})
     @options = options
