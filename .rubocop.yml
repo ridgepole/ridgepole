@@ -41,8 +41,6 @@ Lint/HandleExceptions:
   Enabled: false
 Lint/ParenthesesAsGroupedExpression:
   Enabled: false
-Lint/UnusedMethodArgument:
-  Enabled: false
 Lint/UselessAssignment:
   Enabled: false
 Metrics/AbcSize:

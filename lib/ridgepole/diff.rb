@@ -54,7 +54,7 @@ class Ridgepole::Diff
 
   private
 
-  def scan_table_rename(from, to, delta, options = {})
+  def scan_table_rename(from, to, delta, _options = {})
     to.dup.each do |table_name, to_attrs|
       next unless target?(table_name)
 
@@ -295,7 +295,7 @@ class Ridgepole::Diff
     end
   end
 
-  def scan_indices_change(from, to, to_columns, table_delta, from_table_options, to_table_options)
+  def scan_indices_change(from, to, to_columns, table_delta, _from_table_options, to_table_options)
     from = (from || {}).dup
     to = (to || {}).dup
     indices_delta = {}
@@ -481,7 +481,7 @@ class Ridgepole::Diff
     end
   end
 
-  def diff_inspect(obj1, obj2, options = {})
+  def diff_inspect(obj1, obj2, _options = {})
     obj1 = Ridgepole::Ext::PpSortHash.extend_if_hash(obj1)
     obj2 = Ridgepole::Ext::PpSortHash.extend_if_hash(obj2)
 

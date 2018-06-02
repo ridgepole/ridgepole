@@ -271,7 +271,7 @@ rename_table(#{from_table_name.inspect}, #{to_table_name.inspect})
     buf.puts
   end
 
-  def append_drop_table(table_name, attrs, buf)
+  def append_drop_table(table_name, _attrs, buf)
     buf.puts(<<-EOS)
 drop_table(#{table_name.inspect})
     EOS
@@ -399,7 +399,7 @@ change_column(#{table_name.inspect}, #{column_name.inspect}, #{type.inspect}, #{
     end
   end
 
-  def append_remove_column(table_name, column_name, attrs, buf)
+  def append_remove_column(table_name, column_name, _attrs, buf)
     if @options[:bulk_change]
       buf.puts(<<-EOS)
   t.remove(#{column_name.inspect})
@@ -423,7 +423,7 @@ remove_column(#{table_name.inspect}, #{column_name.inspect})
     end
   end
 
-  def append_add_index(table_name, index_name, attrs, buf, force_bulk_change = false)
+  def append_add_index(table_name, _index_name, attrs, buf, force_bulk_change = false)
     column_name = attrs.fetch(:column_name)
     options = attrs[:options] || {}
 
@@ -438,7 +438,7 @@ add_index(#{table_name.inspect}, #{column_name.inspect}, #{options.inspect})
     end
   end
 
-  def append_remove_index(table_name, index_name, attrs, buf)
+  def append_remove_index(table_name, _index_name, attrs, buf)
     column_name = attrs.fetch(:column_name)
     options = attrs[:options] || {}
     target = options[:name] ? {:name => options[:name]} : column_name
@@ -464,7 +464,7 @@ remove_index(#{table_name.inspect}, #{target.inspect})
     end
   end
 
-  def append_add_foreign_key(table_name, attrs, buf, options)
+  def append_add_foreign_key(table_name, attrs, buf, _options)
     to_table = attrs.fetch(:to_table)
     attrs_options = attrs[:options] || {}
 
@@ -473,7 +473,7 @@ add_foreign_key(#{table_name.inspect}, #{to_table.inspect}, #{attrs_options.insp
     EOS
   end
 
-  def append_remove_foreign_key(table_name, attrs, buf, options)
+  def append_remove_foreign_key(table_name, attrs, buf, _options)
     attrs_options = attrs[:options] || {}
     fk_name = attrs_options[:name]
 
