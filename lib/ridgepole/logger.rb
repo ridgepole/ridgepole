@@ -5,7 +5,7 @@ class Ridgepole::Logger < ::Logger
   def initialize
     super($stdout)
 
-    self.formatter = proc do |severity, datetime, progname, msg|
+    self.formatter = proc do |_severity, _datetime, _progname, msg|
       "#{msg}\n"
     end
 
