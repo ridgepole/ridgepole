@@ -126,8 +126,7 @@ describe Ridgepole::Config do
     let(:env) { 'development' }
 
     before {
-      allow(ENV).to receive(:fetch).with('DATABASE_URL').
-        and_return('mysql2://root:pass@127.0.0.1:3307/blog')
+      allow(ENV).to receive(:fetch).with('DATABASE_URL').and_return('mysql2://root:pass@127.0.0.1:3307/blog')
     }
 
     it {

@@ -9,8 +9,6 @@ Layout/ClosingParenthesisIndentation:
   Enabled: false
 Layout/DefEndAlignment:
   Enabled: false
-Layout/DotPosition:
-  Enabled: false
 Layout/EmptyLineAfterMagicComment:
   Enabled: false
 Layout/EmptyLineBetweenDefs:
