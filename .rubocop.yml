@@ -161,8 +161,6 @@ Style/StringLiteralsInInterpolation:
   Enabled: false
 Style/SymbolArray:
   Enabled: false
-Style/SymbolProc:
-  Enabled: false
 Style/TernaryParentheses:
   Enabled: false
 Style/TrailingCommaInArguments:
