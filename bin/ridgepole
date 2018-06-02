@@ -153,7 +153,7 @@ ARGV.options do |opt|
       exit 1
     end
   rescue => e
-    $stderr.puts("[ERROR] #{e.message}")
+    warn("[ERROR] #{e.message}")
 
     unless e.kind_of?(OptionParser::ParseError)
       puts "\t" + e.backtrace.join("\n\t")
@@ -285,7 +285,7 @@ rescue => e
   if options[:debug]
     raise e
   else
-    $stderr.puts("[ERROR] #{[e.message, e.backtrace.first].join("\n\t")}")
+    warn("[ERROR] #{[e.message, e.backtrace.first].join("\n\t")}")
     exit 1
   end
 end
