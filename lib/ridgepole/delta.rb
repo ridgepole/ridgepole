@@ -65,7 +65,7 @@ class Ridgepole::Delta
         ActiveRecord::Migration.disable_logging = true
         buf = StringIO.new
 
-        callback = proc do |sql, name|
+        callback = proc do |sql, _name|
           buf.puts sql if sql =~ /\A(CREATE|ALTER|DROP|RENAME)\b/i
         end
 
