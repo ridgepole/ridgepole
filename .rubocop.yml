@@ -13,8 +13,6 @@ Layout/DotPosition:
   Enabled: false
 Layout/EmptyLineAfterMagicComment:
   Enabled: false
-Layout/EmptyLineBetweenDefs:
-  Enabled: false
 Layout/ExtraSpacing:
   Enabled: false
 Layout/IndentArray:
