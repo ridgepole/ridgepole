@@ -24,7 +24,7 @@ before_script:
   - for i in {1..60}; do mysql57_ping && break; sleep 1; done
   - for i in {1..60}; do pg_ping && break; sleep 1; done
 script:
-  - bundle exec rake
+  - bundle exec rubocop --fail-level=W -c .rubocop.yml && bundle exec rake
 gemfile:
   - gemfiles/activerecord_5.0.gemfile
   - gemfiles/activerecord_5.1.gemfile

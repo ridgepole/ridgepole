@@ -34,4 +34,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'hash_modern_inspect', '>= 0.1.1'
   spec.add_development_dependency 'hash_order_helper', '>= 0.1.6'
   spec.add_development_dependency 'rspec-match_ruby', '>= 0.1.3'
+  spec.add_development_dependency 'rubocop', '>= 0.56.0'
 end

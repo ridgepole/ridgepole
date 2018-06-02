@@ -1,0 +1,181 @@
+AllCops:
+  Exclude:
+    - 'gemfiles/vendor/**/*'
+Bundler/OrderedGems:
+  Enabled: false
+Gemspec/OrderedDependencies:
+  Enabled: false
+Layout/ClosingParenthesisIndentation:
+  Enabled: false
+Layout/DefEndAlignment:
+  Enabled: false
+Layout/DotPosition:
+  Enabled: false
+Layout/EmptyLineAfterMagicComment:
+  Enabled: false
+Layout/EmptyLineBetweenDefs:
+  Enabled: false
+Layout/ExtraSpacing:
+  Enabled: false
+Layout/IndentArray:
+  Enabled: false
+Layout/IndentHeredoc:
+  Enabled: false
+Layout/IndentationWidth:
+  Enabled: false
+Layout/MultilineOperationIndentation:
+  Enabled: false
+Layout/SpaceAroundOperators:
+  Enabled: false
+Layout/SpaceBeforeComma:
+  Enabled: false
+Layout/SpaceInsideBlockBraces:
+  Enabled: false
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: false
+Layout/SpaceInsideParens:
+  Enabled: false
+Lint/AssignmentInCondition:
+  Enabled: false
+Lint/HandleExceptions:
+  Enabled: false
+Lint/ParenthesesAsGroupedExpression:
+  Enabled: false
+Lint/UnusedBlockArgument:
+  Enabled: false
+Lint/UnusedMethodArgument:
+  Enabled: false
+Lint/UselessAssignment:
+  Enabled: false
+Metrics/AbcSize:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
+Metrics/BlockNesting:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/LineLength:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/ParameterLists:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+Naming/AccessorMethodName:
+  Enabled: false
+Naming/HeredocDelimiterNaming:
+  Enabled: false
+Naming/UncommunicativeMethodParamName:
+  Enabled: false
+Performance/RangeInclude:
+  Enabled: false
+Performance/StartWith:
+  Enabled: false
+Performance/StringReplacement:
+  Enabled: false
+Security/Open:
+  Enabled: false
+Security/YAMLLoad:
+  Enabled: false
+Style/Alias:
+  Enabled: false
+Style/AndOr:
+  Enabled: false
+Style/BlockDelimiters:
+  Enabled: false
+Style/CaseEquality:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
+Style/ClassCheck:
+  Enabled: false
+Style/CommentedKeyword:
+  Enabled: false
+Style/ConditionalAssignment:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/Encoding:
+  Enabled: false
+Style/ExpandPathArguments:
+  Enabled: false
+Style/FormatString:
+  Enabled: false
+Style/GuardClause:
+  Enabled: false
+Style/HashSyntax:
+  Enabled: false
+Style/IfInsideElse:
+  Enabled: false
+Style/IfUnlessModifier:
+  Enabled: false
+Style/MethodMissingSuper:
+  Enabled: false
+Style/MissingRespondToMissing:
+  Enabled: false
+Style/MixinUsage:
+  Enabled: false
+Style/MutableConstant:
+  Enabled: false
+Style/NestedParenthesizedCalls:
+  Enabled: false
+Style/Next:
+  Enabled: false
+Style/NilComparison:
+  Enabled: false
+Style/Not:
+  Enabled: false
+Style/NumericLiteralPrefix:
+  Enabled: false
+Style/NumericLiterals:
+  Enabled: false
+Style/PercentLiteralDelimiters:
+  Enabled: false
+Style/PerlBackrefs:
+  Enabled: false
+Style/PreferredHashMethods:
+  Enabled: false
+Style/RedundantBegin:
+  Enabled: false
+Style/RedundantParentheses:
+  Enabled: false
+Style/RedundantReturn:
+  Enabled: false
+Style/RedundantSelf:
+  Enabled: false
+Style/RescueModifier:
+  Enabled: false
+Style/RescueStandardError:
+  Enabled: false
+Style/SelfAssignment:
+  Enabled: false
+Style/Semicolon:
+  Enabled: false
+Style/SpecialGlobalVars:
+  Enabled: false
+Style/StderrPuts:
+  Enabled: false
+Style/StringLiterals:
+  Enabled: false
+Style/StringLiteralsInInterpolation:
+  Enabled: false
+Style/SymbolArray:
+  Enabled: false
+Style/SymbolProc:
+  Enabled: false
+Style/TernaryParentheses:
+  Enabled: false
+Style/TrailingCommaInArguments:
+  Enabled: false
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+Style/TrailingCommaInHashLiteral:
+  Enabled: false
+Style/UnneededPercentQ:
+  Enabled: false
+Style/WordArray:
+  Enabled: false
