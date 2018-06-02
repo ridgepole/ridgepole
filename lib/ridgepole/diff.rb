@@ -257,12 +257,12 @@ class Ridgepole::Diff
 
           # In PostgreSQL, the index is deleted when the column is deleted
           if @options[:index_removed_drop_column]
-            from_indices.reject! do |name, attrs|
+            from_indices.reject! do |name, _attrs|
               modified_indices.include?(name)
             end
           end
 
-          from_indices.reject! do |name, attrs|
+          from_indices.reject! do |_name, attrs|
             attrs[:column_name].is_a?(Array) && attrs[:column_name].empty?
           end
         end
@@ -302,7 +302,7 @@ class Ridgepole::Diff
 
     to.each do |index_name, to_attrs|
       if index_name.kind_of?(Array)
-        from_index_name, from_attrs = from.find {|name, attrs| attrs[:column_name] == index_name }
+        from_index_name, from_attrs = from.find {|_name, attrs| attrs[:column_name] == index_name }
 
         if from_attrs
           from.delete(from_index_name)

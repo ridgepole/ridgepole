@@ -96,8 +96,8 @@ ARGV.options do |opt|
     opt.on('',   '--pre-query QUERY')             {|v| options[:pre_query] = v                              }
     opt.on('',   '--post-query QUERY')            {|v| options[:post_query] = v                             }
     opt.on('-e', '--export')                      {    set_mode[:export]                                    }
-    opt.on('',   '--split')                       {|v| split = true                                         }
-    opt.on('',   '--split-with-dir')              {|v| split = :with_dir                                    }
+    opt.on('',   '--split')                       {    split = true                                         }
+    opt.on('',   '--split-with-dir')              {    split = :with_dir                                    }
     opt.on('-d', '--diff DSL1 DSL2') {|diff_arg1|
       set_mode[:diff]
       diff_arg2 = ARGV.first
