@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Ridgepole::VERSION
   spec.authors       = ['Genki Sugawara']
   spec.email         = ['sugawara@cookpad.com']
-  spec.summary       = %q{Ridgepole is a tool to manage DB schema.}
-  spec.description   = %q{Ridgepole is a tool to manage DB schema. It defines DB schema using Rails DSL, and updates DB schema according to DSL.}
+  spec.summary       = 'Ridgepole is a tool to manage DB schema.'
+  spec.description   = 'Ridgepole is a tool to manage DB schema. It defines DB schema using Rails DSL, and updates DB schema according to DSL.'
   spec.homepage      = 'https://github.com/winebarrel/ridgepole'
   spec.license       = 'MIT'
 
