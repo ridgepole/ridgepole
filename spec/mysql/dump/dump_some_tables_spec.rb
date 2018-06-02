@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#dump' do
   context 'when there is a tables (dump some tables)' do
     before { restore_tables }
-    subject { client(tables: ['employees', 'salaries']) }
+    subject { client(tables: %w(employees salaries)) }
 
     it {
       expect(subject.dump).to match_fuzzy erbh(<<-EOS)

@@ -15,8 +15,6 @@ Layout/EmptyLineAfterMagicComment:
   Enabled: false
 Layout/EmptyLineBetweenDefs:
   Enabled: false
-Layout/ExtraSpacing:
-  Enabled: false
 Layout/IndentArray:
   Enabled: false
 Layout/IndentHeredoc:
@@ -40,8 +38,6 @@ Lint/AssignmentInCondition:
 Lint/HandleExceptions:
   Enabled: false
 Lint/ParenthesesAsGroupedExpression:
-  Enabled: false
-Lint/UnusedBlockArgument:
   Enabled: false
 Lint/UnusedMethodArgument:
   Enabled: false
@@ -163,8 +159,6 @@ Style/StringLiterals:
   Enabled: false
 Style/StringLiteralsInInterpolation:
   Enabled: false
-Style/SymbolProc:
-  Enabled: false
 Style/TernaryParentheses:
   Enabled: false
 Style/TrailingCommaInArguments:
@@ -174,6 +168,4 @@ Style/TrailingCommaInArrayLiteral:
 Style/TrailingCommaInHashLiteral:
   Enabled: false
 Style/UnneededPercentQ:
-  Enabled: false
-Style/WordArray:
   Enabled: false
