@@ -157,8 +157,6 @@ Style/Semicolon:
   Enabled: false
 Style/SpecialGlobalVars:
   Enabled: false
-Style/StderrPuts:
-  Enabled: false
 Style/StringLiterals:
   Enabled: false
 Style/StringLiteralsInInterpolation:
