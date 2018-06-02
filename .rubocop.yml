@@ -41,8 +41,6 @@ Lint/HandleExceptions:
   Enabled: false
 Lint/ParenthesesAsGroupedExpression:
   Enabled: false
-Lint/UnusedBlockArgument:
-  Enabled: false
 Lint/UnusedMethodArgument:
   Enabled: false
 Lint/UselessAssignment:
@@ -174,6 +172,4 @@ Style/TrailingCommaInArguments:
 Style/TrailingCommaInArrayLiteral:
   Enabled: false
 Style/TrailingCommaInHashLiteral:
-  Enabled: false
-Style/WordArray:
   Enabled: false
