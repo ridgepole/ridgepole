@@ -175,5 +175,3 @@ Style/TrailingCommaInHashLiteral:
   Enabled: false
 Style/UnneededPercentQ:
   Enabled: false
-Style/WordArray:
-  Enabled: false
