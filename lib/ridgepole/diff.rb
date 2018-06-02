@@ -169,7 +169,7 @@ class Ridgepole::Diff
       type = Ridgepole::DSLParser::TableDefinition::DEFAULT_PRIMARY_KEY_TYPE
     end
 
-    if [:integer, :bigint].include?(type) && !options.key?(:default)
+    if %i(integer bigint).include?(type) && !options.key?(:default)
       options[:auto_increment] = true
     end
 
