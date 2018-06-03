@@ -259,7 +259,7 @@ begin
           File.open(diff_file)
         end
       else
-        YAML.load(diff_file)
+        YAML.safe_load(diff_file)
       end
     end
 

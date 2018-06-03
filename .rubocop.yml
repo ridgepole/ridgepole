@@ -70,8 +70,6 @@ Performance/StringReplacement:
   Enabled: false
 Security/Open:
   Enabled: false
-Security/YAMLLoad:
-  Enabled: false
 Style/AndOr:
   Enabled: false
 Style/BlockDelimiters:
