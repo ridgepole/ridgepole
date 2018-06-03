@@ -148,7 +148,7 @@ ARGV.options do |opt|
 
     opt.parse!
 
-    if not mode or ([:apply, :export].include?(mode) and not config) or (options[:with_apply] and not config)
+    if not mode or (%i(apply export).include?(mode) and not config) or (options[:with_apply] and not config)
       puts opt.help
       exit 1
     end
