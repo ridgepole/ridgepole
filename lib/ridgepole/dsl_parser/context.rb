@@ -28,7 +28,7 @@ class Ridgepole::DSLParser
       if options[:primary_key] and options[:primary_key].is_a?(Symbol)
         options[:primary_key] = options[:primary_key].to_s
       end
-      if options[:id] and TableDefinition::ALIAS_TYPES.has_key?(options[:id])
+      if options[:id] and TableDefinition::ALIAS_TYPES.key?(options[:id])
         type, type_default_opts = TableDefinition::ALIAS_TYPES[options[:id]]
         options[:id] = type
         options = type_default_opts.merge(options)
