@@ -20,7 +20,7 @@ class Ridgepole::Config
         parsed_config = parse_database_url(config)
       end
 
-      if parsed_config.has_key?(env.to_s)
+      if parsed_config.key?(env.to_s)
         parsed_config.fetch(env.to_s)
       else
         parsed_config

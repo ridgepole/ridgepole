@@ -112,7 +112,7 @@ class Ridgepole::Diff
     end
 
     [from, to].each do |table_attrs|
-      if table_attrs.has_key?(:default) and table_attrs[:default].nil?
+      if table_attrs.key?(:default) and table_attrs[:default].nil?
         table_attrs.delete(:default)
       end
     end
@@ -282,7 +282,7 @@ class Ridgepole::Diff
         # Already renamed
         next if from[column_name]
 
-        unless from.has_key?(from_column_name)
+        unless from.key?(from_column_name)
           raise "Column `#{from_column_name}` not found"
         end
 
@@ -361,17 +361,17 @@ class Ridgepole::Diff
 
   def normalize_column_options!(attrs, primary_key = false)
     opts = attrs[:options]
-    opts[:null] = true if not opts.has_key?(:null) and not primary_key
+    opts[:null] = true if not opts.key?(:null) and not primary_key
     default_limit = Ridgepole::DefaultsLimit.default_limit(attrs[:type], @options)
     opts.delete(:limit) if opts[:limit] == default_limit
 
     # XXX: MySQL only?
-    if not opts.has_key?(:default) and not primary_key
+    if not opts.key?(:default) and not primary_key
       opts[:default] = nil
     end
 
     if Ridgepole::ConnectionAdapters.mysql?
-      opts[:unsigned] = false unless opts.has_key?(:unsigned)
+      opts[:unsigned] = false unless opts.key?(:unsigned)
 
       if attrs[:type] == :integer and opts[:limit] == Ridgepole::DefaultsLimit.default_limit(:bigint, @options)
         attrs[:type] = :bigint
@@ -382,8 +382,8 @@ class Ridgepole::Diff
 
   def normalize_index_options!(opts)
     # XXX: MySQL only?
-    opts[:using] = :btree unless opts.has_key?(:using)
-    opts[:unique] = false unless opts.has_key?(:unique)
+    opts[:using] = :btree unless opts.key?(:using)
+    opts[:unique] = false unless opts.key?(:unique)
   end
 
   def columns_all_include?(expected_columns, actual_columns, table_options)
@@ -578,7 +578,7 @@ class Ridgepole::Diff
   def check_table_existence(definition)
     return unless @options[:tables]
     @options[:tables].each do |table_name|
-      @logger.warn "[WARNING] '#{table_name}' definition is not found" unless definition.has_key?(table_name)
+      @logger.warn "[WARNING] '#{table_name}' definition is not found" unless definition.key?(table_name)
     end
   end
 end
