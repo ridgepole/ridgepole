@@ -111,7 +111,7 @@ class Ridgepole::DSLParser
       end
     end
 
-    def execute(sql, name = nil, &cond)
+    def execute(sql, _name = nil, &cond)
       @__execute << {
         :sql => sql,
         :condition => cond,
