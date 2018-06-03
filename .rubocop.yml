@@ -115,8 +115,6 @@ Style/NestedParenthesizedCalls:
   Enabled: false
 Style/Next:
   Enabled: false
-Style/NilComparison:
-  Enabled: false
 Style/Not:
   Enabled: false
 Style/NumericLiteralPrefix:
