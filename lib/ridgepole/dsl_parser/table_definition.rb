@@ -135,6 +135,6 @@ class Ridgepole::DSLParser
         end
       end
     end
-    alias :belongs_to :references
+    alias belongs_to references
   end
 end
