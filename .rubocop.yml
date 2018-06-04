@@ -68,8 +68,6 @@ Performance/StartWith:
   Enabled: false
 Performance/StringReplacement:
   Enabled: false
-Security/Open:
-  Enabled: false
 Style/AndOr:
   Enabled: false
 Style/BlockDelimiters:

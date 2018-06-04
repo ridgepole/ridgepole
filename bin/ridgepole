@@ -192,7 +192,7 @@ begin
         logger.info("  write `#{schema_file}`")
         FileUtils.mkdir_p(schema_dir)
 
-        open(schema_file, 'wb') do |f|
+        File.open(schema_file, 'wb') do |f|
           f.puts MAGIC_COMMENT
           f.puts definition
         end
@@ -200,7 +200,7 @@ begin
 
       logger.info("  write `#{output_file}`")
 
-      open(output_file, 'wb') do |f|
+      File.open(output_file, 'wb') do |f|
         f.puts MAGIC_COMMENT
 
         requires.each do |require_path|
@@ -213,7 +213,7 @@ begin
         puts client.dump
       else
         logger.info("Export Schema to `#{output_file}`")
-        open(output_file, 'wb') do |f|
+        File.open(output_file, 'wb') do |f|
           f.puts MAGIC_COMMENT
           f.puts client.dump
         end

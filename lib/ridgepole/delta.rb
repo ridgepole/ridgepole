@@ -13,7 +13,7 @@ class Ridgepole::Delta
         migrate0(options)
       end
 
-      open(log_file, 'wb') {|f| f.puts JSON.pretty_generate(result) }
+      File.open(log_file, 'wb') {|f| f.puts JSON.pretty_generate(result) }
       result
     else
       migrate0(options)
