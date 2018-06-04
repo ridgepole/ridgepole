@@ -153,7 +153,7 @@ module SpecHelper
   def tempfile(basename, content = '')
     begin
       path = `mktemp /tmp/#{basename}.XXXXXX`
-      open(path, 'wb') {|f| f << content }
+      File.open(path, 'wb') {|f| f << content }
       FileUtils.chmod(0777, path)
       yield(path)
     ensure

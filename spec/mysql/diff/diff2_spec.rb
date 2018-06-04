@@ -3,7 +3,7 @@ describe 'Ridgepole::Client.diff' do
     let(:tmpdir) { Dir.mktmpdir }
 
     let(:actual_dsl) {
-      open("#{tmpdir}/file1.required", 'w') do |f|
+      File.open("#{tmpdir}/file1.required", 'w') do |f|
         f.puts <<-EOS
           create_table "clubs", force: :cascade do |t|
             t.string "name", default: "", null: false
@@ -39,7 +39,7 @@ describe 'Ridgepole::Client.diff' do
         EOS
       end
 
-      f = open("#{tmpdir}/file1", 'w+')
+      f = File.open("#{tmpdir}/file1", 'w+')
 
       f.puts <<-EOS
         require "file1.required"
@@ -84,7 +84,7 @@ describe 'Ridgepole::Client.diff' do
     }
 
     let(:expected_dsl) {
-      open("#{tmpdir}/file2.required", 'w') do |f|
+      File.open("#{tmpdir}/file2.required", 'w') do |f|
         f.puts <<-EOS
           create_table "clubs", force: :cascade do |t|
             t.string "name", default: "", null: false
@@ -120,7 +120,7 @@ describe 'Ridgepole::Client.diff' do
         EOS
       end
 
-      f = open("#{tmpdir}/file2", 'w+')
+      f = File.open("#{tmpdir}/file2", 'w+')
 
       f.puts <<-EOS
         require "file2.required"

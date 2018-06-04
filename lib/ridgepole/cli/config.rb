@@ -13,7 +13,7 @@ class Ridgepole::Config
       elsif (expanded = File.expand_path(config)) and File.exist?(expanded)
         parsed_config = parse_config_file(expanded)
       else
-        parsed_config = YAML.load(ERB.new(config).result)
+        parsed_config = YAML.safe_load(ERB.new(config).result, [], [], true)
       end
 
       unless parsed_config.kind_of?(Hash)
@@ -31,7 +31,7 @@ class Ridgepole::Config
 
     def parse_config_file(path)
       yaml = ERB.new(File.read(path)).result
-      YAML.load(yaml)
+      YAML.safe_load(yaml, [], [], true)
     end
 
     def parse_database_url(config)
