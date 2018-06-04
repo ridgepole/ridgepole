@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
   context 'with warning' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "dept_manager", force: :cascade do |t|
           t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
@@ -16,11 +16,11 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
           t.string  "gender", limit: 1, null: false
           t.date    "hire_date", null: false
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "dept_manager", force: :cascade do |t|
           t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
@@ -36,18 +36,18 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
           t.string  "gender", limit: 1, null: false
           t.date    "hire_date", null: false
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
     subject { client(check_relation_type: 'bigserial') }
 
     it {
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-EOS)
+      expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG)
 [WARNING] Relation column type is different.
               employees.id: {:type=>:integer}
   dept_manager.employee_id: {:type=>:bigint}
-      EOS
+      MSG
 
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
@@ -59,7 +59,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
 
   context 'with warning' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "dept_manager", force: :cascade do |t|
           t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
@@ -74,11 +74,11 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
           t.string  "gender", limit: 1, null: false
           t.date    "hire_date", null: false
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "dept_manager", force: :cascade do |t|
           t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
@@ -94,7 +94,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
           t.string  "gender", limit: 1, null: false
           t.date    "hire_date", null: false
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }

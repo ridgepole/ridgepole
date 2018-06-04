@@ -4,7 +4,7 @@ describe 'Ridgepole::Client#dump' do
     subject { client(tables: %w(employees salaries)) }
 
     it {
-      expect(subject.dump).to match_fuzzy erbh(<<-EOS)
+      expect(subject.dump).to match_fuzzy erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", id: :integer, <%= i cond('>= 5.1', default: nil) %>, force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
@@ -20,7 +20,7 @@ describe 'Ridgepole::Client#dump' do
           t.date    "to_date", null: false
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
   end
 
@@ -38,7 +38,7 @@ describe 'Ridgepole::Client#dump' do
     }
 
     it {
-      expect(subject.dump).to match_fuzzy erbh(<<-EOS)
+      expect(subject.dump).to match_fuzzy erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", id: :integer, <%= i cond('>= 5.1', default: nil) %>, force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
@@ -54,7 +54,7 @@ describe 'Ridgepole::Client#dump' do
           t.date    "to_date", null: false
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
   end
 end

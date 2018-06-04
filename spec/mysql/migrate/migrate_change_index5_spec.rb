@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change index (unique: false)' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "salaries", force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
@@ -9,11 +9,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
           t.index ["emp_no", "id"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "salaries", force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
@@ -21,7 +21,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
           t.index ["emp_no", "id"], name: "emp_no", unique: false, <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -35,7 +35,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when change index (unique: true)' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "salaries", force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
@@ -43,11 +43,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
           t.index ["emp_no", "id"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "salaries", force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
@@ -55,7 +55,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
           t.index ["emp_no", "id"], name: "emp_no", unique: true, <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }

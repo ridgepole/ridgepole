@@ -141,22 +141,22 @@ class Ridgepole::Diff
       if @options[:allow_pk_change]
         table_delta[:primary_key_definition] = {change: {id: pk_attrs}}
       else
-        @logger.warn(<<-EOS)
+        @logger.warn(<<-MSG)
 [WARNING] Primary key definition of `#{table_name}` differ but `allow_pk_change` option is false
   from: #{from.slice(*PRIMARY_KEY_OPTIONS)}
     to: #{to.slice(*PRIMARY_KEY_OPTIONS)}
-        EOS
+        MSG
       end
     end
     from = from.except(*PRIMARY_KEY_OPTIONS)
     to = to.except(*PRIMARY_KEY_OPTIONS)
 
     unless from == to
-      @logger.warn(<<-EOS)
+      @logger.warn(<<-MSG)
 [WARNING] No difference of schema configuration for table `#{table_name}` but table options differ.
   from: #{from}
     to: #{to}
-      EOS
+      MSG
     end
   end
 
@@ -565,11 +565,11 @@ class Ridgepole::Diff
           child_label = "#{child_table}.#{column_name}"
           label_len = [parent_label.length, child_label.length].max
 
-          @logger.warn(<<-EOS % [label_len, parent_label, label_len, child_label])
+          @logger.warn(<<-MSG % [label_len, parent_label, label_len, child_label])
 [WARNING] Relation column type is different.
   %*s: #{parent_column_info}
   %*s: #{child_column_info}
-          EOS
+          MSG
         end
       end
     end

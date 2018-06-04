@@ -3,30 +3,30 @@ describe 'Ridgepole::Client (use default:lambda)' do
     subject { client }
 
     it do
-      delta = subject.diff(<<-EOS)
+      delta = subject.diff(<<-RUBY)
         create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      EOS
+      RUBY
 
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy <<-EOS
+      expect(subject.dump).to match_fuzzy <<-RUBY
         create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      EOS
+      RUBY
     end
   end
 
   context 'when there is no difference' do
     let(:dsl) do
-      <<-EOS
+      <<-RUBY
         create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      EOS
+      RUBY
     end
 
     subject { client }
@@ -45,28 +45,28 @@ describe 'Ridgepole::Client (use default:lambda)' do
     subject { client }
 
     before do
-      subject.diff(<<-EOS).migrate
+      subject.diff(<<-RUBY).migrate
         create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      EOS
+      RUBY
     end
 
     it do
-      delta = subject.diff(<<-EOS)
+      delta = subject.diff(<<-RUBY)
         create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { '"1970-01-01 00:00:00"' }, null: false
         end
-      EOS
+      RUBY
 
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_ruby erbh(<<-EOS)
+      expect(subject.dump).to match_ruby erbh(<<-ERB)
         create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: "1970-01-01 00:00:00", null: false
         end
-      EOS
+      ERB
     end
   end
 
@@ -74,28 +74,28 @@ describe 'Ridgepole::Client (use default:lambda)' do
     subject { client }
 
     before do
-      subject.diff(<<-EOS).migrate
+      subject.diff(<<-RUBY).migrate
         create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: '1970-01-01 00:00:00', null: false
         end
-      EOS
+      RUBY
     end
 
     it do
-      delta = subject.diff(<<-EOS)
+      delta = subject.diff(<<-RUBY)
         create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      EOS
+      RUBY
 
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy <<-EOS
+      expect(subject.dump).to match_fuzzy <<-RUBY
         create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      EOS
+      RUBY
     end
   end
 
@@ -103,30 +103,30 @@ describe 'Ridgepole::Client (use default:lambda)' do
     subject { client }
 
     before do
-      subject.diff(<<-EOS).migrate
+      subject.diff(<<-RUBY).migrate
         create_table "foos", force: :cascade do |t|
           t.integer "zoo"
         end
-      EOS
+      RUBY
     end
 
     it do
-      delta = subject.diff(<<-EOS)
+      delta = subject.diff(<<-RUBY)
         create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
           t.integer "zoo"
         end
-      EOS
+      RUBY
 
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy <<-EOS
+      expect(subject.dump).to match_fuzzy <<-RUBY
         create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
           t.integer "zoo"
         end
-      EOS
+      RUBY
     end
   end
 
@@ -134,29 +134,29 @@ describe 'Ridgepole::Client (use default:lambda)' do
     subject { client }
 
     before do
-      subject.diff(<<-EOS).migrate
+      subject.diff(<<-RUBY).migrate
         create_table "foos", force: :cascade do |t|
           t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
           t.integer "zoo"
         end
-      EOS
+      RUBY
     end
 
     it do
-      delta = subject.diff(<<-EOS)
+      delta = subject.diff(<<-RUBY)
         create_table "foos", force: :cascade do |t|
           t.integer "zoo"
         end
-      EOS
+      RUBY
 
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy <<-EOS
+      expect(subject.dump).to match_fuzzy <<-RUBY
         create_table "foos", force: :cascade do |t|
           t.integer "zoo"
         end
-      EOS
+      RUBY
     end
   end
 end

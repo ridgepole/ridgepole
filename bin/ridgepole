@@ -12,10 +12,10 @@ $stderr.sync = true
 Version = Ridgepole::VERSION
 DEFAULT_FILENAME = 'Schemafile'
 
-MAGIC_COMMENT = <<-EOS
+MAGIC_COMMENT = <<-RUBY
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-EOS
+RUBY
 
 COLUMN_TYPES = {
   :boolean => :bool,

@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
           t.index ["name"], name: "idx_name", unique: true, <%= i cond(5.0, using: :btree) %>
@@ -59,11 +59,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date"
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
           t.index ["name"], name: "idx_name", unique: true, <%= i cond(5.0, using: :btree) %>
@@ -124,7 +124,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date"
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -142,7 +142,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = client(:bulk_change => true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
-      expect(delta.script).to match_fuzzy erbh(<<-EOS)
+      expect(delta.script).to match_fuzzy erbh(<<-ERB)
         change_table("employee_clubs", {:bulk=>true}) do |t|
           t.column("any_col", :string, {:null=>false, :after=>"club_id", :limit=>255})
         end
@@ -151,7 +151,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.column("age", :integer, {:null=>false, :after=>"hire_date", :limit=>4})
           t.column("updated_at", :date, {:after=>"age"})
         end
-      EOS
+      ERB
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
     }

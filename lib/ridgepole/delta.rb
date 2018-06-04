@@ -221,18 +221,18 @@ class Ridgepole::Delta
     definition = attrs[:definition] || {}
     indices = attrs[:indices] || {}
 
-    buf.puts(<<-EOS)
+    buf.puts(<<-RUBY)
 create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(options)}) do |t|
-    EOS
+    RUBY
 
     definition.each do |column_name, column_attrs|
       column_type = column_attrs.fetch(:type)
       column_options = column_attrs[:options] || {}
       normalize_limit(column_type, column_options)
 
-      buf.puts(<<-EOS)
+      buf.puts(<<-RUBY)
   t.column(#{column_name.inspect}, :#{column_type.to_s.inspect}, #{inspect_options_include_default_proc(column_options)})
-      EOS
+      RUBY
     end
 
     if @options[:create_table_with_index] and not indices.empty?
@@ -241,9 +241,9 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
       end
     end
 
-    buf.puts(<<-EOS)
+    buf.puts(<<-RUBY)
 end
-    EOS
+    RUBY
 
     if not @options[:create_table_with_index] and not indices.empty?
       append_change_table(table_name, buf) do
@@ -264,26 +264,26 @@ end
   end
 
   def append_rename_table(to_table_name, from_table_name, buf)
-    buf.puts(<<-EOS)
+    buf.puts(<<-RUBY)
 rename_table(#{from_table_name.inspect}, #{to_table_name.inspect})
-    EOS
+    RUBY
 
     buf.puts
   end
 
   def append_drop_table(table_name, _attrs, buf)
-    buf.puts(<<-EOS)
+    buf.puts(<<-RUBY)
 drop_table(#{table_name.inspect})
-    EOS
+    RUBY
 
     buf.puts
   end
 
   def append_change_table_options(table_name, table_options, buf)
     # XXX: MySQL only
-    buf.puts(<<-EOS)
+    buf.puts(<<-RUBY)
 execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name)} #{table_options}"
-    EOS
+    RUBY
 
     buf.puts
   end
@@ -357,25 +357,25 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
     normalize_limit(type, options)
 
     if @options[:bulk_change]
-      buf.puts(<<-EOS)
+      buf.puts(<<-RUBY)
   t.column(#{column_name.inspect}, #{type.inspect}, #{inspect_options_include_default_proc(options)})
-      EOS
+      RUBY
     else
-      buf.puts(<<-EOS)
+      buf.puts(<<-RUBY)
 add_column(#{table_name.inspect}, #{column_name.inspect}, #{type.inspect}, #{inspect_options_include_default_proc(options)})
-      EOS
+      RUBY
     end
   end
 
   def append_rename_column(table_name, to_column_name, from_column_name, buf)
     if @options[:bulk_change]
-      buf.puts(<<-EOS)
+      buf.puts(<<-RUBY)
   t.rename(#{from_column_name.inspect}, #{to_column_name.inspect})
-      EOS
+      RUBY
     else
-      buf.puts(<<-EOS)
+      buf.puts(<<-RUBY)
 rename_column(#{table_name.inspect}, #{from_column_name.inspect}, #{to_column_name.inspect})
-      EOS
+      RUBY
     end
   end
 
@@ -389,25 +389,25 @@ rename_column(#{table_name.inspect}, #{from_column_name.inspect}, #{to_column_na
     end
 
     if @options[:bulk_change]
-      buf.puts(<<-EOS)
+      buf.puts(<<-RUBY)
   t.change(#{column_name.inspect}, #{type.inspect}, #{inspect_options_include_default_proc(options)})
-      EOS
+      RUBY
     else
-      buf.puts(<<-EOS)
+      buf.puts(<<-RUBY)
 change_column(#{table_name.inspect}, #{column_name.inspect}, #{type.inspect}, #{inspect_options_include_default_proc(options)})
-      EOS
+      RUBY
     end
   end
 
   def append_remove_column(table_name, column_name, _attrs, buf)
     if @options[:bulk_change]
-      buf.puts(<<-EOS)
+      buf.puts(<<-RUBY)
   t.remove(#{column_name.inspect})
-      EOS
+      RUBY
     else
-      buf.puts(<<-EOS)
+      buf.puts(<<-RUBY)
 remove_column(#{table_name.inspect}, #{column_name.inspect})
-      EOS
+      RUBY
     end
   end
 
@@ -428,13 +428,13 @@ remove_column(#{table_name.inspect}, #{column_name.inspect})
     options = attrs[:options] || {}
 
     if force_bulk_change or @options[:bulk_change]
-      buf.puts(<<-EOS)
+      buf.puts(<<-RUBY)
   t.index(#{column_name.inspect}, #{options.inspect})
-      EOS
+      RUBY
     else
-      buf.puts(<<-EOS)
+      buf.puts(<<-RUBY)
 add_index(#{table_name.inspect}, #{column_name.inspect}, #{options.inspect})
-      EOS
+      RUBY
     end
   end
 
@@ -444,13 +444,13 @@ add_index(#{table_name.inspect}, #{column_name.inspect}, #{options.inspect})
     target = options[:name] ? {:name => options[:name]} : column_name
 
     if @options[:bulk_change]
-      buf.puts(<<-EOS)
+      buf.puts(<<-RUBY)
   t.remove_index(#{target.inspect})
-      EOS
+      RUBY
     else
-      buf.puts(<<-EOS)
+      buf.puts(<<-RUBY)
 remove_index(#{table_name.inspect}, #{target.inspect})
-      EOS
+      RUBY
     end
   end
 
@@ -468,9 +468,9 @@ remove_index(#{table_name.inspect}, #{target.inspect})
     to_table = attrs.fetch(:to_table)
     attrs_options = attrs[:options] || {}
 
-    buf.puts(<<-EOS)
+    buf.puts(<<-RUBY)
 add_foreign_key(#{table_name.inspect}, #{to_table.inspect}, #{attrs_options.inspect})
-    EOS
+    RUBY
   end
 
   def append_remove_foreign_key(table_name, attrs, buf, _options)
@@ -483,9 +483,9 @@ add_foreign_key(#{table_name.inspect}, #{to_table.inspect}, #{attrs_options.insp
       target = attrs.fetch(:to_table)
     end
 
-    buf.puts(<<-EOS)
+    buf.puts(<<-RUBY)
 remove_foreign_key(#{table_name.inspect}, #{target.inspect})
-    EOS
+    RUBY
   end
 
   def delta_execute

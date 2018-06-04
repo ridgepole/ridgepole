@@ -5,7 +5,7 @@ describe 'Ridgepole::Client.diff' do
 
   context 'when change column' do
     let(:actual_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
         end
@@ -69,11 +69,11 @@ describe 'Ridgepole::Client.diff' do
         end
 
         add_index "titles", ["emp_no"], name: "idx_titles_emp_no", using: :btree
-      EOS
+      RUBY
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
         end
@@ -137,7 +137,7 @@ describe 'Ridgepole::Client.diff' do
         end
 
         add_index "titles", ["emp_no"], name: "idx_titles_emp_no", using: :btree
-      EOS
+      RUBY
     }
 
     subject { Ridgepole::Client }
@@ -145,11 +145,11 @@ describe 'Ridgepole::Client.diff' do
     it {
       delta = subject.diff(actual_dsl, expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to match_fuzzy <<-EOS
+      expect(delta.script).to match_fuzzy <<-RUBY
         change_column("employee_clubs", "club_id", :integer, {:null=>true, :default=>nil})
 
         change_column("employees", "last_name", :string, {:limit=>20, :default=>"XXX"})
-      EOS
+      RUBY
     }
   end
 
@@ -157,19 +157,19 @@ describe 'Ridgepole::Client.diff' do
     subject { Ridgepole::Client }
 
     context 'when adding a column to the last' do
-      let(:actual_dsl) { <<-EOS }
+      let(:actual_dsl) { <<-RUBY }
       create_table "users", force: :cascade do |t|
         t.string "name", null: false
       end
-      EOS
+      RUBY
 
-      let(:expected_dsl) { <<-EOS }
+      let(:expected_dsl) { <<-RUBY }
       create_table "users", force: :cascade do |t|
         t.string "name", null: false
         t.datetime "created_at", null: false
         t.datetime "updated_at", null: false
       end
-      EOS
+      RUBY
 
       # XXX:
       before { client }
@@ -183,20 +183,20 @@ describe 'Ridgepole::Client.diff' do
     end
 
     context 'when adding a column to the middle' do
-      let(:actual_dsl) { <<-EOS }
+      let(:actual_dsl) { <<-RUBY }
       create_table "users", force: :cascade do |t|
         t.datetime "created_at", null: false
       end
-      EOS
+      RUBY
 
-      let(:expected_dsl) { <<-EOS }
+      let(:expected_dsl) { <<-RUBY }
       create_table "users", force: :cascade do |t|
         t.string "name", null: false
         t.integer "age", null: false
         t.datetime "created_at", null: false
         t.datetime "updated_at", null: false
       end
-      EOS
+      RUBY
 
       # XXX:
       before { client }

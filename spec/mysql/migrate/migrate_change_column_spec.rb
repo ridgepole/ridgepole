@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
           t.index ["name"], name: "idx_name", unique: true, <%= i cond(5.0, using: :btree) %>
@@ -59,11 +59,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date"
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
           t.index ["name"], name: "idx_name", unique: true, <%= i cond(5.0, using: :btree) %>
@@ -121,7 +121,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date"
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -139,7 +139,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = client(:bulk_change => true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
-      expect(delta.script).to match_fuzzy erbh(<<-EOS)
+      expect(delta.script).to match_fuzzy erbh(<<-ERB)
         change_table("employee_clubs", {:bulk => true}) do |t|
           t.change("club_id", :integer, <%= {:null=>true, :default=>nil, :unsigned=>false} + cond('>= 5.1',comment: nil) %>)
         end
@@ -148,7 +148,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.change("last_name", :string, <%= {:limit=>20, :default=>"XXX", :unsigned=>false} + cond('>= 5.1',comment: nil) %>)
           t.change("gender", :string, <%= {:limit=>2, :null=>false, :default=>nil, :unsigned=>false} + cond('>= 5.1',comment: nil) %>)
         end
-      EOS
+      ERB
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
     }

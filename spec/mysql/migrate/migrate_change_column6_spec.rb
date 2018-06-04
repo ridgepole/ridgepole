@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column after id (pk: normal)' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "employees", force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
@@ -12,11 +12,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
           t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "employees", force: :cascade do |t|
           t.string   "ext_column", null: false
           t.date     "birth_date", null: false
@@ -28,7 +28,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
           t.binary   "registered_name", limit: 255
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -41,7 +41,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
 
-      expect(show_create_table_mysql('employees')).to match_fuzzy erbh(<<-EOS)
+      expect(show_create_table_mysql('employees')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `employees` (
           `id` <%= cond('>= 5.1','bigint(20)', 'int(11)') %> NOT NULL AUTO_INCREMENT,
           `ext_column` varchar(255) NOT NULL,
@@ -55,13 +55,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
           `registered_name` varbinary(255) DEFAULT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-      EOS
+      ERB
     }
   end
 
   context 'when add column after id (pk: emp_id)' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "employees", primary_key: "emp_id", force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
@@ -72,11 +72,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
           t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "employees", primary_key: "emp_id", force: :cascade do |t|
           t.string   "ext_column", null: false
           t.date     "birth_date", null: false
@@ -88,7 +88,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
           t.binary   "registered_name", limit: 255
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -101,7 +101,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
 
-      expect(show_create_table_mysql('employees')).to match_fuzzy erbh(<<-EOS)
+      expect(show_create_table_mysql('employees')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `employees` (
           `emp_id` <%= cond('>= 5.1','bigint(20)', 'int(11)') %> NOT NULL AUTO_INCREMENT,
           `ext_column` varchar(255) NOT NULL,
@@ -115,13 +115,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
           `registered_name` varbinary(255) DEFAULT NULL,
           PRIMARY KEY (`emp_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-      EOS
+      ERB
     }
   end
 
   context 'when add column after id (pk: no pk)' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "employees", id: false, force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
@@ -132,11 +132,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
           t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "employees", id: false, force: :cascade do |t|
           t.string   "ext_column", null: false
           t.date     "birth_date", null: false
@@ -148,7 +148,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
           t.binary   "registered_name", limit: 255
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -161,7 +161,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
 
-      expect(show_create_table_mysql('employees')).to match_fuzzy <<-EOS
+      expect(show_create_table_mysql('employees')).to match_fuzzy <<-SQL
         CREATE TABLE `employees` (
           `ext_column` varchar(255) NOT NULL,
           `birth_date` date NOT NULL,
@@ -173,13 +173,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
           `updated_at` datetime NOT NULL,
           `registered_name` varbinary(255) DEFAULT NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-      EOS
+      SQL
     }
   end
 
   context 'when add column after id (pk: with pk delta)' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "employees", force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
@@ -190,11 +190,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
           t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "employees", primary_key: "emp_id", force: :cascade do |t|
           t.string   "ext_column", null: false
           t.date     "birth_date", null: false
@@ -206,7 +206,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
           t.binary   "registered_name", limit: 255
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -219,7 +219,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl.sub(/, *primary_key: *"emp_id"/, '')
 
-      expect(show_create_table_mysql('employees')).to match_fuzzy erbh(<<-EOS)
+      expect(show_create_table_mysql('employees')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `employees` (
           `id` <%= cond('>= 5.1','bigint(20)', 'int(11)') %> NOT NULL AUTO_INCREMENT,
           `ext_column` varchar(255) NOT NULL,
@@ -233,7 +233,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           `registered_name` varbinary(255) DEFAULT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-      EOS
+      ERB
     }
   end
 end

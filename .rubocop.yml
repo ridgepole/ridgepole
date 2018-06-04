@@ -58,8 +58,6 @@ Metrics/PerceivedComplexity:
   Enabled: false
 Naming/AccessorMethodName:
   Enabled: false
-Naming/HeredocDelimiterNaming:
-  Enabled: false
 Naming/UncommunicativeMethodParamName:
   Enabled: false
 Performance/RangeInclude:

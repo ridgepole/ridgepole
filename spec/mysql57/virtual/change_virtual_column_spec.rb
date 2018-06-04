@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
   context 'when change virtual column' do
     let(:actual_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "books", force: :cascade do |t|
           t.string   "title"
           t.virtual "upper_title", type: :string, null: false, as: "upper(`title`)"
@@ -9,11 +9,11 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
           t.index ["title"], name: "index_books_on_title"
           t.index ["title_length"], name: "index_books_on_title_length"
         end
-      EOS
+      RUBY
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "books", force: :cascade do |t|
           t.string   "title"
           t.virtual "upper_title", type: :string, null: false, as: "length(`title`)"
@@ -21,7 +21,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
           t.index ["title"], name: "index_books_on_title"
           t.index ["title_length"], name: "index_books_on_title_length"
         end
-      EOS
+      RUBY
     }
 
     before { subject.diff(actual_dsl).migrate }
