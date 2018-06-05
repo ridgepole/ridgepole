@@ -2,8 +2,6 @@ AllCops:
   Exclude:
     - 'gemfiles/vendor/**/*'
   TargetRubyVersion: 2.2
-Bundler/OrderedGems:
-  Enabled: false
 Gemspec/OrderedDependencies:
   Enabled: false
 Layout/ClosingParenthesisIndentation:
