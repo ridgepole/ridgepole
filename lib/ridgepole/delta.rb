@@ -49,7 +49,7 @@ class Ridgepole::Delta
   end
 
   def differ?
-    not script.empty? or not delta_execute.empty?
+    !script.empty? or !delta_execute.empty?
   end
 
   private
@@ -117,7 +117,7 @@ class Ridgepole::Delta
       raise_exception(script, e)
     end
 
-    not script.empty? or execute_count.nonzero?
+    !script.empty? or execute_count.nonzero?
   end
 
   def execute_sqls(options = {})
@@ -235,7 +235,7 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
       RUBY
     end
 
-    if @options[:create_table_with_index] and not indices.empty?
+    if @options[:create_table_with_index] and !indices.empty?
       indices.each do |index_name, index_attrs|
         append_add_index(table_name, index_name, index_attrs, buf, true)
       end
@@ -245,7 +245,7 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
 end
     RUBY
 
-    if not @options[:create_table_with_index] and not indices.empty?
+    if !(@options[:create_table_with_index]) and !indices.empty?
       append_change_table(table_name, buf) do
         indices.each do |index_name, index_attrs|
           append_add_index(table_name, index_name, index_attrs, buf)
@@ -301,7 +301,7 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
     table_options = attrs[:table_options]
     table_comment = attrs[:table_comment]
 
-    if not definition.empty? or not indices.empty? or not primary_key_definition.empty?
+    if !definition.empty? or !indices.empty? or !primary_key_definition.empty?
       append_change_table(table_name, buf) do
         append_delete_indices(table_name, indices, buf)
         append_change_definition(table_name, definition, buf)

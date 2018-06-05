@@ -108,8 +108,6 @@ Style/NestedParenthesizedCalls:
   Enabled: false
 Style/Next:
   Enabled: false
-Style/Not:
-  Enabled: false
 Style/NumericLiteralPrefix:
   Enabled: false
 Style/NumericLiterals:

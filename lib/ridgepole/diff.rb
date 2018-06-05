@@ -361,12 +361,12 @@ class Ridgepole::Diff
 
   def normalize_column_options!(attrs, primary_key = false)
     opts = attrs[:options]
-    opts[:null] = true if not opts.key?(:null) and not primary_key
+    opts[:null] = true if !opts.key?(:null) and !primary_key
     default_limit = Ridgepole::DefaultsLimit.default_limit(attrs[:type], @options)
     opts.delete(:limit) if opts[:limit] == default_limit
 
     # XXX: MySQL only?
-    if not opts.key?(:default) and not primary_key
+    if !opts.key?(:default) and !primary_key
       opts[:default] = nil
     end
 
@@ -391,7 +391,7 @@ class Ridgepole::Diff
       return true
     end
 
-    if table_options[:id] != false and not table_options[:primary_key].is_a?(Array)
+    if table_options[:id] != false and !table_options[:primary_key].is_a?(Array)
       actual_columns = actual_columns + [(table_options[:primary_key] || 'id').to_s]
     end
 
