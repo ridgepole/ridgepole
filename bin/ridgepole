@@ -102,7 +102,7 @@ ARGV.options do |opt|
       set_mode[:diff]
       diff_arg2 = ARGV.first
 
-      if [diff_arg1, diff_arg2].any? {|i| i.nil? or i =~ /\A-/ }
+      if [diff_arg1, diff_arg2].any? {|i| i.nil? || i =~ /\A-/ }
         puts opt.help
         exit 1
       end
@@ -148,7 +148,7 @@ ARGV.options do |opt|
 
     opt.parse!
 
-    if !mode or (%i(apply export).include?(mode) and !config) or (options[:with_apply] and !config)
+    if !mode || (%i(apply export).include?(mode) && !config) || (options[:with_apply] && !config)
       puts opt.help
       exit 1
     end

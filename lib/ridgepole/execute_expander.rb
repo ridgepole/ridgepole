@@ -39,7 +39,7 @@ class Ridgepole::ExecuteExpander
     private
 
     def append_alter_extra(sql)
-      if Ridgepole::ExecuteExpander.alter_extra and sql =~ /\AALTER\b/i
+      if Ridgepole::ExecuteExpander.alter_extra && sql =~ /\AALTER\b/i
         sql = sql + ',' + Ridgepole::ExecuteExpander.alter_extra
       end
 

@@ -66,8 +66,6 @@ Performance/StartWith:
   Enabled: false
 Performance/StringReplacement:
   Enabled: false
-Style/AndOr:
-  Enabled: false
 Style/BlockDelimiters:
   Enabled: false
 Style/CaseEquality:

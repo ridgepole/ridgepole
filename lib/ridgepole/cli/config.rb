@@ -10,7 +10,7 @@ class Ridgepole::Config
 
       if File.exist?(config)
         parsed_config = parse_config_file(config)
-      elsif (expanded = File.expand_path(config)) and File.exist?(expanded)
+      elsif (expanded = File.expand_path(config)) && File.exist?(expanded)
         parsed_config = parse_config_file(expanded)
       else
         parsed_config = YAML.safe_load(ERB.new(config).result, [], [], true)
@@ -37,7 +37,7 @@ class Ridgepole::Config
     def parse_database_url(config)
       uri = URI.parse(config)
 
-      if [uri.scheme, uri.user, uri.host, uri.path].any? {|i| i.nil? or i.empty? }
+      if [uri.scheme, uri.user, uri.host, uri.path].any? {|i| i.nil? || i.empty? }
         raise "Invalid config: #{config.inspect}"
       end
 
