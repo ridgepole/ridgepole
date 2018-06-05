@@ -1,23 +1,23 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change virtual column / not null -> null' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
           t.json    "attrs", null: false
           t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
           t.json    "attrs"
           t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -34,23 +34,23 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when change virtual column / json -> string' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
           t.json    "attrs", null: false
           t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
           t.string  "attrs"
           t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -67,23 +67,23 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when change virtual column / string -> json' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
           t.string  "attrs"
           t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
           t.json    "attrs", null: false
           t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }

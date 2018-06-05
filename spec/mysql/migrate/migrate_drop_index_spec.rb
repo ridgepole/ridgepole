@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop index' do
     let(:dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
           t.index ["name"], name: "idx_name", unique: true, <%= i cond(5.0, using: :btree) %>
@@ -59,13 +59,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date"
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     let(:actual_dsl) { dsl }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
         end
@@ -120,7 +120,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "from_date", null: false
           t.date    "to_date"
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -138,7 +138,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = client(:bulk_change => true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
-      expect(delta.script).to match_fuzzy <<-EOS
+      expect(delta.script).to match_fuzzy <<-RUBY
         change_table("clubs", {:bulk => true}) do |t|
           t.remove_index({:name=>"idx_name"})
         end
@@ -150,7 +150,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         change_table("titles", {:bulk => true}) do |t|
           t.remove_index({:name=>"emp_no"})
         end
-      EOS
+      RUBY
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
     }

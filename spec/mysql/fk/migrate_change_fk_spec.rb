@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change fk' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
@@ -11,11 +11,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_foreign_key "child", "parent", name: "child_ibfk_1", on_delete: :cascade
-      EOS
+      ERB
     }
 
     let(:sorted_actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
@@ -25,11 +25,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_foreign_key "child", "parent", name: "child_ibfk_1", on_delete: :cascade
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
@@ -39,7 +39,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -57,7 +57,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when change fk without name' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
@@ -67,11 +67,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_foreign_key "child", "parent", on_delete: :cascade
-      EOS
+      ERB
     }
 
     let(:sorted_actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
@@ -81,11 +81,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_foreign_key "child", "parent", on_delete: :cascade
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
@@ -95,7 +95,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_foreign_key "child", "parent"
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -113,7 +113,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when drop/add fk with parent table' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
@@ -123,11 +123,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent2_id"
           t.index ["parent2_id"], name: "par2_id", <%= i cond(5.0, using: :btree) %>
@@ -137,7 +137,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_foreign_key "child", "parent2", name: "child_ibfk_2"
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -154,7 +154,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when drop/add fk with parent table without name' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
@@ -164,11 +164,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_foreign_key "child", "parent"
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent2_id"
           t.index ["parent2_id"], name: "par2_id", <%= i cond(5.0, using: :btree) %>
@@ -178,7 +178,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_foreign_key "child", "parent2"
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }

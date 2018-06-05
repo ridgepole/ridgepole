@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   let(:actual_dsl) {
-    erbh(<<-EOS)
+    erbh(<<-ERB)
       create_table "employees", force: :cascade, comment: "old comment" do |t|
         t.date   "birth_date", null: false
         t.string "first_name", limit: 14, null: false
@@ -8,11 +8,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         t.string "gender", limit: 1, null: false
         t.date   "hire_date", null: false
       end
-    EOS
+    ERB
   }
 
   let(:expected_dsl) {
-    erbh(<<-EOS)
+    erbh(<<-ERB)
       create_table "employees", force: :cascade, comment: "new comment" do |t|
         t.date   "birth_date", null: false
         t.string "first_name", limit: 14, null: false
@@ -20,7 +20,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         t.string "gender", limit: 1, null: false
         t.date   "hire_date", null: false
       end
-    EOS
+    ERB
   }
 
   before { subject.diff(actual_dsl).migrate }
@@ -29,11 +29,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     subject { client }
 
     it {
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-EOS)
+      expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG)
 [WARNING] No difference of schema configuration for table `employees` but table options differ.
   from: {:comment=>"old comment"}
     to: {:comment=>"new comment"}
-      EOS
+      MSG
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_falsey
       expect(subject.dump).to match_ruby actual_dsl

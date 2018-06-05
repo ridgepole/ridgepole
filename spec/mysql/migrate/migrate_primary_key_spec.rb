@@ -1,9 +1,9 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   let(:actual_dsl) {
-    erbh(<<-EOS)
+    erbh(<<-ERB)
       create_table "employees", id: :integer, unsigned: true, force: :cascade do |t|
       end
-    EOS
+    ERB
   }
 
   before { subject.diff(actual_dsl).migrate }
@@ -14,18 +14,18 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     context 'with difference' do
       let(:expected_dsl) {
-        erbh(<<-EOS)
+        erbh(<<-ERB)
           create_table "employees", id: :bigint, unsigned: true, force: :cascade do |t|
           end
-        EOS
+        ERB
       }
 
       it {
-        expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-EOS)
+        expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG)
 [WARNING] Primary key definition of `employees` differ but `allow_pk_change` option is false
   from: {:id=>:integer, :unsigned=>true}
     to: {:id=>:bigint, :unsigned=>true}
-        EOS
+        MSG
 
         delta = subject.diff(expected_dsl)
         expect(delta.differ?).to be_falsey
@@ -36,10 +36,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     context 'with no difference' do
       let(:actual_dsl) {
-        erbh(<<-EOS)
+        erbh(<<-ERB)
           create_table "employees", unsigned: true, force: :cascade do |t|
           end
-        EOS
+        ERB
       }
       let(:expected_dsl) { actual_dsl }
 
@@ -55,7 +55,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when allow_pk_change option is true' do
     let(:allow_pk_change) { true }
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "employees", id: :bigint, unsigned: true, force: :cascade do |t|
         end
 
@@ -64,7 +64,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["employee_id"], name: "fk_salaries_employees", <%= i cond(5.0, using: :btree) %>
         end
         add_foreign_key "salaries", "employees", name: "fk_salaries_employees"
-      EOS
+      ERB
     }
 
     it {

@@ -1,21 +1,21 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop column and unique index' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.string "first_name", limit: 14, null: false
           t.string "last_name", limit: 16, null: false
           t.index ["first_name", "last_name"], name: "first_name_last_name", unique: true, <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.string "first_name", limit: 14, null: false
         end
-      EOS
+      ERB
     }
 
     before do

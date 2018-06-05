@@ -3,13 +3,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:dsl) { '' }
 
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
           t.string   "name"
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) { dsl }
@@ -30,13 +30,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when create table with default proc without change' do
     let(:dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
           t.string   "name"
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(dsl).migrate }
@@ -55,23 +55,23 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when migrate table with default proc change' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v1()" }, force: :cascade do |t|
           t.string   "name"
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
           t.string   "name"
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -81,11 +81,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
       let(:allow_pk_change) { false }
 
       it {
-        expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-EOS)
+        expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG)
 [WARNING] Primary key definition of `users` differ but `allow_pk_change` option is false
   from: {:id=>:uuid, :default=>"uuid_generate_v1()"}
     to: {:id=>:uuid, :default=>"uuid_generate_v4()"}
-        EOS
+        MSG
 
         delta = subject.diff(expected_dsl)
         expect(delta.differ?).to be_falsey

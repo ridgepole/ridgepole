@@ -1,14 +1,14 @@
 describe 'Ridgepole::Client (with integer pk)', condition: 5.1 do
   context 'when with id:integer' do
     let(:dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "books", id: :integer, force: :cascade do |t|
           t.string   "title", null: false
           t.integer  "author_id", null: false
           t.datetime "created_at"
           t.datetime "updated_at"
         end
-      EOS
+      RUBY
     }
 
     subject { client }
@@ -23,14 +23,14 @@ describe 'Ridgepole::Client (with integer pk)', condition: 5.1 do
 
   context 'when without id:integer' do
     let(:dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "books", force: :cascade do |t|
           t.string   "title", null: false
           t.integer  "author_id", null: false
           t.datetime "created_at"
           t.datetime "updated_at"
         end
-      EOS
+      RUBY
     }
 
     subject { client }

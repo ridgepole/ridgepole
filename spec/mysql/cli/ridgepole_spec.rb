@@ -12,7 +12,7 @@ describe 'ridgepole' do
       out = out.gsub(/Usage: .*\n/, '')
 
       expect(status.success?).to be_truthy
-      expect(out).to match_fuzzy <<-EOS
+      expect(out).to match_fuzzy <<-MSG
         -c, --config CONF_OR_FILE
         -E, --env ENVIRONMENT
         -a, --apply
@@ -59,7 +59,7 @@ describe 'ridgepole' do
             --debug
             --[no-]color
         -v, --version
-       EOS
+       MSG
     end
   end
 
@@ -68,11 +68,11 @@ describe 'ridgepole' do
       out, status = run_cli(:args => ['-c', conf, '-e', conf, conf])
 
       expect(status.success?).to be_truthy
-      expect(out).to match_fuzzy <<-EOS
+      expect(out).to match_fuzzy <<-MSG
         Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
         # Export Schema
         Ridgepole::Client#dump
-      EOS
+      MSG
     end
 
     specify 'not split with outfile' do
@@ -80,11 +80,11 @@ describe 'ridgepole' do
         out, status = run_cli(:args => ['-c', conf, '-e', '-o', f.path])
 
         expect(status.success?).to be_truthy
-        expect(out).to match_fuzzy <<-EOS
+        expect(out).to match_fuzzy <<-MSG
           Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
           Export Schema to `#{f.path}`
           Ridgepole::Client#dump
-        EOS
+        MSG
       end
     end
 
@@ -92,23 +92,23 @@ describe 'ridgepole' do
       out, status = run_cli(:args => ['-c', conf, '-e', '-o', '-'])
 
       expect(status.success?).to be_truthy
-      expect(out).to match_fuzzy <<-EOS
+      expect(out).to match_fuzzy <<-MSG
         Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
         # Export Schema
         Ridgepole::Client#dump
-      EOS
+      MSG
     end
 
     specify 'split' do
       out, status = run_cli(:args => ['-c', conf, '-e', '--split'])
 
       expect(status.success?).to be_truthy
-      expect(out).to match_fuzzy <<-EOS
+      expect(out).to match_fuzzy <<-MSG
         Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
         Export Schema
         Ridgepole::Client#dump
           write `Schemafile`
-      EOS
+      MSG
     end
 
     specify 'split with outdir' do
@@ -116,12 +116,12 @@ describe 'ridgepole' do
         out, status = run_cli(:args => ['-c', conf, '-e', '--split', '-o', f.path, conf, conf])
 
         expect(status.success?).to be_truthy
-        expect(out).to match_fuzzy <<-EOS
+        expect(out).to match_fuzzy <<-MSG
           Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
           Export Schema
           Ridgepole::Client#dump
             write `#{f.path}`
-        EOS
+        MSG
       end
     end
   end
@@ -131,61 +131,61 @@ describe 'ridgepole' do
       out, status = run_cli(:args => ['-c', conf, '-a'])
 
       expect(status.success?).to be_truthy
-      expect(out).to match_fuzzy <<-EOS
+      expect(out).to match_fuzzy <<-MSG
         Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
         Apply `Schemafile`
         Ridgepole::Client#diff
         Ridgepole::Delta#differ?
         Ridgepole::Delta#migrate
         No change
-      EOS
+      MSG
     end
 
     specify 'apply with conf file' do
       Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
-        conf_file.puts <<-EOS
+        conf_file.puts <<-YAML
           adapter: mysql2
           database: ridgepole_test_for_conf_file
-        EOS
+        YAML
         conf_file.flush
 
         out, status = run_cli(:args => ['-c', conf_file.path, '-a', '--debug'])
 
         expect(status.success?).to be_truthy
-        expect(out).to match_fuzzy <<-EOS
+        expect(out).to match_fuzzy <<-MSG
           Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, {:dry_run=>false, :debug=>true, :color=>false}])
           Apply `Schemafile`
           Ridgepole::Client#diff
           Ridgepole::Delta#differ?
           Ridgepole::Delta#migrate
           No change
-        EOS
+        MSG
       end
     end
 
     specify 'apply with conf file (production)' do
       Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
-        conf_file.puts <<-EOS
+        conf_file.puts <<-YAML
           development:
             adapter: mysql2
             database: ridgepole_development
           production:
             adapter: mysql2
             database: ridgepole_production
-        EOS
+        YAML
         conf_file.flush
 
         out, status = run_cli(:args => ['-c', conf_file.path, '-a', '--debug'])
 
         expect(status.success?).to be_truthy
-        expect(out).to match_fuzzy <<-EOS
+        expect(out).to match_fuzzy <<-MSG
           Ridgepole::Client#initialize([{"adapter"=>"mysql2", "database"=>"ridgepole_development"}, {:dry_run=>false, :debug=>true, :color=>false}])
           Apply `Schemafile`
           Ridgepole::Client#diff
           Ridgepole::Delta#differ?
           Ridgepole::Delta#migrate
           No change
-        EOS
+        MSG
       end
     end
 
@@ -193,13 +193,13 @@ describe 'ridgepole' do
       out, status = run_cli(:args => ['-c', conf, '-a', '--dry-run'])
 
       expect(status.success?).to be_truthy
-      expect(out).to match_fuzzy <<-EOS
+      expect(out).to match_fuzzy <<-MSG
         Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>true, :debug=>false, :color=>false}])
         Apply `Schemafile` (dry-run)
         Ridgepole::Client#diff
         Ridgepole::Delta#differ?
         No change
-      EOS
+      MSG
     end
 
     context 'when differ true' do
@@ -209,20 +209,20 @@ describe 'ridgepole' do
         out, status = run_cli(:args => ['-c', conf, '-a'])
 
         expect(status.success?).to be_truthy
-        expect(out).to match_fuzzy <<-EOS
+        expect(out).to match_fuzzy <<-MSG
           Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
           Apply `Schemafile`
           Ridgepole::Client#diff
           Ridgepole::Delta#differ?
           Ridgepole::Delta#migrate
-        EOS
+        MSG
       end
 
       specify 'dry-run' do
         out, status = run_cli(:args => ['-c', conf, '-a', '--dry-run'])
 
         expect(status.success?).to be_truthy
-        expect(out).to match_fuzzy <<-EOS
+        expect(out).to match_fuzzy <<-MSG
           Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>true, :debug=>false, :color=>false}])
           Apply `Schemafile` (dry-run)
           Ridgepole::Client#diff
@@ -235,7 +235,7 @@ describe 'ridgepole' do
           Ridgepole::Delta#migrate
           # create_table :table do
           # end
-        EOS
+        MSG
       end
     end
   end
@@ -245,11 +245,11 @@ describe 'ridgepole' do
       out, status = run_cli(:args => ['-c', conf, '-d', conf, conf])
 
       expect(status.success?).to be_truthy
-      expect(out).to match_fuzzy <<-EOS
+      expect(out).to match_fuzzy <<-MSG
         Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
         Ridgepole::Client.diff([#{conn_spec_str("ridgepole_test")}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
         Ridgepole::Delta#differ?
-      EOS
+      MSG
     end
 
     context 'when differ true' do
@@ -261,7 +261,7 @@ describe 'ridgepole' do
         # Exit code 1 if there is a difference
         expect(status.success?).to be_falsey
 
-        expect(out).to match_fuzzy <<-EOS
+        expect(out).to match_fuzzy <<-MSG
           Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
           Ridgepole::Client.diff([#{conn_spec_str("ridgepole_test")}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
           Ridgepole::Delta#differ?
@@ -273,136 +273,136 @@ describe 'ridgepole' do
           Ridgepole::Delta#migrate
           # create_table :table do
           # end
-        EOS
+        MSG
       end
     end
 
     context 'when config file' do
       specify '.yml' do
         Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
-          conf_file.puts <<-EOS
+          conf_file.puts <<-YAML
             adapter: mysql2
             database: ridgepole_test_for_conf_file
-          EOS
+          YAML
           conf_file.flush
 
           out, status = run_cli(:args => ['-c', conf, '-d', conf_file.path, conf])
 
           expect(status.success?).to be_truthy
 
-          expect(out).to match_fuzzy <<-EOS
+          expect(out).to match_fuzzy <<-MSG
             Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Delta#differ?
-          EOS
+          MSG
         end
       end
 
       specify '.yml (file2)' do
         Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
-          conf_file.puts <<-EOS
+          conf_file.puts <<-YAML
             adapter: mysql2
             database: ridgepole_test_for_conf_file
-          EOS
+          YAML
           conf_file.flush
 
           out, status = run_cli(:args => ['-c', conf, '-d', conf, conf_file.path])
 
           expect(status.success?).to be_truthy
 
-          expect(out).to match_fuzzy <<-EOS
+          expect(out).to match_fuzzy <<-MSG
             Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Client.diff([#{conn_spec_str("ridgepole_test")}, {"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Delta#differ?
-          EOS
+          MSG
         end
       end
 
       specify '.yml (development)' do
         Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
-          conf_file.puts <<-EOS
+          conf_file.puts <<-YAML
             development:
               adapter: mysql2
               database: ridgepole_development
             production:
               adapter: mysql2
               database: ridgepole_production
-          EOS
+          YAML
           conf_file.flush
 
           out, status = run_cli(:args => ['-c', conf, '-d', conf_file.path, conf])
 
           expect(status.success?).to be_truthy
 
-          expect(out).to match_fuzzy <<-EOS
+          expect(out).to match_fuzzy <<-MSG
             Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_development"}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Delta#differ?
-          EOS
+          MSG
         end
       end
 
       specify '.yml (production)' do
         Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
-          conf_file.puts <<-EOS
+          conf_file.puts <<-YAML
             development:
               adapter: mysql2
               database: ridgepole_development
             production:
               adapter: mysql2
               database: ridgepole_production
-          EOS
+          YAML
           conf_file.flush
 
           out, status = run_cli(:args => ['-c', conf, '-d', conf_file.path, conf, '-E', :production])
 
           expect(status.success?).to be_truthy
 
-          expect(out).to match_fuzzy <<-EOS
+          expect(out).to match_fuzzy <<-MSG
             Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_production"}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Delta#differ?
-          EOS
+          MSG
         end
       end
 
       specify '.yaml' do
         Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yaml']) do |conf_file|
-          conf_file.puts <<-EOS
+          conf_file.puts <<-YAML
             adapter: mysql2
             database: ridgepole_test_for_conf_file
-          EOS
+          YAML
           conf_file.flush
 
           out, status = run_cli(:args => ['-c', conf, '-d', conf_file.path, conf])
 
           expect(status.success?).to be_truthy
 
-          expect(out).to match_fuzzy <<-EOS
+          expect(out).to match_fuzzy <<-MSG
             Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Delta#differ?
-          EOS
+          MSG
         end
       end
 
       specify '.rb' do
         Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.rb']) do |conf_file|
-          conf_file.puts <<-EOS
+          conf_file.puts <<-RUBY
             create_table :table do
             end
-          EOS
+          RUBY
           conf_file.flush
 
           out, status = run_cli(:args => ['-c', conf, '-d', conf_file.path, conf])
 
           expect(status.success?).to be_truthy
 
-          expect(out).to match_fuzzy <<-EOS
+          expect(out).to match_fuzzy <<-MSG
             Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Client.diff([#{conf_file.path}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Delta#differ?
-          EOS
+          MSG
         end
       end
     end

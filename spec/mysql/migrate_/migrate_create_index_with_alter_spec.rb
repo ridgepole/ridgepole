@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create index' do
     let(:dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
           t.index ["name"], name: "idx_name", unique: true, <%= i cond(5.0, using: :btree) %>
@@ -59,11 +59,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date"
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
         end
@@ -118,7 +118,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "from_date", null: false
           t.date    "to_date"
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) { dsl }

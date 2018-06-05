@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change index without using (no change)' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
@@ -9,11 +9,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
@@ -21,7 +21,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
           t.index ["emp_no"], name: "emp_no"
         end
-      EOS
+      RUBY
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -35,7 +35,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when change index without using (change)' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
@@ -43,11 +43,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     let(:dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
@@ -55,11 +55,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
           t.index ["salary"], using: :hash
         end
-      EOS
+      RUBY
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
@@ -67,10 +67,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
           t.index ["salary"], name: "index_salaries_on_salary", using: :hash
         end
-      EOS
+      RUBY
     }
 
-    before { subject.diff(<<-EOS).migrate }
+    before { subject.diff(<<-RUBY).migrate }
       create_table "salaries", id: false, force: :cascade do |t|
         t.integer "emp_no", null: false
         t.integer "salary", null: false
@@ -79,7 +79,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       end
 
       add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
-    EOS
+    RUBY
 
     subject { client(:table_options => 'ENGINE=MEMORY') }
 
@@ -94,7 +94,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when change index without name (no change)' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
@@ -102,11 +102,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
@@ -114,7 +114,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
           t.index ["emp_no"], <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -128,7 +128,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when change index without name (change)' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
@@ -136,11 +136,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     let(:dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
@@ -148,11 +148,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
           t.index ["salary"], <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
@@ -160,7 +160,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
           t.index ["salary"], name: "index_salaries_on_salary", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }

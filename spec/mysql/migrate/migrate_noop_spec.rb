@@ -2,7 +2,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when no operation' do
     let(:actual_dsl) { '' }
     let(:expected_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
         end
@@ -67,7 +67,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
-      EOS
+      RUBY
     }
 
     subject { client }
@@ -79,7 +79,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(migrated).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
 
-      expect(sql).to match_fuzzy erbh(<<-EOS)
+      expect(sql).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `clubs` (`id` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `name` varchar(255) DEFAULT '' NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE UNIQUE INDEX `idx_name` USING btree ON `clubs` (`name`)
         CREATE TABLE `departments` (`dept_no` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `dept_name` varchar(40) NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
@@ -97,7 +97,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         CREATE  INDEX `emp_no` USING btree ON `salaries` (`emp_no`)
         CREATE TABLE `titles` (`emp_no` int NOT NULL, `title` varchar(50) NOT NULL, `from_date` date NOT NULL, `to_date` date) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE  INDEX `emp_no` USING btree ON `titles` (`emp_no`)
-      EOS
+      ERB
     }
 
     it {
@@ -108,7 +108,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_ruby actual_dsl
 
       # XXX:
-      expect(sql.gsub('`', '')).to match_fuzzy erbh(<<-EOS).gsub('`', '')
+      expect(sql.gsub('`', '')).to match_fuzzy erbh(<<-ERB).gsub('`', '')
         CREATE TABLE `clubs` (`id` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `name` varchar(255) DEFAULT '' NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         ALTER TABLE `clubs` ADD UNIQUE INDEX `idx_name` USING btree (`name`)
         CREATE TABLE `departments` (`dept_no` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `dept_name` varchar(40) NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
@@ -124,14 +124,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
         ALTER TABLE `salaries` ADD  INDEX `emp_no` USING btree (`emp_no`)
         CREATE TABLE `titles` (`emp_no` int NOT NULL, `title` varchar(50) NOT NULL, `from_date` date NOT NULL, `to_date` date) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         ALTER TABLE `titles` ADD  INDEX `emp_no` USING btree (`emp_no`)
-      EOS
+      ERB
     }
   end
 
   context 'when no operation' do
     let(:actual_dsl) { '' }
     let(:expected_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
         end
@@ -196,7 +196,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
-      EOS
+      RUBY
     }
 
     subject { client(:default_int_limit => 11) }
@@ -208,7 +208,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(migrated).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
 
-      expect(sql).to match_fuzzy erbh(<<-EOS)
+      expect(sql).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `clubs` (`id` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `name` varchar(255) DEFAULT '' NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE UNIQUE INDEX `idx_name` USING btree ON `clubs` (`name`)
         CREATE TABLE `departments` (`dept_no` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `dept_name` varchar(40) NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
@@ -226,7 +226,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         CREATE  INDEX `emp_no` USING btree ON `salaries` (`emp_no`)
         CREATE TABLE `titles` (`emp_no` int NOT NULL, `title` varchar(50) NOT NULL, `from_date` date NOT NULL, `to_date` date) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         CREATE  INDEX `emp_no` USING btree ON `titles` (`emp_no`)
-      EOS
+      ERB
     }
   end
 end

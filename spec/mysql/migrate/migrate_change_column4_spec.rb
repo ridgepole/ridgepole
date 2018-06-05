@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (boolean without limit)' do
     let(:actual_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
@@ -12,11 +12,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
           t.boolean  "registered"
         end
-      EOS
+      RUBY
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
@@ -27,7 +27,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
           t.boolean  "registered"
         end
-      EOS
+      RUBY
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -41,7 +41,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when change column (boolean with limit)' do
     let(:actual_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
@@ -52,11 +52,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
           t.boolean  "registered"
         end
-      EOS
+      RUBY
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
@@ -67,7 +67,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
           t.boolean  "registered", limit: 1
         end
-      EOS
+      RUBY
     }
 
     before { subject.diff(actual_dsl).migrate }

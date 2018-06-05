@@ -1,25 +1,25 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column' do
     let(:actual_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", default: 0, null: false
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
-      EOS
+      RUBY
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
-      EOS
+      RUBY
     }
 
     before { subject.diff(actual_dsl).migrate }

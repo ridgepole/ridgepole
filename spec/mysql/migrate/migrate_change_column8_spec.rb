@@ -6,17 +6,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
   let(:dump_without_table_options) { false }
 
   let(:actual_dsl) {
-    erbh(<<-EOS)
+    erbh(<<-ERB)
       create_table "employees", primary_key: "emp_no", force: :cascade, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       end
-    EOS
+    ERB
   }
 
   let(:expected_dsl) {
-    erbh(<<-EOS)
+    erbh(<<-ERB)
       create_table :employees, primary_key: :emp_no, force: :cascade do |t|
       end
-    EOS
+    ERB
   }
 
   context 'when change options (no change)' do

@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column (ext cols)' do
     let(:actual_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "items", force: :cascade do |t|
           t.string   "name"
           t.integer  "price"
@@ -9,11 +9,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
         end
-      EOS
+      RUBY
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "items", force: :cascade do |t|
           t.string      "name"
           t.integer     "price"
@@ -45,7 +45,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.bit_varying "bit varying"
           t.money       "money", scale: 2
         end
-      EOS
+      RUBY
     }
 
     before { subject.diff(actual_dsl).migrate }

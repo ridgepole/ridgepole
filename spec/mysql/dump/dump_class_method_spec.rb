@@ -4,7 +4,7 @@ describe 'Ridgepole::Client.dump' do
     subject { Ridgepole::Client }
 
     it {
-      expect(subject.dump(conn_spec, dump_without_table_options: true)).to match_fuzzy erbh(<<-EOS)
+      expect(subject.dump(conn_spec, dump_without_table_options: true)).to match_fuzzy erbh(<<-ERB)
         create_table "clubs", <%= i cond('>= 5.1', id: :integer) %>, unsigned: true, force: :cascade do |t|
           t.string "name", default: "", null: false
           t.index ["name"], name: "idx_name", unique: true, <%= i cond(5.0, using: :btree) %>
@@ -62,7 +62,7 @@ describe 'Ridgepole::Client.dump' do
           t.date    "to_date"
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
-      EOS
+      ERB
     }
   end
 end

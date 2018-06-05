@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create_table options are different' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
@@ -9,11 +9,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no2", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
@@ -21,18 +21,18 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
 
     it {
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-EOS)
+      expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG)
 [WARNING] No difference of schema configuration for table `employees` but table options differ.
   from: {:primary_key=>"emp_no"}
     to: {:primary_key=>"emp_no2"}
-      EOS
+      MSG
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_falsey
       expect(subject.dump).to match_ruby actual_dsl
@@ -43,7 +43,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when create_table options are different (ignore comment)' do
     let(:actual_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
@@ -51,11 +51,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", comment: "my comment", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
@@ -63,7 +63,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }

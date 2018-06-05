@@ -3,11 +3,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) { '' }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "bigint_test", id: false, force: :cascade do |t|
           t.bigint "b"
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(actual_dsl).migrate }
@@ -23,19 +23,19 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when no change' do
     let(:dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "bigint_test", id: false, force: :cascade do |t|
           t.bigint "b"
         end
-      EOS
+      ERB
     }
 
     let(:expected_dsl) {
-      erbh(<<-EOS)
+      erbh(<<-ERB)
         create_table "bigint_test", id: false, force: :cascade do |t|
           t.bigint "b"
         end
-      EOS
+      ERB
     }
 
     before { subject.diff(dsl).migrate }

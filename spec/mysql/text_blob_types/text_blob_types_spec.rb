@@ -3,7 +3,7 @@ describe 'Ridgepole::Client (with new text/blob types)' do
     subject { client }
 
     it do
-      delta = subject.diff(<<-EOS)
+      delta = subject.diff(<<-RUBY)
         create_table :foos, id: :unsigned_integer do |t|
           t.blob             :blob
           t.tinyblob         :tiny_blob
@@ -17,12 +17,12 @@ describe 'Ridgepole::Client (with new text/blob types)' do
           t.unsigned_bigint  :unsigned_bigint
           t.unsigned_integer :unsigned_integer
         end
-      EOS
+      RUBY
 
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy erbh(<<-EOS)
+      expect(subject.dump).to match_fuzzy erbh(<<-ERB)
         create_table "foos", id: :integer, unsigned: true, force: :cascade do |t|
           t.binary  "blob", <%= i cond(5.0, limit: 65535) %>
           t.blob    "tiny_blob", limit: 255
@@ -36,7 +36,7 @@ describe 'Ridgepole::Client (with new text/blob types)' do
           t.bigint  "unsigned_bigint", unsigned: true
           t.integer "unsigned_integer", unsigned: true
         end
-      EOS
+      ERB
     end
   end
 
@@ -44,7 +44,7 @@ describe 'Ridgepole::Client (with new text/blob types)' do
     subject { client }
 
     before do
-      subject.diff(<<-EOS).migrate
+      subject.diff(<<-RUBY).migrate
         create_table :foos do |t|
           t.blob             :blob
           t.tinyblob         :tiny_blob
@@ -58,11 +58,11 @@ describe 'Ridgepole::Client (with new text/blob types)' do
           t.unsigned_bigint  :unsigned_bigint
           t.unsigned_integer :unsigned_integer
         end
-      EOS
+      RUBY
     end
 
     it do
-      delta = subject.diff(<<-EOS)
+      delta = subject.diff(<<-RUBY)
         create_table :foos do |t|
           t.blob             :blob
           t.tinyblob         :tiny_blob
@@ -76,7 +76,7 @@ describe 'Ridgepole::Client (with new text/blob types)' do
           t.unsigned_bigint  :unsigned_bigint
           t.unsigned_integer :unsigned_integer
         end
-      EOS
+      RUBY
 
       expect(delta.differ?).to be_falsey
     end

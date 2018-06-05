@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when with ignore tables option (same)' do
     let(:current_schema) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
@@ -18,11 +18,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "salaries", ["salary"], name: "emp_no", using: :btree
-      EOS
+      RUBY
     }
 
     let(:dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
@@ -39,11 +39,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
-      EOS
+      RUBY
     }
 
     let(:expected_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
@@ -51,7 +51,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
         end
-      EOS
+      RUBY
     }
 
     before { subject.diff(current_schema).migrate }
@@ -68,7 +68,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when with ignore tables option (differ)' do
     let(:current_schema) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
@@ -85,11 +85,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "salaries", ["salary"], name: "emp_no", using: :btree
-      EOS
+      RUBY
     }
 
     let(:dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 15, null: false
@@ -106,11 +106,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
-      EOS
+      RUBY
     }
 
     let(:before_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
@@ -118,11 +118,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
         end
-      EOS
+      RUBY
     }
 
     let(:after_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 15, null: false
@@ -130,7 +130,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
         end
-      EOS
+      RUBY
     }
 
     before { subject.diff(current_schema).migrate }
@@ -147,7 +147,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when with ignore tables option (target and ignore)' do
     let(:current_schema) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
@@ -164,11 +164,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "salaries", ["salary"], name: "emp_no", using: :btree
-      EOS
+      RUBY
     }
 
     let(:dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 15, null: false
@@ -185,11 +185,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
-      EOS
+      RUBY
     }
 
     let(:before_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
@@ -197,11 +197,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
         end
-      EOS
+      RUBY
     }
 
     let(:after_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 15, null: false
@@ -209,7 +209,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
         end
-      EOS
+      RUBY
     }
 
     before { subject.diff(current_schema).migrate }
@@ -226,7 +226,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when with ignore tables option (target)' do
     let(:current_schema) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
@@ -243,11 +243,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "salaries", ["salary"], name: "emp_no", using: :btree
-      EOS
+      RUBY
     }
 
     let(:dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 15, null: false
@@ -264,11 +264,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
-      EOS
+      RUBY
     }
 
     let(:before_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
@@ -276,11 +276,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
         end
-      EOS
+      RUBY
     }
 
     let(:after_dsl) {
-      <<-EOS
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 15, null: false
@@ -288,7 +288,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
         end
-      EOS
+      RUBY
     }
 
     before { subject.diff(current_schema).migrate }
