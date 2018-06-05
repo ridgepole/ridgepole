@@ -462,8 +462,8 @@ class Ridgepole::Diff
   end
 
   def compare_column_attrs(attrs1, attrs2)
-    attrs1 = attrs1.merge(:options => attrs1.fetch(:options, {}).dup)
-    attrs2 = attrs2.merge(:options => attrs2.fetch(:options, {}).dup)
+    attrs1 = attrs1.merge(options: attrs1.fetch(:options, {}).dup)
+    attrs2 = attrs2.merge(options: attrs2.fetch(:options, {}).dup)
     normalize_default_proc_options!(attrs1[:options], attrs2[:options])
 
     if @options[:skip_column_comment_change]
@@ -488,7 +488,7 @@ class Ridgepole::Diff
     diffy = Diffy::Diff.new(
       obj1.pretty_inspect,
       obj2.pretty_inspect,
-      :diff => '-u'
+      diff: '-u'
     )
 
     diffy.to_s(@options[:color] ? :color : :text).gsub(/\s+\z/m, '')
@@ -507,8 +507,8 @@ class Ridgepole::Diff
     end
 
     relation_info[table_name] = {
-      :options => table_attr[:options] || {},
-      :columns => attrs_by_column,
+      options: table_attr[:options] || {},
+      columns: attrs_by_column,
     }
   end
 
@@ -539,13 +539,13 @@ class Ridgepole::Diff
         next if table_options[:id] == false
 
         parent_column_info = {
-          :type => table_options[:id] || @options[:check_relation_type].to_sym,
-          :unsigned => table_options[:unsigned],
+          type: table_options[:id] || @options[:check_relation_type].to_sym,
+          unsigned: table_options[:unsigned],
         }
 
         child_column_info = {
-          :type => column_attrs[:type],
-          :unsigned => column_attrs.fetch(:options, {})[:unsigned],
+          type: column_attrs[:type],
+          unsigned: column_attrs.fetch(:options, {})[:unsigned],
         }
 
         [parent_column_info, child_column_info].each do |column_info|
@@ -555,8 +555,8 @@ class Ridgepole::Diff
 
           # for PostgreSQL
           column_info[:type] = {
-            :serial => :integer,
-            :bigserial => :bigint,
+            serial: :integer,
+            bigserial: :bigint,
           }.fetch(column_info[:type], column_info[:type])
         end
 

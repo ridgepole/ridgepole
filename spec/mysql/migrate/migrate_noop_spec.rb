@@ -75,7 +75,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      migrated, sql = delta.migrate(:noop => true)
+      migrated, sql = delta.migrate(noop: true)
       expect(migrated).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
 
@@ -101,9 +101,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     it {
-      delta = client(:bulk_change => true).diff(expected_dsl)
+      delta = client(bulk_change: true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      migrated, sql = delta.migrate(:noop => true)
+      migrated, sql = delta.migrate(noop: true)
       expect(migrated).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
 
@@ -199,12 +199,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
       RUBY
     }
 
-    subject { client(:default_int_limit => 11) }
+    subject { client(default_int_limit: 11) }
 
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
-      migrated, sql = delta.migrate(:noop => true)
+      migrated, sql = delta.migrate(noop: true)
       expect(migrated).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
 

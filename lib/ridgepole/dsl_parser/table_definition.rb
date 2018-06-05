@@ -12,8 +12,8 @@ class Ridgepole::DSLParser
       name = name.to_s
 
       @__definition[name] = {
-        :type => type,
-        :options => options,
+        type: type,
+        options: options,
       }
     end
 
@@ -115,7 +115,7 @@ class Ridgepole::DSLParser
     end
 
     def timestamps(*args)
-      options = {:null => false}.merge(args.extract_options!)
+      options = {null: false}.merge(args.extract_options!)
       column(:created_at, :datetime, options)
       column(:updated_at, :datetime, options)
     end

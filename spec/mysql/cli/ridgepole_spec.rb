@@ -8,7 +8,7 @@ describe 'ridgepole' do
 
   context 'when help' do
     specify do
-      out, status = run_cli(:args => ['-h'])
+      out, status = run_cli(args: ['-h'])
       out = out.gsub(/Usage: .*\n/, '')
 
       expect(status.success?).to be_truthy
@@ -65,7 +65,7 @@ describe 'ridgepole' do
 
   context 'when export' do
     specify 'not split' do
-      out, status = run_cli(:args => ['-c', conf, '-e', conf, conf])
+      out, status = run_cli(args: ['-c', conf, '-e', conf, conf])
 
       expect(status.success?).to be_truthy
       expect(out).to match_fuzzy <<-MSG
@@ -77,7 +77,7 @@ describe 'ridgepole' do
 
     specify 'not split with outfile' do
       Tempfile.open("#{File.basename __FILE__}.#{$$}") do |f|
-        out, status = run_cli(:args => ['-c', conf, '-e', '-o', f.path])
+        out, status = run_cli(args: ['-c', conf, '-e', '-o', f.path])
 
         expect(status.success?).to be_truthy
         expect(out).to match_fuzzy <<-MSG
@@ -89,7 +89,7 @@ describe 'ridgepole' do
     end
 
     specify 'not split with output stdout' do
-      out, status = run_cli(:args => ['-c', conf, '-e', '-o', '-'])
+      out, status = run_cli(args: ['-c', conf, '-e', '-o', '-'])
 
       expect(status.success?).to be_truthy
       expect(out).to match_fuzzy <<-MSG
@@ -100,7 +100,7 @@ describe 'ridgepole' do
     end
 
     specify 'split' do
-      out, status = run_cli(:args => ['-c', conf, '-e', '--split'])
+      out, status = run_cli(args: ['-c', conf, '-e', '--split'])
 
       expect(status.success?).to be_truthy
       expect(out).to match_fuzzy <<-MSG
@@ -113,7 +113,7 @@ describe 'ridgepole' do
 
     specify 'split with outdir' do
       Tempfile.open("#{File.basename __FILE__}.#{$$}") do |f|
-        out, status = run_cli(:args => ['-c', conf, '-e', '--split', '-o', f.path, conf, conf])
+        out, status = run_cli(args: ['-c', conf, '-e', '--split', '-o', f.path, conf, conf])
 
         expect(status.success?).to be_truthy
         expect(out).to match_fuzzy <<-MSG
@@ -128,7 +128,7 @@ describe 'ridgepole' do
 
   context 'when apply' do
     specify 'apply' do
-      out, status = run_cli(:args => ['-c', conf, '-a'])
+      out, status = run_cli(args: ['-c', conf, '-a'])
 
       expect(status.success?).to be_truthy
       expect(out).to match_fuzzy <<-MSG
@@ -149,7 +149,7 @@ describe 'ridgepole' do
         YAML
         conf_file.flush
 
-        out, status = run_cli(:args => ['-c', conf_file.path, '-a', '--debug'])
+        out, status = run_cli(args: ['-c', conf_file.path, '-a', '--debug'])
 
         expect(status.success?).to be_truthy
         expect(out).to match_fuzzy <<-MSG
@@ -175,7 +175,7 @@ describe 'ridgepole' do
         YAML
         conf_file.flush
 
-        out, status = run_cli(:args => ['-c', conf_file.path, '-a', '--debug'])
+        out, status = run_cli(args: ['-c', conf_file.path, '-a', '--debug'])
 
         expect(status.success?).to be_truthy
         expect(out).to match_fuzzy <<-MSG
@@ -190,7 +190,7 @@ describe 'ridgepole' do
     end
 
     specify 'dry-run' do
-      out, status = run_cli(:args => ['-c', conf, '-a', '--dry-run'])
+      out, status = run_cli(args: ['-c', conf, '-a', '--dry-run'])
 
       expect(status.success?).to be_truthy
       expect(out).to match_fuzzy <<-MSG
@@ -206,7 +206,7 @@ describe 'ridgepole' do
       let(:differ) { true }
 
       specify 'apply' do
-        out, status = run_cli(:args => ['-c', conf, '-a'])
+        out, status = run_cli(args: ['-c', conf, '-a'])
 
         expect(status.success?).to be_truthy
         expect(out).to match_fuzzy <<-MSG
@@ -219,7 +219,7 @@ describe 'ridgepole' do
       end
 
       specify 'dry-run' do
-        out, status = run_cli(:args => ['-c', conf, '-a', '--dry-run'])
+        out, status = run_cli(args: ['-c', conf, '-a', '--dry-run'])
 
         expect(status.success?).to be_truthy
         expect(out).to match_fuzzy <<-MSG
@@ -242,7 +242,7 @@ describe 'ridgepole' do
 
   context 'when diff' do
     specify do
-      out, status = run_cli(:args => ['-c', conf, '-d', conf, conf])
+      out, status = run_cli(args: ['-c', conf, '-d', conf, conf])
 
       expect(status.success?).to be_truthy
       expect(out).to match_fuzzy <<-MSG
@@ -256,7 +256,7 @@ describe 'ridgepole' do
       let(:differ) { true }
 
       specify do
-        out, status = run_cli(:args => ['-c', conf, '-d', conf, conf])
+        out, status = run_cli(args: ['-c', conf, '-d', conf, conf])
 
         # Exit code 1 if there is a difference
         expect(status.success?).to be_falsey
@@ -286,7 +286,7 @@ describe 'ridgepole' do
           YAML
           conf_file.flush
 
-          out, status = run_cli(:args => ['-c', conf, '-d', conf_file.path, conf])
+          out, status = run_cli(args: ['-c', conf, '-d', conf_file.path, conf])
 
           expect(status.success?).to be_truthy
 
@@ -306,7 +306,7 @@ describe 'ridgepole' do
           YAML
           conf_file.flush
 
-          out, status = run_cli(:args => ['-c', conf, '-d', conf, conf_file.path])
+          out, status = run_cli(args: ['-c', conf, '-d', conf, conf_file.path])
 
           expect(status.success?).to be_truthy
 
@@ -330,7 +330,7 @@ describe 'ridgepole' do
           YAML
           conf_file.flush
 
-          out, status = run_cli(:args => ['-c', conf, '-d', conf_file.path, conf])
+          out, status = run_cli(args: ['-c', conf, '-d', conf_file.path, conf])
 
           expect(status.success?).to be_truthy
 
@@ -354,7 +354,7 @@ describe 'ridgepole' do
           YAML
           conf_file.flush
 
-          out, status = run_cli(:args => ['-c', conf, '-d', conf_file.path, conf, '-E', :production])
+          out, status = run_cli(args: ['-c', conf, '-d', conf_file.path, conf, '-E', :production])
 
           expect(status.success?).to be_truthy
 
@@ -374,7 +374,7 @@ describe 'ridgepole' do
           YAML
           conf_file.flush
 
-          out, status = run_cli(:args => ['-c', conf, '-d', conf_file.path, conf])
+          out, status = run_cli(args: ['-c', conf, '-d', conf_file.path, conf])
 
           expect(status.success?).to be_truthy
 
@@ -394,7 +394,7 @@ describe 'ridgepole' do
           RUBY
           conf_file.flush
 
-          out, status = run_cli(:args => ['-c', conf, '-d', conf_file.path, conf])
+          out, status = run_cli(args: ['-c', conf, '-d', conf_file.path, conf])
 
           expect(status.success?).to be_truthy
 

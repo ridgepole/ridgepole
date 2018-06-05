@@ -81,7 +81,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
     RUBY
 
-    subject { client(:table_options => 'ENGINE=MEMORY') }
+    subject { client(table_options: 'ENGINE=MEMORY') }
 
     it {
       delta = subject.diff(dsl)
