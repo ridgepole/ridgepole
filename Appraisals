@@ -8,6 +8,6 @@ appraise 'activerecord-5.1' do
 end
 
 appraise 'activerecord-5.2' do
-  gem 'mysql2', '~> 0.4.4'
   gem 'activerecord', '~> 5.2.0'
+  gem 'mysql2', '~> 0.4.4'
 end
