@@ -38,7 +38,7 @@ class Ridgepole::Diff
 
     scan_relation_info(relation_info)
 
-    unless @options[:merge] or @options[:skip_drop_table]
+    unless @options[:merge] || @options[:skip_drop_table]
       from.each do |table_name, from_attrs|
         next unless target?(table_name)
 
@@ -112,19 +112,19 @@ class Ridgepole::Diff
     end
 
     [from, to].each do |table_attrs|
-      if table_attrs.key?(:default) and table_attrs[:default].nil?
+      if table_attrs.key?(:default) && table_attrs[:default].nil?
         table_attrs.delete(:default)
       end
     end
 
     if Ridgepole::ConnectionAdapters.mysql?
-      if @options[:mysql_change_table_options] and from_options != to_options
+      if @options[:mysql_change_table_options] && (from_options != to_options)
         from.delete(:options)
         to.delete(:options)
         table_delta[:table_options] = to_options
       end
 
-      if @options[:mysql_change_table_comment] and from[:comment] != to[:comment]
+      if @options[:mysql_change_table_comment] && (from[:comment] != to[:comment])
         from.delete(:comment)
         to_comment = to.delete(:comment)
         table_delta[:table_comment] = to_comment
@@ -200,7 +200,7 @@ class Ridgepole::Diff
 
     scan_column_rename(from, to, definition_delta)
 
-    if table_options[:id] == false or table_options[:primary_key].is_a?(Array)
+    if (table_options[:id] == false) || table_options[:primary_key].is_a?(Array)
       priv_column_name = nil
     else
       priv_column_name = table_options[:primary_key] || 'id'
@@ -348,9 +348,9 @@ class Ridgepole::Diff
   end
 
   def target?(table_name)
-    if @options[:tables] and @options[:tables].include?(table_name)
+    if @options[:tables] && @options[:tables].include?(table_name)
       true
-    elsif @options[:ignore_tables] and @options[:ignore_tables].any? {|i| i =~ table_name }
+    elsif @options[:ignore_tables] && @options[:ignore_tables].any? {|i| i =~ table_name }
       false
     elsif @options[:tables]
       false
@@ -361,19 +361,19 @@ class Ridgepole::Diff
 
   def normalize_column_options!(attrs, primary_key = false)
     opts = attrs[:options]
-    opts[:null] = true if not opts.key?(:null) and not primary_key
+    opts[:null] = true if !opts.key?(:null) && !primary_key
     default_limit = Ridgepole::DefaultsLimit.default_limit(attrs[:type], @options)
     opts.delete(:limit) if opts[:limit] == default_limit
 
     # XXX: MySQL only?
-    if not opts.key?(:default) and not primary_key
+    if !opts.key?(:default) && !primary_key
       opts[:default] = nil
     end
 
     if Ridgepole::ConnectionAdapters.mysql?
       opts[:unsigned] = false unless opts.key?(:unsigned)
 
-      if attrs[:type] == :integer and opts[:limit] == Ridgepole::DefaultsLimit.default_limit(:bigint, @options)
+      if (attrs[:type] == :integer) && (opts[:limit] == Ridgepole::DefaultsLimit.default_limit(:bigint, @options))
         attrs[:type] = :bigint
         opts.delete(:limit)
       end
@@ -391,7 +391,7 @@ class Ridgepole::Diff
       return true
     end
 
-    if table_options[:id] != false and not table_options[:primary_key].is_a?(Array)
+    if (table_options[:id] != false) && !table_options[:primary_key].is_a?(Array)
       actual_columns = actual_columns + [(table_options[:primary_key] || 'id').to_s]
     end
 
@@ -447,13 +447,13 @@ class Ridgepole::Diff
     # default: 0, null: true  -> default: nil, null: false | default: nil, null: false (`default: nil` is ignored)
     # default: 0, null: true ->                null: false | default: nil, null: false (`default: nil` is ignored)
 
-    if from_attrs[:options][:default] != to_attrs[:options][:default] and from_attrs[:options][:null] == to_attrs[:options][:null]
+    if (from_attrs[:options][:default] != to_attrs[:options][:default]) && (from_attrs[:options][:null] == to_attrs[:options][:null])
       to_attrs = to_attrs.deep_dup
       to_attrs[:options].delete(:null)
     end
 
-    if Ridgepole::ConnectionAdapters.mysql? and ActiveRecord::VERSION::STRING =~ /\A5\.0\./
-      if to_attrs[:options][:default].nil? and to_attrs[:options][:null] == false
+    if Ridgepole::ConnectionAdapters.mysql? && ActiveRecord::VERSION::STRING =~ /\A5\.0\./
+      if to_attrs[:options][:default].nil? && (to_attrs[:options][:null] == false)
         Ridgepole::Logger.instance.warn("[WARNING] Table `#{table_name}`: `default: nil` is ignored when `null: false`. Please apply twice")
       end
     end
@@ -475,7 +475,7 @@ class Ridgepole::Diff
   end
 
   def normalize_default_proc_options!(opts1, opts2)
-    if opts1[:default].kind_of?(Proc) and opts2[:default].kind_of?(Proc)
+    if opts1[:default].kind_of?(Proc) && opts2[:default].kind_of?(Proc)
       opts1[:default] = opts1[:default].call
       opts2[:default] = opts2[:default].call
     end

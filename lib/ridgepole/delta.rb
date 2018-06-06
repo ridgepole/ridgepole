@@ -49,7 +49,7 @@ class Ridgepole::Delta
   end
 
   def differ?
-    not script.empty? or not delta_execute.empty?
+    !script.empty? || !delta_execute.empty?
   end
 
   private
@@ -117,7 +117,7 @@ class Ridgepole::Delta
       raise_exception(script, e)
     end
 
-    not script.empty? or execute_count.nonzero?
+    !script.empty? || execute_count.nonzero?
   end
 
   def execute_sqls(options = {})
@@ -209,7 +209,7 @@ class Ridgepole::Delta
     rgx = /\A#{Regexp.escape(SCRIPT_NAME)}:(\d+):/
     line = e.backtrace.find {|i| i =~ rgx }
 
-    if line and (m = rgx.match(line))
+    if line && (m = rgx.match(line))
       m[1].to_i
     else
       0
@@ -235,7 +235,7 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
       RUBY
     end
 
-    if @options[:create_table_with_index] and not indices.empty?
+    if @options[:create_table_with_index] && !indices.empty?
       indices.each do |index_name, index_attrs|
         append_add_index(table_name, index_name, index_attrs, buf, true)
       end
@@ -245,7 +245,7 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
 end
     RUBY
 
-    if not @options[:create_table_with_index] and not indices.empty?
+    if !(@options[:create_table_with_index]) && !indices.empty?
       append_change_table(table_name, buf) do
         indices.each do |index_name, index_attrs|
           append_add_index(table_name, index_name, index_attrs, buf)
@@ -301,7 +301,7 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
     table_options = attrs[:table_options]
     table_comment = attrs[:table_comment]
 
-    if not definition.empty? or not indices.empty? or not primary_key_definition.empty?
+    if !definition.empty? || !indices.empty? || !primary_key_definition.empty?
       append_change_table(table_name, buf) do
         append_delete_indices(table_name, indices, buf)
         append_change_definition(table_name, definition, buf)
@@ -384,7 +384,7 @@ rename_column(#{table_name.inspect}, #{from_column_name.inspect}, #{to_column_na
     options = attrs[:options] || {}
 
     # Fix for https://github.com/rails/rails/commit/7f0567b43b73b1bd1a16bfac9cd32fcbf1321b51
-    if Ridgepole::ConnectionAdapters.mysql? and ActiveRecord::VERSION::STRING !~ /\A5\.0\./
+    if Ridgepole::ConnectionAdapters.mysql? && ActiveRecord::VERSION::STRING !~ /\A5\.0\./
       options[:comment] = nil unless options.key?(:comment)
     end
 
@@ -427,7 +427,7 @@ remove_column(#{table_name.inspect}, #{column_name.inspect})
     column_name = attrs.fetch(:column_name)
     options = attrs[:options] || {}
 
-    if force_bulk_change or @options[:bulk_change]
+    if force_bulk_change || @options[:bulk_change]
       buf.puts(<<-RUBY)
   t.index(#{column_name.inspect}, #{options.inspect})
       RUBY

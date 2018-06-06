@@ -1,7 +1,7 @@
 include ERBh
 
 ERBh.define_method(:i) do |obj|
-  if obj.nil? or (obj.respond_to?(:empty?) and obj.empty?)
+  if obj.nil? || (obj.respond_to?(:empty?) && obj.empty?)
     @_erbout.sub!(/,\s*\z/, '')
     ''
   elsif obj.is_a?(Hash)

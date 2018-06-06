@@ -15,7 +15,7 @@ module SpecCondition
     end
 
     def activerecord_5?
-      ActiveRecord::VERSION::MAJOR >= 5 and ActiveRecord::VERSION::MAJOR < 6
+      (ActiveRecord::VERSION::MAJOR >= 5) && (ActiveRecord::VERSION::MAJOR < 6)
     end
 
     def debug?
