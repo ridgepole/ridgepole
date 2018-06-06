@@ -126,12 +126,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
-      delta.migrate(:noop => true)
+      delta.migrate(noop: true)
       expect(subject.dump).to match_ruby actual_dsl
     }
 
     it {
-      delta = client(:bulk_change => true).diff(expected_dsl)
+      delta = client(bulk_change: true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
       expect(delta.script).to match_fuzzy erbh(<<-ERB)

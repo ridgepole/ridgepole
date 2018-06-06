@@ -135,7 +135,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     it {
-      delta = client(:bulk_change => true).diff(expected_dsl)
+      delta = client(bulk_change: true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
       expect(delta.script).to match_fuzzy erbh(<<-ERB)

@@ -30,7 +30,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
-      migrated, sql = delta.migrate(:noop => true)
+      migrated, sql = delta.migrate(noop: true)
       expect(migrated).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
 
@@ -63,13 +63,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     before { subject.diff(actual_dsl).migrate }
-    subject { client(:default_integer_limit => 3) }
+    subject { client(default_integer_limit: 3) }
 
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl.sub(/"emp_no"/, '"emp_no", limit: 3')
-      migrated, sql = delta.migrate(:noop => true)
+      migrated, sql = delta.migrate(noop: true)
       expect(migrated).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl.sub(/"emp_no"/, '"emp_no", limit: 3')
 
@@ -102,13 +102,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     before { subject.diff(actual_dsl).migrate }
-    subject { client(:default_integer_limit => 3) }
+    subject { client(default_integer_limit: 3) }
 
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl.sub(/"emp_no"/, '"emp_no", limit: 3')
-      migrated, sql = delta.migrate(:noop => true)
+      migrated, sql = delta.migrate(noop: true)
       expect(migrated).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl.sub(/"emp_no"/, '"emp_no", limit: 3')
 
@@ -141,13 +141,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
 
     before { subject.diff(actual_dsl).migrate }
-    subject { client(:default_bigint_limit => 9) }
+    subject { client(default_bigint_limit: 9) }
 
     it {
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
-      migrated, sql = delta.migrate(:noop => true)
+      migrated, sql = delta.migrate(noop: true)
       expect(migrated).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
 

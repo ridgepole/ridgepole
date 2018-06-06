@@ -71,7 +71,7 @@ class Ridgepole::Delta
 
         eval_script_block = proc do
           Ridgepole::ExecuteExpander.without_operation(callback) do
-            migrated = eval_script(script, options.merge(:out => buf))
+            migrated = eval_script(script, options.merge(out: buf))
           end
         end
 
@@ -441,7 +441,7 @@ add_index(#{table_name.inspect}, #{column_name.inspect}, #{options.inspect})
   def append_remove_index(table_name, _index_name, attrs, buf)
     column_name = attrs.fetch(:column_name)
     options = attrs[:options] || {}
-    target = options[:name] ? {:name => options[:name]} : column_name
+    target = options[:name] ? {name: options[:name]} : column_name
 
     if @options[:bulk_change]
       buf.puts(<<-RUBY)
@@ -478,7 +478,7 @@ add_foreign_key(#{table_name.inspect}, #{to_table.inspect}, #{attrs_options.insp
     fk_name = attrs_options[:name]
 
     if fk_name
-      target = {:name => fk_name}
+      target = {name: fk_name}
     else
       target = attrs.fetch(:to_table)
     end

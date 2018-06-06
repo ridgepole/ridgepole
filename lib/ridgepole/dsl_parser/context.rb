@@ -76,8 +76,8 @@ class Ridgepole::DSLParser
       end
 
       @__definition[table_name][:indices][idx] = {
-        :column_name => column_name,
-        :options => options,
+        column_name: column_name,
+        options: options,
       }
     end
 
@@ -94,8 +94,8 @@ class Ridgepole::DSLParser
       end
 
       @__definition[from_table][:foreign_keys][idx] = {
-        :to_table => to_table,
-        :options => options,
+        to_table: to_table,
+        options: options,
       }
     end
 
@@ -113,8 +113,8 @@ class Ridgepole::DSLParser
 
     def execute(sql, _name = nil, &cond)
       @__execute << {
-        :sql => sql,
-        :condition => cond,
+        sql: sql,
+        condition: cond,
       }
     end
   end

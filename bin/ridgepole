@@ -18,13 +18,13 @@ MAGIC_COMMENT = <<-RUBY
 RUBY
 
 COLUMN_TYPES = {
-  :boolean => :bool,
-  :integer => :int,
-  :bigint  => :bigint,
-  :float   => :float,
-  :string  => :string,
-  :text    => :text,
-  :binary  => :binary,
+  boolean: :bool,
+  integer: :int,
+  bigint: :bigint,
+  float: :float,
+  string: :string,
+  text: :text,
+  binary: :binary,
 }
 
 config = nil
@@ -38,9 +38,9 @@ diff_with_apply = false
 exit_code = 0
 
 options = {
-  :dry_run => false,
-  :debug   => false,
-  :color   => $stdout.tty?,
+  dry_run: false,
+  debug: false,
+  color: $stdout.tty?,
 }
 
 set_mode = proc do |m|
@@ -54,8 +54,8 @@ def noop_migrate(delta, options)
   end
 
   migrated, out = delta.migrate(
-    :noop => true,
-    :alter_extra => options[:alter_extra]
+    noop: true,
+    alter_extra: options[:alter_extra]
   )
 
   if migrated
@@ -229,7 +229,7 @@ begin
     logger.info(msg)
 
     dsl = File.read(file)
-    delta = client.diff(dsl, :path => file)
+    delta = client.diff(dsl, path: file)
     differ = delta.differ?
 
     if options[:dry_run]
@@ -240,8 +240,8 @@ begin
       logger.verbose_info('# Update schema')
 
       differ, _out = delta.migrate(
-        :external_script => options[:external_script],
-        :alter_extra => options[:alter_extra]
+        external_script: options[:external_script],
+        alter_extra: options[:alter_extra]
       )
     end
 

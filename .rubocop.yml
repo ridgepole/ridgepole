@@ -88,8 +88,6 @@ Style/FormatString:
   Enabled: false
 Style/GuardClause:
   Enabled: false
-Style/HashSyntax:
-  Enabled: false
 Style/IfInsideElse:
   Enabled: false
 Style/IfUnlessModifier:

@@ -47,11 +47,11 @@ class Ridgepole::ExecuteExpander
     end
   end
 
-  cattr_accessor :noop,         :instance_writer => false, :instance_reader => false
-  cattr_accessor :callback,     :instance_writer => false, :instance_reader => false
-  cattr_accessor :use_script,   :instance_writer => false, :instance_reader => false
-  cattr_accessor :sql_executer, :instance_writer => false, :instance_reader => false
-  cattr_accessor :alter_extra,  :instance_writer => false, :instance_reader => false
+  cattr_accessor :noop,         instance_writer: false, instance_reader: false
+  cattr_accessor :callback,     instance_writer: false, instance_reader: false
+  cattr_accessor :use_script,   instance_writer: false, instance_reader: false
+  cattr_accessor :sql_executer, instance_writer: false, instance_reader: false
+  cattr_accessor :alter_extra,  instance_writer: false, instance_reader: false
 
   class << self
     def without_operation(callback = nil)
