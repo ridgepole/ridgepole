@@ -3,7 +3,8 @@ AllCops:
     - 'gemfiles/**/*'
   TargetRubyVersion: 2.2
 Bundler/OrderedGems:
-  Enabled: false
+  Include:
+    - '**/Appraisals'
 Gemspec/OrderedDependencies:
   Enabled: false
 Layout/ClosingParenthesisIndentation:
