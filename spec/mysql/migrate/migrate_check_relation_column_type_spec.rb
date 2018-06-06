@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
   context 'with warning' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "dept_manager", force: :cascade do |t|
           t.string  "dept_no", limit: 4, null: false
@@ -17,9 +17,9 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
           t.date    "hire_date", null: false
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "dept_manager", force: :cascade do |t|
           t.integer "employee_id"
@@ -37,7 +37,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
           t.date    "hire_date", null: false
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client(check_relation_type: 'bigint') }
@@ -58,7 +58,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
   end
 
   context 'with unsigned warning' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "dept_manager", force: :cascade do |t|
           t.string  "dept_no", limit: 4, null: false
@@ -75,9 +75,9 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
           t.date    "hire_date", null: false
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "dept_manager", force: :cascade do |t|
           t.bigint "employee_id"
@@ -95,7 +95,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
           t.date    "hire_date", null: false
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client(check_relation_type: 'bigint') }
@@ -116,7 +116,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
   end
 
   context 'without warning' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "dept_manager", force: :cascade do |t|
           t.string  "dept_no", limit: 4, null: false
@@ -133,9 +133,9 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
           t.date    "hire_date", null: false
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "dept_manager", force: :cascade do |t|
           t.bigint "employee_id"
@@ -153,7 +153,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
           t.date    "hire_date", null: false
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client(check_relation_type: 'bigint') }
@@ -169,7 +169,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
   end
 
   context 'with unsigned warning' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "dept_manager", force: :cascade do |t|
           t.string  "dept_no", limit: 4, null: false
@@ -186,9 +186,9 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
           t.date    "hire_date", null: false
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "dept_manager", force: :cascade do |t|
           t.bigint "employee_id", unsigned: true
@@ -206,7 +206,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
           t.date    "hire_date", null: false
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client(check_relation_type: 'bigint') }

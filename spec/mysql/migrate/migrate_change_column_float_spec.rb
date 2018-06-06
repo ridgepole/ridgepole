@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change float column' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
@@ -9,9 +9,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
@@ -20,7 +20,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client(default_float_limit: 0) }
@@ -40,7 +40,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when change float column (no change)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       <<-RUBY
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
@@ -49,9 +49,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
       RUBY
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
@@ -60,7 +60,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }

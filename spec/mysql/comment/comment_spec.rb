@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (add comment)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no", null: false
@@ -9,9 +9,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no", null: false, comment: "any comment"
@@ -20,7 +20,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "any comment4"
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -35,7 +35,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when change column (delete comment)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no", null: false, comment: "any comment"
@@ -44,9 +44,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "any comment4"
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no", null: false
@@ -55,7 +55,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -70,7 +70,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when change column (change comment)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no", null: false, comment: "any comment"
@@ -79,9 +79,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "any comment4"
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no", null: false, comment: "other comment"
@@ -90,7 +90,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "other comment4"
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -105,7 +105,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when change column (no change comment)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no", null: false, comment: "any comment"
@@ -114,7 +114,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "any comment4"
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -129,7 +129,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when create table (with comment)' do
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade, comment: "table comment" do |t|
           t.integer "emp_no", null: false, comment: "other comment"
@@ -138,7 +138,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "other comment4"
         end
       ERB
-    }
+    end
 
     subject { client }
 
@@ -152,7 +152,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when drop table (with comment)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade, comment: "table comment" do |t|
           t.integer "emp_no", null: false, comment: "other comment"
@@ -161,7 +161,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "other comment4"
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }

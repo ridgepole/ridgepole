@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop fk' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
@@ -12,15 +12,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
       ERB
-    }
+    end
 
-    let(:sorted_actual_dsl) {
+    let(:sorted_actual_dsl) do
       expected_dsl + (<<-RUBY)
         add_foreign_key "child", "parent", name: "child_ibfk_1"
       RUBY
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
@@ -30,7 +30,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -56,7 +56,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when drop fk when drop table' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
@@ -68,9 +68,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
       ERB
-    }
+    end
 
-    let(:sorted_dsl) {
+    let(:sorted_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
@@ -82,7 +82,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
       ERB
-    }
+    end
 
     before { subject.diff(dsl).migrate }
     subject { client }
@@ -97,7 +97,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when drop fk without name' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
@@ -109,15 +109,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent"
       ERB
-    }
+    end
 
-    let(:sorted_actual_dsl) {
+    let(:sorted_actual_dsl) do
       expected_dsl + (<<-RUBY)
         add_foreign_key "child", "parent"
       RUBY
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
@@ -127,7 +127,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -153,7 +153,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when drop fk when drop table without name' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
@@ -165,9 +165,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent"
       ERB
-    }
+    end
 
-    let(:sorted_dsl) {
+    let(:sorted_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
@@ -179,7 +179,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent"
       ERB
-    }
+    end
 
     before { subject.diff(dsl).migrate }
     subject { client }
@@ -194,7 +194,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when drop fk with parent table' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
@@ -206,16 +206,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -230,7 +230,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when drop fk with parent table without name' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
@@ -242,16 +242,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent"
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
           t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }

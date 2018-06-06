@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when database and definition are same' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         create_table "clubs", <%= i cond('>= 5.1',id: :serial) + {force: :cascade} %> do |t|
           t.string "name", limit: 255, default: "", null: false
@@ -59,7 +59,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["emp_no"], name: "idx_titles_emp_no", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { restore_tables }
     subject { client }

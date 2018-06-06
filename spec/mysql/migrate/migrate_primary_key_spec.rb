@@ -1,10 +1,10 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  let(:actual_dsl) {
+  let(:actual_dsl) do
     erbh(<<-ERB)
       create_table "employees", id: :integer, unsigned: true, force: :cascade do |t|
       end
     ERB
-  }
+  end
 
   before { subject.diff(actual_dsl).migrate }
   subject { client(allow_pk_change: allow_pk_change) }
@@ -13,12 +13,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:allow_pk_change) { false }
 
     context 'with difference' do
-      let(:expected_dsl) {
+      let(:expected_dsl) do
         erbh(<<-ERB)
           create_table "employees", id: :bigint, unsigned: true, force: :cascade do |t|
           end
         ERB
-      }
+      end
 
       it {
         expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG)
@@ -35,12 +35,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     context 'with no difference' do
-      let(:actual_dsl) {
+      let(:actual_dsl) do
         erbh(<<-ERB)
           create_table "employees", unsigned: true, force: :cascade do |t|
           end
         ERB
-      }
+      end
       let(:expected_dsl) { actual_dsl }
 
       it {
@@ -54,7 +54,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when allow_pk_change option is true' do
     let(:allow_pk_change) { true }
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees", id: :bigint, unsigned: true, force: :cascade do |t|
         end
@@ -65,7 +65,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
         add_foreign_key "salaries", "employees", name: "fk_salaries_employees"
       ERB
-    }
+    end
 
     it {
       delta = subject.diff(expected_dsl)

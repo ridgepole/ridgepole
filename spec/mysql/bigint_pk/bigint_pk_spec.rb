@@ -1,5 +1,5 @@
 describe 'Ridgepole::Client (with bigint pk)', condition: 5.0 do
-  let(:id_primary_key_create_table) {
+  let(:id_primary_key_create_table) do
     <<-RUBY
       create_table "books", id: :primary_key, limit: 8, force: :cascade do |t|
         t.string   "title", null: false
@@ -8,9 +8,9 @@ describe 'Ridgepole::Client (with bigint pk)', condition: 5.0 do
         t.datetime "updated_at"
       end
     RUBY
-  }
+  end
 
-  let(:id_bigint_create_table) {
+  let(:id_bigint_create_table) do
     <<-RUBY
       create_table "books", id: :bigint, force: :cascade do |t|
         t.string   "title", null: false
@@ -19,7 +19,7 @@ describe 'Ridgepole::Client (with bigint pk)', condition: 5.0 do
         t.datetime "updated_at"
       end
     RUBY
-  }
+  end
 
   context 'when with limit:8' do
     subject { client }

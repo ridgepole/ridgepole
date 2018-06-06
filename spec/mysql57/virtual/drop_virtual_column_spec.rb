@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
   context 'when drop virtual column' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       <<-RUBY
         create_table "books", force: :cascade do |t|
           t.string   "title"
@@ -10,16 +10,16 @@ describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
           t.index ["title_length"], name: "index_books_on_title_length"
         end
       RUBY
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "books", force: :cascade do |t|
           t.string  "title"
           t.index ["title"], name: "index_books_on_title"
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }

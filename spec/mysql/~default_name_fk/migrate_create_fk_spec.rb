@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create fk' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
@@ -10,13 +10,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       actual_dsl + (<<-RUBY)
         add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client(dump_with_default_fk_name: true) }
@@ -42,7 +42,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when create fk when create table' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         # Define parent before child
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
@@ -55,9 +55,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       ERB
-    }
+    end
 
-    let(:sorted_dsl) {
+    let(:sorted_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
@@ -69,7 +69,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       ERB
-    }
+    end
 
     subject { client(dump_with_default_fk_name: true) }
 
@@ -83,7 +83,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'already defined' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         # Define parent before child
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
@@ -98,19 +98,19 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       ERB
-    }
+    end
 
     subject { client(dump_with_default_fk_name: true) }
 
     it {
-      expect {
+      expect do
         subject.diff(dsl)
-      }.to raise_error('Foreign Key `child(fk_rails_e74ce85cbc)` already defined')
+      end.to raise_error('Foreign Key `child(fk_rails_e74ce85cbc)` already defined')
     }
   end
 
   context 'orphan fk' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         # Define parent before child
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
@@ -118,14 +118,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       ERB
-    }
+    end
 
     subject { client(dump_with_default_fk_name: true) }
 
     it {
-      expect {
+      expect do
         subject.diff(dsl)
-      }.to raise_error('Table `child` to create the foreign key is not defined: fk_rails_e74ce85cbc')
+      end.to raise_error('Table `child` to create the foreign key is not defined: fk_rails_e74ce85cbc')
     }
   end
 end

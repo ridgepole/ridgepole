@@ -82,15 +82,15 @@ ARGV.options do |opt|
     opt.on('',   '--table-options OPTIONS')       {|v| options[:table_options] = v                          }
     opt.on('',   '--alter-extra ALTER_SPEC')      {|v| options[:alter_extra] = v                            }
     opt.on('',   '--external-script SCRIPT')      {|v| options[:external_script] = v                        }
-    opt.on('',   '--bulk-change') {
+    opt.on('',   '--bulk-change') do
       raise OptionParser::InvalidOption, "Cannot use `bulk-change` in `merge`" if options[:merge]
       options[:bulk_change] = true
-    }
+    end
 
     COLUMN_TYPES.each do |column_type, column_type_alias|
-      opt.on('', "--default-#{column_type_alias}-limit LIMIT", Integer) {|v|
+      opt.on('', "--default-#{column_type_alias}-limit LIMIT", Integer) do |v|
         options[:"default_#{column_type}_limit"] = v
-      }
+      end
     end
 
     opt.on('',   '--pre-query QUERY')             {|v| options[:pre_query] = v                              }
@@ -98,7 +98,7 @@ ARGV.options do |opt|
     opt.on('-e', '--export')                      {    set_mode[:export]                                    }
     opt.on('',   '--split')                       {    split = true                                         }
     opt.on('',   '--split-with-dir')              {    split = :with_dir                                    }
-    opt.on('-d', '--diff DSL1 DSL2') {|diff_arg1|
+    opt.on('-d', '--diff DSL1 DSL2') do |diff_arg1|
       set_mode[:diff]
       diff_arg2 = ARGV.first
 
@@ -109,7 +109,7 @@ ARGV.options do |opt|
 
       ARGV.shift
       diff_files = [diff_arg1, diff_arg2]
-    }
+    end
     opt.on('',   '--with-apply')                                 {    diff_with_apply = true                               }
     opt.on('-o', '--output SCHEMAFILE')                          {|v| output_file = v                                      }
     opt.on('-t', '--tables TABLES', Array)                       {|v| options[:tables] = v                                 }
@@ -127,13 +127,13 @@ ARGV.options do |opt|
     opt.on('',   '--allow-pk-change')                            {    options[:allow_pk_change] = true                     }
     opt.on('',   '--create-table-with-index')                    {    options[:create_table_with_index] = true             }
 
-    opt.on('',   '--mysql-dump-auto-increment') {
+    opt.on('',   '--mysql-dump-auto-increment') do
       if Gem::Version.new(ActiveRecord::VERSION::STRING) < Gem::Version.new('5.1')
         raise OptionParser::InvalidOption, '`mysql-dump-auto-increment` is not available in `activerecord < 5.1`'
       end
 
       options[:mysql_dump_auto_increment] = true
-    }
+    end
 
     opt.on('-r', '--require LIBS', Array)                        {|v| v.each {|i| require i }                              }
     opt.on(''  , '--log-file LOG_FILE')                          {|v| options[:log_file] = v                               }
@@ -141,10 +141,10 @@ ARGV.options do |opt|
     opt.on(''  , '--debug')                                      {    options[:debug] = true                               }
     opt.on(''  , '--[no-]color')                                 {|v| options[:color] = v                                  }
 
-    opt.on('-v', '--version') {
+    opt.on('-v', '--version') do
       puts opt.ver
       exit
-    }
+    end
 
     opt.parse!
 

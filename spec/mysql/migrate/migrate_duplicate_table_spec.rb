@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when table already defined' do
-    let(:dsl) {
+    let(:dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date    "birth_date", null: false
@@ -22,14 +22,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "updated_at"
         end
       RUBY
-    }
+    end
 
     subject { client }
 
     it {
-      expect {
+      expect do
         subject.diff(dsl)
-      }.to raise_error('Table `employees` already defined')
+      end.to raise_error('Table `employees` already defined')
     }
   end
 end

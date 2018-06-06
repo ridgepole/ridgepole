@@ -2,7 +2,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create table with default proc' do
     let(:dsl) { '' }
 
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
           t.string   "name"
@@ -10,7 +10,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
         end
       ERB
-    }
+    end
 
     let(:expected_dsl) { dsl }
 
@@ -29,7 +29,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when create table with default proc without change' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
           t.string   "name"
@@ -37,7 +37,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
         end
       ERB
-    }
+    end
 
     before { subject.diff(dsl).migrate }
     subject { client }
@@ -54,7 +54,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when migrate table with default proc change' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v1()" }, force: :cascade do |t|
           t.string   "name"
@@ -62,9 +62,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
           t.string   "name"
@@ -72,7 +72,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client(allow_pk_change: allow_pk_change) }

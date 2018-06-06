@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change index' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
@@ -60,9 +60,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
@@ -122,9 +122,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
@@ -184,7 +184,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -219,9 +219,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
       RUBY
 
       # XXX: Can not add an index of the same name
-      expect {
+      expect do
         delta.migrate
-      }.to raise_error(/Index name 'emp_no' on table 'dept_emp' already exists/)
+      end.to raise_error(/Index name 'emp_no' on table 'dept_emp' already exists/)
     }
   end
 end

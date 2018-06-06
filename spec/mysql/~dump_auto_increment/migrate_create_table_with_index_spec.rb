@@ -2,7 +2,7 @@ describe 'Ridgepole::Client#diff -> migrate (with index)', condition: 5.1 do
   context 'when create table with auto increment column' do
     let(:actual_dsl) { '' }
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", primary_key: ["emp_no", "dept_no"], force: :cascade do |t|
           t.integer "emp_no", null: false
@@ -13,7 +13,7 @@ describe 'Ridgepole::Client#diff -> migrate (with index)', condition: 5.1 do
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client(create_table_with_index: true, mysql_dump_auto_increment: true) }

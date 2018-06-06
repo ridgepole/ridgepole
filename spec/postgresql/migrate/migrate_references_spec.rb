@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when use references (no change)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.<%= cond('>= 5.1','bigint', 'integer') %> "products_id"
@@ -9,15 +9,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index "user_id"
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.references :products, :user, index: true
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -29,7 +29,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when use references with polymorphic (no change)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.<%= cond('>= 5.1','bigint', 'integer') %> "products_id"
@@ -40,15 +40,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["user_type", "user_id"]
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.references :products, :user, index: true, polymorphic: true
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -60,22 +60,22 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when use references with index false (no change)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.<%= cond('>= 5.1','bigint', 'integer') %> "products_id"
           t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.references :products, :user, index: false
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }

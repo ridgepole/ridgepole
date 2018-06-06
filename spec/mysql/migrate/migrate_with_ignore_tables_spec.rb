@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when with ignore tables option (same)' do
-    let(:current_schema) {
+    let(:current_schema) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -19,9 +19,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "salaries", ["salary"], name: "emp_no", using: :btree
       RUBY
-    }
+    end
 
-    let(:dsl) {
+    let(:dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -40,9 +40,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
       RUBY
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -52,7 +52,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
         end
       RUBY
-    }
+    end
 
     before { subject.diff(current_schema).migrate }
     subject { client(ignore_tables: [/^salaries$/] ) }
@@ -67,7 +67,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when with ignore tables option (differ)' do
-    let(:current_schema) {
+    let(:current_schema) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -86,9 +86,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "salaries", ["salary"], name: "emp_no", using: :btree
       RUBY
-    }
+    end
 
-    let(:dsl) {
+    let(:dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -107,9 +107,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
       RUBY
-    }
+    end
 
-    let(:before_dsl) {
+    let(:before_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -119,9 +119,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
         end
       RUBY
-    }
+    end
 
-    let(:after_dsl) {
+    let(:after_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -131,7 +131,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
         end
       RUBY
-    }
+    end
 
     before { subject.diff(current_schema).migrate }
     subject { client(ignore_tables: [/^salaries$/] ) }
@@ -146,7 +146,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when with ignore tables option (target and ignore)' do
-    let(:current_schema) {
+    let(:current_schema) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -165,9 +165,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "salaries", ["salary"], name: "emp_no", using: :btree
       RUBY
-    }
+    end
 
-    let(:dsl) {
+    let(:dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -186,9 +186,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
       RUBY
-    }
+    end
 
-    let(:before_dsl) {
+    let(:before_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -198,9 +198,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
         end
       RUBY
-    }
+    end
 
-    let(:after_dsl) {
+    let(:after_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -210,7 +210,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
         end
       RUBY
-    }
+    end
 
     before { subject.diff(current_schema).migrate }
     subject { client(tables: ["employees"], ignore_tables: [/^.+$/] ) }
@@ -225,7 +225,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when with ignore tables option (target)' do
-    let(:current_schema) {
+    let(:current_schema) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -244,9 +244,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "salaries", ["salary"], name: "emp_no", using: :btree
       RUBY
-    }
+    end
 
-    let(:dsl) {
+    let(:dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -265,9 +265,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
       RUBY
-    }
+    end
 
-    let(:before_dsl) {
+    let(:before_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -277,9 +277,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
         end
       RUBY
-    }
+    end
 
-    let(:after_dsl) {
+    let(:after_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -289,7 +289,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
         end
       RUBY
-    }
+    end
 
     before { subject.diff(current_schema).migrate }
     subject { client(tables: ["employees"]) }

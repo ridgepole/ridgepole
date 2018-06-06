@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column (ext cols)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       <<-RUBY
         create_table "items", force: :cascade do |t|
           t.string   "name"
@@ -10,9 +10,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
         end
       RUBY
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "items", force: :cascade do |t|
           t.string      "name"
@@ -46,7 +46,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.money       "money", scale: 2
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
