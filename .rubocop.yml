@@ -1,6 +1,6 @@
 AllCops:
   Exclude:
-    - 'gemfiles/vendor/**/*'
+    - 'gemfiles/**/*'
   TargetRubyVersion: 2.2
 Bundler/OrderedGems:
   Enabled: false
