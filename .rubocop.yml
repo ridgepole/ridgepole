@@ -5,8 +5,6 @@ AllCops:
 Bundler/OrderedGems:
   Include:
     - '**/Appraisals'
-Gemspec/OrderedDependencies:
-  Enabled: false
 Layout/ClosingParenthesisIndentation:
   Enabled: false
 Layout/DefEndAlignment:
