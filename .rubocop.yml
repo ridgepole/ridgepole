@@ -4,7 +4,7 @@ AllCops:
   TargetRubyVersion: 2.2
 Bundler/OrderedGems:
   Include:
-    - '**/Appraisals'
+    - 'Appraisals'
 Layout/ClosingParenthesisIndentation:
   Enabled: false
 Layout/DefEndAlignment:
@@ -138,4 +138,6 @@ Style/TrailingCommaInArguments:
 Style/TrailingCommaInArrayLiteral:
   Enabled: false
 Style/TrailingCommaInHashLiteral:
+  Enabled: false
+Layout/ClosingHeredocIndentation:
   Enabled: false
