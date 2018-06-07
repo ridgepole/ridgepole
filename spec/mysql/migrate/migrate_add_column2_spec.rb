@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column (int/noop) (1)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
@@ -9,9 +9,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "dept_emp", id: false, force: :cascade do |t|
           t.integer "emp_no", limit: 4, null: false
@@ -21,7 +21,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -39,7 +39,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when add column (int/noop) (2)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
@@ -48,9 +48,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "dept_emp", id: false, force: :cascade do |t|
           t.integer "emp_no", limit: 3, null: false
@@ -60,7 +60,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client(default_integer_limit: 3) }
@@ -78,7 +78,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when add column (int/noop) (3)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
@@ -87,9 +87,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "dept_emp", id: false, force: :cascade do |t|
           t.integer "emp_no", limit: 3, null: false
@@ -99,7 +99,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client(default_integer_limit: 3) }
@@ -117,7 +117,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when add column (bigint/noop)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", id: false, force: :cascade do |t|
           t.bigint "emp_no", null: false
@@ -126,9 +126,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "dept_emp", id: false, force: :cascade do |t|
           t.bigint "emp_no", limit: 9, null: false
@@ -138,7 +138,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client(default_bigint_limit: 9) }

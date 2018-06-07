@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (binary: blob -> varbinary)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
@@ -13,9 +13,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
@@ -28,7 +28,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.binary   "registered_name", limit: 255
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -43,7 +43,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when change column (binary: varbinary -> blob)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
@@ -56,9 +56,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.binary   "registered_name", limit: 255
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
@@ -71,7 +71,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -86,7 +86,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when change column (binary without limit)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
@@ -99,9 +99,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
@@ -114,7 +114,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.binary   "registered_name"
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }

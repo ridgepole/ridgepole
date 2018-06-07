@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when execute' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         create_table "authors", <%= i cond('>= 5.1',id: :integer) + {force: :cascade} %> do |t|
           t.string "name", null: false
@@ -12,9 +12,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["author_id"], name: "idx_author_id", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
-    let(:dsl_with_execute) {
+    let(:dsl_with_execute) do
       erbh(<<-ERB)
         create_table "authors", <%= i cond('>= 5.1',id: :integer) + {force: :cascade} %> do |t|
           t.string "name", null: false
@@ -30,7 +30,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = '<%= TEST_SCHEMA %>' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?
         end
       ERB
-    }
+    end
 
     before { subject.diff(dsl).migrate }
     subject { client }
@@ -70,7 +70,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when not execute' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         create_table "authors", <%= i cond('>= 5.1',id: :integer) + {force: :cascade} %> do |t|
           t.string "name", null: false
@@ -83,9 +83,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
         add_foreign_key "books", "authors", name: "fk_author"
       ERB
-    }
+    end
 
-    let(:dsl_with_execute) {
+    let(:dsl_with_execute) do
       erbh(<<-ERB)
         create_table "authors", <%= i cond('>= 5.1',id: :integer) + {force: :cascade} %> do |t|
           t.string "name", null: false
@@ -103,7 +103,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "books", "authors", name: "fk_author"
       ERB
-    }
+    end
 
     before { subject.diff(dsl_with_execute).migrate }
     subject { client }
@@ -142,7 +142,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when execute (noop)' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         create_table "authors", <%= i cond('>= 5.1',id: :integer) + {force: :cascade} %> do |t|
           t.string "name", null: false
@@ -154,9 +154,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["author_id"], name: "idx_author_id", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
-    let(:dsl_with_execute) {
+    let(:dsl_with_execute) do
       erbh(<<-ERB)
         create_table "authors", <%= i cond('>= 5.1',id: :integer) + {force: :cascade} %> do |t|
           t.string "name", null: false
@@ -172,7 +172,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           c.raw_connection.query("SELECT 1 FROM information_schema.key_column_usage WHERE TABLE_SCHEMA = '<%= TEST_SCHEMA %>' AND CONSTRAINT_NAME = 'fk_author' LIMIT 1").each.length.zero?
         end
       ERB
-    }
+    end
 
     before { subject.diff(dsl).migrate }
     subject { client }
@@ -211,7 +211,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when not execute (noop)' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         create_table "authors", <%= i cond('>= 5.1',id: :integer) + {force: :cascade} %> do |t|
           t.string "name", null: false
@@ -224,9 +224,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
         add_foreign_key "books", "authors", name: "fk_author"
       ERB
-    }
+    end
 
-    let(:dsl_with_execute) {
+    let(:dsl_with_execute) do
       erbh(<<-ERB)
         create_table "authors", <%= i cond('>= 5.1',id: :integer) + {force: :cascade} %> do |t|
           t.string "name", null: false
@@ -244,7 +244,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "books", "authors", name: "fk_author"
       ERB
-    }
+    end
 
     before { subject.diff(dsl_with_execute).migrate }
     subject { client }

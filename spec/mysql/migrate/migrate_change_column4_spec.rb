@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (boolean without limit)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
@@ -13,9 +13,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.boolean  "registered"
         end
       RUBY
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
@@ -28,7 +28,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.boolean  "registered"
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -40,7 +40,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when change column (boolean with limit)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
@@ -53,9 +53,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.boolean  "registered"
         end
       RUBY
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
@@ -68,7 +68,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.boolean  "registered", limit: 1
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }

@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change index (length has string keys) / No update' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -11,9 +11,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: <%= cond('< 5.2.0.beta2', '{ first_name: 10, last_name: 10 }', 10) %>, <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -24,7 +24,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: <%= cond('< 5.2.0.beta2', 10, '{ "first_name" => 10, "last_name" => 10, "foo" => nil }') %>, <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -37,7 +37,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when change index (length has string keys) / Update' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -47,9 +47,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
         end
       RUBY
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -60,14 +60,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: <%= cond('< 5.2.0.beta2', 10, '{ "first_name" => 10, "last_name" => 10 }') %>, <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
-    let(:actual_dsl_plus_index) {
+    let(:actual_dsl_plus_index) do
       actual_dsl.sub(/\bend\b/, erbh(<<-ERB))
           t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: <%= cond('< 5.2.0.beta2', '{ first_name: 10, last_name: 10 }', 10) %>, <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }

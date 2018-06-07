@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change fk' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "parent", force: :cascade do |t|
         end
@@ -12,9 +12,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc", on_delete: :cascade
       ERB
-    }
+    end
 
-    let(:sorted_actual_dsl) {
+    let(:sorted_actual_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
@@ -26,9 +26,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc", on_delete: :cascade
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
@@ -40,7 +40,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
 

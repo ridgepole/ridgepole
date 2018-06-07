@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create fk' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
@@ -10,13 +10,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "parent", force: :cascade do |t|
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       actual_dsl + (<<-RUBY)
         add_foreign_key "child", "parent", name: "child_ibfk_1"
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -42,7 +42,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when create fk when create table' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         # Define parent before child
         create_table "parent", force: :cascade do |t|
@@ -55,9 +55,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
       ERB
-    }
+    end
 
-    let(:sorted_dsl) {
+    let(:sorted_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
@@ -69,7 +69,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
       ERB
-    }
+    end
 
     before { client.diff('').migrate }
     subject { client }
@@ -84,7 +84,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'already defined' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         # Define parent before child
         create_table "parent", force: :cascade do |t|
@@ -99,19 +99,19 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
       ERB
-    }
+    end
 
     subject { client }
 
     it {
-      expect {
+      expect do
         subject.diff(dsl)
-      }.to raise_error('Foreign Key `child(child_ibfk_1)` already defined')
+      end.to raise_error('Foreign Key `child(child_ibfk_1)` already defined')
     }
   end
 
   context 'when create fk without name' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
@@ -121,13 +121,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "parent", force: :cascade do |t|
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       actual_dsl + (<<-RUBY)
         add_foreign_key "child", "parent"
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -153,7 +153,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'orphan fk' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         # Define parent before child
         create_table "parent", force: :cascade do |t|
@@ -161,14 +161,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
       ERB
-    }
+    end
 
     subject { client }
 
     it {
-      expect {
+      expect do
         subject.diff(dsl)
-      }.to raise_error('Table `child` to create the foreign key is not defined: child_ibfk_1')
+      end.to raise_error('Table `child` to create the foreign key is not defined: child_ibfk_1')
     }
   end
 end

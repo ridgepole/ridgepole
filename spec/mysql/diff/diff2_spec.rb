@@ -2,7 +2,7 @@ describe 'Ridgepole::Client.diff' do
   context 'when change column' do
     let(:tmpdir) { Dir.mktmpdir }
 
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       File.open("#{tmpdir}/file1.required", 'w') do |f|
         f.puts <<-RUBY
           create_table "clubs", force: :cascade do |t|
@@ -81,9 +81,9 @@ describe 'Ridgepole::Client.diff' do
       f.flush
       f.rewind
       f
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       File.open("#{tmpdir}/file2.required", 'w') do |f|
         f.puts <<-RUBY
           create_table "clubs", force: :cascade do |t|
@@ -162,7 +162,7 @@ describe 'Ridgepole::Client.diff' do
       f.flush
       f.rewind
       f
-    }
+    end
 
     subject { Ridgepole::Client }
 

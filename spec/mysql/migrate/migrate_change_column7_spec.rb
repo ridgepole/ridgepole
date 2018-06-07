@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'integer/limit:8 = bigint' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", limit: 8, null: false
@@ -9,7 +9,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
       ERB
-    }
+    end
 
     before { subject.diff(dsl).migrate }
     subject { client }

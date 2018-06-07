@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop fk' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "parent", force: :cascade do |t|
         end
@@ -12,15 +12,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       ERB
-    }
+    end
 
-    let(:sorted_actual_dsl) {
+    let(:sorted_actual_dsl) do
       expected_dsl + (<<-RUBY)
         add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       RUBY
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
@@ -30,7 +30,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "parent", force: :cascade do |t|
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client(dump_with_default_fk_name: true) }
@@ -56,7 +56,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when drop fk when drop table' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         create_table "parent", force: :cascade do |t|
         end
@@ -68,9 +68,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       ERB
-    }
+    end
 
-    let(:sorted_dsl) {
+    let(:sorted_dsl) do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
@@ -82,7 +82,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       ERB
-    }
+    end
 
     before { subject.diff(dsl).migrate }
     subject { client(dump_with_default_fk_name: true) }

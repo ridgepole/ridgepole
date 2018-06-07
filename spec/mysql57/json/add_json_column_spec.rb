@@ -1,15 +1,15 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add virtual column' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
           t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
@@ -17,7 +17,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }

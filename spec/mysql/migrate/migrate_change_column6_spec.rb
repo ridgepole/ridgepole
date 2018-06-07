@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column after id (pk: normal)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", force: :cascade do |t|
           t.date     "birth_date", null: false
@@ -13,9 +13,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees", force: :cascade do |t|
           t.string   "ext_column", null: false
@@ -29,7 +29,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.binary   "registered_name", limit: 255
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -60,7 +60,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when add column after id (pk: emp_id)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_id", force: :cascade do |t|
           t.date     "birth_date", null: false
@@ -73,9 +73,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_id", force: :cascade do |t|
           t.string   "ext_column", null: false
@@ -89,7 +89,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.binary   "registered_name", limit: 255
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -120,7 +120,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when add column after id (pk: no pk)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", id: false, force: :cascade do |t|
           t.date     "birth_date", null: false
@@ -133,9 +133,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees", id: false, force: :cascade do |t|
           t.string   "ext_column", null: false
@@ -149,7 +149,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.binary   "registered_name", limit: 255
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -178,7 +178,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when add column after id (pk: with pk delta)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", force: :cascade do |t|
           t.date     "birth_date", null: false
@@ -191,9 +191,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_id", force: :cascade do |t|
           t.string   "ext_column", null: false
@@ -207,7 +207,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.binary   "registered_name", limit: 255
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }

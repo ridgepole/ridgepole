@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column ignore comment' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false, comment: "my comment"
@@ -11,9 +11,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["gender"], name: "gender", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table :employees, primary_key: :emp_no, force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -24,7 +24,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index :gender, name: :gender, <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client(skip_column_comment_change: true) }

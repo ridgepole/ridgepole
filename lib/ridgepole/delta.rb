@@ -187,11 +187,11 @@ class Ridgepole::Delta
     digit_number = (lines.count + 1).to_s.length
     err_num = detect_error_line(org)
 
-    errmsg = lines.with_index.map {|l, i|
+    errmsg = lines.with_index.map do |l, i|
       line_num = i + 1
       prefix = (line_num == err_num) ? '* ' : '  '
       "#{prefix}%*d: #{l}" % [digit_number, line_num]
-    }
+    end
 
     if err_num > 0
       from = err_num - 6

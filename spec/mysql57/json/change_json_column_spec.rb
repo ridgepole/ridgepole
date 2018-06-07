@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change virtual column / not null -> null' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
@@ -8,9 +8,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
@@ -18,7 +18,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -33,7 +33,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when change virtual column / json -> string' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
@@ -41,9 +41,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
@@ -51,7 +51,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -66,7 +66,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when change virtual column / string -> json' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
@@ -74,9 +74,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
@@ -84,7 +84,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }

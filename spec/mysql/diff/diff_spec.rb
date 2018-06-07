@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client.diff' do
   context 'when change column' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       <<-RUBY
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
@@ -67,9 +67,9 @@ describe 'Ridgepole::Client.diff' do
 
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
       RUBY
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
@@ -136,7 +136,7 @@ describe 'Ridgepole::Client.diff' do
 
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
       RUBY
-    }
+    end
 
     subject { Ridgepole::Client }
 

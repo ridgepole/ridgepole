@@ -5,19 +5,19 @@ describe 'Ridgepole::Client#diff -> migrate' do
   let(:warning_regexp) { /table options differ/ }
   let(:dump_without_table_options) { false }
 
-  let(:actual_dsl) {
+  let(:actual_dsl) do
     erbh(<<-ERB)
       create_table "employees", primary_key: "emp_no", force: :cascade, options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8' do |t|
       end
     ERB
-  }
+  end
 
-  let(:expected_dsl) {
+  let(:expected_dsl) do
     erbh(<<-ERB)
       create_table :employees, primary_key: :emp_no, force: :cascade do |t|
       end
     ERB
-  }
+  end
 
   context 'when change options (no change)' do
     let(:table_options) { 'ENGINE=InnoDB DEFAULT CHARSET=utf8' }

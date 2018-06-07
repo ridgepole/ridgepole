@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when there is an error in the script' do
     let(:actual_dsl) { '' }
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
@@ -68,7 +68,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
       RUBY
-    }
+    end
 
     subject { client }
 
@@ -81,9 +81,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
         33: add_index("employee_clubs", ["emp_no", "Xclub_id"], {:name=>"idx_emp_no_club_id", :using=>:btree})
       MSG
 
-      expect {
+      expect do
         delta.migrate
-      }.to raise_error(RuntimeError, errmsg)
+      end.to raise_error(RuntimeError, errmsg)
     }
   end
 end

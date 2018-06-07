@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when rename table' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
@@ -59,9 +59,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["emp_no"], name: "idx_titles_emp_no", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "clubs", force: :cascade do |t|
           t.string "name", limit: 255, default: "", null: false
@@ -120,7 +120,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["emp_no"], name: "idx_titles_emp_no", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -135,7 +135,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when rename table (dry-run)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -145,9 +145,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["first_name"], name: "first_name", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees2", primary_key: "emp_no", force: :cascade, renamed_from: 'employees' do |t|
           t.date   "birth_date", null: false
@@ -157,7 +157,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["first_name"], name: "first_name", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }

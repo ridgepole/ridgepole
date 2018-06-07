@@ -2,43 +2,43 @@ describe Ridgepole::Config do
   subject { Ridgepole::Config.load(config, env) }
 
   context 'when passed toplevel yaml' do
-    let(:config) {
+    let(:config) do
       <<-YAML.strip_heredoc
         adapter: mysql2
         encoding: utf8
         database: blog
         username: root
       YAML
-    }
+    end
     let(:env) { 'development' }
-    specify {
+    specify do
       expect(subject['adapter']).to eq "mysql2"
       expect(subject['encoding']).to eq "utf8"
       expect(subject['database']).to eq "blog"
       expect(subject['username']).to eq "root"
-    }
+    end
   end
 
   context 'when passed dynamic yaml' do
-    let(:config) {
+    let(:config) do
       <<-YAML.strip_heredoc
         adapter: mysql2
         encoding: utf8
         database: blog_<%= 1 + 2 %>
         username: user_<%= 3 * 4 %>
       YAML
-    }
+    end
     let(:env) { 'development' }
-    specify {
+    specify do
       expect(subject['adapter']).to eq "mysql2"
       expect(subject['encoding']).to eq "utf8"
       expect(subject['database']).to eq "blog_3"
       expect(subject['username']).to eq "user_12"
-    }
+    end
   end
 
   context 'when passed rails database.yml style yaml' do
-    let(:config) {
+    let(:config) do
       <<-YAML.strip_heredoc
         development:
           adapter: sqlspecifye
@@ -49,37 +49,37 @@ describe Ridgepole::Config do
           database: blog
           username: root
       YAML
-    }
+    end
 
     context 'in development env' do
       let(:env) { 'development' }
-      specify {
+      specify do
         expect(subject['adapter']).to eq "sqlspecifye"
         expect(subject['database']).to eq "db/sample.db"
         expect(subject['username']).to be_nil
-      }
+      end
     end
 
     context 'in production env' do
       let(:env) { 'production' }
-      specify {
+      specify do
         expect(subject['adapter']).to eq "mysql2"
         expect(subject['encoding']).to eq "utf8"
         expect(subject['database']).to eq "blog"
         expect(subject['username']).to eq "root"
-      }
+      end
     end
   end
 
   context 'when passed yaml file' do
-    let(:config) {
+    let(:config) do
       <<-YAML.strip_heredoc
         adapter: mysql2
         encoding: utf8
         database: blog
         username: root
       YAML
-    }
+    end
     let(:env) { 'development' }
     it {
       Tempfile.create("database.yml") do |f|
@@ -95,17 +95,17 @@ describe Ridgepole::Config do
   end
 
   context 'when passed unexisting yaml' do
-    let(:config) {
+    let(:config) do
       'database.yml'
-    }
+    end
 
     let(:env) { 'development' }
 
-    specify {
-      expect {
+    specify do
+      expect do
         subject
-      }.to raise_error 'Invalid config: "database.yml"'
-    }
+      end.to raise_error 'Invalid config: "database.yml"'
+    end
   end
 
   context 'when passed DATABASE_URL' do
@@ -125,9 +125,9 @@ describe Ridgepole::Config do
     let(:config) { 'env:DATABASE_URL' }
     let(:env) { 'development' }
 
-    before {
+    before do
       allow(ENV).to receive(:fetch).with('DATABASE_URL').and_return('mysql2://root:pass@127.0.0.1:3307/blog')
-    }
+    end
 
     it {
       expect(subject['adapter']).to eq "mysql2"

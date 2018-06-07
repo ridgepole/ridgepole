@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when there is an index of orphans' do
     let(:actual_dsl) { '' }
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
@@ -68,14 +68,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
       RUBY
-    }
+    end
 
     subject { client }
 
     it {
-      expect {
+      expect do
         subject.diff(expected_dsl)
-      }.to raise_error('Table `Xdept_manager` to create the index is not defined: dept_no,emp_no')
+      end.to raise_error('Table `Xdept_manager` to create the index is not defined: dept_no,emp_no')
     }
   end
 end

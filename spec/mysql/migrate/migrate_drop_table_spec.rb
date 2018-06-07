@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop table' do
-    let(:dsl) {
+    let(:dsl) do
       erbh(<<-ERB)
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
@@ -60,11 +60,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     let(:actual_dsl) { dsl }
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "departments", primary_key: "dept_no", force: :cascade do |t|
           t.string "dept_name", limit: 40, null: false
@@ -105,7 +105,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }

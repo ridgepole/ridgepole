@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when use timestamps (no change)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
@@ -12,9 +12,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
         end
       RUBY
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -25,7 +25,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.timestamps
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -37,7 +37,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when use timestamps (change)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -47,9 +47,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
         end
       ERB
-    }
+    end
 
-    let(:dsl) {
+    let(:dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -60,9 +60,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.timestamps
         end
       RUBY
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
@@ -74,7 +74,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.datetime "updated_at", null: false
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -89,7 +89,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when use references (no change)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -103,9 +103,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index "user_id"
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -116,7 +116,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.references :products, :user
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -128,7 +128,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when use references with polymorphic (no change)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -144,9 +144,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["user_type", "user_id"]
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -157,7 +157,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.references :products, :user, polymorphic: true
         end
       RUBY
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -169,7 +169,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when use references (change)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -179,9 +179,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
         end
       ERB
-    }
+    end
 
-    let(:dsl) {
+    let(:dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -192,9 +192,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.references :products, :user
         end
       RUBY
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -208,7 +208,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["user_id"], name: "index_employees_on_user_id", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -223,7 +223,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when use references with polymorphic (change)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -233,9 +233,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
         end
       ERB
-    }
+    end
 
-    let(:dsl) {
+    let(:dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -246,9 +246,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.references :products, :user, polymorphic: true
         end
       RUBY
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
@@ -264,7 +264,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["user_type", "user_id"], name: "index_employees_on_user_type_and_user_id", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }

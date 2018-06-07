@@ -1,6 +1,6 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change index (same name)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "salaries", force: :cascade do |t|
           t.integer "emp_no", null: false
@@ -10,9 +10,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["emp_no", "id"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "salaries", force: :cascade do |t|
           t.integer "emp_no", null: false
@@ -22,7 +22,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["salary", "id"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -37,7 +37,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when change index (same name) (2)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
@@ -47,9 +47,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
@@ -59,7 +59,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["salary"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
@@ -74,7 +74,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when change index (same name) (3)' do
-    let(:actual_dsl) {
+    let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "salaries", primary_key: "emp_no", force: :cascade do |t|
           t.integer "salary", null: false
@@ -83,9 +83,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["salary", "emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "salaries", primary_key: "emp_no", force: :cascade do |t|
           t.integer "salary", null: false
@@ -94,7 +94,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["from_date", "emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
       ERB
-    }
+    end
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }

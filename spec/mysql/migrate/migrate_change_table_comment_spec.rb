@@ -1,5 +1,5 @@
 describe 'Ridgepole::Client#diff -> migrate' do
-  let(:actual_dsl) {
+  let(:actual_dsl) do
     erbh(<<-ERB)
       create_table "employees", force: :cascade, comment: "old comment" do |t|
         t.date   "birth_date", null: false
@@ -9,9 +9,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
         t.date   "hire_date", null: false
       end
     ERB
-  }
+  end
 
-  let(:expected_dsl) {
+  let(:expected_dsl) do
     erbh(<<-ERB)
       create_table "employees", force: :cascade, comment: "new comment" do |t|
         t.date   "birth_date", null: false
@@ -21,7 +21,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         t.date   "hire_date", null: false
       end
     ERB
-  }
+  end
 
   before { subject.diff(actual_dsl).migrate }
 

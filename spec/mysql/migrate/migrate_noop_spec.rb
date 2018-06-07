@@ -1,7 +1,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when no operation' do
     let(:actual_dsl) { '' }
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
@@ -68,7 +68,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
       RUBY
-    }
+    end
 
     subject { client }
 
@@ -130,7 +130,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when no operation' do
     let(:actual_dsl) { '' }
-    let(:expected_dsl) {
+    let(:expected_dsl) do
       <<-RUBY
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
@@ -197,7 +197,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_index "titles", ["emp_no"], name: "emp_no", using: :btree
       RUBY
-    }
+    end
 
     subject { client(default_int_limit: 11) }
 
