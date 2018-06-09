@@ -13,7 +13,7 @@ class Ridgepole::Delta
         migrate0(options)
       end
 
-      File.open(log_file, 'wb') {|f| f.puts JSON.pretty_generate(result) }
+      File.open(log_file, 'wb') { |f| f.puts JSON.pretty_generate(result) }
       result
     else
       migrate0(options)
@@ -45,7 +45,7 @@ class Ridgepole::Delta
       pre_buf_for_fk,
       buf,
       post_buf_for_fk
-    ].map {|b| b.string.strip }.join("\n\n").strip
+    ].map { |b| b.string.strip }.join("\n\n").strip
   end
 
   def differ?
@@ -207,7 +207,7 @@ class Ridgepole::Delta
 
   def detect_error_line(e)
     rgx = /\A#{Regexp.escape(SCRIPT_NAME)}:(\d+):/
-    line = e.backtrace.find {|i| i =~ rgx }
+    line = e.backtrace.find { |i| i =~ rgx }
 
     if line && (m = rgx.match(line))
       m[1].to_i

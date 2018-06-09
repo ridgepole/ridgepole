@@ -46,7 +46,7 @@ module SpecCondition
   def condition(*conds)
     conds.any? do |c|
       if c.is_a? Array
-        c.all? {|i| check_version_or_cond(i) }
+        c.all? { |i| check_version_or_cond(i) }
       else
         check_version_or_cond(c)
       end

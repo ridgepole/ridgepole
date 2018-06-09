@@ -71,7 +71,7 @@ class Ridgepole::DSLParser
       define_method column_type do |*args|
         options = args.extract_options!
         column_names = args
-        column_names.each {|name| column(name, column_type, options) }
+        column_names.each { |name| column(name, column_type, options) }
       end
     end
 
@@ -106,7 +106,7 @@ class Ridgepole::DSLParser
         options = args.extract_options!
         options = default_options.merge(options)
         column_names = args
-        column_names.each {|name| column(name, column_type, options) }
+        column_names.each { |name| column(name, column_type, options) }
       end
     end
 

@@ -29,7 +29,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       verbose_infos = []
-      allow(Ridgepole::Logger.instance).to receive(:verbose_info) {|m| verbose_infos << m }
+      allow(Ridgepole::Logger.instance).to receive(:verbose_info) { |m| verbose_infos << m }
 
       Ridgepole::Logger.verbose = true
       delta = subject.diff(expected_dsl)
