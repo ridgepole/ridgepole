@@ -36,7 +36,7 @@ RSpec.configure do |config|
 
   config.before(:each) do |example|
     if conds = example.metadata[:condition]
-      skip unless Array(conds).any? {|c| condition(*c) }
+      skip unless Array(conds).any? { |c| condition(*c) }
     end
 
     case example.metadata[:file_path]
@@ -153,7 +153,7 @@ module SpecHelper
   def tempfile(basename, content = '')
     begin
       path = `mktemp /tmp/#{basename}.XXXXXX`
-      File.open(path, 'wb') {|f| f << content }
+      File.open(path, 'wb') { |f| f << content }
       FileUtils.chmod(0777, path)
       yield(path)
     ensure

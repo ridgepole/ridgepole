@@ -21,8 +21,6 @@ Layout/SpaceAroundOperators:
   Enabled: false
 Layout/SpaceBeforeComma:
   Enabled: false
-Layout/SpaceInsideBlockBraces:
-  Enabled: false
 Layout/SpaceInsideHashLiteralBraces:
   Enabled: false
 Layout/SpaceInsideParens:
