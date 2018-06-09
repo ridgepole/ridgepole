@@ -133,8 +133,6 @@ Style/StringLiteralsInInterpolation:
   Enabled: false
 Style/TernaryParentheses:
   Enabled: false
-Style/TrailingCommaInArguments:
-  Enabled: false
 Style/TrailingCommaInArrayLiteral:
   Enabled: false
 Style/TrailingCommaInHashLiteral:

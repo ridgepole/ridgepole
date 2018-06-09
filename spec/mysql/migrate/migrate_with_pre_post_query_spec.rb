@@ -136,7 +136,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     subject do
       client(
         pre_query: 'create table pre  (id int)',
-        post_query: 'create table post (id int)',
+        post_query: 'create table post (id int)'
       )
     end
 
