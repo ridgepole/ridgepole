@@ -137,7 +137,5 @@ Style/TrailingCommaInArguments:
   Enabled: false
 Style/TrailingCommaInArrayLiteral:
   Enabled: false
-Style/TrailingCommaInHashLiteral:
-  Enabled: false
 Layout/ClosingHeredocIndentation:
   Enabled: false
