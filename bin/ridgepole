@@ -24,7 +24,7 @@ COLUMN_TYPES = {
   float: :float,
   string: :string,
   text: :text,
-  binary: :binary,
+  binary: :binary
 }
 
 config = nil
@@ -40,7 +40,7 @@ exit_code = 0
 options = {
   dry_run: false,
   debug: false,
-  color: $stdout.tty?,
+  color: $stdout.tty?
 }
 
 set_mode = proc do |m|

@@ -77,7 +77,7 @@ class Ridgepole::DSLParser
 
       @__definition[table_name][:indices][idx] = {
         column_name: column_name,
-        options: options,
+        options: options
       }
     end
 
@@ -95,12 +95,12 @@ class Ridgepole::DSLParser
 
       @__definition[from_table][:foreign_keys][idx] = {
         to_table: to_table,
-        options: options,
+        options: options
       }
     end
 
     def require(file)
-      schemafile = (file =~ %r|\A/|) ? file : File.join(@__working_dir, file)
+      schemafile = file =~ %r|\A/| ? file : File.join(@__working_dir, file)
 
       if File.exist?(schemafile)
         instance_eval(File.read(schemafile), schemafile)
@@ -114,7 +114,7 @@ class Ridgepole::DSLParser
     def execute(sql, _name = nil, &cond)
       @__execute << {
         sql: sql,
-        condition: cond,
+        condition: cond
       }
     end
   end

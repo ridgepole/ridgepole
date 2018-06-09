@@ -13,7 +13,7 @@ class Ridgepole::DSLParser
 
       @__definition[name] = {
         type: type,
-        options: options,
+        options: options
       }
     end
 
@@ -86,7 +86,7 @@ class Ridgepole::DSLParser
       unsigned_integer: [:integer, {unsigned: true}],
       unsigned_bigint: [:bigint, {unsigned: true}],
       unsigned_float: [:float, {limit: 24, unsigned: true}],
-      unsigned_decimal: [:decimal, {precision: 10, unsigned: true}],
+      unsigned_decimal: [:decimal, {precision: 10, unsigned: true}]
     }
 
     # XXX:
