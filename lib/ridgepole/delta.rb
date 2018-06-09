@@ -44,7 +44,7 @@ class Ridgepole::Delta
     [
       pre_buf_for_fk,
       buf,
-      post_buf_for_fk,
+      post_buf_for_fk
     ].map {|b| b.string.strip }.join("\n\n").strip
   end
 

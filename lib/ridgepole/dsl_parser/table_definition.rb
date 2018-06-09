@@ -64,7 +64,7 @@ class Ridgepole::DSLParser
       :virtual,
 
       # https://github.com/rails/rails/blob/v5.0.4/activerecord/lib/active_record/connection_adapters/abstract_mysql_adapter.rb#L53
-      :json,
+      :json
     ].uniq
 
     TYPES.each do |column_type|

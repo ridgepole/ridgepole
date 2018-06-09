@@ -49,7 +49,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         "# Load tables",
         "#   employees",
         "# Load tables",
-        "#   employees",
+        "#   employees"
       ]
 
       expect(verbose_infos).to match_array expected_verbose_infos

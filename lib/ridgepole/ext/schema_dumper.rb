@@ -25,7 +25,7 @@ module Ridgepole
           add_foreign_key_statements = foreign_keys.map do |foreign_key|
             parts = [
               "add_foreign_key #{remove_prefix_and_suffix(foreign_key.from_table).inspect}",
-              remove_prefix_and_suffix(foreign_key.to_table).inspect,
+              remove_prefix_and_suffix(foreign_key.to_table).inspect
             ]
 
             if foreign_key.column != @connection.foreign_key_column_for(foreign_key.to_table)
