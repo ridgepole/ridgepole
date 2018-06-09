@@ -76,7 +76,7 @@ describe 'ridgepole' do
     end
 
     specify 'not split with outfile' do
-      Tempfile.open("#{File.basename __FILE__}.#{$$}") do |f|
+      Tempfile.open("#{File.basename __FILE__}.#{$PROCESS_ID}") do |f|
         out, status = run_cli(args: ['-c', conf, '-e', '-o', f.path])
 
         expect(status.success?).to be_truthy
@@ -112,7 +112,7 @@ describe 'ridgepole' do
     end
 
     specify 'split with outdir' do
-      Tempfile.open("#{File.basename __FILE__}.#{$$}") do |f|
+      Tempfile.open("#{File.basename __FILE__}.#{$PROCESS_ID}") do |f|
         out, status = run_cli(args: ['-c', conf, '-e', '--split', '-o', f.path, conf, conf])
 
         expect(status.success?).to be_truthy
@@ -142,7 +142,7 @@ describe 'ridgepole' do
     end
 
     specify 'apply with conf file' do
-      Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
+      Tempfile.open(["#{File.basename __FILE__}.#{$PROCESS_ID}", '.yml']) do |conf_file|
         conf_file.puts <<-YAML
           adapter: mysql2
           database: ridgepole_test_for_conf_file
@@ -164,7 +164,7 @@ describe 'ridgepole' do
     end
 
     specify 'apply with conf file (production)' do
-      Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
+      Tempfile.open(["#{File.basename __FILE__}.#{$PROCESS_ID}", '.yml']) do |conf_file|
         conf_file.puts <<-YAML
           development:
             adapter: mysql2
@@ -279,7 +279,7 @@ describe 'ridgepole' do
 
     context 'when config file' do
       specify '.yml' do
-        Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
+        Tempfile.open(["#{File.basename __FILE__}.#{$PROCESS_ID}", '.yml']) do |conf_file|
           conf_file.puts <<-YAML
             adapter: mysql2
             database: ridgepole_test_for_conf_file
@@ -299,7 +299,7 @@ describe 'ridgepole' do
       end
 
       specify '.yml (file2)' do
-        Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
+        Tempfile.open(["#{File.basename __FILE__}.#{$PROCESS_ID}", '.yml']) do |conf_file|
           conf_file.puts <<-YAML
             adapter: mysql2
             database: ridgepole_test_for_conf_file
@@ -319,7 +319,7 @@ describe 'ridgepole' do
       end
 
       specify '.yml (development)' do
-        Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
+        Tempfile.open(["#{File.basename __FILE__}.#{$PROCESS_ID}", '.yml']) do |conf_file|
           conf_file.puts <<-YAML
             development:
               adapter: mysql2
@@ -343,7 +343,7 @@ describe 'ridgepole' do
       end
 
       specify '.yml (production)' do
-        Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yml']) do |conf_file|
+        Tempfile.open(["#{File.basename __FILE__}.#{$PROCESS_ID}", '.yml']) do |conf_file|
           conf_file.puts <<-YAML
             development:
               adapter: mysql2
@@ -367,7 +367,7 @@ describe 'ridgepole' do
       end
 
       specify '.yaml' do
-        Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.yaml']) do |conf_file|
+        Tempfile.open(["#{File.basename __FILE__}.#{$PROCESS_ID}", '.yaml']) do |conf_file|
           conf_file.puts <<-YAML
             adapter: mysql2
             database: ridgepole_test_for_conf_file
@@ -387,7 +387,7 @@ describe 'ridgepole' do
       end
 
       specify '.rb' do
-        Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.rb']) do |conf_file|
+        Tempfile.open(["#{File.basename __FILE__}.#{$PROCESS_ID}", '.rb']) do |conf_file|
           conf_file.puts <<-RUBY
             create_table :table do
             end

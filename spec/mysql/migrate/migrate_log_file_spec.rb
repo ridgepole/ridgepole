@@ -110,7 +110,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     before { client.diff(actual_dsl).migrate }
 
     it {
-      tempfile("#{File.basename __FILE__}.#{$$}") do |path|
+      tempfile("#{File.basename __FILE__}.#{$PROCESS_ID}") do |path|
         delta = client(log_file: path).diff(expected_dsl)
         expect(delta.differ?).to be_truthy
         expect(client.dump).to match_ruby actual_dsl
