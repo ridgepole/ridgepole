@@ -8,7 +8,9 @@ class Ridgepole::Delta
   end
 
   def migrate(options = {})
-    if log_file = @options[:log_file]
+    log_file = @options[:log_file]
+
+    if log_file
       result = ActiveRecord::Migration.record_time do
         migrate0(options)
       end
