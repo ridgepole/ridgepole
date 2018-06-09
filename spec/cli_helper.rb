@@ -50,7 +50,7 @@ module CLIHelper
     hook = options[:hook] || default_cli_hook
     path = File.expand_path('../../bin/ridgepole', __FILE__)
 
-    Tempfile.open(["#{File.basename __FILE__}.#{$$}", '.rb']) do |f|
+    Tempfile.open(["#{File.basename __FILE__}.#{$PROCESS_ID}", '.rb']) do |f|
       f.puts(hook)
       f.puts(File.read(path))
       f.flush
