@@ -508,7 +508,7 @@ class Ridgepole::Diff
 
     relation_info[table_name] = {
       options: table_attr[:options] || {},
-      columns: attrs_by_column,
+      columns: attrs_by_column
     }
   end
 
@@ -540,12 +540,12 @@ class Ridgepole::Diff
 
         parent_column_info = {
           type: table_options[:id] || @options[:check_relation_type].to_sym,
-          unsigned: table_options[:unsigned],
+          unsigned: table_options[:unsigned]
         }
 
         child_column_info = {
           type: column_attrs[:type],
-          unsigned: column_attrs.fetch(:options, {})[:unsigned],
+          unsigned: column_attrs.fetch(:options, {})[:unsigned]
         }
 
         [parent_column_info, child_column_info].each do |column_info|
@@ -556,7 +556,7 @@ class Ridgepole::Diff
           # for PostgreSQL
           column_info[:type] = {
             serial: :integer,
-            bigserial: :bigint,
+            bigserial: :bigint
           }.fetch(column_info[:type], column_info[:type])
         end
 

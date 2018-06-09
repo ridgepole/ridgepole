@@ -131,11 +131,7 @@ Style/StringLiterals:
   Enabled: false
 Style/StringLiteralsInInterpolation:
   Enabled: false
-Style/TernaryParentheses:
-  Enabled: false
 Style/TrailingCommaInArrayLiteral:
-  Enabled: false
-Style/TrailingCommaInHashLiteral:
   Enabled: false
 Layout/ClosingHeredocIndentation:
   Enabled: false
