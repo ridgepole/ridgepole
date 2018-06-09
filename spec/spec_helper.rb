@@ -35,7 +35,9 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do |example|
-    if conds = example.metadata[:condition]
+    conds = example.metadata[:condition]
+
+    if conds
       skip unless Array(conds).any? { |c| condition(*c) }
     end
 
