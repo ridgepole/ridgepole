@@ -27,7 +27,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           ('Taro', 'Yamada'), ('Taro', 'Sato')
         ;
       SQL
-      )
+                                           )
     end
     subject { client }
 
