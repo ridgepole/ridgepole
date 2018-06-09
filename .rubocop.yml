@@ -131,7 +131,5 @@ Style/StringLiteralsInInterpolation:
   Enabled: false
 Style/TrailingCommaInArguments:
   Enabled: false
-Style/TrailingCommaInArrayLiteral:
-  Enabled: false
 Layout/ClosingHeredocIndentation:
   Enabled: false

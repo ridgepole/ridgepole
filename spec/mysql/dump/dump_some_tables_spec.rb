@@ -33,7 +33,7 @@ describe 'Ridgepole::Client#dump' do
         /^dept_emp$/,
         /^dept_manager$/,
         /^employee_clubs$/,
-        /^titles$/,
+        /^titles$/
       ])
     end
 
