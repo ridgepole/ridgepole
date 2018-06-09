@@ -302,7 +302,7 @@ class Ridgepole::Diff
 
     to.each do |index_name, to_attrs|
       if index_name.kind_of?(Array)
-        from_index_name, from_attrs = from.find {|_name, attrs| attrs[:column_name] == index_name }
+        from_index_name, from_attrs = from.find { |_name, attrs| attrs[:column_name] == index_name }
 
         if from_attrs
           from.delete(from_index_name)
@@ -350,7 +350,7 @@ class Ridgepole::Diff
   def target?(table_name)
     if @options[:tables] && @options[:tables].include?(table_name)
       true
-    elsif @options[:ignore_tables] && @options[:ignore_tables].any? {|i| i =~ table_name }
+    elsif @options[:ignore_tables] && @options[:ignore_tables].any? { |i| i =~ table_name }
       false
     elsif @options[:tables]
       false
@@ -395,7 +395,7 @@ class Ridgepole::Diff
       actual_columns = actual_columns + [(table_options[:primary_key] || 'id').to_s]
     end
 
-    expected_columns.all? {|i| actual_columns.include?(i) }
+    expected_columns.all? { |i| actual_columns.include?(i) }
   end
 
   def scan_foreign_keys_change(from, to, table_delta, options)

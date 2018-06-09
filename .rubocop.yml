@@ -5,8 +5,6 @@ AllCops:
 Bundler/OrderedGems:
   Include:
     - 'Appraisals'
-Layout/ClosingParenthesisIndentation:
-  Enabled: false
 Layout/DefEndAlignment:
   Enabled: false
 Layout/EmptyLineAfterMagicComment:
@@ -15,15 +13,9 @@ Layout/IndentArray:
   Enabled: false
 Layout/IndentHeredoc:
   Enabled: false
-Layout/IndentationWidth:
-  Enabled: false
 Layout/MultilineOperationIndentation:
   Enabled: false
-Layout/SpaceAroundOperators:
-  Enabled: false
 Layout/SpaceBeforeComma:
-  Enabled: false
-Layout/SpaceInsideBlockBraces:
   Enabled: false
 Layout/SpaceInsideHashLiteralBraces:
   Enabled: false
@@ -124,8 +116,6 @@ Style/SelfAssignment:
 Style/Semicolon:
   Enabled: false
 Style/StringLiterals:
-  Enabled: false
-Style/StringLiteralsInInterpolation:
   Enabled: false
 Style/TrailingCommaInArguments:
   Enabled: false

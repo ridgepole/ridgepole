@@ -5,9 +5,9 @@ module Ridgepole
     module AbstractMysqlAdapter
       module DumpAutoIncrement
         def prepare_column_options(column)
-         spec = super
-         spec[:auto_increment] = "true" if column.auto_increment?
-         spec
+          spec = super
+          spec[:auto_increment] = "true" if column.auto_increment?
+          spec
         end
       end
     end

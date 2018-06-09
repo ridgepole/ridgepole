@@ -37,7 +37,7 @@ class Ridgepole::Config
     def parse_database_url(config)
       uri = URI.parse(config)
 
-      if [uri.scheme, uri.user, uri.host, uri.path].any? {|i| i.nil? || i.empty? }
+      if [uri.scheme, uri.user, uri.host, uri.path].any? { |i| i.nil? || i.empty? }
         raise "Invalid config: #{config.inspect}"
       end
 
