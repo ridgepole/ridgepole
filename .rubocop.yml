@@ -17,8 +17,6 @@ Layout/IndentationWidth:
   Enabled: false
 Layout/MultilineOperationIndentation:
   Enabled: false
-Layout/SpaceAroundOperators:
-  Enabled: false
 Layout/SpaceBeforeComma:
   Enabled: false
 Layout/SpaceInsideHashLiteralBraces:
