@@ -69,7 +69,7 @@ describe 'ridgepole' do
 
       expect(status.success?).to be_truthy
       expect(out).to match_fuzzy <<-MSG
-        Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
+        Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
         # Export Schema
         Ridgepole::Client#dump
       MSG
@@ -81,7 +81,7 @@ describe 'ridgepole' do
 
         expect(status.success?).to be_truthy
         expect(out).to match_fuzzy <<-MSG
-          Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
+          Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
           Export Schema to `#{f.path}`
           Ridgepole::Client#dump
         MSG
@@ -93,7 +93,7 @@ describe 'ridgepole' do
 
       expect(status.success?).to be_truthy
       expect(out).to match_fuzzy <<-MSG
-        Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
+        Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
         # Export Schema
         Ridgepole::Client#dump
       MSG
@@ -104,7 +104,7 @@ describe 'ridgepole' do
 
       expect(status.success?).to be_truthy
       expect(out).to match_fuzzy <<-MSG
-        Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
+        Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
         Export Schema
         Ridgepole::Client#dump
           write `Schemafile`
@@ -117,7 +117,7 @@ describe 'ridgepole' do
 
         expect(status.success?).to be_truthy
         expect(out).to match_fuzzy <<-MSG
-          Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
+          Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
           Export Schema
           Ridgepole::Client#dump
             write `#{f.path}`
@@ -132,7 +132,7 @@ describe 'ridgepole' do
 
       expect(status.success?).to be_truthy
       expect(out).to match_fuzzy <<-MSG
-        Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
+        Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
         Apply `Schemafile`
         Ridgepole::Client#diff
         Ridgepole::Delta#differ?
@@ -194,7 +194,7 @@ describe 'ridgepole' do
 
       expect(status.success?).to be_truthy
       expect(out).to match_fuzzy <<-MSG
-        Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>true, :debug=>false, :color=>false}])
+        Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>true, :debug=>false, :color=>false}])
         Apply `Schemafile` (dry-run)
         Ridgepole::Client#diff
         Ridgepole::Delta#differ?
@@ -210,7 +210,7 @@ describe 'ridgepole' do
 
         expect(status.success?).to be_truthy
         expect(out).to match_fuzzy <<-MSG
-          Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
+          Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
           Apply `Schemafile`
           Ridgepole::Client#diff
           Ridgepole::Delta#differ?
@@ -223,7 +223,7 @@ describe 'ridgepole' do
 
         expect(status.success?).to be_truthy
         expect(out).to match_fuzzy <<-MSG
-          Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>true, :debug=>false, :color=>false}])
+          Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>true, :debug=>false, :color=>false}])
           Apply `Schemafile` (dry-run)
           Ridgepole::Client#diff
           Ridgepole::Delta#differ?
@@ -246,8 +246,8 @@ describe 'ridgepole' do
 
       expect(status.success?).to be_truthy
       expect(out).to match_fuzzy <<-MSG
-        Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
-        Ridgepole::Client.diff([#{conn_spec_str("ridgepole_test")}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
+        Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
+        Ridgepole::Client.diff([#{conn_spec_str('ridgepole_test')}, #{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
         Ridgepole::Delta#differ?
       MSG
     end
@@ -262,8 +262,8 @@ describe 'ridgepole' do
         expect(status.success?).to be_falsey
 
         expect(out).to match_fuzzy <<-MSG
-          Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
-          Ridgepole::Client.diff([#{conn_spec_str("ridgepole_test")}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
+          Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
+          Ridgepole::Client.diff([#{conn_spec_str('ridgepole_test')}, #{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
           Ridgepole::Delta#differ?
           Ridgepole::Delta#script
           Ridgepole::Delta#script
@@ -291,8 +291,8 @@ describe 'ridgepole' do
           expect(status.success?).to be_truthy
 
           expect(out).to match_fuzzy <<-MSG
-            Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
-            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
+            Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
+            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, #{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Delta#differ?
           MSG
         end
@@ -311,8 +311,8 @@ describe 'ridgepole' do
           expect(status.success?).to be_truthy
 
           expect(out).to match_fuzzy <<-MSG
-            Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
-            Ridgepole::Client.diff([#{conn_spec_str("ridgepole_test")}, {"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, {:dry_run=>false, :debug=>false, :color=>false}])
+            Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
+            Ridgepole::Client.diff([#{conn_spec_str('ridgepole_test')}, {"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Delta#differ?
           MSG
         end
@@ -335,8 +335,8 @@ describe 'ridgepole' do
           expect(status.success?).to be_truthy
 
           expect(out).to match_fuzzy <<-MSG
-            Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
-            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_development"}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
+            Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
+            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_development"}, #{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Delta#differ?
           MSG
         end
@@ -359,8 +359,8 @@ describe 'ridgepole' do
           expect(status.success?).to be_truthy
 
           expect(out).to match_fuzzy <<-MSG
-            Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
-            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_production"}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
+            Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
+            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_production"}, #{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Delta#differ?
           MSG
         end
@@ -379,8 +379,8 @@ describe 'ridgepole' do
           expect(status.success?).to be_truthy
 
           expect(out).to match_fuzzy <<-MSG
-            Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
-            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
+            Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
+            Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, #{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Delta#differ?
           MSG
         end
@@ -399,8 +399,8 @@ describe 'ridgepole' do
           expect(status.success?).to be_truthy
 
           expect(out).to match_fuzzy <<-MSG
-            Ridgepole::Client#initialize([#{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
-            Ridgepole::Client.diff([#{conf_file.path}, #{conn_spec_str("ridgepole_test")}, {:dry_run=>false, :debug=>false, :color=>false}])
+            Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
+            Ridgepole::Client.diff([#{conf_file.path}, #{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false}])
             Ridgepole::Delta#differ?
           MSG
         end
