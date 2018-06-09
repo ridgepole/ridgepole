@@ -125,13 +125,9 @@ Style/SelfAssignment:
   Enabled: false
 Style/Semicolon:
   Enabled: false
-Style/SpecialGlobalVars:
-  Enabled: false
 Style/StringLiterals:
   Enabled: false
 Style/StringLiteralsInInterpolation:
-  Enabled: false
-Style/TrailingCommaInArrayLiteral:
   Enabled: false
 Layout/ClosingHeredocIndentation:
   Enabled: false

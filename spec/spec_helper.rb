@@ -1,4 +1,4 @@
-$: << File.expand_path('..', __FILE__)
+$LOAD_PATH << File.expand_path('..', __FILE__)
 
 require 'spec_const'
 require 'spec_condition'

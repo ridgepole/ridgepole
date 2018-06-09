@@ -129,7 +129,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     describe '#diff' do
       specify do
-        Tempfile.open("#{File.basename __FILE__}.#{$$}") do |f|
+        Tempfile.open("#{File.basename __FILE__}.#{$PROCESS_ID}") do |f|
           f.puts(actual_dsl)
           f.flush
 
