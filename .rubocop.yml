@@ -117,7 +117,5 @@ Style/Semicolon:
   Enabled: false
 Style/StringLiterals:
   Enabled: false
-Style/TrailingCommaInArguments:
-  Enabled: false
 Layout/ClosingHeredocIndentation:
   Enabled: false
