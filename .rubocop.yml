@@ -15,8 +15,6 @@ Layout/IndentArray:
   Enabled: false
 Layout/IndentHeredoc:
   Enabled: false
-Layout/IndentationWidth:
-  Enabled: false
 Layout/MultilineOperationIndentation:
   Enabled: false
 Layout/SpaceAroundOperators:
