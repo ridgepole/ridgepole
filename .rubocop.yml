@@ -35,8 +35,6 @@ Lint/HandleExceptions:
   Enabled: false
 Lint/ParenthesesAsGroupedExpression:
   Enabled: false
-Lint/UselessAssignment:
-  Enabled: false
 Metrics/AbcSize:
   Enabled: false
 Metrics/BlockLength:

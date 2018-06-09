@@ -124,7 +124,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
       ERB
 
-      migrated, out = delta.migrate
+      migrated, _out = delta.migrate
       expect(migrated).to be_falsey
       expect(subject.dump).to match_ruby dsl
 
