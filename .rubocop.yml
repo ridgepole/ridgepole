@@ -95,19 +95,11 @@ Style/PercentLiteralDelimiters:
   Enabled: false
 Style/PerlBackrefs:
   Enabled: false
-Style/RedundantBegin:
-  Enabled: false
 Style/RedundantParentheses:
-  Enabled: false
-Style/RedundantReturn:
   Enabled: false
 Style/RedundantSelf:
   Enabled: false
-Style/RescueModifier:
-  Enabled: false
 Style/RescueStandardError:
-  Enabled: false
-Style/SelfAssignment:
   Enabled: false
 Style/Semicolon:
   Enabled: false
