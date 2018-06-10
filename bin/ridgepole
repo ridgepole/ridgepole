@@ -83,7 +83,7 @@ ARGV.options do |opt|
     opt.on('',   '--alter-extra ALTER_SPEC')      { |v| options[:alter_extra] = v }
     opt.on('',   '--external-script SCRIPT')      { |v| options[:external_script] = v }
     opt.on('',   '--bulk-change') do
-      raise OptionParser::InvalidOption, "Cannot use `bulk-change` in `merge`" if options[:merge]
+      raise OptionParser::InvalidOption, 'Cannot use `bulk-change` in `merge`' if options[:merge]
       options[:bulk_change] = true
     end
 

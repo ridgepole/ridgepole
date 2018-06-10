@@ -18,7 +18,7 @@ describe 'Ridgepole::Client#dump' do
     }
 
     it {
-      expect(Ridgepole::Logger.instance).to receive(:warn).with("[WARNING] Could not dump table \"places\" because of following StandardError")
+      expect(Ridgepole::Logger.instance).to receive(:warn).with('[WARNING] Could not dump table "places" because of following StandardError')
       expect(Ridgepole::Logger.instance).to receive(:warn).with("   Unknown type 'geometry' for column 'location'")
       subject.dump
     }
