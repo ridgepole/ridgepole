@@ -9,8 +9,6 @@ Layout/DefEndAlignment:
   Enabled: false
 Layout/EmptyLineAfterMagicComment:
   Enabled: false
-Layout/IndentArray:
-  Enabled: false
 Layout/IndentHeredoc:
   Enabled: false
 Layout/MultilineOperationIndentation:
