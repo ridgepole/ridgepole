@@ -37,7 +37,8 @@ class Ridgepole::ExternalSqlExecuter
             end
           end
         end
-      rescue EOFError
+      rescue EOFError # rubocop:disable Lint/HandleExceptions
+        # nothing to do
       end
 
       unless wait_thr.value.success?
