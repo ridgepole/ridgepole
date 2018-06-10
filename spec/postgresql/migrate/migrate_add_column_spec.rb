@@ -188,7 +188,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(migrated).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
 
-      expect(sql).to match_fuzzy("ALTER TABLE \"dept_emp\" ADD \"emp_no2\" integer NOT NULL")
+      expect(sql).to match_fuzzy('ALTER TABLE "dept_emp" ADD "emp_no2" integer NOT NULL')
     }
   end
 end

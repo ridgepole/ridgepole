@@ -113,7 +113,5 @@ Style/SelfAssignment:
   Enabled: false
 Style/Semicolon:
   Enabled: false
-Style/StringLiterals:
-  Enabled: false
 Layout/ClosingHeredocIndentation:
   Enabled: false

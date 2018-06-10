@@ -210,7 +210,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     it {
-      expect(Ridgepole::Logger.instance).to receive(:warn).with("[WARNING] The table `not_employees` to be renamed does not exist.")
+      expect(Ridgepole::Logger.instance).to receive(:warn).with('[WARNING] The table `not_employees` to be renamed does not exist.')
       subject.diff(dsl)
     }
   end
@@ -232,7 +232,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     it {
-      expect(Ridgepole::Logger.instance).to receive(:warn).with("[WARNING] The table `employees` has already been renamed to the table `employees2`.")
+      expect(Ridgepole::Logger.instance).to receive(:warn).with('[WARNING] The table `employees` has already been renamed to the table `employees2`.')
       subject.diff(dsl)
     }
   end

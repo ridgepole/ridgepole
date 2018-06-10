@@ -34,7 +34,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(migrated).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
 
-      expect(sql).to match_fuzzy erbh("ALTER TABLE `dept_emp` ADD `emp_no2` int NOT NULL AFTER `emp_no`")
+      expect(sql).to match_fuzzy erbh('ALTER TABLE `dept_emp` ADD `emp_no2` int NOT NULL AFTER `emp_no`')
     }
   end
 
@@ -73,7 +73,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(migrated).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl.sub(/"emp_no"/, '"emp_no", limit: 3')
 
-      expect(sql).to match_fuzzy erbh("ALTER TABLE `dept_emp` ADD `emp_no2` mediumint NOT NULL AFTER `emp_no`")
+      expect(sql).to match_fuzzy erbh('ALTER TABLE `dept_emp` ADD `emp_no2` mediumint NOT NULL AFTER `emp_no`')
     }
   end
 
@@ -112,7 +112,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(migrated).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl.sub(/"emp_no"/, '"emp_no", limit: 3')
 
-      expect(sql).to match_fuzzy erbh("ALTER TABLE `dept_emp` ADD `emp_no2` int NOT NULL AFTER `emp_no`")
+      expect(sql).to match_fuzzy erbh('ALTER TABLE `dept_emp` ADD `emp_no2` int NOT NULL AFTER `emp_no`')
     }
   end
 
@@ -151,7 +151,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(migrated).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
 
-      expect(sql).to match_fuzzy erbh("ALTER TABLE `dept_emp` ADD `emp_no2` int NOT NULL AFTER `emp_no`")
+      expect(sql).to match_fuzzy erbh('ALTER TABLE `dept_emp` ADD `emp_no2` int NOT NULL AFTER `emp_no`')
     }
   end
 end

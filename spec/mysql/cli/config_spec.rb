@@ -12,10 +12,10 @@ describe Ridgepole::Config do
     end
     let(:env) { 'development' }
     specify do
-      expect(subject['adapter']).to eq "mysql2"
-      expect(subject['encoding']).to eq "utf8"
-      expect(subject['database']).to eq "blog"
-      expect(subject['username']).to eq "root"
+      expect(subject['adapter']).to eq 'mysql2'
+      expect(subject['encoding']).to eq 'utf8'
+      expect(subject['database']).to eq 'blog'
+      expect(subject['username']).to eq 'root'
     end
   end
 
@@ -30,10 +30,10 @@ describe Ridgepole::Config do
     end
     let(:env) { 'development' }
     specify do
-      expect(subject['adapter']).to eq "mysql2"
-      expect(subject['encoding']).to eq "utf8"
-      expect(subject['database']).to eq "blog_3"
-      expect(subject['username']).to eq "user_12"
+      expect(subject['adapter']).to eq 'mysql2'
+      expect(subject['encoding']).to eq 'utf8'
+      expect(subject['database']).to eq 'blog_3'
+      expect(subject['username']).to eq 'user_12'
     end
   end
 
@@ -54,8 +54,8 @@ describe Ridgepole::Config do
     context 'in development env' do
       let(:env) { 'development' }
       specify do
-        expect(subject['adapter']).to eq "sqlspecifye"
-        expect(subject['database']).to eq "db/sample.db"
+        expect(subject['adapter']).to eq 'sqlspecifye'
+        expect(subject['database']).to eq 'db/sample.db'
         expect(subject['username']).to be_nil
       end
     end
@@ -63,10 +63,10 @@ describe Ridgepole::Config do
     context 'in production env' do
       let(:env) { 'production' }
       specify do
-        expect(subject['adapter']).to eq "mysql2"
-        expect(subject['encoding']).to eq "utf8"
-        expect(subject['database']).to eq "blog"
-        expect(subject['username']).to eq "root"
+        expect(subject['adapter']).to eq 'mysql2'
+        expect(subject['encoding']).to eq 'utf8'
+        expect(subject['database']).to eq 'blog'
+        expect(subject['username']).to eq 'root'
       end
     end
   end
@@ -82,14 +82,14 @@ describe Ridgepole::Config do
     end
     let(:env) { 'development' }
     it {
-      Tempfile.create("database.yml") do |f|
+      Tempfile.create('database.yml') do |f|
         f.puts config
         f.flush
 
-        expect(subject['adapter']).to eq "mysql2"
-        expect(subject['encoding']).to eq "utf8"
-        expect(subject['database']).to eq "blog"
-        expect(subject['username']).to eq "root"
+        expect(subject['adapter']).to eq 'mysql2'
+        expect(subject['encoding']).to eq 'utf8'
+        expect(subject['database']).to eq 'blog'
+        expect(subject['username']).to eq 'root'
       end
     }
   end
@@ -113,10 +113,10 @@ describe Ridgepole::Config do
     let(:env) { 'development' }
 
     it {
-      expect(subject['adapter']).to eq "mysql2"
-      expect(subject['database']).to eq "blog"
-      expect(subject['username']).to eq "root"
-      expect(subject['password']).to eq "pass"
+      expect(subject['adapter']).to eq 'mysql2'
+      expect(subject['database']).to eq 'blog'
+      expect(subject['username']).to eq 'root'
+      expect(subject['password']).to eq 'pass'
       expect(subject['port']).to eq 3307
     }
   end
@@ -130,10 +130,10 @@ describe Ridgepole::Config do
     end
 
     it {
-      expect(subject['adapter']).to eq "mysql2"
-      expect(subject['database']).to eq "blog"
-      expect(subject['username']).to eq "root"
-      expect(subject['password']).to eq "pass"
+      expect(subject['adapter']).to eq 'mysql2'
+      expect(subject['database']).to eq 'blog'
+      expect(subject['username']).to eq 'root'
+      expect(subject['password']).to eq 'pass'
       expect(subject['port']).to eq 3307
     }
   end

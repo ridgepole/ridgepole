@@ -196,7 +196,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(migrated).to be_truthy
       expect(subject.dump).to match_ruby dsl
 
-      expect(sql).to match_fuzzy "ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)"
+      expect(sql).to match_fuzzy 'ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)'
 
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
@@ -269,7 +269,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(migrated).to be_falsey
       expect(subject.dump).to match_ruby dsl
 
-      expect(sql).to match_fuzzy ""
+      expect(sql).to match_fuzzy ''
 
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (

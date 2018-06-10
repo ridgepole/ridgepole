@@ -6,7 +6,7 @@ module Ridgepole
       module DumpAutoIncrement
         def prepare_column_options(column)
           spec = super
-          spec[:auto_increment] = "true" if column.auto_increment?
+          spec[:auto_increment] = 'true' if column.auto_increment?
           spec
         end
       end
