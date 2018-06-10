@@ -34,9 +34,9 @@ module Ridgepole
 
       case text
       when /\A--\s+(.+)\Z/
-        self.time_recorder.add_key($1)
+        self.time_recorder.add_key(Regexp.last_match(1))
       when /\A\s+->\s+(\d+\.\d+)s\Z/
-        self.time_recorder.add_value($1.to_f)
+        self.time_recorder.add_value(Regexp.last_match(1).to_f)
       end
     end
 
