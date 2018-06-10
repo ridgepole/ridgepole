@@ -76,7 +76,10 @@ ARGV.options do |opt|
     opt.on('-c', '--config CONF_OR_FILE')         { |v| config = v }
     opt.on('-E', '--env ENVIRONMENT')             { |v| env = v }
     opt.on('-a', '--apply')                       { set_mode[:apply] }
-    opt.on('-m', '--merge')                       { set_mode[:apply]; options[:merge] = true }
+    opt.on('-m', '--merge') do
+      set_mode[:apply]
+      options[:merge] = true
+    end
     opt.on('-f', '--file SCHEMAFILE')             { |v| file = v }
     opt.on('',   '--dry-run')                     { options[:dry_run] = true }
     opt.on('',   '--table-options OPTIONS')       { |v| options[:table_options] = v }
