@@ -55,34 +55,28 @@ class Ridgepole::ExecuteExpander
 
   class << self
     def without_operation(callback = nil)
-      begin
-        self.noop = true
-        self.callback = callback
-        yield
-      ensure
-        self.noop = false
-        self.callback = nil
-      end
+      self.noop = true
+      self.callback = callback
+      yield
+    ensure
+      self.noop = false
+      self.callback = nil
     end
 
     def with_script(script, logger)
-      begin
-        self.use_script = true
-        self.sql_executer = Ridgepole::ExternalSqlExecuter.new(script, logger)
-        yield
-      ensure
-        self.use_script = false
-        self.sql_executer = nil
-      end
+      self.use_script = true
+      self.sql_executer = Ridgepole::ExternalSqlExecuter.new(script, logger)
+      yield
+    ensure
+      self.use_script = false
+      self.sql_executer = nil
     end
 
     def with_alter_extra(extra)
-      begin
-        self.alter_extra = extra
-        yield
-      ensure
-        self.alter_extra = nil
-      end
+      self.alter_extra = extra
+      yield
+    ensure
+      self.alter_extra = nil
     end
 
     def expand_execute(connection)
