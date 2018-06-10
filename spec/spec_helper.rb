@@ -156,7 +156,7 @@ module SpecHelper
     begin
       path = `mktemp /tmp/#{basename}.XXXXXX`
       File.open(path, 'wb') { |f| f << content }
-      FileUtils.chmod(0777, path)
+      FileUtils.chmod(0o777, path)
       yield(path)
     ensure
       FileUtils.rm_f(path) if path
