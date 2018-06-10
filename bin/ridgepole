@@ -148,7 +148,7 @@ ARGV.options do |opt|
 
     opt.parse!
 
-    if !mode || (%i(apply export).include?(mode) && !config) || (options[:with_apply] && !config)
+    if !mode || (%i[apply export].include?(mode) && !config) || (options[:with_apply] && !config)
       puts opt.help
       exit 1
     end
@@ -253,7 +253,7 @@ begin
       if File.exist?(diff_file)
         file_ext = File.extname(diff_file)
 
-        if %w(.yml .yaml).include?(file_ext)
+        if %w[.yml .yaml].include?(file_ext)
           Ridgepole::Config.load(diff_file, env)
         else
           File.open(diff_file)
