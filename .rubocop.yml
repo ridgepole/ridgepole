@@ -89,8 +89,6 @@ Style/PerlBackrefs:
   Enabled: false
 Style/RedundantParentheses:
   Enabled: false
-Style/RedundantSelf:
-  Enabled: false
 Style/RescueStandardError:
   Enabled: false
 Style/Semicolon:

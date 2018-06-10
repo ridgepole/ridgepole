@@ -58,7 +58,7 @@ class Ridgepole::Client
     end
 
     def dump(conn_spec, options = {}, &block)
-      client = self.new(conn_spec, options)
+      client = new(conn_spec, options)
       client.dump(&block)
     end
 

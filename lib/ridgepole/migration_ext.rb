@@ -13,7 +13,7 @@ module Ridgepole
           begin
             self.time_recorder = TimeRecorder.new
             yield
-            result = self.time_recorder.result
+            result = time_recorder.result
           ensure
             self.time_recorder = nil
           end
@@ -25,18 +25,18 @@ module Ridgepole
 
     def write(text = '')
       logger = Ridgepole::Logger.instance
-      logger.info(text) unless self.disable_logging
+      logger.info(text) unless disable_logging
       parse_text(text)
     end
 
     def parse_text(text)
-      return unless self.time_recorder
+      return unless time_recorder
 
       case text
       when /\A--\s+(.+)\Z/
-        self.time_recorder.add_key($1)
+        time_recorder.add_key($1)
       when /\A\s+->\s+(\d+\.\d+)s\Z/
-        self.time_recorder.add_value($1.to_f)
+        time_recorder.add_value($1.to_f)
       end
     end
 
