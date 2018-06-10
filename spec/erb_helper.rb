@@ -15,6 +15,10 @@ ERBh.define_method(:cond) do |conds, m, e = nil|
   if condition(*Array(conds))
     m
   else
-    e || (m.class.new rescue nil)
+    e || (begin
+            m.class.new
+          rescue
+            nil
+          end)
   end
 end

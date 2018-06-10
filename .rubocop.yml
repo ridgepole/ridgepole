@@ -105,8 +105,6 @@ Style/RedundantReturn:
   Enabled: false
 Style/RedundantSelf:
   Enabled: false
-Style/RescueModifier:
-  Enabled: false
 Style/RescueStandardError:
   Enabled: false
 Style/Semicolon:
