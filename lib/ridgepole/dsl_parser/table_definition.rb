@@ -96,7 +96,7 @@ class Ridgepole::DSLParser
       column_names = args
 
       column_names.each do |name|
-        column_type = (0..0xff).include?(options[:limit]) ? :blob : :binary
+        column_type = (0..0xff).cover?(options[:limit]) ? :blob : :binary
         column(name, column_type, options)
       end
     end

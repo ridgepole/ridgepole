@@ -47,8 +47,6 @@ Naming/AccessorMethodName:
   Enabled: false
 Naming/UncommunicativeMethodParamName:
   Enabled: false
-Performance/RangeInclude:
-  Enabled: false
 Performance/StartWith:
   Enabled: false
 Performance/StringReplacement:
