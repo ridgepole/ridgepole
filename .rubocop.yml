@@ -109,8 +109,6 @@ Style/RescueModifier:
   Enabled: false
 Style/RescueStandardError:
   Enabled: false
-Style/SelfAssignment:
-  Enabled: false
 Style/Semicolon:
   Enabled: false
 Style/StringLiterals:

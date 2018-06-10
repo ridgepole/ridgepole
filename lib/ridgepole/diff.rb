@@ -392,7 +392,7 @@ class Ridgepole::Diff
     end
 
     if (table_options[:id] != false) && !table_options[:primary_key].is_a?(Array)
-      actual_columns = actual_columns + [(table_options[:primary_key] || 'id').to_s]
+      actual_columns += [(table_options[:primary_key] || 'id').to_s]
     end
 
     expected_columns.all? { |i| actual_columns.include?(i) }
