@@ -140,7 +140,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       SHELL
 
       tempfile(File.basename(__FILE__), script) do |path|
-        FileUtils.chmod(0755, path)
+        FileUtils.chmod(0o755, path)
         delta.migrate(external_script: path)
       end
 

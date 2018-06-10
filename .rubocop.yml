@@ -85,8 +85,6 @@ Style/MutableConstant:
   Enabled: false
 Style/Next:
   Enabled: false
-Style/NumericLiteralPrefix:
-  Enabled: false
 Style/NumericLiterals:
   Enabled: false
 Style/PerlBackrefs:
