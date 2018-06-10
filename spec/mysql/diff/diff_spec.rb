@@ -160,7 +160,7 @@ describe 'Ridgepole::Client.diff' do
 
     it {
       expect(Ridgepole::Logger.instance).to receive(:warn).with(/definition is not found/)
-      subject.diff('', '', tables: %w(some_table_name))
+      subject.diff('', '', tables: %w[some_table_name])
     }
   end
 end

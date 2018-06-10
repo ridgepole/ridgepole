@@ -93,8 +93,6 @@ Style/NumericLiteralPrefix:
   Enabled: false
 Style/NumericLiterals:
   Enabled: false
-Style/PercentLiteralDelimiters:
-  Enabled: false
 Style/PerlBackrefs:
   Enabled: false
 Style/RedundantBegin:

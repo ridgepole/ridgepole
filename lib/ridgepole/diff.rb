@@ -1,5 +1,5 @@
 class Ridgepole::Diff
-  PRIMARY_KEY_OPTIONS = %i(id limit default null precision scale collation unsigned).freeze
+  PRIMARY_KEY_OPTIONS = %i[id limit default null precision scale collation unsigned].freeze
 
   def initialize(options = {})
     @options = options
@@ -169,7 +169,7 @@ class Ridgepole::Diff
       type = Ridgepole::DSLParser::TableDefinition::DEFAULT_PRIMARY_KEY_TYPE
     end
 
-    if %i(integer bigint).include?(type) && !options.key?(:default)
+    if %i[integer bigint].include?(type) && !options.key?(:default)
       options[:auto_increment] = true
     end
 
