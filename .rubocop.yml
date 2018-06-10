@@ -85,8 +85,6 @@ Style/MixinUsage:
   Enabled: false
 Style/MutableConstant:
   Enabled: false
-Style/NestedParenthesizedCalls:
-  Enabled: false
 Style/Next:
   Enabled: false
 Style/NumericLiteralPrefix:
