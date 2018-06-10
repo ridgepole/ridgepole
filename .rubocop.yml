@@ -81,8 +81,6 @@ Style/MixinUsage:
   Enabled: false
 Style/MutableConstant:
   Enabled: false
-Style/Next:
-  Enabled: false
 Style/NumericLiterals:
   Enabled: false
 Style/PerlBackrefs:
