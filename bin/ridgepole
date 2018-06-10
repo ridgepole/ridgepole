@@ -68,7 +68,7 @@ def noop_migrate(delta, options)
     end
   end
 
-  return migrated
+  migrated
 end
 
 ARGV.options do |opt|

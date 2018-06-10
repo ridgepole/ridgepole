@@ -157,7 +157,7 @@ class Ridgepole::Delta
       execute_count += 1
     end
 
-    return execute_count
+    execute_count
   end
 
   def with_pre_post_query(options = {})
@@ -181,7 +181,7 @@ class Ridgepole::Delta
       end
     end
 
-    return retval
+    retval
   end
 
   def raise_exception(script, org)
