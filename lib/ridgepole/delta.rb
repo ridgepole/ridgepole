@@ -115,7 +115,7 @@ class Ridgepole::Delta
 
         execute_count = execute_sqls(options)
       end
-    rescue => e
+    rescue StandardError => e
       raise_exception(script, e)
     end
 
@@ -133,7 +133,7 @@ class Ridgepole::Delta
 
       begin
         executable = cond.nil? || cond.call(ActiveRecord::Base.connection)
-      rescue => e
+      rescue StandardError => e
         errmsg = "[WARN] `#{sql}` is not executed: #{e.message}"
 
         if @options[:debug]
