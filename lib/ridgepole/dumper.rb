@@ -39,8 +39,8 @@ class Ridgepole::Dumper
 
     dsl = stream.string.lines.select do |line|
       line !~ /\A#/ &&
-      line !~ /\AActiveRecord::Schema\.define/ &&
-      line !~ /\Aend/
+        line !~ /\AActiveRecord::Schema\.define/ &&
+        line !~ /\Aend/
     end
 
     dsl = dsl.join.strip_heredoc
