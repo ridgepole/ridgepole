@@ -85,7 +85,5 @@ Style/RedundantSelf:
   Enabled: false
 Style/RescueStandardError:
   Enabled: false
-Style/Semicolon:
-  Enabled: false
 Layout/ClosingHeredocIndentation:
   Enabled: false
