@@ -502,7 +502,7 @@ remove_foreign_key(#{table_name.inspect}, #{target.inspect})
   def inspect_options_include_default_proc(options)
     options = options.dup
 
-    if options[:default].kind_of?(Proc)
+    if options[:default].is_a?(Proc)
       proc_default = options.delete(:default)
       proc_default = ":default=>proc{#{proc_default.call.inspect}}"
       options_inspect = options.inspect

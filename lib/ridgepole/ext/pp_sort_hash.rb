@@ -19,7 +19,7 @@ module Ridgepole
       end
 
       def self.extend_if_hash(obj)
-        if obj.kind_of?(Hash)
+        if obj.is_a?(Hash)
           obj = obj.dup
           obj.extend(self)
         end

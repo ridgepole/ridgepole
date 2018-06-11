@@ -298,7 +298,7 @@ class Ridgepole::Diff
     indices_delta = {}
 
     to.each do |index_name, to_attrs|
-      if index_name.kind_of?(Array)
+      if index_name.is_a?(Array)
         from_index_name, from_attrs = from.find { |_name, attrs| attrs[:column_name] == index_name }
 
         if from_attrs
@@ -472,7 +472,7 @@ class Ridgepole::Diff
   end
 
   def normalize_default_proc_options!(opts1, opts2)
-    if opts1[:default].kind_of?(Proc) && opts2[:default].kind_of?(Proc)
+    if opts1[:default].is_a?(Proc) && opts2[:default].is_a?(Proc)
       opts1[:default] = opts1[:default].call
       opts2[:default] = opts2[:default].call
     end
