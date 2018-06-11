@@ -138,7 +138,7 @@ class Ridgepole::Diff
     pk_attrs = build_primary_key_attrs_if_changed(from, to, table_name)
     if pk_attrs
       if @options[:allow_pk_change]
-        table_delta[:primary_key_definition] = {change: {id: pk_attrs}}
+        table_delta[:primary_key_definition] = { change: { id: pk_attrs } }
       else
         @logger.warn(<<-MSG)
 [WARNING] Primary key definition of `#{table_name}` differ but `allow_pk_change` option is false
@@ -172,7 +172,7 @@ class Ridgepole::Diff
       options[:auto_increment] = true
     end
 
-    {type: type, options: options}
+    { type: type, options: options }
   end
 
   def build_attrs_if_changed(to_attrs, from_attrs, table_name, primary_key: false)
