@@ -162,11 +162,11 @@ class Ridgepole::Diff
   def convert_to_primary_key_attrs(column_options)
     options = column_options.dup
 
-    if options[:id]
-      type = options.delete(:id)
-    else
-      type = Ridgepole::DSLParser::TableDefinition::DEFAULT_PRIMARY_KEY_TYPE
-    end
+    type = if options[:id]
+             options.delete(:id)
+           else
+             Ridgepole::DSLParser::TableDefinition::DEFAULT_PRIMARY_KEY_TYPE
+           end
 
     if %i[integer bigint].include?(type) && !options.key?(:default)
       options[:auto_increment] = true
@@ -199,11 +199,11 @@ class Ridgepole::Diff
 
     scan_column_rename(from, to, definition_delta)
 
-    if (table_options[:id] == false) || table_options[:primary_key].is_a?(Array)
-      priv_column_name = nil
-    else
-      priv_column_name = table_options[:primary_key] || 'id'
-    end
+    priv_column_name = if (table_options[:id] == false) || table_options[:primary_key].is_a?(Array)
+                         nil
+                       else
+                         table_options[:primary_key] || 'id'
+                       end
 
     to.each do |column_name, to_attrs|
       if (from_attrs = from.delete(column_name))

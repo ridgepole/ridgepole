@@ -479,11 +479,11 @@ add_foreign_key(#{table_name.inspect}, #{to_table.inspect}, #{attrs_options.insp
     attrs_options = attrs[:options] || {}
     fk_name = attrs_options[:name]
 
-    if fk_name
-      target = { name: fk_name }
-    else
-      target = attrs.fetch(:to_table)
-    end
+    target = if fk_name
+               { name: fk_name }
+             else
+               attrs.fetch(:to_table)
+             end
 
     buf.puts(<<-RUBY)
 remove_foreign_key(#{table_name.inspect}, #{target.inspect})

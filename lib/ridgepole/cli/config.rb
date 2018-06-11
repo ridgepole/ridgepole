@@ -8,13 +8,13 @@ class Ridgepole::Config
         config = ENV.fetch(Regexp.last_match(1))
       end
 
-      if File.exist?(config)
-        parsed_config = parse_config_file(config)
-      elsif (expanded = File.expand_path(config)) && File.exist?(expanded)
-        parsed_config = parse_config_file(expanded)
-      else
-        parsed_config = YAML.safe_load(ERB.new(config).result, [], [], true)
-      end
+      parsed_config = if File.exist?(config)
+                        parse_config_file(config)
+                      elsif (expanded = File.expand_path(config)) && File.exist?(expanded)
+                        parse_config_file(expanded)
+                      else
+                        YAML.safe_load(ERB.new(config).result, [], [], true)
+                      end
 
       unless parsed_config.kind_of?(Hash)
         parsed_config = parse_database_url(config)
