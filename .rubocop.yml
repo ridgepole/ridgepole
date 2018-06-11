@@ -53,8 +53,6 @@ Style/Encoding:
   Enabled: false
 Style/ExpandPathArguments:
   Enabled: false
-Style/FormatString:
-  Enabled: false
 Style/GuardClause:
   Enabled: false
 Style/IfInsideElse:
