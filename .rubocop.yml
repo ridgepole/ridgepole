@@ -17,8 +17,6 @@ Layout/SpaceInsideHashLiteralBraces:
   Enabled: false
 Layout/SpaceInsideParens:
   Enabled: false
-Lint/ParenthesesAsGroupedExpression:
-  Enabled: false
 Metrics/AbcSize:
   Enabled: false
 Metrics/BlockLength:
