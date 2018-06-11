@@ -5,8 +5,6 @@ AllCops:
 Bundler/OrderedGems:
   Include:
     - 'Appraisals'
-Layout/EmptyLineAfterMagicComment:
-  Enabled: false
 Layout/IndentHeredoc:
   Enabled: false
 Layout/MultilineOperationIndentation:
