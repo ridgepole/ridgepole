@@ -9,8 +9,6 @@ Layout/EmptyLineAfterMagicComment:
   Enabled: false
 Layout/IndentHeredoc:
   Enabled: false
-Layout/MultilineOperationIndentation:
-  Enabled: false
 Layout/SpaceBeforeComma:
   Enabled: false
 Layout/SpaceInsideHashLiteralBraces:
