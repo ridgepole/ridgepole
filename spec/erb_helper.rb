@@ -17,7 +17,7 @@ ERBh.define_method(:cond) do |conds, m, e = nil|
   else
     e || (begin
             m.class.new
-          rescue
+          rescue StandardError
             nil
           end)
   end

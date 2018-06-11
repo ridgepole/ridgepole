@@ -73,7 +73,5 @@ Style/NumericLiterals:
   Enabled: false
 Style/RedundantParentheses:
   Enabled: false
-Style/RescueStandardError:
-  Enabled: false
 Layout/ClosingHeredocIndentation:
   Enabled: false

@@ -155,7 +155,7 @@ ARGV.options do |opt|
       puts opt.help
       exit 1
     end
-  rescue => e
+  rescue StandardError => e
     warn("[ERROR] #{e.message}")
 
     unless e.kind_of?(OptionParser::ParseError)
@@ -284,7 +284,7 @@ begin
       exit_code = 1 if differ
     end
   end
-rescue => e
+rescue StandardError => e
   if options[:debug]
     raise e
   else
