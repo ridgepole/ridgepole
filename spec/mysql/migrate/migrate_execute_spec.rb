@@ -52,7 +52,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy (dsl + (<<-RUBY))
+      expect(subject.dump).to match_fuzzy dsl + <<-RUBY
         add_foreign_key "books", "authors", name: "fk_author"
       RUBY
 
