@@ -40,9 +40,7 @@ class Ridgepole::ExternalSqlExecuter
         # nothing to do
       end
 
-      unless wait_thr.value.success?
-        raise "`#{@script}` execution failed"
-      end
+      raise "`#{@script}` execution failed" unless wait_thr.value.success?
     end
   end
 end

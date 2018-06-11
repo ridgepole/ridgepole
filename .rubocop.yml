@@ -59,8 +59,6 @@ Style/GuardClause:
   Enabled: false
 Style/IfInsideElse:
   Enabled: false
-Style/IfUnlessModifier:
-  Enabled: false
 Style/MethodMissingSuper:
   Enabled: false
 Style/MissingRespondToMissing:

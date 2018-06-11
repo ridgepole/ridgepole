@@ -49,9 +49,7 @@ set_mode = proc do |m|
 end
 
 def noop_migrate(delta, options)
-  unless delta.script.empty?
-    puts delta.script + "\n\n"
-  end
+  puts delta.script + "\n\n" unless delta.script.empty?
 
   migrated, out = delta.migrate(
     noop: true,
@@ -223,9 +221,7 @@ begin
       end
     end
   when :apply
-    unless File.exist?(file)
-      raise "No Schemafile found (looking for: #{file})"
-    end
+    raise "No Schemafile found (looking for: #{file})" unless File.exist?(file)
 
     msg = (options[:merge] ? 'Merge' : 'Apply') + " `#{file}`"
     msg << ' (dry-run)' if options[:dry_run]
@@ -236,9 +232,7 @@ begin
     differ = delta.differ?
 
     if options[:dry_run]
-      if differ
-        differ = noop_migrate(delta, options)
-      end
+      differ = noop_migrate(delta, options) if differ
     else
       logger.verbose_info('# Update schema')
 
@@ -248,9 +242,7 @@ begin
       )
     end
 
-    unless differ
-      logger.info('No change')
-    end
+    logger.info('No change') unless differ
   when :diff
     diff_files = diff_files.map do |diff_file|
       if File.exist?(diff_file)
@@ -272,13 +264,9 @@ begin
       logger.verbose_info('# Update schema')
       differ = delta.differ?
 
-      if differ
-        differ, _out = delta.migrate
-      end
+      differ, _out = delta.migrate if differ
 
-      if differ
-        logger.info('No change')
-      end
+      logger.info('No change') if differ
     elsif delta.differ?
       differ = noop_migrate(delta, options)
       exit_code = 1 if differ

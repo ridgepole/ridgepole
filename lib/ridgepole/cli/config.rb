@@ -4,9 +4,7 @@ require 'yaml'
 class Ridgepole::Config
   class << self
     def load(config, env = 'development')
-      if config =~ /\Aenv:(.+)\z/
-        config = ENV.fetch(Regexp.last_match(1))
-      end
+      config = ENV.fetch(Regexp.last_match(1)) if config =~ /\Aenv:(.+)\z/
 
       if File.exist?(config)
         parsed_config = parse_config_file(config)
