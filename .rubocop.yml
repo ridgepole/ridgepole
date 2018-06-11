@@ -49,8 +49,6 @@ Style/ConditionalAssignment:
   Enabled: false
 Style/Documentation:
   Enabled: false
-Style/Encoding:
-  Enabled: false
 Style/ExpandPathArguments:
   Enabled: false
 Style/GuardClause:
