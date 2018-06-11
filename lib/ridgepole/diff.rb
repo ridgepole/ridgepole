@@ -552,7 +552,7 @@ class Ridgepole::Diff
         child_label = "#{child_table}.#{column_name}"
         label_len = [parent_label.length, child_label.length].max
 
-        @logger.warn(<<-MSG % [label_len, parent_label, label_len, child_label])
+        @logger.warn(format(<<-MSG, label_len, parent_label, label_len, child_label))
 [WARNING] Relation column type is different.
   %*s: #{parent_column_info}
   %*s: #{child_column_info}
