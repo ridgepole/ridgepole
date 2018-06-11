@@ -267,9 +267,7 @@ class Ridgepole::Diff
       end
     end
 
-    unless definition_delta.empty?
-      table_delta[:definition] = definition_delta
-    end
+    table_delta[:definition] = definition_delta unless definition_delta.empty?
   end
 
   def scan_column_rename(from, to, definition_delta)
@@ -339,9 +337,7 @@ class Ridgepole::Diff
       end
     end
 
-    unless indices_delta.empty?
-      table_delta[:indices] = indices_delta
-    end
+    table_delta[:indices] = indices_delta unless indices_delta.empty?
   end
 
   def target?(table_name)
@@ -363,9 +359,7 @@ class Ridgepole::Diff
     opts.delete(:limit) if opts[:limit] == default_limit
 
     # XXX: MySQL only?
-    if !opts.key?(:default) && !primary_key
-      opts[:default] = nil
-    end
+    opts[:default] = nil if !opts.key?(:default) && !primary_key
 
     if Ridgepole::ConnectionAdapters.mysql?
       opts[:unsigned] = false unless opts.key?(:unsigned)
@@ -384,9 +378,7 @@ class Ridgepole::Diff
   end
 
   def columns_all_include?(expected_columns, actual_columns, table_options)
-    unless expected_columns.is_a?(Array)
-      return true
-    end
+    return true unless expected_columns.is_a?(Array)
 
     if (table_options[:id] != false) && !table_options[:primary_key].is_a?(Array)
       actual_columns += [(table_options[:primary_key] || 'id').to_s]
@@ -546,9 +538,7 @@ class Ridgepole::Diff
         }
 
         [parent_column_info, child_column_info].each do |column_info|
-          unless column_info[:unsigned]
-            column_info.delete(:unsigned)
-          end
+          column_info.delete(:unsigned) unless column_info[:unsigned]
 
           # for PostgreSQL
           column_info[:type] = {

@@ -136,9 +136,7 @@ class Ridgepole::Delta
       rescue StandardError => e
         errmsg = "[WARN] `#{sql}` is not executed: #{e.message}"
 
-        if @options[:debug]
-          errmsg = ([errmsg] + e.backtrace).join("\n\tfrom ")
-        end
+        errmsg = ([errmsg] + e.backtrace).join("\n\tfrom ") if @options[:debug]
 
         Ridgepole::Logger.instance.warn(errmsg)
 
@@ -316,13 +314,9 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
       append_change_foreign_keys(table_name, foreign_keys, pre_buf_for_fk, post_buf_for_fk, @options)
     end
 
-    if table_options
-      append_change_table_options(table_name, table_options, buf)
-    end
+    append_change_table_options(table_name, table_options, buf) if table_options
 
-    if table_comment
-      append_change_table_comment(table_name, table_comment, buf)
-    end
+    append_change_table_comment(table_name, table_comment, buf) if table_comment
 
     buf.puts
     pre_buf_for_fk.puts

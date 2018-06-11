@@ -52,9 +52,7 @@ module Ridgepole
       end
 
       def add_value(value)
-        if @key
-          @result[@key] = value
-        end
+        @result[@key] = value if @key
 
         @key = nil
       end

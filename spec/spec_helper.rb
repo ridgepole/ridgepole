@@ -64,9 +64,7 @@ module SpecHelper
   end
 
   def system_raise_on_fail(*args)
-    unless system(*args)
-      raise "Failed to run: #{args}"
-    end
+    raise "Failed to run: #{args}" unless system(*args)
   end
 
   def restore_database_mysql
