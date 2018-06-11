@@ -7,8 +7,6 @@ Bundler/OrderedGems:
     - 'Appraisals'
 Layout/EmptyLineAfterMagicComment:
   Enabled: false
-Layout/IndentArray:
-  Enabled: false
 Layout/IndentHeredoc:
   Enabled: false
 Layout/MultilineOperationIndentation:
