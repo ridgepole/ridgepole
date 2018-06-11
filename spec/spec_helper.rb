@@ -105,7 +105,7 @@ module SpecHelper
 
   def client(options = {}, config = {})
     config = conn_spec(config)
-    default_options = {debug: condition(:debug)}
+    default_options = { debug: condition(:debug) }
     default_options[:dump_without_table_options] = true
 
     options = default_options.merge(options)
