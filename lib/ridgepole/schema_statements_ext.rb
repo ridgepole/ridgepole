@@ -4,7 +4,7 @@ module Ridgepole
   module SchemaStatementsExt
     def index_name_exists?(*)
       if Ridgepole::ExecuteExpander.noop
-        caller_methods = caller.map { |i| i =~ /:\d+:in `(.+)'/ ? $1 : '' }
+        caller_methods = caller.map { |i| i =~ /:\d+:in `(.+)'/ ? Regexp.last_match(1) : '' }
         if caller_methods.any? { |i| i =~ /\Aremove_index/ }
           true
         elsif caller_methods.any? { |i| i =~ /\Aadd_index/ }

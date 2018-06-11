@@ -5,11 +5,7 @@ AllCops:
 Bundler/OrderedGems:
   Include:
     - 'Appraisals'
-Layout/DefEndAlignment:
-  Enabled: false
 Layout/EmptyLineAfterMagicComment:
-  Enabled: false
-Layout/IndentArray:
   Enabled: false
 Layout/IndentHeredoc:
   Enabled: false
@@ -81,17 +77,11 @@ Style/MixinUsage:
   Enabled: false
 Style/MutableConstant:
   Enabled: false
-Style/Next:
-  Enabled: false
 Style/NumericLiterals:
-  Enabled: false
-Style/PerlBackrefs:
   Enabled: false
 Style/RedundantParentheses:
   Enabled: false
 Style/RescueStandardError:
-  Enabled: false
-Style/Semicolon:
   Enabled: false
 Layout/ClosingHeredocIndentation:
   Enabled: false

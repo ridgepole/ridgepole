@@ -28,13 +28,13 @@ describe 'Ridgepole::Client#dump' do
     before { restore_tables }
     subject do
       client(ignore_tables: [
-        /^clubs$/,
-        /^departments$/,
-        /^dept_emp$/,
-        /^dept_manager$/,
-        /^employee_clubs$/,
-        /^titles$/
-      ])
+               /^clubs$/,
+               /^departments$/,
+               /^dept_emp$/,
+               /^dept_manager$/,
+               /^employee_clubs$/,
+               /^titles$/
+             ])
     end
 
     it {

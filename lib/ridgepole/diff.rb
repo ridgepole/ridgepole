@@ -58,26 +58,25 @@ class Ridgepole::Diff
     to.dup.each do |table_name, to_attrs|
       next unless target?(table_name)
 
-      if (from_table_name = (to_attrs[:options] || {}).delete(:renamed_from))
-        from_table_name = from_table_name.to_s if from_table_name
+      next unless (from_table_name = (to_attrs[:options] || {}).delete(:renamed_from))
+      from_table_name = from_table_name.to_s if from_table_name
 
-        # Already renamed
-        if from[table_name]
-          @logger.warn("[WARNING] The table `#{from_table_name}` has already been renamed to the table `#{table_name}`.")
-          next
-        end
-
-        unless from[from_table_name]
-          @logger.warn("[WARNING] The table `#{from_table_name}` to be renamed does not exist.")
-          next
-        end
-
-        delta[:rename] ||= {}
-        delta[:rename][table_name] = from_table_name
-
-        from.delete(from_table_name)
-        to.delete(table_name)
+      # Already renamed
+      if from[table_name]
+        @logger.warn("[WARNING] The table `#{from_table_name}` has already been renamed to the table `#{table_name}`.")
+        next
       end
+
+      unless from[from_table_name]
+        @logger.warn("[WARNING] The table `#{from_table_name}` to be renamed does not exist.")
+        next
+      end
+
+      delta[:rename] ||= {}
+      delta[:rename][table_name] = from_table_name
+
+      from.delete(from_table_name)
+      to.delete(table_name)
     end
   end
 
@@ -246,25 +245,24 @@ class Ridgepole::Diff
         definition_delta[:delete] ||= {}
         definition_delta[:delete][column_name] = from_attrs
 
-        if from_indices
-          modified_indices = []
+        next unless from_indices
+        modified_indices = []
 
-          from_indices.each do |name, attrs|
-            if attrs[:column_name].is_a?(Array) && attrs[:column_name].delete(column_name)
-              modified_indices << name
-            end
+        from_indices.each do |name, attrs|
+          if attrs[:column_name].is_a?(Array) && attrs[:column_name].delete(column_name)
+            modified_indices << name
           end
+        end
 
-          # In PostgreSQL, the index is deleted when the column is deleted
-          if @options[:index_removed_drop_column]
-            from_indices.reject! do |name, _attrs|
-              modified_indices.include?(name)
-            end
+        # In PostgreSQL, the index is deleted when the column is deleted
+        if @options[:index_removed_drop_column]
+          from_indices.reject! do |name, _attrs|
+            modified_indices.include?(name)
           end
+        end
 
-          from_indices.reject! do |_name, attrs|
-            attrs[:column_name].is_a?(Array) && attrs[:column_name].empty?
-          end
+        from_indices.reject! do |_name, attrs|
+          attrs[:column_name].is_a?(Array) && attrs[:column_name].empty?
         end
       end
     end
@@ -276,22 +274,21 @@ class Ridgepole::Diff
 
   def scan_column_rename(from, to, definition_delta)
     to.dup.each do |column_name, to_attrs|
-      if (from_column_name = (to_attrs[:options] || {}).delete(:renamed_from))
-        from_column_name = from_column_name.to_s if from_column_name
+      next unless (from_column_name = (to_attrs[:options] || {}).delete(:renamed_from))
+      from_column_name = from_column_name.to_s if from_column_name
 
-        # Already renamed
-        next if from[column_name]
+      # Already renamed
+      next if from[column_name]
 
-        unless from.key?(from_column_name)
-          raise "Column `#{from_column_name}` not found"
-        end
-
-        definition_delta[:rename] ||= {}
-        definition_delta[:rename][column_name] = from_column_name
-
-        from.delete(from_column_name)
-        to.delete(column_name)
+      unless from.key?(from_column_name)
+        raise "Column `#{from_column_name}` not found"
       end
+
+      definition_delta[:rename] ||= {}
+      definition_delta[:rename][column_name] = from_column_name
+
+      from.delete(from_column_name)
+      to.delete(column_name)
     end
   end
 
@@ -560,17 +557,16 @@ class Ridgepole::Diff
           }.fetch(column_info[:type], column_info[:type])
         end
 
-        if parent_column_info != child_column_info
-          parent_label = "#{parent_table}.id"
-          child_label = "#{child_table}.#{column_name}"
-          label_len = [parent_label.length, child_label.length].max
+        next unless parent_column_info != child_column_info
+        parent_label = "#{parent_table}.id"
+        child_label = "#{child_table}.#{column_name}"
+        label_len = [parent_label.length, child_label.length].max
 
-          @logger.warn(<<-MSG % [label_len, parent_label, label_len, child_label])
+        @logger.warn(<<-MSG % [label_len, parent_label, label_len, child_label])
 [WARNING] Relation column type is different.
   %*s: #{parent_column_info}
   %*s: #{child_column_info}
-          MSG
-        end
+        MSG
       end
     end
   end

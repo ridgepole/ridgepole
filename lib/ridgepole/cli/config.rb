@@ -5,7 +5,7 @@ class Ridgepole::Config
   class << self
     def load(config, env = 'development')
       if config =~ /\Aenv:(.+)\z/
-        config = ENV.fetch($1)
+        config = ENV.fetch(Regexp.last_match(1))
       end
 
       if File.exist?(config)
@@ -49,6 +49,6 @@ class Ridgepole::Config
         'port'     => uri.port,
         'database' => uri.path.sub(%r{\A/}, '')
       }
-     end
-   end # of class methods
+    end
+  end # of class methods
 end
