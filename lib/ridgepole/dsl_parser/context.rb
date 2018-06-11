@@ -10,7 +10,7 @@ class Ridgepole::DSLParser
     end
 
     def self.eval(dsl, opts = {})
-      ctx = self.new(opts)
+      ctx = new(opts)
 
       if opts[:path]
         ctx.instance_eval(dsl, opts[:path])
