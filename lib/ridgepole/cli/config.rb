@@ -14,7 +14,7 @@ class Ridgepole::Config
         parsed_config = YAML.safe_load(ERB.new(config).result, [], [], true)
       end
 
-      unless parsed_config.kind_of?(Hash)
+      unless parsed_config.is_a?(Hash)
         parsed_config = parse_database_url(config)
       end
 

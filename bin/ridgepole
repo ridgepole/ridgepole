@@ -156,7 +156,7 @@ ARGV.options do |opt|
   rescue StandardError => e
     warn("[ERROR] #{e.message}")
 
-    unless e.kind_of?(OptionParser::ParseError)
+    unless e.is_a?(OptionParser::ParseError)
       puts "\t" + e.backtrace.join("\n\t")
     end
 
