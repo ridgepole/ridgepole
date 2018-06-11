@@ -78,11 +78,11 @@ class Ridgepole::DSLParser
     ALIAS_TYPES = {
       # https://github.com/rails/rails/blob/v5.0.0.rc1/activerecord/lib/active_record/connection_adapters/mysql/schema_definitions.rb
       tinyblob: [:blob, { limit: 255 }],
-      mediumblob: [:binary, { limit: 16777215 }],
-      longblob: [:binary, { limit: 4294967295 }],
+      mediumblob: [:binary, { limit: 16_777_215 }],
+      longblob: [:binary, { limit: 4_294_967_295 }],
       tinytext: [:text, { limit: 255 }],
-      mediumtext: [:text, { limit: 16777215 }],
-      longtext: [:text, { limit: 4294967295 }],
+      mediumtext: [:text, { limit: 16_777_215 }],
+      longtext: [:text, { limit: 4_294_967_295 }],
       unsigned_integer: [:integer, { unsigned: true }],
       unsigned_bigint: [:bigint, { unsigned: true }],
       unsigned_float: [:float, { limit: 24, unsigned: true }],
@@ -92,7 +92,7 @@ class Ridgepole::DSLParser
     # XXX:
     def blob(*args)
       options = args.extract_options!
-      options = { limit: 65535 }.merge(options)
+      options = { limit: 65_535 }.merge(options)
       column_names = args
 
       column_names.each do |name|

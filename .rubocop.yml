@@ -69,8 +69,6 @@ Style/MixinUsage:
   Enabled: false
 Style/MutableConstant:
   Enabled: false
-Style/NumericLiterals:
-  Enabled: false
 Style/RedundantParentheses:
   Enabled: false
 Layout/ClosingHeredocIndentation:
