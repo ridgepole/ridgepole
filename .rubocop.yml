@@ -43,8 +43,6 @@ Style/ClassAndModuleChildren:
   Enabled: false
 Style/CommentedKeyword:
   Enabled: false
-Style/ConditionalAssignment:
-  Enabled: false
 Style/Documentation:
   Enabled: false
 Style/ExpandPathArguments:
