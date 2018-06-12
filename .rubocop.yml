@@ -41,8 +41,6 @@ Style/CaseEquality:
   Enabled: false
 Style/ClassAndModuleChildren:
   Enabled: false
-Style/CommentedKeyword:
-  Enabled: false
 Style/Documentation:
   Enabled: false
 Style/ExpandPathArguments:

@@ -48,5 +48,5 @@ class Ridgepole::Config
         'database' => uri.path.sub(%r{\A/}, '')
       }
     end
-  end # of class methods
+  end
 end

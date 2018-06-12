@@ -24,5 +24,5 @@ class Ridgepole::DefaultsLimit
     rescue ActiveRecord::ConnectionNotEstablished
       nil
     end
-  end # of class methods
+  end
 end

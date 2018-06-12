@@ -86,5 +86,5 @@ class Ridgepole::ExecuteExpander
         prepend ConnectionAdapterExt
       end
     end
-  end # of class methods
+  end
 end
