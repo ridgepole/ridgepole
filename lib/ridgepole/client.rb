@@ -80,5 +80,5 @@ class Ridgepole::Client
       parser = Ridgepole::DSLParser.new(options)
       parser.parse(dsl_or_config, parse_opts)
     end
-  end # of class methods
+  end
 end
