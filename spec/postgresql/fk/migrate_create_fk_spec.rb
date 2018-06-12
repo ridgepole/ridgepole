@@ -13,7 +13,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     let(:expected_dsl) do
-      actual_dsl + (<<-RUBY)
+      actual_dsl + <<-RUBY
         add_foreign_key "child", "parent", name: "child_ibfk_1"
       RUBY
     end
@@ -124,7 +124,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     let(:expected_dsl) do
-      actual_dsl + (<<-RUBY)
+      actual_dsl + <<-RUBY
         add_foreign_key "child", "parent"
       RUBY
     end
