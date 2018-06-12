@@ -27,8 +27,6 @@ Metrics/ParameterLists:
   Enabled: false
 Metrics/PerceivedComplexity:
   Enabled: false
-Naming/UncommunicativeMethodParamName:
-  Enabled: false
 Performance/StringReplacement:
   Enabled: false
 Style/ClassAndModuleChildren:
