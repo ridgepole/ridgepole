@@ -50,7 +50,7 @@ class Ridgepole::DSLParser
       table_name = table_name.to_s
       # Keep column_name for expression index support
       # https://github.com/rails/rails/pull/23393
-      unless column_name.is_a?(String) && /\W/ === column_name
+      unless column_name.is_a?(String) && /\W/ === column_name # rubocop:disable Style/CaseEquality
         column_name = [column_name].flatten.map(&:to_s)
       end
       options[:name] = options[:name].to_s if options[:name]

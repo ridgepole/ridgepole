@@ -31,8 +31,6 @@ Naming/UncommunicativeMethodParamName:
   Enabled: false
 Performance/StringReplacement:
   Enabled: false
-Style/CaseEquality:
-  Enabled: false
 Style/ClassAndModuleChildren:
   Enabled: false
 Style/CommentedKeyword:
