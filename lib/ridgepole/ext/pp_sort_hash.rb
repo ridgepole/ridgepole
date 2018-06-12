@@ -1,17 +1,17 @@
 module Ridgepole
   module Ext
     module PpSortHash
-      def pretty_print(q)
-        q.group(1, '{', '}') do
-          q.seplist(sort_by { |k, _| k.to_s }, nil, :each) do |k, v|
+      def pretty_print(pp_obj)
+        pp_obj.group(1, '{', '}') do
+          pp_obj.seplist(sort_by { |k, _| k.to_s }, nil, :each) do |k, v|
             v = PpSortHash.extend_if_hash(v)
 
-            q.group do
-              q.pp k
-              q.text '=>'
-              q.group(1) do
-                q.breakable ''
-                q.pp v
+            pp_obj.group do
+              pp_obj.pp k
+              pp_obj.text '=>'
+              pp_obj.group(1) do
+                pp_obj.breakable ''
+                pp_obj.pp v
               end
             end
           end

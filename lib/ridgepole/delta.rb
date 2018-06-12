@@ -205,9 +205,9 @@ class Ridgepole::Delta
     raise e
   end
 
-  def detect_error_line(e)
+  def detect_error_line(exception)
     rgx = /\A#{Regexp.escape(SCRIPT_NAME)}:(\d+):/
-    line = e.backtrace.find { |i| i =~ rgx }
+    line = exception.backtrace.find { |i| i =~ rgx }
 
     if line && (m = rgx.match(line))
       m[1].to_i
