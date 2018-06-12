@@ -55,7 +55,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     before { subject.diff(current_schema).migrate }
-    subject { client(ignore_tables: [/^salaries$/] ) }
+    subject { client(ignore_tables: [/^salaries$/]) }
 
     it {
       delta = subject.diff(dsl)
@@ -134,7 +134,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     before { subject.diff(current_schema).migrate }
-    subject { client(ignore_tables: [/^salaries$/] ) }
+    subject { client(ignore_tables: [/^salaries$/]) }
 
     it {
       delta = subject.diff(dsl)
@@ -213,7 +213,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     before { subject.diff(current_schema).migrate }
-    subject { client(tables: ['employees'], ignore_tables: [/^.+$/] ) }
+    subject { client(tables: ['employees'], ignore_tables: [/^.+$/]) }
 
     it {
       delta = subject.diff(dsl)
