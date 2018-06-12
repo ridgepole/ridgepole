@@ -33,8 +33,6 @@ Naming/AccessorMethodName:
   Enabled: false
 Naming/UncommunicativeMethodParamName:
   Enabled: false
-Performance/StartWith:
-  Enabled: false
 Performance/StringReplacement:
   Enabled: false
 Style/CaseEquality:

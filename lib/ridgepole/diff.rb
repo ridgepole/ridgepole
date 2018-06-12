@@ -441,7 +441,7 @@ class Ridgepole::Diff
       to_attrs[:options].delete(:null)
     end
 
-    if Ridgepole::ConnectionAdapters.mysql? && ActiveRecord::VERSION::STRING =~ /\A5\.0\./
+    if Ridgepole::ConnectionAdapters.mysql? && ActiveRecord::VERSION::STRING.start_with?('5.0.')
       if to_attrs[:options][:default].nil? && (to_attrs[:options][:null] == false)
         Ridgepole::Logger.instance.warn("[WARNING] Table `#{table_name}`: `default: nil` is ignored when `null: false`. Please apply twice")
       end

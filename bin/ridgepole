@@ -103,7 +103,7 @@ ARGV.options do |opt|
       set_mode[:diff]
       diff_arg2 = ARGV.first
 
-      if [diff_arg1, diff_arg2].any? { |i| i.nil? || i =~ /\A-/ }
+      if [diff_arg1, diff_arg2].any? { |i| i.nil? || i.start_with?('-') }
         puts opt.help
         exit 1
       end

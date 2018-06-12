@@ -31,7 +31,7 @@ class Ridgepole::Dumper
     end
 
     stream.string.lines.each_cons(2) do |first_line, second_line|
-      if first_line =~ /\A# Could not dump/
+      if first_line.start_with?('# Could not dump')
         @logger.warn("[WARNING] #{first_line.sub(/\A# /, '').chomp}")
         @logger.warn(second_line.sub(/\A#/, '').chomp)
       end
@@ -72,7 +72,7 @@ class Ridgepole::Dumper
     end
 
     dsl.lines.each do |line|
-      if line =~ /\Acreate_table/
+      if line.start_with?('create_table')
         pass.call
         name = line.split(/[\s,'"]+/)[1]
         definition << line
