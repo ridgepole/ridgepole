@@ -5,9 +5,9 @@ module Ridgepole
     def index_name_exists?(*)
       if Ridgepole::ExecuteExpander.noop
         caller_methods = caller.map { |i| i =~ /:\d+:in `(.+)'/ ? Regexp.last_match(1) : '' }
-        if caller_methods.any? { |i| i =~ /\Aremove_index/ }
+        if caller_methods.any? { |i| i.start_with?('remove_index') }
           true
-        elsif caller_methods.any? { |i| i =~ /\Aadd_index/ }
+        elsif caller_methods.any? { |i| i.start_with?('add_index') }
           false
         else
           super
