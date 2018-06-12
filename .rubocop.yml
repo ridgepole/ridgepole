@@ -29,8 +29,6 @@ Metrics/ParameterLists:
   Enabled: false
 Metrics/PerceivedComplexity:
   Enabled: false
-Naming/AccessorMethodName:
-  Enabled: false
 Naming/UncommunicativeMethodParamName:
   Enabled: false
 Performance/StartWith:

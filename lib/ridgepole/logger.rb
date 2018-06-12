@@ -16,7 +16,7 @@ class Ridgepole::Logger < ::Logger
     info(msg) if verbose
   end
 
-  def set_debug(value)
+  def debug=(value)
     self.level = value ? Logger::DEBUG : Logger::INFO
   end
 end

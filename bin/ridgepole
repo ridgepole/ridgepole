@@ -166,7 +166,7 @@ end
 
 begin
   logger = Ridgepole::Logger.instance
-  logger.set_debug(options[:debug])
+  logger.debug = options[:debug]
 
   client = Ridgepole::Client.new(Ridgepole::Config.load(config, env), options) if config
 
