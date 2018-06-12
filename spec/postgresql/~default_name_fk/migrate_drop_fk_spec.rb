@@ -15,7 +15,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     let(:sorted_actual_dsl) do
-      expected_dsl + (<<-RUBY)
+      expected_dsl + <<-RUBY
         add_foreign_key "child", "parent", name: "fk_rails_e74ce85cbc"
       RUBY
     end

@@ -49,7 +49,5 @@ Style/MixinUsage:
   Enabled: false
 Style/MutableConstant:
   Enabled: false
-Style/RedundantParentheses:
-  Enabled: false
 Layout/ClosingHeredocIndentation:
   Enabled: false
