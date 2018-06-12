@@ -55,7 +55,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     before { subject.diff(current_schema).migrate }
-    subject { client(tables: ['employees'] ) }
+    subject { client(tables: ['employees']) }
 
     it {
       delta = subject.diff(dsl)
