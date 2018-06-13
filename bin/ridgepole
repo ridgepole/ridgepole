@@ -10,9 +10,9 @@ $stdout.sync = true
 $stderr.sync = true
 
 Version = Ridgepole::VERSION
-DEFAULT_FILENAME = 'Schemafile'
+DEFAULT_FILENAME = 'Schemafile'.freeze
 
-MAGIC_COMMENT = <<-RUBY
+MAGIC_COMMENT = <<-RUBY.freeze
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 RUBY
@@ -25,7 +25,7 @@ COLUMN_TYPES = {
   string: :string,
   text: :text,
   binary: :binary
-}
+}.freeze
 
 config = nil
 env = 'development'

@@ -1,5 +1,5 @@
 class Ridgepole::Delta
-  SCRIPT_NAME = '<Schema>'
+  SCRIPT_NAME = '<Schema>'.freeze
 
   def initialize(delta, options = {})
     @delta = delta

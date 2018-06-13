@@ -9,7 +9,7 @@ class Ridgepole::DefaultsLimit
       text: 65_535,
       binary: 65_535
     }
-  }
+  }.freeze
 
   class << self
     def default_limit(column_type, options)
