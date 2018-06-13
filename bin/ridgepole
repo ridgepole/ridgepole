@@ -208,16 +208,14 @@ begin
           f.puts "require '#{require_path}'"
         end
       end
+    elsif output_file == '-'
+      logger.info('# Export Schema')
+      puts client.dump
     else
-      if output_file == '-' # rubocop:disable Style/IfInsideElse
-        logger.info('# Export Schema')
-        puts client.dump
-      else
-        logger.info("Export Schema to `#{output_file}`")
-        File.open(output_file, 'wb') do |f|
-          f.puts MAGIC_COMMENT
-          f.puts client.dump
-        end
+      logger.info("Export Schema to `#{output_file}`")
+      File.open(output_file, 'wb') do |f|
+        f.puts MAGIC_COMMENT
+        f.puts client.dump
       end
     end
   when :apply
