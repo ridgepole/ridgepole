@@ -39,8 +39,6 @@ Style/IfInsideElse:
   Enabled: false
 Style/MethodMissingSuper:
   Enabled: false
-Style/MissingRespondToMissing:
-  Enabled: false
 Style/MixinUsage:
   Enabled: false
 Style/MutableConstant:
