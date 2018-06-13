@@ -43,7 +43,5 @@ Style/MissingRespondToMissing:
   Enabled: false
 Style/MixinUsage:
   Enabled: false
-Style/MutableConstant:
-  Enabled: false
 Layout/ClosingHeredocIndentation:
   Enabled: false

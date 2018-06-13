@@ -87,7 +87,7 @@ class Ridgepole::DSLParser
       unsigned_bigint: [:bigint, { unsigned: true }],
       unsigned_float: [:float, { limit: 24, unsigned: true }],
       unsigned_decimal: [:decimal, { precision: 10, unsigned: true }]
-    }
+    }.freeze
 
     # XXX:
     def blob(*args)
