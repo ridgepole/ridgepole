@@ -1,4 +1,4 @@
-$LOAD_PATH << File.expand_path('..', __FILE__)
+$LOAD_PATH << File.expand_path(__dir__)
 
 require 'spec_const'
 require 'spec_condition'
@@ -68,12 +68,12 @@ module SpecHelper
   end
 
   def restore_database_mysql
-    sql_file = File.expand_path('../mysql/ridgepole_test_database.sql', __FILE__)
+    sql_file = File.expand_path('mysql/ridgepole_test_database.sql', __dir__)
     system_raise_on_fail("#{MYSQL_CLI} < #{sql_file}")
   end
 
   def restore_database_postgresql
-    sql_file = File.expand_path('../postgresql/ridgepole_test_database.sql', __FILE__)
+    sql_file = File.expand_path('postgresql/ridgepole_test_database.sql', __dir__)
     system("#{PG_CREATEDB} ridgepole_test 2>/dev/null")
     system_raise_on_fail("#{PG_PSQL} ridgepole_test --set ON_ERROR_STOP=off -q -f #{sql_file} 2>/dev/null")
   end
@@ -87,17 +87,17 @@ module SpecHelper
   end
 
   def restore_tables_mysql
-    sql_file = File.expand_path('../mysql/ridgepole_test_tables.sql', __FILE__)
+    sql_file = File.expand_path('mysql/ridgepole_test_tables.sql', __dir__)
     system_raise_on_fail("#{MYSQL_CLI} < #{sql_file}")
   end
 
   def restore_tables_postgresql
-    sql_file = File.expand_path('../postgresql/ridgepole_test_tables.sql', __FILE__)
+    sql_file = File.expand_path('postgresql/ridgepole_test_tables.sql', __dir__)
     system_raise_on_fail("#{PG_PSQL} ridgepole_test -q -f #{sql_file} 2>/dev/null")
   end
 
   def restore_tables_mysql_unknown_column_type
-    sql_file = File.expand_path('../mysql/ridgepole_test_tables_unknown_column_type.sql', __FILE__)
+    sql_file = File.expand_path('mysql/ridgepole_test_tables_unknown_column_type.sql', __dir__)
     system_raise_on_fail("#{MYSQL_CLI} < #{sql_file}")
   end
 
@@ -160,7 +160,7 @@ module SpecHelper
   end
 
   def run_ridgepole(*args)
-    Dir.chdir(File.expand_path('../..', __FILE__)) do
+    Dir.chdir(File.expand_path('..', __dir__)) do
       cmd = [:bundle, :exec, './bin/ridgepole'] + args
       Open3.capture2e(cmd.join(' '))
     end
