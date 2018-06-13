@@ -1,7 +1,11 @@
 class Ridgepole::ExecuteExpander
   class Stub
-    def method_missing(method_name, *args, &block)
+    def method_missing(_method_name, *_args, &_block)
       # Nothing to do
+    end
+
+    def respond_to_missing?(_symbol, _include_private)
+      true
     end
   end
 
