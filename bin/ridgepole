@@ -209,7 +209,7 @@ begin
         end
       end
     else
-      if output_file == '-'
+      if output_file == '-' # rubocop:disable Style/IfInsideElse
         logger.info('# Export Schema')
         puts client.dump
       else
