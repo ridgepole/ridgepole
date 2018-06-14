@@ -108,7 +108,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_ruby actual_dsl
 
       # XXX:
-      expect(sql.gsub('`', '')).to match_fuzzy erbh(<<-ERB).gsub('`', '')
+      expect(sql.delete('`')).to match_fuzzy erbh(<<-ERB).delete('`')
         CREATE TABLE `clubs` (`id` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `name` varchar(255) DEFAULT '' NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
         ALTER TABLE `clubs` ADD UNIQUE INDEX `idx_name` USING btree (`name`)
         CREATE TABLE `departments` (`dept_no` <%= cond('>= 5.1','bigint NOT NULL', 'int') %> AUTO_INCREMENT PRIMARY KEY, `dept_name` varchar(40) NOT NULL) <%= cond('< 5.2.0.beta2', 'ENGINE=InnoDB') %>
