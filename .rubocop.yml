@@ -32,6 +32,7 @@ Style/GuardClause:
 Style/MethodMissingSuper:
   Enabled: false
 Style/MixinUsage:
-  Enabled: false
+  Exclude:
+    - 'spec/**/*'
 Layout/ClosingHeredocIndentation:
   Enabled: false
