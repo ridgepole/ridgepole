@@ -139,7 +139,13 @@ module Ridgepole
       pk_attrs = build_primary_key_attrs_if_changed(from, to, table_name)
       if pk_attrs
         if @options[:allow_pk_change]
-          delta_type = pk_attrs[:options][:id] == false ? :delete : :change
+          if from[:id] == false
+            delta_type = :add
+            pk_attrs[:options][:primary_key] = true
+          else
+            delta_type = pk_attrs[:options][:id] == false ? :delete : :change
+          end
+
           table_delta[:primary_key_definition] = { delta_type => { id: pk_attrs } }
         else
           @logger.warn(<<-MSG)
@@ -170,7 +176,7 @@ module Ridgepole
                Ridgepole::DSLParser::TableDefinition::DEFAULT_PRIMARY_KEY_TYPE
              end
 
-      if %i[integer bigint].include?(type) && !options.key?(:default)
+      if %i[integer bigint].include?(type) && !options.key?(:default) && !Ridgepole::ConnectionAdapters.postgresql?
         options[:auto_increment] = true
       end
 
