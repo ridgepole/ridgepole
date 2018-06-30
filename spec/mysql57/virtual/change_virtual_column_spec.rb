@@ -1,4 +1,4 @@
-describe 'Ridgepole::Client#diff -> migrate', condition: 5.1 do
+describe 'Ridgepole::Client#diff -> migrate', condition: '>= 5.1.0' do
   context 'when change virtual column' do
     let(:actual_dsl) do
       <<-RUBY

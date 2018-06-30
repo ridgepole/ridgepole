@@ -139,7 +139,8 @@ module Ridgepole
       pk_attrs = build_primary_key_attrs_if_changed(from, to, table_name)
       if pk_attrs
         if @options[:allow_pk_change]
-          table_delta[:primary_key_definition] = { change: { id: pk_attrs } }
+          delta_type = pk_attrs[:options][:id] == false ? :delete : :change
+          table_delta[:primary_key_definition] = { delta_type => { id: pk_attrs } }
         else
           @logger.warn(<<-MSG)
 [WARNING] Primary key definition of `#{table_name}` differ but `allow_pk_change` option is false
