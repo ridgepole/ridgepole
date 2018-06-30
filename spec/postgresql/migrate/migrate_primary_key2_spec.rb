@@ -8,6 +8,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 5.1.0' do
   end
 
   before do
+    subject.diff('').migrate
     subject.diff(actual_dsl).migrate
   end
   subject { client(allow_pk_change: allow_pk_change) }
@@ -54,7 +55,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 5.1.0' do
     let(:allow_pk_change) { true }
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "employees", force: :cascade do |t|
+        create_table "employees", id: :serial, force: :cascade do |t|
           t.string "name"
         end
       ERB
