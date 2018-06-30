@@ -86,7 +86,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 * `>= 0.7.3`
   * Add `--mysql-change-table-comment option` ([pull#166](https://github.com/winebarrel/ridgepole/pull/166))
   * Refactoring with RuboCop
-  * Support primary key dropping ([issue#246](https://github.com/winebarrel/ridgepole/issues/246))
+  * Support primary key adding/dropping ([issue#246](https://github.com/winebarrel/ridgepole/issues/246))
 
 ## Installation
 
