@@ -86,6 +86,8 @@ module Ridgepole
         from_table = from_table.to_s
         to_table = to_table.to_s
         options[:name] = options[:name].to_s if options[:name]
+        options[:primary_key] = options[:primary_key].to_s if options[:primary_key]
+        options[:column] = options[:column].to_s if options[:column]
         @__definition[from_table] ||= {}
         @__definition[from_table][:foreign_keys] ||= {}
         idx = options[:name] || [from_table, to_table]
