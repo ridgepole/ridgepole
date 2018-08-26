@@ -108,6 +108,22 @@ Or install it yourself as:
 
 see https://github.com/winebarrel/ridgepole/releases.
 
+### Install from rpm
+
+```sh
+sudo dpkg -i ridgepole_x.x.x+xxx-x_amd64.deb
+sudo apt install build-essential libmysqlclient-dev
+sudo /opt/ridgepole/embedded/bin/gem install mysql2
+```
+
+### Install from rpm
+
+```sh
+sudo yum install ridgepole-x.x.x+xxx-x.el7.x86_64.rpm
+sudo yum install make gcc mariadb-devel
+sudo /opt/ridgepole/embedded/bin/gem install mysql2
+```
+
 ## Help
 ```
 Usage: ridgepole [options]
