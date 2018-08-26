@@ -1,0 +1,1 @@
+ln -sf /opt/ridgepole/embedded/bin/ridgepole /usr/bin
