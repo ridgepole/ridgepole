@@ -1,6 +1,7 @@
 AllCops:
   Exclude:
     - 'gemfiles/**/*'
+    - 'omnibus-ridgepole/**/*'
   TargetRubyVersion: 2.2
 Bundler/OrderedGems:
   Include:
