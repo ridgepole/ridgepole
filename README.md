@@ -104,6 +104,10 @@ Or install it yourself as:
 
     $ gem install ridgepole
 
+## Omnibus Package (deb/rpm)
+
+see https://github.com/winebarrel/ridgepole/releases.
+
 ## Help
 ```
 Usage: ridgepole [options]
