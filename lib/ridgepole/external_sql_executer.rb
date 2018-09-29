@@ -19,12 +19,14 @@ module Ridgepole
             ready = IO.select(files)
 
             next unless ready
+
             readable = ready[0]
 
             readable.each do |f|
               begin
                 data = f.read_nonblock(1024)
                 next if data.nil?
+
                 data.chomp!
 
                 if f == stderr

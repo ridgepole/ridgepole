@@ -45,6 +45,7 @@ options = {
 
 set_mode = proc do |m|
   raise OptionParser::InvalidOption, 'More than one mode is specified' if mode
+
   mode = m
 end
 
@@ -85,6 +86,7 @@ ARGV.options do |opt|
     opt.on('',   '--external-script SCRIPT') { |v| options[:external_script] = v }
     opt.on('',   '--bulk-change') do
       raise OptionParser::InvalidOption, 'Cannot use `bulk-change` in `merge`' if options[:merge]
+
       options[:bulk_change] = true
     end
 
