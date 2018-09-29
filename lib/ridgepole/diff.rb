@@ -60,6 +60,7 @@ module Ridgepole
         next unless target?(table_name)
 
         next unless (from_table_name = (to_attrs[:options] || {}).delete(:renamed_from))
+
         from_table_name = from_table_name.to_s if from_table_name
 
         # Already renamed
@@ -197,6 +198,7 @@ module Ridgepole
       from_column_attrs = convert_to_primary_key_attrs(from.slice(*PRIMARY_KEY_OPTIONS))
       to_column_attrs = convert_to_primary_key_attrs(to.slice(*PRIMARY_KEY_OPTIONS))
       return if from_column_attrs == to_column_attrs
+
       build_attrs_if_changed(to_column_attrs, from_column_attrs, table_name, primary_key: true)
     end
 
@@ -254,6 +256,7 @@ module Ridgepole
           definition_delta[:delete][column_name] = from_attrs
 
           next unless from_indices
+
           modified_indices = []
 
           from_indices.each do |name, attrs|
@@ -281,6 +284,7 @@ module Ridgepole
     def scan_column_rename(from, to, definition_delta)
       to.dup.each do |column_name, to_attrs|
         next unless (from_column_name = (to_attrs[:options] || {}).delete(:renamed_from))
+
         from_column_name = from_column_name.to_s if from_column_name
 
         # Already renamed
@@ -556,6 +560,7 @@ module Ridgepole
           end
 
           next unless parent_column_info != child_column_info
+
           parent_label = "#{parent_table}.id"
           child_label = "#{child_table}.#{column_name}"
           label_len = [parent_label.length, child_label.length].max
@@ -571,6 +576,7 @@ module Ridgepole
 
     def check_table_existence(definition)
       return unless @options[:tables]
+
       @options[:tables].each do |table_name|
         @logger.warn "[WARNING] '#{table_name}' definition is not found" unless definition.key?(table_name)
       end

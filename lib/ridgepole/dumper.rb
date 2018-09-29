@@ -13,6 +13,7 @@ module Ridgepole
       if target_tables
         conn.data_sources.each do |tbl|
           next if target_tables.include?(tbl)
+
           ActiveRecord::SchemaDumper.ignore_tables << tbl
         end
       end
