@@ -253,6 +253,13 @@ begin
         else
           File.open(diff_file)
         end
+      elsif Gem::Version.new(Psych::VERSION) >= Gem::Version.new('3.1.0.pre1') # Ruby 2.6
+        YAML.safe_load(
+          diff_file,
+          whitelist_classes: [],
+          whitelist_symbols: [],
+          aliases: true
+        )
       else
         YAML.safe_load(diff_file, [], [], true)
       end
