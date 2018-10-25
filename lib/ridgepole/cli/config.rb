@@ -11,6 +11,13 @@ module Ridgepole
                           parse_config_file(config)
                         elsif (expanded = File.expand_path(config)) && File.exist?(expanded)
                           parse_config_file(expanded)
+                        elsif Gem::Version.new(Psych::VERSION) >= Gem::Version.new('3.1.0.pre1') # Ruby 2.6
+                          YAML.safe_load(
+                            ERB.new(config).result,
+                            whitelist_classes: [],
+                            whitelist_symbols: [],
+                            aliases: true
+                          )
                         else
                           YAML.safe_load(ERB.new(config).result, [], [], true)
                         end
@@ -30,7 +37,17 @@ module Ridgepole
 
       def parse_config_file(path)
         yaml = ERB.new(File.read(path)).result
-        YAML.safe_load(yaml, [], [], true)
+
+        if Gem::Version.new(Psych::VERSION) >= Gem::Version.new('3.1.0.pre1') # Ruby 2.6
+          YAML.safe_load(
+            yaml,
+            whitelist_classes: [],
+            whitelist_symbols: [],
+            aliases: true
+          )
+        else
+          YAML.safe_load(yaml, [], [], true)
+        end
       end
 
       def parse_database_url(config)
