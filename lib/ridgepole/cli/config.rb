@@ -14,8 +14,8 @@ module Ridgepole
                         elsif Gem::Version.new(Psych::VERSION) >= Gem::Version.new('3.1.0.pre1') # Ruby 2.6
                           YAML.safe_load(
                             ERB.new(config).result,
-                            whitelist_classes: [],
-                            whitelist_symbols: [],
+                            permitted_classes: [],
+                            permitted_symbols: [],
                             aliases: true
                           )
                         else
@@ -41,8 +41,8 @@ module Ridgepole
         if Gem::Version.new(Psych::VERSION) >= Gem::Version.new('3.1.0.pre1') # Ruby 2.6
           YAML.safe_load(
             yaml,
-            whitelist_classes: [],
-            whitelist_symbols: [],
+            permitted_classes: [],
+            permitted_symbols: [],
             aliases: true
           )
         else
