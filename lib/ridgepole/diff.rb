@@ -113,9 +113,7 @@ module Ridgepole
       end
 
       [from, to].each do |table_attrs|
-        if table_attrs.key?(:default) && table_attrs[:default].nil?
-          table_attrs.delete(:default)
-        end
+        table_attrs.delete(:default) if table_attrs.key?(:default) && table_attrs[:default].nil?
       end
 
       if Ridgepole::ConnectionAdapters.mysql?
@@ -177,9 +175,7 @@ module Ridgepole
                Ridgepole::DSLParser::TableDefinition::DEFAULT_PRIMARY_KEY_TYPE
              end
 
-      if %i[integer bigint].include?(type) && !options.key?(:default) && !Ridgepole::ConnectionAdapters.postgresql?
-        options[:auto_increment] = true
-      end
+      options[:auto_increment] = true if %i[integer bigint].include?(type) && !options.key?(:default) && !Ridgepole::ConnectionAdapters.postgresql?
 
       { type: type, options: options }
     end
@@ -188,9 +184,7 @@ module Ridgepole
       normalize_column_options!(from_attrs, primary_key)
       normalize_column_options!(to_attrs, primary_key)
 
-      unless compare_column_attrs(from_attrs, to_attrs)
-        new_to_attrs = fix_change_column_options(table_name, from_attrs, to_attrs)
-      end
+      new_to_attrs = fix_change_column_options(table_name, from_attrs, to_attrs) unless compare_column_attrs(from_attrs, to_attrs)
       new_to_attrs
     end
 
@@ -242,9 +236,7 @@ module Ridgepole
         added_size = 0
         to.reverse_each.with_index do |(column_name, to_attrs), i|
           if to_attrs[:options].delete(:after)
-            if added_size != i
-              @logger.warn("[WARNING] PostgreSQL doesn't support adding a new column except for the last position. #{table_name}.#{column_name} will be added to the last.")
-            end
+            @logger.warn("[WARNING] PostgreSQL doesn't support adding a new column except for the last position. #{table_name}.#{column_name} will be added to the last.") if added_size != i
             added_size += 1
           end
         end
@@ -260,9 +252,7 @@ module Ridgepole
           modified_indices = []
 
           from_indices.each do |name, attrs|
-            if attrs[:column_name].is_a?(Array) && attrs[:column_name].delete(column_name)
-              modified_indices << name
-            end
+            modified_indices << name if attrs[:column_name].is_a?(Array) && attrs[:column_name].delete(column_name)
           end
 
           # In PostgreSQL, the index is deleted when the column is deleted
@@ -290,9 +280,7 @@ module Ridgepole
         # Already renamed
         next if from[column_name]
 
-        unless from.key?(from_column_name)
-          raise "Column `#{from_column_name}` not found"
-        end
+        raise "Column `#{from_column_name}` not found" unless from.key?(from_column_name)
 
         definition_delta[:rename] ||= {}
         definition_delta[:rename][column_name] = from_column_name
@@ -392,9 +380,7 @@ module Ridgepole
     def columns_all_include?(expected_columns, actual_columns, table_options)
       return true unless expected_columns.is_a?(Array)
 
-      if (table_options[:id] != false) && !table_options[:primary_key].is_a?(Array)
-        actual_columns += [(table_options[:primary_key] || 'id').to_s]
-      end
+      actual_columns += [(table_options[:primary_key] || 'id').to_s] if (table_options[:id] != false) && !table_options[:primary_key].is_a?(Array)
 
       expected_columns.all? { |i| actual_columns.include?(i) }
     end
@@ -430,9 +416,7 @@ module Ridgepole
         end
       end
 
-      unless foreign_keys_delta.empty?
-        table_delta[:foreign_keys] = foreign_keys_delta
-      end
+      table_delta[:foreign_keys] = foreign_keys_delta unless foreign_keys_delta.empty?
     end
 
     # XXX: MySQL only?
@@ -454,9 +438,7 @@ module Ridgepole
       end
 
       if Ridgepole::ConnectionAdapters.mysql? && ActiveRecord::VERSION::STRING.start_with?('5.0.')
-        if to_attrs[:options][:default].nil? && (to_attrs[:options][:null] == false)
-          Ridgepole::Logger.instance.warn("[WARNING] Table `#{table_name}`: `default: nil` is ignored when `null: false`. Please apply twice")
-        end
+        Ridgepole::Logger.instance.warn("[WARNING] Table `#{table_name}`: `default: nil` is ignored when `null: false`. Please apply twice") if to_attrs[:options][:default].nil? && (to_attrs[:options][:null] == false)
       end
 
       to_attrs
@@ -502,14 +484,12 @@ module Ridgepole
       definition = table_attr[:definition] || {}
 
       definition.each do |column_name, column_attrs|
-        if column_name =~ /\w+_id\z/
-          attrs_by_column[column_name] = column_attrs.dup
-        end
+        attrs_by_column[column_name] = column_attrs.dup if column_name =~ /\w+_id\z/
       end
 
       relation_info[table_name] = {
         options: table_attr[:options] || {},
-        columns: attrs_by_column
+        columns: attrs_by_column,
       }
     end
 
@@ -541,12 +521,12 @@ module Ridgepole
 
           parent_column_info = {
             type: table_options[:id] || @options[:check_relation_type].to_sym,
-            unsigned: table_options[:unsigned]
+            unsigned: table_options[:unsigned],
           }
 
           child_column_info = {
             type: column_attrs[:type],
-            unsigned: column_attrs.fetch(:options, {})[:unsigned]
+            unsigned: column_attrs.fetch(:options, {})[:unsigned],
           }
 
           [parent_column_info, child_column_info].each do |column_info|
@@ -555,7 +535,7 @@ module Ridgepole
             # for PostgreSQL
             column_info[:type] = {
               serial: :integer,
-              bigserial: :bigint
+              bigserial: :bigint,
             }.fetch(column_info[:type], column_info[:type])
           end
 

@@ -8,8 +8,8 @@ module Ridgepole
         float: 24,
         string: 255,
         text: 65_535,
-        binary: 65_535
-      }
+        binary: 65_535,
+      },
     }.freeze
 
     class << self

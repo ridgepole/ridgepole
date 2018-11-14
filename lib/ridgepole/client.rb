@@ -6,22 +6,16 @@ module Ridgepole
       ActiveRecord::Base.establish_connection(conn_spec)
 
       # XXX: If the required processing in class method?
-      if !@options.key?(:index_removed_drop_column) && (Ridgepole::DefaultsLimit.adapter == :postgresql)
-        @options[:index_removed_drop_column] = true
-      end
+      @options[:index_removed_drop_column] = true if !@options.key?(:index_removed_drop_column) && (Ridgepole::DefaultsLimit.adapter == :postgresql)
 
       Ridgepole::ExecuteExpander.expand_execute(ActiveRecord::Base.connection)
       @dumper = Ridgepole::Dumper.new(@options)
       @parser = Ridgepole::DSLParser.new(@options)
       @diff = Ridgepole::Diff.new(@options)
 
-      if @options[:mysql_use_alter]
-        require 'ridgepole/ext/abstract_mysql_adapter/use_alter_index'
-      end
+      require 'ridgepole/ext/abstract_mysql_adapter/use_alter_index' if @options[:mysql_use_alter]
 
-      if @options[:mysql_dump_auto_increment]
-        require 'ridgepole/ext/abstract_mysql_adapter/dump_auto_increment'
-      end
+      require 'ridgepole/ext/abstract_mysql_adapter/dump_auto_increment' if @options[:mysql_dump_auto_increment]
     end
 
     def dump(&block)

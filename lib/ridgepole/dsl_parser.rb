@@ -15,17 +15,13 @@ module Ridgepole
 
     def check_orphan_index(definition)
       definition.each do |table_name, attrs|
-        if attrs[:indices] && !(attrs[:definition])
-          raise "Table `#{table_name}` to create the index is not defined: #{attrs[:indices].keys.join(',')}"
-        end
+        raise "Table `#{table_name}` to create the index is not defined: #{attrs[:indices].keys.join(',')}" if attrs[:indices] && !(attrs[:definition])
       end
     end
 
     def check_orphan_foreign_key(definition)
       definition.each do |table_name, attrs|
-        if attrs[:foreign_keys] && !(attrs[:definition])
-          raise "Table `#{table_name}` to create the foreign key is not defined: #{attrs[:foreign_keys].keys.join(',')}"
-        end
+        raise "Table `#{table_name}` to create the foreign key is not defined: #{attrs[:foreign_keys].keys.join(',')}" if attrs[:foreign_keys] && !(attrs[:definition])
       end
     end
   end

@@ -14,7 +14,7 @@ module Ridgepole
 
         @__definition[name] = {
           type: type,
-          options: options
+          options: options,
         }
       end
 
@@ -87,7 +87,7 @@ module Ridgepole
         unsigned_integer: [:integer, { unsigned: true }],
         unsigned_bigint: [:bigint, { unsigned: true }],
         unsigned_float: [:float, { limit: 24, unsigned: true }],
-        unsigned_decimal: [:decimal, { precision: 10, unsigned: true }]
+        unsigned_decimal: [:decimal, { precision: 10, unsigned: true }],
       }.freeze
 
       # XXX:

@@ -24,7 +24,7 @@ COLUMN_TYPES = {
   float: :float,
   string: :string,
   text: :text,
-  binary: :binary
+  binary: :binary,
 }.freeze
 
 config = nil
@@ -40,7 +40,7 @@ exit_code = 0
 options = {
   dry_run: false,
   debug: false,
-  color: $stdout.tty?
+  color: $stdout.tty?,
 }
 
 set_mode = proc do |m|
@@ -131,9 +131,7 @@ ARGV.options do |opt|
     opt.on('',   '--create-table-with-index') { options[:create_table_with_index] = true }
 
     opt.on('',   '--mysql-dump-auto-increment') do
-      if Gem::Version.new(ActiveRecord::VERSION::STRING) < Gem::Version.new('5.1')
-        raise OptionParser::InvalidOption, '`mysql-dump-auto-increment` is not available in `activerecord < 5.1`'
-      end
+      raise OptionParser::InvalidOption, '`mysql-dump-auto-increment` is not available in `activerecord < 5.1`' if Gem::Version.new(ActiveRecord::VERSION::STRING) < Gem::Version.new('5.1')
 
       options[:mysql_dump_auto_increment] = true
     end
@@ -158,9 +156,7 @@ ARGV.options do |opt|
   rescue StandardError => e
     warn("[ERROR] #{e.message}")
 
-    unless e.is_a?(OptionParser::ParseError)
-      puts "\t" + e.backtrace.join("\n\t")
-    end
+    puts "\t" + e.backtrace.join("\n\t") unless e.is_a?(OptionParser::ParseError)
 
     exit 1
   end

@@ -26,9 +26,7 @@ module Ridgepole
         table_name = table_name.to_s
         table_definition = TableDefinition.new(table_name, self)
 
-        if options[:primary_key] && options[:primary_key].is_a?(Symbol)
-          options[:primary_key] = options[:primary_key].to_s
-        end
+        options[:primary_key] = options[:primary_key].to_s if options[:primary_key] && options[:primary_key].is_a?(Symbol)
         if options[:id] && TableDefinition::ALIAS_TYPES.key?(options[:id])
           type, type_default_opts = TableDefinition::ALIAS_TYPES[options[:id]]
           options[:id] = type
@@ -38,9 +36,7 @@ module Ridgepole
         yield(table_definition)
         @__definition[table_name] ||= {}
 
-        if @__definition[table_name][:definition]
-          raise "Table `#{table_name}` already defined"
-        end
+        raise "Table `#{table_name}` already defined" if @__definition[table_name][:definition]
 
         @__definition[table_name][:definition] = table_definition.__definition
         options.delete(:force)
@@ -51,17 +47,13 @@ module Ridgepole
         table_name = table_name.to_s
         # Keep column_name for expression index support
         # https://github.com/rails/rails/pull/23393
-        unless column_name.is_a?(String) && /\W/ === column_name # rubocop:disable Style/CaseEquality
-          column_name = [column_name].flatten.map(&:to_s)
-        end
+        column_name = [column_name].flatten.map(&:to_s) unless column_name.is_a?(String) && /\W/ === column_name # rubocop:disable Style/CaseEquality
         options[:name] = options[:name].to_s if options[:name]
         @__definition[table_name] ||= {}
         @__definition[table_name][:indices] ||= {}
         idx = options[:name] || column_name
 
-        if @__definition[table_name][:indices][idx]
-          raise "Index `#{table_name}(#{idx})` already defined"
-        end
+        raise "Index `#{table_name}(#{idx})` already defined" if @__definition[table_name][:indices][idx]
 
         if options[:length].is_a?(Numeric)
           index_length = options[:length]
@@ -72,13 +64,11 @@ module Ridgepole
           end
         end
 
-        if options[:length]
-          options[:length] = options[:length].compact.symbolize_keys
-        end
+        options[:length] = options[:length].compact.symbolize_keys if options[:length]
 
         @__definition[table_name][:indices][idx] = {
           column_name: column_name,
-          options: options
+          options: options,
         }
       end
 
@@ -92,13 +82,11 @@ module Ridgepole
         @__definition[from_table][:foreign_keys] ||= {}
         idx = options[:name] || [from_table, to_table]
 
-        if @__definition[from_table][:foreign_keys][idx]
-          raise "Foreign Key `#{from_table}(#{idx})` already defined"
-        end
+        raise "Foreign Key `#{from_table}(#{idx})` already defined" if @__definition[from_table][:foreign_keys][idx]
 
         @__definition[from_table][:foreign_keys][idx] = {
           to_table: to_table,
-          options: options
+          options: options,
         }
       end
 
@@ -117,7 +105,7 @@ module Ridgepole
       def execute(sql, _name = nil, &cond)
         @__execute << {
           sql: sql,
-          condition: cond
+          condition: cond,
         }
       end
     end
