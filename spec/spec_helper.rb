@@ -119,7 +119,7 @@ module SpecHelper
         host: TEST_PG_HOST,
         port: TEST_PG_PORT,
         username: TEST_PG_USER,
-        password: TEST_PG_PASS
+        password: TEST_PG_PASS,
       }.merge(config)
     else
       {
@@ -128,7 +128,7 @@ module SpecHelper
         host: TEST_MYSQL_HOST,
         port: TEST_MYSQL_PORT,
         username: TEST_MYSQL_USER,
-        password: TEST_MYSQL_PASS
+        password: TEST_MYSQL_PASS,
       }.merge(config)
     end
   end

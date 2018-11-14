@@ -110,9 +110,7 @@ module Ridgepole
 
       begin
         with_pre_post_query(options) do
-          unless script.empty?
-            ActiveRecord::Schema.new.instance_eval(script, SCRIPT_NAME, 1)
-          end
+          ActiveRecord::Schema.new.instance_eval(script, SCRIPT_NAME, 1) unless script.empty?
 
           execute_count = execute_sqls(options)
         end
@@ -311,9 +309,7 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
         end
       end
 
-      unless foreign_keys.empty?
-        append_change_foreign_keys(table_name, foreign_keys, pre_buf_for_fk, post_buf_for_fk, @options)
-      end
+      append_change_foreign_keys(table_name, foreign_keys, pre_buf_for_fk, post_buf_for_fk, @options) unless foreign_keys.empty?
 
       append_change_table_options(table_name, table_options, buf) if table_options
 

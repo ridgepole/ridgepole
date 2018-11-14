@@ -20,17 +20,13 @@ module Ridgepole
 
       if ignore_tables
         conn.data_sources.each do |tbl|
-          if ignore_tables.any? { |i| i =~ tbl } && !(target_tables && target_tables.include?(tbl))
-            ActiveRecord::SchemaDumper.ignore_tables << tbl
-          end
+          ActiveRecord::SchemaDumper.ignore_tables << tbl if ignore_tables.any? { |i| i =~ tbl } && !(target_tables && target_tables.include?(tbl))
         end
       end
 
       stream = dump_from(conn)
 
-      if target_tables || ignore_tables
-        ActiveRecord::SchemaDumper.ignore_tables.clear
-      end
+      ActiveRecord::SchemaDumper.ignore_tables.clear if target_tables || ignore_tables
 
       stream.string.lines.each_cons(2) do |first_line, second_line|
         if first_line.start_with?('# Could not dump')

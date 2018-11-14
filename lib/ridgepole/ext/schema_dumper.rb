@@ -28,13 +28,9 @@ module Ridgepole
               remove_prefix_and_suffix(foreign_key.to_table).inspect
             ]
 
-            if foreign_key.column != @connection.foreign_key_column_for(foreign_key.to_table)
-              parts << "column: #{foreign_key.column.inspect}"
-            end
+            parts << "column: #{foreign_key.column.inspect}" if foreign_key.column != @connection.foreign_key_column_for(foreign_key.to_table)
 
-            if foreign_key.custom_primary_key?
-              parts << "primary_key: #{foreign_key.primary_key.inspect}"
-            end
+            parts << "primary_key: #{foreign_key.primary_key.inspect}" if foreign_key.custom_primary_key?
 
             parts << "name: #{foreign_key.name.inspect}"
 

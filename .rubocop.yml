@@ -35,5 +35,7 @@ Style/MethodMissingSuper:
 Style/MixinUsage:
   Exclude:
     - 'spec/**/*'
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: consistent_comma
 Layout/ClosingHeredocIndentation:
   Enabled: false

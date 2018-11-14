@@ -22,9 +22,7 @@ module Ridgepole
                           YAML.safe_load(ERB.new(config).result, [], [], true)
                         end
 
-        unless parsed_config.is_a?(Hash)
-          parsed_config = parse_database_url(config)
-        end
+        parsed_config = parse_database_url(config) unless parsed_config.is_a?(Hash)
 
         if parsed_config.key?(env.to_s)
           parsed_config.fetch(env.to_s)
@@ -53,17 +51,15 @@ module Ridgepole
       def parse_database_url(config)
         uri = URI.parse(config)
 
-        if [uri.scheme, uri.user, uri.host, uri.path].any? { |i| i.nil? || i.empty? }
-          raise "Invalid config: #{config.inspect}"
-        end
+        raise "Invalid config: #{config.inspect}" if [uri.scheme, uri.user, uri.host, uri.path].any? { |i| i.nil? || i.empty? }
 
         {
-          'adapter'  => uri.scheme,
+          'adapter' => uri.scheme,
           'username' => uri.user,
           'password' => uri.password,
-          'host'     => uri.host,
-          'port'     => uri.port,
-          'database' => uri.path.sub(%r{\A/}, '')
+          'host' => uri.host,
+          'port' => uri.port,
+          'database' => uri.path.sub(%r{\A/}, ''),
         }
       end
     end
