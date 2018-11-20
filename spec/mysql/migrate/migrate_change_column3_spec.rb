@@ -168,6 +168,37 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
+  context 'when use references with unsigned polymorphic (no change)' do
+    let(:actual_dsl) do
+      erbh(<<-ERB)
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+          t.<%= cond('>= 5.1','bigint', 'integer') %> "products_id", unsigned: true
+          t.string "products_type"
+          t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id", unsigned: true
+          t.string "user_type"
+          t.index ["products_type", "products_id"]
+          t.index ["user_type", "user_id"]
+        end
+      ERB
+    end
+
+    let(:expected_dsl) do
+      <<-RUBY
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+          t.references :products, :user, unsigned: true, polymorphic: true
+        end
+      RUBY
+    end
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_falsey
+    }
+  end
+
   context 'when use references (change)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
