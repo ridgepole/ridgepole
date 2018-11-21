@@ -125,6 +125,7 @@ module Ridgepole
         options = args.extract_options!
         polymorphic = options.delete(:polymorphic)
         polymorphic_options = polymorphic.is_a?(Hash) ? polymorphic : {}
+        # https://github.com/rails/rails/blob/5-2-1/activerecord/lib/active_record/connection_adapters/abstract/schema_definitions.rb#L167
         polymorphic_options.merge!(options.slice(:null, :first, :after))
         index_options = options.key?(:index) ? options.delete(:index) : true
         type = options.delete(:type) || DEFAULT_PRIMARY_KEY_TYPE
