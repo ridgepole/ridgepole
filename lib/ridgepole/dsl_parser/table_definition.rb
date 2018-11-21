@@ -124,12 +124,14 @@ module Ridgepole
       def references(*args)
         options = args.extract_options!
         polymorphic = options.delete(:polymorphic)
+        polymorphic_options = polymorphic.is_a?(Hash) ? polymorphic : {}
+        polymorphic_options.merge!(options.slice(:null, :first, :after))
         index_options = options.key?(:index) ? options.delete(:index) : true
         type = options.delete(:type) || DEFAULT_PRIMARY_KEY_TYPE
 
         args.each do |col|
           column("#{col}_id", type, options)
-          column("#{col}_type", :string, polymorphic.is_a?(Hash) ? polymorphic : options) if polymorphic
+          column("#{col}_type", :string, polymorphic_options) if polymorphic
           if index_options
             columns = polymorphic ? ["#{col}_type", "#{col}_id"] : ["#{col}_id"]
             index(columns, index_options.is_a?(Hash) ? index_options : {})
