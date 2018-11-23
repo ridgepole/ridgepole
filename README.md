@@ -89,6 +89,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Support primary key adding/dropping ([issue#246](https://github.com/winebarrel/ridgepole/issues/246))
 * `>= 0.7.4`
   * Fix `add_foreign_key` options ([issue#250](https://github.com/winebarrel/ridgepole/issues/250))
+* `>= 0.7.5`
+  * Fix polymorphic options ([pull#263](https://github.com/winebarrel/ridgepole/pull/263))
 
 ## Installation
 
