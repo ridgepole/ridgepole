@@ -16,7 +16,7 @@ matrix:
 before_script:
   - sudo service mysql stop
   - sudo service postgresql stop
-  - docker-compose up -d
+  - for i in {1..60}; do docker-compose up -d && break; sleep 1; done
   - function mysql_ping { mysqladmin -u root -h 127.0.0.1 -P 13316 -ppassword ping; }
   - function mysql57_ping { mysqladmin -u root -h 127.0.0.1 -P 13317  -ppassword ping; }
   - function pg_ping { PGPASSWORD=password pg_isready -U postgres -h 127.0.0.1 -p 15442; }
