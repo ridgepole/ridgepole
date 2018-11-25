@@ -10,7 +10,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 [![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=0.7)](https://travis-ci.org/winebarrel/ridgepole)
 [![Coverage Status](https://coveralls.io/repos/github/winebarrel/ridgepole/badge.svg?branch=0.7)](https://coveralls.io/github/winebarrel/ridgepole?branch=0.7)
 
-**ChangeLog**
+<details><summary>ChangeLog</summary>
 
 * `>= 0.4.8`
   * `activerecord-mysql-unsigned` is now optional. Please pass `--enable-mysql-unsigned` after you install [activerecord-mysql-unsigned](https://github.com/waka/activerecord-mysql-unsigned) if you want to use.
@@ -92,6 +92,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 * `>= 0.7.5`
   * Fix polymorphic options ([pull#263](https://github.com/winebarrel/ridgepole/pull/263))
   * Fix `--mysql-use-alter` option ([pull#246](https://github.com/winebarrel/ridgepole/pull/264))
+</details>
 
 ## Installation
 
