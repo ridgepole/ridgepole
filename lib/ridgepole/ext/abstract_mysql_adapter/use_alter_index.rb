@@ -11,7 +11,8 @@ module Ridgepole
           execute "ALTER TABLE #{quote_table_name(table_name)} ADD #{index_type} INDEX #{quote_column_name(index_name)} #{index_using} (#{index_columns})#{index_options}"
         end
 
-        def remove_index!(table_name, index_name)
+        def remove_index(table_name, options)
+          index_name = index_name_for_remove(table_name, options)
           execute "ALTER TABLE #{quote_table_name(table_name)} DROP INDEX #{quote_column_name(index_name)}"
         end
       end
