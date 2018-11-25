@@ -91,6 +91,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Fix `add_foreign_key` options ([issue#250](https://github.com/winebarrel/ridgepole/issues/250))
 * `>= 0.7.5`
   * Fix polymorphic options ([pull#263](https://github.com/winebarrel/ridgepole/pull/263))
+  * Fix `--mysql-use-alter` option ([pull#246](https://github.com/winebarrel/ridgepole/pull/264))
 
 ## Installation
 
