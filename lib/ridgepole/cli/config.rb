@@ -55,11 +55,11 @@ module Ridgepole
 
         {
           'adapter' => uri.scheme,
-          'username' => uri.user,
-          'password' => uri.password,
+          'username' => CGI.unescape(uri.user),
+          'password' => CGI.unescape(uri.password),
           'host' => uri.host,
           'port' => uri.port,
-          'database' => uri.path.sub(%r{\A/}, ''),
+          'database' => CGI.unescape(uri.path.sub(%r{\A/}, '')),
         }
       end
     end
