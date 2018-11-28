@@ -92,6 +92,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 * `>= 0.7.5`
   * Fix polymorphic options ([pull#263](https://github.com/winebarrel/ridgepole/pull/263))
   * Fix `--mysql-use-alter` option ([pull#246](https://github.com/winebarrel/ridgepole/pull/264))
+  * Fix Database URI parsing ([pull#265](https://github.com/winebarrel/ridgepole/pull/265))
 </details>
 
 ## Installation
