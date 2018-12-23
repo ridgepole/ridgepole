@@ -24,7 +24,7 @@ namespace :docker do
 end
 
 namespace :omnibus do
-  task build: ['build:ubuntu', 'build:centos']
+  task build: ['docker:image:build', 'build:ubuntu', 'build:centos']
 
   namespace :build do
     task :ubuntu do
