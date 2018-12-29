@@ -9,10 +9,10 @@ rvm:
   - 2.3.6
   - 2.4.5
   - 2.5.3
-  - 2.6.0-preview3
+  - 2.6.0
 matrix:
   allow_failures:
-    - rvm: 2.6.0-preview3
+    - rvm: 2.6.0
 before_script:
   - sudo service mysql stop
   - sudo service postgresql stop
