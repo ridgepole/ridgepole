@@ -104,7 +104,7 @@ describe Ridgepole::Config do
     specify do
       expect do
         subject
-      end.to raise_error 'Invalid config: "database.yml"'
+      end.to raise_error %(Invalid config: 'scheme' is empty: "database.yml")
     end
   end
 

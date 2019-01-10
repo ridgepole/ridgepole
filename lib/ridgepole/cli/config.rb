@@ -51,12 +51,19 @@ module Ridgepole
       def parse_database_url(config)
         uri = URI.parse(config)
 
-        raise "Invalid config: #{config.inspect}" if [uri.scheme, uri.user, uri.host, uri.path].any? { |i| i.nil? || i.empty? }
+        %w[scheme user host path].each do |key|
+          value = uri.send(key)
+
+          if value.nil? || value.empty?
+            key = 'database' if key == 'path'
+            raise "Invalid config: '#{key}' is empty: #{config.inspect}"
+          end
+        end
 
         {
           'adapter' => uri.scheme,
           'username' => CGI.unescape(uri.user),
-          'password' => CGI.unescape(uri.password),
+          'password' => uri.password ? CGI.unescape(uri.password) : nil,
           'host' => uri.host,
           'port' => uri.port,
           'database' => CGI.unescape(uri.path.sub(%r{\A/}, '')),
