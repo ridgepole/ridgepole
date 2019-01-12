@@ -210,7 +210,11 @@ module Ridgepole
                          end
 
       to.each do |column_name, to_attrs|
-        if (from_attrs = from.delete(column_name))
+        ignore_column = to_attrs.fetch(:options, {}).delete(:ignore)
+        from_attrs = from.delete(column_name)
+        next if ignore_column
+
+        if from_attrs
           to_attrs = build_attrs_if_changed(to_attrs, from_attrs, table_name)
           if to_attrs
             definition_delta[:change] ||= {}
@@ -296,6 +300,8 @@ module Ridgepole
       indices_delta = {}
 
       to.each do |index_name, to_attrs|
+        ignore_index = to_attrs.fetch(:options, {}).delete(:ignore)
+
         if index_name.is_a?(Array)
           from_index_name, from_attrs = from.find { |_name, attrs| attrs[:column_name] == index_name }
 
@@ -306,6 +312,8 @@ module Ridgepole
         else
           from_attrs = from.delete(index_name)
         end
+
+        next if ignore_index
 
         if from_attrs
           normalize_index_options!(from_attrs[:options])
@@ -391,7 +399,9 @@ module Ridgepole
       foreign_keys_delta = {}
 
       to.each do |foreign_key_name_or_tables, to_attrs|
+        ignore_fk = to_attrs.fetch(:options, {}).delete(:ignore)
         from_attrs = from.delete(foreign_key_name_or_tables)
+        next if ignore_fk
 
         if from_attrs
           if from_attrs != to_attrs

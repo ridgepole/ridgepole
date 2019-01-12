@@ -94,6 +94,9 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Fix polymorphic options ([pull#263](https://github.com/winebarrel/ridgepole/pull/263))
   * Fix `--mysql-use-alter` option ([pull#246](https://github.com/winebarrel/ridgepole/pull/264))
   * Fix Database URI parsing ([pull#265](https://github.com/winebarrel/ridgepole/pull/265))
+* `>= 0.7.6`
+  * Fix database url check ([pull#266](https://github.com/winebarrel/ridgepole/pull/266))
+  * Add ignore option ([pull#267](https://github.com/winebarrel/ridgepole/pull/267))
 </details>
 
 ## Installation
@@ -274,6 +277,18 @@ add_index "child", ["parent_id"], name: "par_ind", using: :btree
 add_foreign_key "child", "parent", name: "child_ibfk_1"
 ```
 
+## Ignore Column/Index/FK
+
+```ruby
+create_table "articles", force: :cascade do |t|
+  t.string   "title", ignore: true # All changes are ignored
+  t.text     "desc", renamed_from: "text"
+  t.text     "author"
+  t.datetime "created_at"
+  t.datetime "updated_at"
+end
+```
+
 ## Collation/Charset
 You can use the column collation by passing `--enable-mysql-awesome` ([activerecord-mysql-awesome](https://github.com/kamipo/activerecord-mysql-awesome) is required)
 
@@ -397,7 +412,7 @@ Apply `Schemafile`
 ...
 ```
 
-## Running tests
+## Run tests
 
 ```sh
 docker-compose up -d

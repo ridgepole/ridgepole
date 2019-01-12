@@ -227,6 +227,9 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
       definition.each do |column_name, column_attrs|
         column_type = column_attrs.fetch(:type)
         column_options = column_attrs[:options] || {}
+        ignore_column = column_options[:ignore]
+        next if ignore_column
+
         normalize_limit(column_type, column_options)
 
         buf.puts(<<-RUBY)
@@ -419,6 +422,8 @@ remove_column(#{table_name.inspect}, #{column_name.inspect})
     def append_add_index(table_name, _index_name, attrs, buf, force_bulk_change = false)
       column_name = attrs.fetch(:column_name)
       options = attrs[:options] || {}
+      ignore_index = options[:ignore]
+      return if ignore_index
 
       if force_bulk_change || @options[:bulk_change]
         buf.puts(<<-RUBY)
