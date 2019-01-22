@@ -117,7 +117,7 @@ Or install it yourself as:
 
 see https://github.com/winebarrel/ridgepole/releases.
 
-### Install from rpm
+### Install from deb
 
 ```sh
 sudo dpkg -i ridgepole_x.x.x+xxx-x_amd64.deb
