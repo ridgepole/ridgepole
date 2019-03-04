@@ -22,15 +22,15 @@ describe 'Ridgepole::Client (with new text/blob types)' do
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy erbh(<<-ERB)
+      expect(subject.dump).to match_ruby erbh(<<-ERB)
         create_table "foos", id: :integer, unsigned: true, force: :cascade do |t|
           t.binary  "blob", <%= i cond(5.0, limit: 65535) %>
-          t.blob    "tiny_blob", limit: 255
-          t.binary  "medium_blob", limit: 16777215
-          t.binary  "long_blob", limit: 4294967295
-          t.text    "tiny_text", limit: 255
-          t.text    "medium_text", limit: 16777215
-          t.text    "long_text", limit: 4294967295
+          t.<%= cond('< 6.0.0.beta2', :blob, :binary) %> "tiny_blob", <%= i cond('< 6.0.0.beta2', {limit: 255}, {size: :tiny}) %>
+          t.binary  "medium_blob", <%= i cond('< 6.0.0.beta2', {limit: 16777215}, {size: :medium}) %>
+          t.binary  "long_blob", <%= i cond('< 6.0.0.beta2', {limit: 4294967295}, {size: :long}) %>
+          t.text    "tiny_text", <%= i cond('< 6.0.0.beta2', {limit: 255}, {size: :tiny}) %>
+          t.text    "medium_text", <%= i cond('< 6.0.0.beta2', {limit: 16777215}, {size: :medium}) %>
+          t.text    "long_text", <%= i cond('< 6.0.0.beta2', {limit: 4294967295}, {size: :long}) %>
           t.decimal "unsigned_decimal", precision: 10, unsigned: true
           t.float   "unsigned_float", <%= i cond('< 5.2.0.beta2', limit: 24) %>, unsigned: true
           t.bigint  "unsigned_bigint", unsigned: true
@@ -40,7 +40,7 @@ describe 'Ridgepole::Client (with new text/blob types)' do
     end
   end
 
-  context 'when compare new types' do
+  context 'when compare new types', condition: '< 6.0.0.beta2' do
     subject { client }
 
     before do
@@ -75,6 +75,48 @@ describe 'Ridgepole::Client (with new text/blob types)' do
           t.unsigned_float   :unsigned_float
           t.unsigned_bigint  :unsigned_bigint
           t.unsigned_integer :unsigned_integer
+        end
+      RUBY
+
+      expect(delta.differ?).to be_falsey
+    end
+  end
+
+  context 'when compare new types', condition: '>= 6.0.0.beta2' do
+    subject { client }
+
+    before do
+      subject.diff(<<-RUBY).migrate
+        create_table "foos", force: :cascade do |t|
+          t.binary "blob"
+          t.binary "tiny_blob", size: :tiny
+          t.binary "medium_blob", size: :medium
+          t.binary "long_blob", size: :long
+          t.text "tiny_text", size: :tiny
+          t.text "medium_text", size: :medium
+          t.text "long_text", size: :long
+          t.decimal "unsigned_decimal", precision: 10, unsigned: true
+          t.float "unsigned_float", unsigned: true
+          t.bigint "unsigned_bigint", unsigned: true
+          t.integer "unsigned_integer", unsigned: true
+        end
+      RUBY
+    end
+
+    it do
+      delta = subject.diff(<<-RUBY)
+        create_table "foos", force: :cascade do |t|
+          t.binary "blob"
+          t.binary "tiny_blob", size: :tiny
+          t.binary "medium_blob", size: :medium
+          t.binary "long_blob", size: :long
+          t.text "tiny_text", size: :tiny
+          t.text "medium_text", size: :medium
+          t.text "long_text", size: :long
+          t.decimal "unsigned_decimal", precision: 10, unsigned: true
+          t.float "unsigned_float", unsigned: true
+          t.bigint "unsigned_bigint", unsigned: true
+          t.integer "unsigned_integer", unsigned: true
         end
       RUBY
 
