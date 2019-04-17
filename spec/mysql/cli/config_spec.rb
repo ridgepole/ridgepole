@@ -109,7 +109,7 @@ describe Ridgepole::Config do
   end
 
   context 'when passed DATABASE_URL' do
-    let(:config) { 'mysql2://root:pass@127.0.0.1:3307/blog' }
+    let(:config) { 'mysql2://root:pass@127.0.0.1:3307/blog?pool=5&reaping_frequency=2' }
     let(:env) { 'development' }
 
     it {
@@ -118,6 +118,8 @@ describe Ridgepole::Config do
       expect(subject['username']).to eq 'root'
       expect(subject['password']).to eq 'pass'
       expect(subject['port']).to eq 3307
+      expect(subject['pool']).to eq '5'
+      expect(subject['reaping_frequency']).to eq '2'
     }
   end
 
