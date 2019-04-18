@@ -60,14 +60,21 @@ module Ridgepole
           end
         end
 
-        {
+        query_hash =
+          if uri.query
+            uri.query.split('&').map { |pair| pair.split('=') }.to_h
+          else
+            {}
+          end
+
+        query_hash.merge(
           'adapter' => uri.scheme,
           'username' => CGI.unescape(uri.user),
           'password' => uri.password ? CGI.unescape(uri.password) : nil,
           'host' => uri.host,
           'port' => uri.port,
-          'database' => CGI.unescape(uri.path.sub(%r{\A/}, '')),
-        }
+          'database' => CGI.unescape(uri.path.sub(%r{\A/}, ''))
+        )
       end
     end
   end
