@@ -97,6 +97,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 * `>= 0.7.6`
   * Fix database url check ([pull#266](https://github.com/winebarrel/ridgepole/pull/266))
   * Add ignore option ([pull#267](https://github.com/winebarrel/ridgepole/pull/267))
+* `>= 0.7.7`
+  * Support URI query string ([pull#273](https://github.com/winebarrel/ridgepole/pull/273))
 </details>
 
 ## Installation
