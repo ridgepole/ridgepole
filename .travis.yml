@@ -46,5 +46,3 @@ matrix:
       gemfile: gemfiles/activerecord_6.0.gemfile
     - rvm: 2.4.5
       gemfile: gemfiles/activerecord_6.0.gemfile
-  allow_failures:
-    - gemfile: gemfiles/activerecord_6.0.gemfile
