@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (binary: blob -> varbinary)' do
     let(:actual_dsl) do

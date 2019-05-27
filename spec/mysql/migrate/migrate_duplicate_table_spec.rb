@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when table already defined' do
     let(:dsl) do

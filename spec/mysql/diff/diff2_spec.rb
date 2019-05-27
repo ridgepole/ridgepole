@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'Ridgepole::Client.diff' do
   context 'when change column' do
     let(:tmpdir) { Dir.mktmpdir }

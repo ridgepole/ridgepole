@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 include ERBh
 
 ERBh.define_method(:i) do |obj|

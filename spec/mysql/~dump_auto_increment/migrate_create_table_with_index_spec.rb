@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'Ridgepole::Client#diff -> migrate (with index)', condition: '>= 5.1.0' do
   context 'when create table with auto increment column' do
     let(:actual_dsl) { '' }

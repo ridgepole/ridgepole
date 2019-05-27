@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when with ignore tables option (same)' do
     let(:current_schema) do

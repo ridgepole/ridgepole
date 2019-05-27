@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module CLIHelper
   def default_cli_hook
     <<-RUBY.strip_heredoc

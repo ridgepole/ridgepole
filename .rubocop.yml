@@ -39,3 +39,5 @@ Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: consistent_comma
 Layout/ClosingHeredocIndentation:
   Enabled: false
+Style/NumericPredicate:
+  Enabled: false

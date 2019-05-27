@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ridgepole
   class DSLParser
     def initialize(options = {})

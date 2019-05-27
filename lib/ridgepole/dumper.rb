@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ridgepole
   class Dumper
     def initialize(options = {})

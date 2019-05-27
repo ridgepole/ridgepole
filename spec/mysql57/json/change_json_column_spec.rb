@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change virtual column / not null -> null' do
     let(:actual_dsl) do

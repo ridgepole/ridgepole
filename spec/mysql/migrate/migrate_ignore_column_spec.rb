@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column with ignore:true' do
     let(:actual_dsl) do
