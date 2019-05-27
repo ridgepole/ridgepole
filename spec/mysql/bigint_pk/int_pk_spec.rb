@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'Ridgepole::Client (with integer pk)', condition: '>= 5.1.0' do
   context 'when with id:integer' do
     let(:dsl) do

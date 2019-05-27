@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'Ridgepole::Client (use default:lambda)' do
   context 'when create table with default:lambda' do
     subject { client }

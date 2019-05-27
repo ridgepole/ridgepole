@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe Ridgepole::Config do
   subject { Ridgepole::Config.load(config, env) }
 

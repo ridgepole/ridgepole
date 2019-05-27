@@ -1,4 +1,6 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
 $LOAD_PATH << File.expand_path('../lib', __dir__)
 require 'yaml'
 require 'optparse'
@@ -10,9 +12,9 @@ $stdout.sync = true
 $stderr.sync = true
 
 Version = Ridgepole::VERSION
-DEFAULT_FILENAME = 'Schemafile'.freeze
+DEFAULT_FILENAME = 'Schemafile'
 
-MAGIC_COMMENT = <<-RUBY.freeze
+MAGIC_COMMENT = <<-RUBY
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 RUBY

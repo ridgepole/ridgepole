@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'Ridgepole::Client#diff -> migrate' do
   before { subject.diff(actual_dsl).migrate }
   subject { client(table_options: table_options, dump_without_table_options: dump_without_table_options) }

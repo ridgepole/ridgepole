@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'Ridgepole::Client.dump' do
   context 'when there is a tables' do
     before { restore_tables }

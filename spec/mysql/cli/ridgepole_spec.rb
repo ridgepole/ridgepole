@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'ridgepole' do
   let(:differ) { false }
   let(:conf) { "'" + JSON.dump(conn_spec) + "'" }

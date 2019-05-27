@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ridgepole
   class Diff
     PRIMARY_KEY_OPTIONS = %i[id limit default null precision scale collation unsigned].freeze
@@ -349,9 +351,9 @@ module Ridgepole
     end
 
     def target?(table_name)
-      if @options[:tables] && @options[:tables].include?(table_name)
+      if @options[:tables]&.include?(table_name)
         true
-      elsif @options[:ignore_tables] && @options[:ignore_tables].any? { |i| i =~ table_name }
+      elsif @options[:ignore_tables]&.any? { |i| i =~ table_name }
         false
       elsif @options[:tables]
         false
