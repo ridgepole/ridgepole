@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if ENV['TRAVIS']
   require 'simplecov'
   require 'coveralls'

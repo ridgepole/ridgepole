@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'Ridgepole::Client (with bigint pk)', condition: 5.0 do
   let(:id_primary_key_create_table) do
     <<-RUBY

@@ -2,7 +2,7 @@ AllCops:
   Exclude:
     - 'gemfiles/**/*'
     - 'omnibus-ridgepole/**/*'
-  TargetRubyVersion: 2.2
+  TargetRubyVersion: 2.3
 Bundler/OrderedGems:
   Include:
     - 'Appraisals'
@@ -38,4 +38,6 @@ Style/MixinUsage:
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: consistent_comma
 Layout/ClosingHeredocIndentation:
+  Enabled: false
+Style/NumericPredicate:
   Enabled: false

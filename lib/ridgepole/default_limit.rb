@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Ridgepole
   class DefaultsLimit
     DEFAULTS_LIMITS = {

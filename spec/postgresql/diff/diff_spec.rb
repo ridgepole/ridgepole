@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'Ridgepole::Client.diff' do
   before do
     allow(Ridgepole::Diff).to receive(:postgresql?).and_return(true)

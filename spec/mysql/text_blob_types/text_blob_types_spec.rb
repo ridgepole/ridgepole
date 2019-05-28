@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'Ridgepole::Client (with new text/blob types)' do
   context 'when use new types' do
     subject { client }

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Ridgepole
   class Delta
-    SCRIPT_NAME = '<Schema>'.freeze
+    SCRIPT_NAME = '<Schema>'
 
     def initialize(delta, options = {})
       @delta = delta

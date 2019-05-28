@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 describe 'Ridgepole::Client#diff -> migrate (with index)' do
   context 'when create table' do
     let(:actual_dsl) { '' }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class HidePendingFormatter < RSpec::Core::Formatters::ProgressFormatter
   RSpec::Core::Formatters.register self, :example_pending
   RSpec::Core::Formatters.register self, :dump_pending
