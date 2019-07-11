@@ -82,7 +82,7 @@ module Ridgepole
         options[:column] = options[:column].to_s if options[:column]
         @__definition[from_table] ||= {}
         @__definition[from_table][:foreign_keys] ||= {}
-        idx = options[:name] || [from_table, to_table]
+        idx = options[:name] || [from_table, to_table, options[:column]]
 
         raise "Foreign Key `#{from_table}(#{idx})` already defined" if @__definition[from_table][:foreign_keys][idx]
 
