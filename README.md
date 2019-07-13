@@ -98,6 +98,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Add ignore option ([pull#267](https://github.com/winebarrel/ridgepole/pull/267))
 * `>= 0.7.7`
   * Support URI query string ([pull#273](https://github.com/winebarrel/ridgepole/pull/273))
+* `>= 0.7.8`
+  * Fix for `add_foreign_key(..., column: ,,,)` ([pull#278](https://github.com/winebarrel/ridgepole/pull/278))
 </details>
 
 ## Installation
