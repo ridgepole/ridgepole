@@ -20,7 +20,7 @@ module Ridgepole
             callback.call(sql, name)
           end
 
-          if sql =~ /\A(SELECT|SHOW)\b/i
+          if /\A(SELECT|SHOW)\b/i.match?(sql)
             begin
               super(sql, name)
             rescue StandardError
@@ -30,7 +30,7 @@ module Ridgepole
             Stub.new
           end
         elsif Ridgepole::ExecuteExpander.use_script
-          if sql =~ /\A(SELECT|SHOW)\b/i
+          if /\A(SELECT|SHOW)\b/i.match?(sql)
             super(sql, name)
           else
             sql = append_alter_extra(sql)
