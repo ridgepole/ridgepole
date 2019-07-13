@@ -93,7 +93,7 @@ module Ridgepole
       end
 
       def require(file)
-        schemafile = file =~ %r{\A/} ? file : File.join(@__working_dir, file)
+        schemafile = %r{\A/}.match?(file) ? file : File.join(@__working_dir, file)
 
         if File.exist?(schemafile)
           instance_eval(File.read(schemafile), schemafile)
