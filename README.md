@@ -6,9 +6,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 (like Chef/Puppet)
 
 [![Gem Version](https://badge.fury.io/rb/ridgepole.svg)](http://badge.fury.io/rb/ridgepole)
-[![Unstable Version](https://img.shields.io/badge/unstable-0.8.0.rc2-green.svg?longCache=true&style=flat)](https://rubygems.org/gems/ridgepole/versions/0.8.0.rc2)
-[![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=0.7)](https://travis-ci.org/winebarrel/ridgepole)
-[![Coverage Status](https://coveralls.io/repos/github/winebarrel/ridgepole/badge.svg?branch=0.7)](https://coveralls.io/github/winebarrel/ridgepole?branch=0.7)
+[![Build Status](https://travis-ci.org/winebarrel/ridgepole.svg?branch=0.8)](https://travis-ci.org/winebarrel/ridgepole)
+[![Coverage Status](https://coveralls.io/repos/github/winebarrel/ridgepole/badge.svg?branch=0.8)](https://coveralls.io/github/winebarrel/ridgepole?branch=0.8)
 
 <details><summary>ChangeLog</summary>
 
@@ -100,6 +99,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Support URI query string ([pull#273](https://github.com/winebarrel/ridgepole/pull/273))
 * `>= 0.7.8`
   * Fix for `add_foreign_key(..., column: ,,,)` ([pull#278](https://github.com/winebarrel/ridgepole/pull/278))
+* `>= 0.8.0`
+  * Support Rails 6.0
 </details>
 
 ## Installation
