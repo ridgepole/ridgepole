@@ -42,7 +42,7 @@ module Ridgepole
         append_change(table_name, attrs, buf, pre_buf_for_fk, post_buf_for_fk)
       end
 
-      (@delta[:delete] || {}).each do |table_name, attrs|
+      (@delta[:delete] || {}).reverse_each do |table_name, attrs|
         append_drop_table(table_name, attrs, buf)
       end
 
