@@ -101,6 +101,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Fix for `add_foreign_key(..., column: ,,,)` ([pull#278](https://github.com/winebarrel/ridgepole/pull/278))
 * `>= 0.8.0`
   * Support Rails 6.0
+* `>= 0.8.1`
+  * Drop tables in an order considering foreign key constraints ([pull#284](https://github.com/winebarrel/ridgepole/pull/284))
 </details>
 
 ## Installation
