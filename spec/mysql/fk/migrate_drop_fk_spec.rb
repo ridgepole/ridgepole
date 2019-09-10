@@ -60,29 +60,29 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop fk when drop table' do
     let(:dsl) do
       erbh(<<-ERB)
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "0_parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
-        create_table "child", force: :cascade do |t|
-          t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+        create_table "1_child", force: :cascade do |t|
+          t.integer "0_parent_id"
+          t.index ["0_parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        add_foreign_key "child", "parent", name: "child_ibfk_1"
+        add_foreign_key "1_child", "0_parent", name: "child_ibfk_1"
       ERB
     end
 
     let(:sorted_dsl) do
       erbh(<<-ERB)
-        create_table "child", force: :cascade do |t|
-          t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+        create_table "0_parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
         end
 
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "1_child", force: :cascade do |t|
+          t.integer "0_parent_id"
+          t.index ["0_parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        add_foreign_key "child", "parent", name: "child_ibfk_1"
+        add_foreign_key "1_child", "0_parent", name: "child_ibfk_1"
       ERB
     end
 
