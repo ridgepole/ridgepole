@@ -69,8 +69,11 @@ module Ridgepole
             {}
           end
 
+        adapter = uri.scheme
+        adapter = 'postgresql' if adapter == 'postgres'
+
         query_hash.merge(
-          'adapter' => uri.scheme,
+          'adapter' => adapter,
           'username' => CGI.unescape(uri.user),
           'password' => uri.password ? CGI.unescape(uri.password) : nil,
           'host' => uri.host,

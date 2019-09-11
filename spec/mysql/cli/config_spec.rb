@@ -125,6 +125,19 @@ describe Ridgepole::Config do
     }
   end
 
+  context 'when passed Heroku style DATABASE_URL' do
+    let(:config) { 'postgres://root:pass@127.0.0.1:5432/blog' }
+    let(:env) { 'development' }
+
+    it {
+      expect(subject['adapter']).to eq 'postgresql'
+      expect(subject['database']).to eq 'blog'
+      expect(subject['username']).to eq 'root'
+      expect(subject['password']).to eq 'pass'
+      expect(subject['port']).to eq 5432
+    }
+  end
+
   context 'when passed DATABASE_URL from ENV' do
     let(:config) { 'env:DATABASE_URL' }
     let(:env) { 'development' }
