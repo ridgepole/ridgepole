@@ -103,6 +103,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Support Rails 6.0
 * `>= 0.8.1`
   * Drop tables in an order considering foreign key constraints ([pull#284](https://github.com/winebarrel/ridgepole/pull/284))
+* `>= 0.8.2`
+  * Support `postgres://` schema ([pull#285](https://github.com/winebarrel/ridgepole/pull/285))
 </details>
 
 ## Installation
