@@ -47,6 +47,14 @@ module Ridgepole
 
           delta[:delete] ||= {}
           delta[:delete][table_name] = from_attrs
+
+          foreign_keys = from_attrs.fetch(:foreign_keys, {})
+          next if foreign_keys.empty?
+
+          table_delta = {}
+          scan_foreign_keys_change(foreign_keys, {}, table_delta, @options)
+          delta[:change] ||= {}
+          delta[:change][table_name] = table_delta
         end
       end
 

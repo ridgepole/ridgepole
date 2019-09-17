@@ -60,29 +60,36 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop fk when drop table' do
     let(:dsl) do
       erbh(<<-ERB)
-        create_table "0_parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "users", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+          t.integer "invitation_id"
+          t.index ["invitation_id"], name: "idx_invitation_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        create_table "1_child", force: :cascade do |t|
-          t.integer "0_parent_id"
-          t.index ["0_parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+        add_foreign_key "users", "invitations", name: "users_ibfk"
+
+        create_table "invitations", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+          t.integer "user_id"
+          t.index ["user_id"], name: "idx_user_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        add_foreign_key "1_child", "0_parent", name: "child_ibfk_1"
+        add_foreign_key "invitations", "users", name: "invitations_ibfk"
       ERB
     end
 
     let(:sorted_dsl) do
       erbh(<<-ERB)
-        create_table "0_parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "invitations", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+          t.integer "user_id"
+          t.index ["user_id"], name: "idx_user_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        create_table "1_child", force: :cascade do |t|
-          t.integer "0_parent_id"
-          t.index ["0_parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+        create_table "users", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+          t.integer "invitation_id"
+          t.index ["invitation_id"], name: "idx_invitation_id", <%= i cond(5.0, using: :btree) %>
         end
 
-        add_foreign_key "1_child", "0_parent", name: "child_ibfk_1"
+        add_foreign_key "invitations", "users", name: "invitations_ibfk"
+        add_foreign_key "users", "invitations", name: "users_ibfk"
       ERB
     end
 
