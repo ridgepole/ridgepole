@@ -105,6 +105,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Drop tables in an order considering foreign key constraints ([pull#284](https://github.com/winebarrel/ridgepole/pull/284))
 * `>= 0.8.2`
   * Support `postgres://` schema ([pull#285](https://github.com/winebarrel/ridgepole/pull/285))
+* `>= 0.8.3`
+  * Fix "topological sort failed" error ([pull#287](https://github.com/winebarrel/ridgepole/pull/287))
 </details>
 
 ## Installation
