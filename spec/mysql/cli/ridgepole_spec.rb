@@ -54,6 +54,7 @@ describe 'ridgepole' do
             --skip-column-comment-change
             --allow-pk-change
             --create-table-with-index
+            --set-index-to-fk
             --mysql-dump-auto-increment
         -r, --require LIBS
             --log-file LOG_FILE

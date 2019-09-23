@@ -7,6 +7,7 @@ module Ridgepole
       attr_reader :__execute
 
       def initialize(opts = {})
+        @__options = opts
         @__working_dir = File.expand_path(opts[:path] ? File.dirname(opts[:path]) : Dir.pwd)
         @__definition = {}
         @__execute = []
@@ -85,6 +86,11 @@ module Ridgepole
         idx = options[:name] || [from_table, to_table, options[:column]]
 
         raise "Foreign Key `#{from_table}(#{idx})` already defined" if @__definition[from_table][:foreign_keys][idx]
+
+        if @__options[:set_index_to_fk]
+          index_column = options[:column] ||= "#{to_table.singularize}_id"
+          add_index(from_table, index_column) if @__definition[from_table][:indices].blank? || @__definition[from_table][:indices].none? { |_k, v| v[:column_name] == [index_column] }
+        end
 
         @__definition[from_table][:foreign_keys][idx] = {
           to_table: to_table,

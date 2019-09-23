@@ -7,6 +7,7 @@ module Ridgepole
     end
 
     def parse(dsl, opts = {})
+      opts = opts.merge(set_index_to_fk: true) if @options[:set_index_to_fk]
       definition, execute = Context.eval(dsl, opts)
       check_orphan_index(definition)
       check_orphan_foreign_key(definition)

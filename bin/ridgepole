@@ -131,6 +131,7 @@ ARGV.options do |opt|
     opt.on('',   '--skip-column-comment-change') { options[:skip_column_comment_change] = true }
     opt.on('',   '--allow-pk-change') { options[:allow_pk_change] = true }
     opt.on('',   '--create-table-with-index') { options[:create_table_with_index] = true }
+    opt.on('',   '--set-index-to-fk') { options[:set_index_to_fk] = true }
 
     opt.on('',   '--mysql-dump-auto-increment') do
       raise OptionParser::InvalidOption, '`mysql-dump-auto-increment` is not available in `activerecord < 5.1`' if Gem::Version.new(ActiveRecord::VERSION::STRING) < Gem::Version.new('5.1')
