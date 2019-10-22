@@ -169,4 +169,57 @@ describe 'Ridgepole::Client#diff -> migrate' do
       end.to raise_error('Table `child` to create the foreign key is not defined: child_ibfk_1')
     }
   end
+
+  context 'when create fk without any indexes for its column' do
+    let(:dsl) do
+      erbh(<<-ERB)
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+        end
+
+        create_table "child", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+          t.integer "parent_id"
+        end
+        add_foreign_key "child", "parent", name: "child_ibfk_1"
+      ERB
+    end
+
+    subject { client(dump_without_table_options: false) }
+
+    it {
+      expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG).twice
+[WARNING] Table `child` has a foreign key on `parent_id` column, but doesn't have any indexes on the column.
+          Although an index will be added automatically by InnoDB, please add an index explicitly for your future operations.
+      MSG
+      subject.diff(dsl).migrate
+
+      expect do
+        subject.diff(dsl).migrate
+      end.to raise_error(/Mysql2::Error: Cannot drop index/)
+    }
+  end
+
+  context 'when create fk with first key of multiple column indexes for its column' do
+    let(:dsl) do
+      erbh(<<-ERB)
+        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+        end
+
+        create_table "child", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+          t.integer "parent_id"
+          t.string "name"
+          t.index ["parent_id", "name"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+        end
+        add_foreign_key "child", "parent", name: "child_ibfk_1"
+      ERB
+    end
+
+    subject { client(dump_without_table_options: false) }
+
+    it {
+      expect(Ridgepole::Logger.instance).to_not receive(:warn)
+      subject.diff(dsl).migrate
+
+      expect { subject.diff(dsl).migrate }.to_not raise_error
+    }
+  end
 end
