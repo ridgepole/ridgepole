@@ -36,7 +36,7 @@ module Ridgepole
 
       attrs[:foreign_keys].each do |_, foreign_key_attrs|
         fk_index = foreign_key_attrs[:options][:column] || "#{foreign_key_attrs[:to_table].singularize}_id"
-        unless attrs[:indices]&.any? { |_k, v| v[:column_name] == [fk_index] }
+        unless attrs[:indices]&.any? { |_k, v| v[:column_name].first == fk_index }
           errmsg = "[WARNING] Table `#{table_name}` to set the foreign key is not define index: `#{fk_index}`"
           Ridgepole::Logger.instance.warn(errmsg)
         end
