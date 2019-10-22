@@ -107,6 +107,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Support `postgres://` schema ([pull#285](https://github.com/winebarrel/ridgepole/pull/285))
 * `>= 0.8.3`
   * Fix "topological sort failed" error ([pull#287](https://github.com/winebarrel/ridgepole/pull/287))
+* `>= 0.8.4`
+  * Display a warning if an InnoDB table doesn't have any indexes on a column where it has a foreign key ([pull#290](https://github.com/winebarrel/ridgepole/pull/290))
 </details>
 
 ## Installation
