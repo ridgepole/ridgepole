@@ -161,7 +161,7 @@ module Ridgepole
 
       unless from == to
         @logger.warn(<<-MSG)
-[WARNING] No difference of schema configuration for table `#{table_name}` but table options differ.
+[WARNING] Table option changes are ignored on `#{table_name}`.
   from: #{from}
     to: #{to}
       MSG

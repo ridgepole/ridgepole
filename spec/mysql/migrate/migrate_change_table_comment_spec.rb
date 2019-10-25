@@ -32,7 +32,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     it {
       expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG)
-[WARNING] No difference of schema configuration for table `employees` but table options differ.
+[WARNING] Table option changes are ignored on `employees`.
   from: {:comment=>"old comment"}
     to: {:comment=>"new comment"}
       MSG

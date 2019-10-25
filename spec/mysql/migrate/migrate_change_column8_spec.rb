@@ -4,7 +4,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   before { subject.diff(actual_dsl).migrate }
   subject { client(table_options: table_options, dump_without_table_options: dump_without_table_options) }
 
-  let(:warning_regexp) { /table options differ/ }
+  let(:warning_regexp) { /Table option changes are ignored/ }
   let(:dump_without_table_options) { false }
 
   let(:actual_dsl) do
