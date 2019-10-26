@@ -109,6 +109,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Fix "topological sort failed" error ([pull#287](https://github.com/winebarrel/ridgepole/pull/287))
 * `>= 0.8.4`
   * Display a warning if an InnoDB table doesn't have any indexes on a column where it has a foreign key ([pull#290](https://github.com/winebarrel/ridgepole/pull/290))
+* `>= 0.8.5`
+  * Improve warning message on table options ([pull#291](https://github.com/winebarrel/ridgepole/pull/291))
 </details>
 
 ## Installation
