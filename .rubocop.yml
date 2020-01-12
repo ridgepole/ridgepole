@@ -6,7 +6,7 @@ AllCops:
 Bundler/OrderedGems:
   Include:
     - 'Appraisals'
-Layout/IndentHeredoc:
+Layout/HeredocIndentation:
   Enabled: false
 Metrics/AbcSize:
   Enabled: false
@@ -18,7 +18,7 @@ Metrics/ClassLength:
   Enabled: false
 Metrics/CyclomaticComplexity:
   Enabled: false
-Metrics/LineLength:
+Style/LineLength:
   Enabled: false
 Metrics/MethodLength:
   Enabled: false
