@@ -4,7 +4,6 @@ group: edge
 language: ruby
 cache:
   - bundler
-  - apt
 rvm:
   - 2.4.6
   - 2.5.5
