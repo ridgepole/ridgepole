@@ -41,7 +41,7 @@ module Ridgepole
               end
             end
           end
-        rescue EOFError # rubocop:disable Lint/HandleExceptions
+        rescue EOFError # rubocop:disable Lint/SuppressedException
           # nothing to do
         end
 
