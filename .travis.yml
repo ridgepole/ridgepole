@@ -40,7 +40,5 @@ addons:
       - postgresql-client-9.4
 matrix:
   exclude:
-    - rvm: 2.3.8
-      gemfile: gemfiles/activerecord_6.0.gemfile
-    - rvm: 2.4.6
+    - rvm: 2.4.9
       gemfile: gemfiles/activerecord_6.0.gemfile
