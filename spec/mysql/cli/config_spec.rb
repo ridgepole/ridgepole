@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
 describe Ridgepole::Config do
-  subject { Ridgepole::Config.load(config, env) }
+  subject { Ridgepole::Config.load(config, env, spec_name) }
+
+  let(:spec_name) { '' }
 
   context 'when passed toplevel yaml' do
     let(:config) do
@@ -153,5 +155,56 @@ describe Ridgepole::Config do
       expect(subject['password']).to eq 'pass'
       expect(subject['port']).to eq 3307
     }
+  end
+
+  context 'when passed rails database.yml multiple databases style yaml' do
+    let(:config) do
+      <<-YAML.strip_heredoc
+        development:
+          primary:
+            adapter: sqlspecifye
+            database: db/sample.db
+        production:
+          primary:
+            adapter: mysql2
+            encoding: utf8
+            database: blog
+            username: root
+          primary_replica:
+            adapter: mysql2
+            encoding: utf8
+            database: blog
+            username: readonly
+      YAML
+    end
+
+    context 'in development env with primary spec name' do
+      let(:env) { 'development' }
+      let(:spec_name) { 'primary' }
+      specify do
+        expect(subject['adapter']).to eq 'sqlspecifye'
+        expect(subject['database']).to eq 'db/sample.db'
+        expect(subject['username']).to be_nil
+      end
+    end
+
+    context 'in production env with primary spec name' do
+      let(:env) { 'production' }
+      let(:spec_name) { 'primary' }
+      specify do
+        expect(subject['adapter']).to eq 'mysql2'
+        expect(subject['encoding']).to eq 'utf8'
+        expect(subject['database']).to eq 'blog'
+        expect(subject['username']).to eq 'root'
+      end
+    end
+
+    context 'in production env with primary_replica spec name' do
+      let(:env) { 'production' }
+      let(:spec_name) { 'primary_replica' }
+      specify do
+        expect(subject['username']).to eq 'readonly'
+      end
+    end
   end
 end

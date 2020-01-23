@@ -38,6 +38,7 @@ split = false
 diff_files = nil
 diff_with_apply = false
 exit_code = 0
+spec_name = ''
 
 options = {
   dry_run: false,
@@ -76,6 +77,7 @@ ARGV.options do |opt|
   begin
     opt.on('-c', '--config CONF_OR_FILE') { |v| config = v }
     opt.on('-E', '--env ENVIRONMENT') { |v| env = v }
+    opt.on('-s', '--spec-name SPEC_NAME') { |v| spec_name = v }
     opt.on('-a', '--apply') { set_mode[:apply] }
     opt.on('-m', '--merge') do
       set_mode[:apply]
@@ -168,7 +170,7 @@ begin
   logger = Ridgepole::Logger.instance
   logger.debug = options[:debug]
 
-  client = Ridgepole::Client.new(Ridgepole::Config.load(config, env), options) if config
+  client = Ridgepole::Client.new(Ridgepole::Config.load(config, env, spec_name), options) if config
 
   ActiveRecord::Base.logger = logger
   ActiveSupport::LogSubscriber.colorize_logging = options[:color]
@@ -247,7 +249,7 @@ begin
         file_ext = File.extname(diff_file)
 
         if %w[.yml .yaml].include?(file_ext)
-          Ridgepole::Config.load(diff_file, env)
+          Ridgepole::Config.load(diff_file, env, spec_name)
         else
           File.open(diff_file)
         end

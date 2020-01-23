@@ -152,6 +152,7 @@ sudo /opt/ridgepole/embedded/bin/gem install mysql2
 Usage: ridgepole [options]
     -c, --config CONF_OR_FILE
     -E, --env ENVIRONMENT
+    -s, --spec-name SPEC_NAME
     -a, --apply
     -m, --merge
     -f, --file SCHEMAFILE

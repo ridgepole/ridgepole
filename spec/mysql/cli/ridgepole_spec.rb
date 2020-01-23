@@ -17,6 +17,7 @@ describe 'ridgepole' do
       expect(out).to match_fuzzy <<-MSG
         -c, --config CONF_OR_FILE
         -E, --env ENVIRONMENT
+        -s, --spec-name SPEC_NAME
         -a, --apply
         -m, --merge
         -f, --file SCHEMAFILE

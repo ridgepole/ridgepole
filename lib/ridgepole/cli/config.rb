@@ -6,7 +6,7 @@ require 'yaml'
 module Ridgepole
   class Config
     class << self
-      def load(config, env = 'development')
+      def load(config, env = 'development', spec_name = '')
         config = ENV.fetch(Regexp.last_match(1)) if config =~ /\Aenv:(.+)\z/
 
         parsed_config = if File.exist?(config)
@@ -27,7 +27,11 @@ module Ridgepole
         parsed_config = parse_database_url(config) unless parsed_config.is_a?(Hash)
 
         if parsed_config.key?(env.to_s)
-          parsed_config.fetch(env.to_s)
+          parsed_config = parsed_config.fetch(env.to_s)
+        end
+
+        if parsed_config.key?(spec_name.to_s)
+          parsed_config.fetch(spec_name.to_s)
         else
           parsed_config
         end
