@@ -26,9 +26,7 @@ module Ridgepole
 
         parsed_config = parse_database_url(config) unless parsed_config.is_a?(Hash)
 
-        if parsed_config.key?(env.to_s)
-          parsed_config = parsed_config.fetch(env.to_s)
-        end
+        parsed_config = parsed_config.fetch(env.to_s) if parsed_config.key?(env.to_s)
 
         if parsed_config.key?(spec_name.to_s)
           parsed_config.fetch(spec_name.to_s)
