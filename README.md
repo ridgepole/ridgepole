@@ -111,6 +111,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Display a warning if an InnoDB table doesn't have any indexes on a column where it has a foreign key ([pull#290](https://github.com/winebarrel/ridgepole/pull/290))
 * `>= 0.8.5`
   * Improve warning message on table options ([pull#291](https://github.com/winebarrel/ridgepole/pull/291))
+* `>= 0.8.6`
+  * Support multiple databases feature ([pull#297](https://github.com/winebarrel/ridgepole/pull/297))
 </details>
 
 ## Installation
