@@ -246,7 +246,7 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
       end
 
       buf.puts(<<-RUBY)
-  end
+end
       RUBY
 
       if !(@options[:create_table_with_index]) && !indices.empty?
