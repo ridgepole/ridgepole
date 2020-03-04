@@ -104,6 +104,10 @@ module Ridgepole
         end
       end
 
+      def require_relative(relative_path)
+        require(File.expand_path(relative_path, File.dirname(caller[0])))
+      end
+
       def execute(sql, _name = nil, &cond)
         @__execute << {
           sql: sql,
