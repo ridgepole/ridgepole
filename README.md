@@ -113,6 +113,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Improve warning message on table options ([pull#291](https://github.com/winebarrel/ridgepole/pull/291))
 * `>= 0.8.6`
   * Support multiple databases feature ([pull#297](https://github.com/winebarrel/ridgepole/pull/297))
+* `>= 0.8.7`
+  * Support `require_relative` ([pull#298](https://github.com/winebarrel/ridgepole/pull/298))
 </details>
 
 ## Installation
