@@ -12,10 +12,6 @@ module SpecCondition
       ENV['MYSQL57'] == '1'
     end
 
-    def mysql_awesome_enabled?
-      ENV['ENABLE_MYSQL_AWESOME'] == '1'
-    end
-
     def activerecord_5?
       (ActiveRecord::VERSION::MAJOR >= 5) && (ActiveRecord::VERSION::MAJOR < 6)
     end
