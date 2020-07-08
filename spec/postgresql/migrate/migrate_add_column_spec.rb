@@ -141,13 +141,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
       expect(delta.script).to match_fuzzy <<-RUBY
-        change_table("employee_clubs", {:bulk => true}) do |t|
-          t.column("any_col", :string, {:limit=>255, :null=>false})
+        change_table("employee_clubs", bulk: true) do |t|
+          t.column("any_col", :string, **{:limit=>255, :null=>false})
         end
 
-        change_table("employees", {:bulk => true}) do |t|
-          t.column("age", :integer, {:null=>false})
-          t.column("updated_at", :date, {})
+        change_table("employees", bulk: true) do |t|
+          t.column("age", :integer, **{:null=>false})
+          t.column("updated_at", :date, **{})
         end
       RUBY
       delta.migrate

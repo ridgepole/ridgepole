@@ -148,9 +148,9 @@ describe 'Ridgepole::Client.diff' do
       delta = subject.diff(actual_dsl, expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(delta.script).to match_fuzzy <<-RUBY
-        change_column("employee_clubs", "club_id", :integer, {:null=>true, :default=>nil})
+        change_column("employee_clubs", "club_id", :integer, **{:null=>true, :default=>nil})
 
-        change_column("employees", "last_name", :string, {:limit=>20, :default=>"XXX"})
+        change_column("employees", "last_name", :string, **{:limit=>20, :default=>"XXX"})
       RUBY
     }
   end

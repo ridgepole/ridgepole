@@ -20,11 +20,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
 
       expect(delta.script).to match_fuzzy <<-RUBY
-        create_table("employee_clubs", {:options=>"ENGINE=MyISAM CHARSET=utf8"}) do |t|
-          t.column("emp_no", :"integer", {:null=>false, :unsigned=>true, :limit=>4})
-          t.column("club_id", :"integer", {:null=>false, :unsigned=>true, :limit=>4})
+        create_table("employee_clubs", **{:options=>"ENGINE=MyISAM CHARSET=utf8"}) do |t|
+          t.column("emp_no", :"integer", **{:null=>false, :unsigned=>true, :limit=>4})
+          t.column("club_id", :"integer", **{:null=>false, :unsigned=>true, :limit=>4})
         end
-        add_index("employee_clubs", ["emp_no", "club_id"], {:name=>"idx_emp_no_club_id", :using=>:btree})
+        add_index("employee_clubs", ["emp_no", "club_id"], **{:name=>"idx_emp_no_club_id", :using=>:btree})
       RUBY
     }
   end
@@ -48,11 +48,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
 
       expect(delta.script).to match_fuzzy <<-RUBY
-        create_table("employee_clubs", {:options=>"ENGINE=InnoDB CHARSET=utf8mb4"}) do |t|
-          t.column("emp_no", :"integer", {:null=>false, :unsigned=>true, :limit=>4})
-          t.column("club_id", :"integer", {:null=>false, :unsigned=>true, :limit=>4})
+        create_table("employee_clubs", **{:options=>"ENGINE=InnoDB CHARSET=utf8mb4"}) do |t|
+          t.column("emp_no", :"integer", **{:null=>false, :unsigned=>true, :limit=>4})
+          t.column("club_id", :"integer", **{:null=>false, :unsigned=>true, :limit=>4})
         end
-        add_index("employee_clubs", ["emp_no", "club_id"], {:name=>"idx_emp_no_club_id", :using=>:btree})
+        add_index("employee_clubs", ["emp_no", "club_id"], **{:name=>"idx_emp_no_club_id", :using=>:btree})
       RUBY
     }
   end

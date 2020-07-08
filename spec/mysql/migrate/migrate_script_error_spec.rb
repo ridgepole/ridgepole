@@ -80,7 +80,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_ruby actual_dsl
 
       errmsg = Regexp.new(Regexp.escape(<<-MSG.strip))
-        33: add_index("employee_clubs", ["emp_no", "Xclub_id"], {:name=>"idx_emp_no_club_id", :using=>:btree})
+        33: add_index("employee_clubs", ["emp_no", "Xclub_id"], **{:name=>"idx_emp_no_club_id", :using=>:btree})
       MSG
 
       expect do

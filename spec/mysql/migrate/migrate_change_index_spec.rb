@@ -204,19 +204,19 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
       expect(delta.script).to match_fuzzy <<-RUBY
-        change_table("dept_emp", {:bulk => true}) do |t|
-          t.remove_index({:name=>"emp_no"})
-          t.index(["from_date"], {:name=>"emp_no", :using=>:btree, :unique=>false})
+        change_table("dept_emp", bulk: true) do |t|
+          t.remove_index(name: "emp_no")
+          t.index(["from_date"], **{:name=>"emp_no", :using=>:btree, :unique=>false})
         end
 
-        change_table("dept_manager", {:bulk => true}) do |t|
-          t.remove_index({:name=>"emp_no"})
-          t.index(["from_date"], {:name=>"emp_no", :using=>:btree, :unique=>false})
+        change_table("dept_manager", bulk: true) do |t|
+          t.remove_index(name: "emp_no")
+          t.index(["from_date"], **{:name=>"emp_no", :using=>:btree, :unique=>false})
         end
 
-        change_table("salaries", {:bulk => true}) do |t|
-          t.remove_index({:name=>"emp_no"})
-          t.index(["from_date"], {:name=>"emp_no", :using=>:btree, :unique=>false})
+        change_table("salaries", bulk: true) do |t|
+          t.remove_index(name: "emp_no")
+          t.index(["from_date"], **{:name=>"emp_no", :using=>:btree, :unique=>false})
         end
       RUBY
 

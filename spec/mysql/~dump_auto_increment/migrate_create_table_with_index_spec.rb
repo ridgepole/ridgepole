@@ -25,13 +25,13 @@ describe 'Ridgepole::Client#diff -> migrate (with index)', condition: '>= 5.1.0'
       expect(delta.differ?).to be_truthy
 
       expect(delta.script).to match_fuzzy erbh(<<-ERB)
-        create_table("dept_emp", {:primary_key=>["emp_no", "dept_no"]}) do |t|
-          t.column("emp_no", :"integer", {:null=>false, :limit=>4})
-          t.column("dept_no", :"integer", {:null=>false, :auto_increment=>true, :limit=>4})
-          t.column("from_date", :"date", {:null=>false})
-          t.column("to_date", :"date", {:null=>false})
-          t.index(["dept_no"], <%= {:name=>"dept_no"} + cond(5.0, using: :btree) %>)
-          t.index(["emp_no"], <%= {:name=>"emp_no"} + cond(5.0, using: :btree) %>)
+        create_table("dept_emp", **{:primary_key=>["emp_no", "dept_no"]}) do |t|
+          t.column("emp_no", :"integer", **{:null=>false, :limit=>4})
+          t.column("dept_no", :"integer", **{:null=>false, :auto_increment=>true, :limit=>4})
+          t.column("from_date", :"date", **{:null=>false})
+          t.column("to_date", :"date", **{:null=>false})
+          t.index(["dept_no"], **<%= {:name=>"dept_no"} + cond(5.0, using: :btree) %>)
+          t.index(["emp_no"], **<%= {:name=>"emp_no"} + cond(5.0, using: :btree) %>)
         end
       ERB
 
