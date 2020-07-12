@@ -3,8 +3,7 @@
 module Ridgepole
   class DSLParser
     class Context
-      attr_reader :__definition
-      attr_reader :__execute
+      attr_reader :__definition, :__execute
 
       def initialize(opts = {})
         @__working_dir = File.expand_path(opts[:path] ? File.dirname(opts[:path]) : Dir.pwd)
