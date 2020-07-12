@@ -36,7 +36,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
       expect(delta.script).to match_fuzzy <<-RUBY
-        add_foreign_key("child", "parent", {:name=>"fk_rails_e74ce85cbc"})
+        add_foreign_key("child", "parent", **{:name=>"fk_rails_e74ce85cbc"})
       RUBY
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl

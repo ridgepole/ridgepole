@@ -326,7 +326,7 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
     end
 
     def append_change_table(table_name, buf)
-      buf.puts "change_table(#{table_name.inspect}, {:bulk => true}) do |t|" if @options[:bulk_change]
+      buf.puts "change_table(#{table_name.inspect}, bulk: true) do |t|" if @options[:bulk_change]
       yield
       buf.puts 'end' if @options[:bulk_change]
     end
@@ -429,11 +429,11 @@ remove_column(#{table_name.inspect}, #{column_name.inspect})
 
       if force_bulk_change || @options[:bulk_change]
         buf.puts(<<-RUBY)
-  t.index(#{column_name.inspect}, #{options.inspect})
+  t.index(#{column_name.inspect}, **#{options.inspect})
       RUBY
       else
         buf.puts(<<-RUBY)
-add_index(#{table_name.inspect}, #{column_name.inspect}, #{options.inspect})
+add_index(#{table_name.inspect}, #{column_name.inspect}, **#{options.inspect})
       RUBY
       end
     end
@@ -441,15 +441,20 @@ add_index(#{table_name.inspect}, #{column_name.inspect}, #{options.inspect})
     def append_remove_index(table_name, _index_name, attrs, buf)
       column_name = attrs.fetch(:column_name)
       options = attrs[:options] || {}
-      target = options[:name] ? { name: options[:name] } : column_name
+      target =
+        if options[:name]
+          "name: #{options[:name].inspect}"
+        else
+          column_name.inspect
+        end
 
       if @options[:bulk_change]
         buf.puts(<<-RUBY)
-  t.remove_index(#{target.inspect})
+  t.remove_index(#{target})
       RUBY
       else
         buf.puts(<<-RUBY)
-remove_index(#{table_name.inspect}, #{target.inspect})
+remove_index(#{table_name.inspect}, #{target})
       RUBY
       end
     end
@@ -469,7 +474,7 @@ remove_index(#{table_name.inspect}, #{target.inspect})
       attrs_options = attrs[:options] || {}
 
       buf.puts(<<-RUBY)
-add_foreign_key(#{table_name.inspect}, #{to_table.inspect}, #{attrs_options.inspect})
+add_foreign_key(#{table_name.inspect}, #{to_table.inspect}, **#{attrs_options.inspect})
     RUBY
     end
 
@@ -478,13 +483,13 @@ add_foreign_key(#{table_name.inspect}, #{to_table.inspect}, #{attrs_options.insp
       fk_name = attrs_options[:name]
 
       target = if fk_name
-                 { name: fk_name }
+                 "name: #{fk_name.inspect}"
                else
-                 attrs.fetch(:to_table)
+                 attrs.fetch(:to_table).inspect
                end
 
       buf.puts(<<-RUBY)
-remove_foreign_key(#{table_name.inspect}, #{target.inspect})
+remove_foreign_key(#{table_name.inspect}, #{target})
     RUBY
     end
 
@@ -500,17 +505,19 @@ remove_foreign_key(#{table_name.inspect}, #{target.inspect})
     def inspect_options_include_default_proc(options)
       options = options.dup
 
-      if options[:default].is_a?(Proc)
-        proc_default = options.delete(:default)
-        proc_default = ":default=>proc{#{proc_default.call.inspect}}"
-        options_inspect = options.inspect
-        options_inspect.sub!(/\}\z/, '')
-        options_inspect << ', ' if options_inspect !~ /\{\z/
-        options_inspect << proc_default << '}'
-        options_inspect
-      else
-        options.inspect
-      end
+      kwargs =
+        if options[:default].is_a?(Proc)
+          proc_default = options.delete(:default)
+          proc_default = ":default=>proc{#{proc_default.call.inspect}}"
+          options_inspect = options.inspect
+          options_inspect.sub!(/\}\z/, '')
+          options_inspect << ', ' if options_inspect !~ /\{\z/
+          options_inspect << proc_default << '}'
+          options_inspect
+        else
+          options.inspect
+        end
+      "**#{kwargs}"
     end
   end
 end

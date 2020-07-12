@@ -50,7 +50,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     specify do
       delta = subject.diff(expected_dsl)
       expect(delta).to be_differ
-      expect(delta.script).to match_fuzzy('remove_index("users", {:name=>"index_users_on_lower_name"})')
+      expect(delta.script).to match_fuzzy('remove_index("users", name: "index_users_on_lower_name")')
       expect(subject.dump).to match_fuzzy(actual_dsl)
       delta.migrate
       expect(subject.dump).to match_fuzzy(expected_dsl)
