@@ -37,10 +37,11 @@ module Ridgepole
       attrs[:foreign_keys].each do |_, foreign_key_attrs|
         fk_index = foreign_key_attrs[:options][:column] || "#{foreign_key_attrs[:to_table].singularize}_id"
         next if attrs[:indices]&.any? { |_k, v| v[:column_name].first == fk_index }
+        next if attrs[:options][:primary_key] == fk_index
 
         Ridgepole::Logger.instance.warn(<<-MSG)
 [WARNING] Table `#{table_name}` has a foreign key on `#{fk_index}` column, but doesn't have any indexes on the column.
-          Although an index will be added automatically by InnoDB, please add an index explicitly for your future operations.
+          Although an index will be added automatically by InnoDB, please add an index explicitly before the next operation.
         MSG
       end
     end

@@ -188,13 +188,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG).twice
 [WARNING] Table `child` has a foreign key on `parent_id` column, but doesn't have any indexes on the column.
-          Although an index will be added automatically by InnoDB, please add an index explicitly for your future operations.
+          Although an index will be added automatically by InnoDB, please add an index explicitly before the next operation.
       MSG
       subject.diff(dsl).migrate
 
-      expect do
-        subject.diff(dsl).migrate
-      end.to raise_error(/Mysql2::Error: Cannot drop index/)
+      expect(subject.diff(dsl).differ?).to be_truthy
     }
   end
 
@@ -219,7 +217,29 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(Ridgepole::Logger.instance).to_not receive(:warn)
       subject.diff(dsl).migrate
 
-      expect { subject.diff(dsl).migrate }.to_not raise_error
+      expect(subject.diff(dsl).differ?).to be_falsey
+    }
+  end
+
+  context 'when create fk on the primary key' do
+    let(:dsl) do
+      erbh(<<-ERB)
+        create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+        end
+
+        create_table "icons", primary_key: "user_id", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+        end
+        add_foreign_key "icons", "users", name: "fk_icons_users"
+      ERB
+    end
+
+    subject { client(dump_without_table_options: false) }
+
+    it {
+      expect(Ridgepole::Logger.instance).to_not receive(:warn)
+      subject.diff(dsl).migrate
+
+      expect(subject.diff(dsl).differ?).to be_falsey
     }
   end
 end
