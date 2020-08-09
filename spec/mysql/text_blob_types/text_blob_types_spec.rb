@@ -5,7 +5,7 @@ describe 'Ridgepole::Client (with new text/blob types)' do
     subject { client }
 
     it do
-      delta = subject.diff(<<-RUBY)
+      table_def = <<-RUBY
         create_table :foos, id: :unsigned_integer do |t|
           t.blob             :blob
           t.tinyblob         :tiny_blob
@@ -20,6 +20,7 @@ describe 'Ridgepole::Client (with new text/blob types)' do
           t.unsigned_integer :unsigned_integer
         end
       RUBY
+      delta = subject.diff(table_def)
 
       expect(delta.differ?).to be_truthy
       delta.migrate
@@ -39,6 +40,8 @@ describe 'Ridgepole::Client (with new text/blob types)' do
           t.integer "unsigned_integer", unsigned: true
         end
       ERB
+
+      expect(subject.diff(table_def).differ?).to be_falsey
     end
   end
 

@@ -30,8 +30,6 @@ Style/Documentation:
   Enabled: false
 Style/GuardClause:
   Enabled: false
-Style/MethodMissingSuper:
-  Enabled: false
 Style/MixinUsage:
   Exclude:
     - 'spec/**/*'
@@ -47,6 +45,8 @@ Layout/SpaceAroundMethodCallOperator:
   Enabled: true
 Lint/DeprecatedOpenSSLConstant:
   Enabled: true
+Lint/MissingSuper:
+  Enabled: false
 Lint/MixedRegexpCaptureTypes:
   Enabled: true
 Lint/RaiseException:
