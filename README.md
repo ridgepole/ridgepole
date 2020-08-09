@@ -117,6 +117,9 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Support `require_relative` ([pull#298](https://github.com/winebarrel/ridgepole/pull/298))
 * `>= 0.8.8`
   * Fix keyword arguments warnings in Ruby 2.7 ([pull#303](https://github.com/winebarrel/ridgepole/pull/303))
+* `>= 0.8.9`
+  * Fix unexpected differences on text types and blob types on Rails 6 ([pull#306](https://github.com/winebarrel/ridgepole/pull/306))
+  * Fix unexpected warning when a foreign key is added on the primary key ([pull#307](https://github.com/winebarrel/ridgepole/pull/307))
 </details>
 
 ## Installation
