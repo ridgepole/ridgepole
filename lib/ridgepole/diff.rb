@@ -386,6 +386,18 @@ module Ridgepole
           attrs[:type] = :bigint
           opts.delete(:limit)
         end
+
+        if opts[:size] && (attrs[:type] == :text || attrs[:type] == :blob || attrs[:type] == :binary)
+          case opts.delete(:size)
+          when :tiny
+            attrs[:type] = :blob if attrs[:type] == :binary
+            opts[:limit] = 255
+          when :medium
+            opts[:limit] = 16_777_215
+          when :long
+            opts[:limit] = 4_294_967_295
+          end
+        end
       end
     end
 
