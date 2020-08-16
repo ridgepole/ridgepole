@@ -186,13 +186,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     subject { client(dump_without_table_options: false) }
 
     it {
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG).twice
-[WARNING] Table `child` has a foreign key on `parent_id` column, but doesn't have any indexes on the column.
-          Although an index will be added automatically by InnoDB, please add an index explicitly before the next operation.
-      MSG
-      subject.diff(dsl).migrate
-
-      expect(subject.diff(dsl).differ?).to be_truthy
+      expect do
+        subject.diff(dsl).migrate
+      end.to raise_error('The column `parent_id` of the table `child` has a foreign key but no index. Although InnoDB creates an index automatically, please add one explicitly in order for ridgepole to manage it.')
     }
   end
 
