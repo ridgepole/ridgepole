@@ -120,6 +120,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 * `>= 0.8.9`
   * Fix unexpected differences on text types and blob types on Rails 6 ([pull#306](https://github.com/winebarrel/ridgepole/pull/306))
   * Fix unexpected warning when a foreign key is added on the primary key ([pull#307](https://github.com/winebarrel/ridgepole/pull/307))
+* `>= 0.8.10`
+  * Raise an error if an InnoDB column has a foreign key but no index ([pull#310](https://github.com/winebarrel/ridgepole/pull/310))
 </details>
 
 ## Installation
