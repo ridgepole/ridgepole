@@ -3,6 +3,7 @@ AllCops:
     - 'gemfiles/**/*'
     - 'omnibus-ridgepole/**/*'
   TargetRubyVersion: 2.4
+  NewCops: enable
 Bundler/OrderedGems:
   Include:
     - 'Appraisals'
@@ -39,39 +40,13 @@ Layout/ClosingHeredocIndentation:
   Enabled: false
 Style/NumericPredicate:
   Enabled: false
-Layout/EmptyLinesAroundAttributeAccessor:
-  Enabled: true
-Layout/SpaceAroundMethodCallOperator:
-  Enabled: true
-Lint/DeprecatedOpenSSLConstant:
-  Enabled: true
 Lint/MissingSuper:
   Enabled: false
-Lint/MixedRegexpCaptureTypes:
-  Enabled: true
-Lint/RaiseException:
-  Enabled: true
-Lint/StructNewOverride:
-  Enabled: true
-Style/AccessorGrouping:
-  Enabled: true
-Style/BisectedAttrAccessor:
-  Enabled: true
-Style/ExponentialNotation:
-  Enabled: true
-Style/HashEachMethods:
-  Enabled: true
-Style/HashTransformKeys:
-  Enabled: true
-Style/HashTransformValues:
-  Enabled: true
-Style/RedundantAssignment:
-  Enabled: true
-Style/RedundantFetchBlock:
-  Enabled: true
-Style/RedundantRegexpCharacterClass:
-  Enabled: true
-Style/RedundantRegexpEscape:
-  Enabled: true
-Style/SlicingWithRange:
-  Enabled: true
+Style/StringConcatenation:
+  Enabled: false
+Style/SoleNestedConditional:
+  Enabled: false
+Lint/DuplicateBranch:
+  Enabled: false
+Style/OptionalBooleanParameter:
+  Enabled: false

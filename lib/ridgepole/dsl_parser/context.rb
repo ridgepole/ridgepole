@@ -27,7 +27,7 @@ module Ridgepole
         table_name = table_name.to_s
         table_definition = TableDefinition.new(table_name, self)
 
-        options[:primary_key] = options[:primary_key].to_s if options[:primary_key]&.is_a?(Symbol)
+        options[:primary_key] = options[:primary_key].to_s if options[:primary_key].is_a?(Symbol)
         if options[:id] && TableDefinition::ALIAS_TYPES.key?(options[:id])
           type, type_default_opts = TableDefinition::ALIAS_TYPES[options[:id]]
           options[:id] = type
