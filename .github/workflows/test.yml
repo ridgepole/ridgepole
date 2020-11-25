@@ -28,6 +28,8 @@ jobs:
         exclude:
           - ruby: 2.4
             gemfile: gemfiles/activerecord_6.0.gemfile
+          - ruby: 2.4
+            gemfile: gemfiles/activerecord_6.1.gemfile
 
     steps:
       - uses: actions/checkout@v2
