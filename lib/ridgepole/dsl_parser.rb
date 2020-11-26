@@ -37,7 +37,8 @@ module Ridgepole
       attrs[:foreign_keys].each do |_, foreign_key_attrs|
         fk_index = foreign_key_attrs[:options][:column] || "#{foreign_key_attrs[:to_table].singularize}_id"
         next if attrs[:indices]&.any? { |_k, v| v[:column_name].first == fk_index }
-        next if attrs[:options][:primary_key] == fk_index
+        # NOTE: For composite primary keys, the first column of the primary key is used as the foreign key index
+        next if Array(attrs[:options][:primary_key]).first == fk_index
 
         raise "The column `#{fk_index}` of the table `#{table_name}` has a foreign key but no index. Although InnoDB creates an index automatically, please add one explicitly in order for ridgepole to manage it."
       end
