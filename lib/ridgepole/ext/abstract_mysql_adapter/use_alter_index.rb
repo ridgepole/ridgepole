@@ -7,7 +7,7 @@ module Ridgepole
     module AbstractMysqlAdapter
       module UseAlterIndex
         def add_index(table_name, column_name, options = {})
-          index_name, index_type, index_columns, index_options, _index_algorithm, index_using = add_index_options(table_name, column_name, options)
+          index_name, index_type, index_columns, index_options, _index_algorithm, index_using = add_index_options(table_name, column_name, **options)
 
           # cannot specify index_algorithm
           execute "ALTER TABLE #{quote_table_name(table_name)} ADD #{index_type} INDEX #{quote_column_name(index_name)} #{index_using} (#{index_columns})#{index_options}"
