@@ -243,15 +243,15 @@ end
 context 'when create fk on the first primary key' do
   let(:dsl) do
     erbh(<<-ERB)
-      create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+      create_table "users", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
       end
 
-      create_table "employee", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+      create_table "employee", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
       end
 
       create_table "icons", primary_key: ["user_id", "employee_id"], force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-        t.bigint "user_id", null: false
-        t.bigint "employee_id", null: false
+        t.integer "user_id", null: false
+        t.integer "employee_id", null: false
       end
       add_foreign_key "icons", "users", name: "fk_icons_users"
     ERB
@@ -270,15 +270,15 @@ end
 context 'when create fk on the second primary key' do
   let(:dsl) do
     erbh(<<-ERB)
-      create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+      create_table "users", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
       end
 
-      create_table "employee", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+      create_table "employee", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
       end
 
       create_table "icons", primary_key: ["user_id", "employee_id"], force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-        t.bigint "user_id", null: false
-        t.bigint "employee_id", null: false
+        t.integer "user_id", null: false
+        t.integer "employee_id", null: false
       end
       add_foreign_key "icons", "employees", name: "fk_icons_employees"
     ERB
