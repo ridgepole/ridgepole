@@ -19,6 +19,10 @@ module SpecCondition
     def debug?
       ENV['DEBUG'] == '1'
     end
+
+    def verbose?
+      ENV['VERBOSE'] == '1'
+    end
   end
 
   def check_version_or_cond(version_or_cond)
