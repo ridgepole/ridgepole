@@ -25,10 +25,11 @@ require 'erb_helper'
 
 RSpec.configure do |config|
   config.before(:all) do
-    if condition(:debug)
+    if condition(:debug) || condition(:verbose)
       ActiveRecord::Migration.verbose = true
       logger = Ridgepole::Logger.instance
       logger.level = ::Logger::DEBUG
+      logger.verbose = condition(:verbose)
       ActiveRecord::Base.logger = logger
     else
       ActiveRecord::Migration.verbose = false

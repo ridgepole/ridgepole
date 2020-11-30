@@ -131,6 +131,7 @@ module Ridgepole
         polymorphic_options.merge!(options.slice(:null, :first, :after))
         index_options = options.key?(:index) ? options.delete(:index) : true
         type = options.delete(:type) || DEFAULT_PRIMARY_KEY_TYPE
+        foreign_key_options = options.delete(:foreign_key)
 
         args.each do |col|
           column("#{col}_id", type, options)
@@ -138,6 +139,12 @@ module Ridgepole
           if index_options
             columns = polymorphic ? ["#{col}_type", "#{col}_id"] : ["#{col}_id"]
             index(columns, index_options.is_a?(Hash) ? index_options : {})
+          end
+          if foreign_key_options # rubocop:disable Style/Next
+            fk_opts = foreign_key_options.is_a?(Hash) ? foreign_key_options.dup : {}
+            fk_opts.update(column: "#{col}_id") if col.to_s.singularize != col.to_s
+            to_table = fk_opts.delete(:to_table) || col
+            @base.add_foreign_key(@table_name, to_table, fk_opts)
           end
         end
       end

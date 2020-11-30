@@ -310,4 +310,126 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_ruby expected_dsl
     }
   end
+
+  context 'when use references with fk (no change)' do
+    let(:actual_dsl) do
+      erbh(<<-ERB)
+        create_table "products", force: :cascade do |t|
+        end
+
+        create_table "user", force: :cascade do |t|
+        end
+
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+          t.date   "birth_date", null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
+          t.<%= cond('>= 5.1','bigint', 'integer') %> "products_id"
+          t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
+          t.index "products_id"
+          t.index "user_id"
+        end
+
+        add_foreign_key("employees", "products", **{:column=>"products_id"})
+        add_foreign_key("employees", "user")
+      ERB
+    end
+
+    let(:expected_dsl) do
+      erbh(<<-ERB)
+        create_table "products", force: :cascade do |t|
+        end
+
+        create_table "user", force: :cascade do |t|
+        end
+
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+          t.date   "birth_date", null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
+          t.references :products, :user, foreign_key: true
+        end
+      ERB
+    end
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_falsey
+    }
+  end
+
+  context 'when use references with fk (change)' do
+    let(:actual_dsl) do
+      erbh(<<-ERB)
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+          t.date   "birth_date", null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
+        end
+        create_table "products", force: :cascade do |t|
+        end
+        create_table "user", force: :cascade do |t|
+        end
+      ERB
+    end
+
+    let(:dsl) do
+      erbh(<<-ERB)
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+          t.date   "birth_date", null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
+          t.references :products, :user, foreign_key: true
+        end
+        create_table "products", force: :cascade do |t|
+        end
+        create_table "user", force: :cascade do |t|
+        end
+      ERB
+    end
+
+    let(:expected_dsl) do
+      erbh(<<-ERB)
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+          t.date   "birth_date", null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
+          t.<%= cond('>= 5.1','bigint', 'integer') %> "products_id"
+          t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
+          t.index ["products_id"], name: "index_employees_on_products_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["user_id"], name: "index_employees_on_user_id", <%= i cond(5.0, using: :btree) %>
+        end
+        create_table "products", force: :cascade do |t|
+        end
+        create_table "user", force: :cascade do |t|
+        end
+        add_foreign_key("employees", "products", column: "products_id")
+        add_foreign_key("employees", "user")
+      ERB
+    end
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_ruby actual_dsl
+      delta.migrate
+      expect(subject.dump).to match_ruby expected_dsl
+    }
+  end
 end
