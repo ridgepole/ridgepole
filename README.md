@@ -122,6 +122,9 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Fix unexpected warning when a foreign key is added on the primary key ([pull#307](https://github.com/winebarrel/ridgepole/pull/307))
 * `>= 0.8.10`
   * Raise an error if an InnoDB column has a foreign key but no index ([pull#310](https://github.com/winebarrel/ridgepole/pull/310))
+* `>= 0.8.11`
+  * Fix FK index check support multiple PK ([pull#315](https://github.com/winebarrel/ridgepole/pull/315))
+  * Support t.reference() foreign_key option ([pull#316](https://github.com/winebarrel/ridgepole/pull/316))
 </details>
 
 ## Installation
