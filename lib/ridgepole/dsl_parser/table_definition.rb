@@ -136,7 +136,6 @@ module Ridgepole
         args.each do |col|
           column("#{col}_id", type, options)
           column("#{col}_type", :string, polymorphic_options) if polymorphic
-          referenced_table = col.to_s.pluralize
           if index_options
             columns = polymorphic ? ["#{col}_type", "#{col}_id"] : ["#{col}_id"]
             index(columns, index_options.is_a?(Hash) ? index_options : {})
@@ -144,7 +143,7 @@ module Ridgepole
           if foreign_key_options # rubocop:disable Style/Next
             fk_opts = foreign_key_options.is_a?(Hash) ? foreign_key_options.dup : {}
             fk_opts.update(column: "#{col}_id") if col.to_s.singularize != col.to_s
-            to_table = fk_opts.delete(:to_table) || referenced_table
+            to_table = fk_opts.delete(:to_table) || col.to_s.pluralize
             @base.add_foreign_key(@table_name, to_table, fk_opts)
           end
         end
