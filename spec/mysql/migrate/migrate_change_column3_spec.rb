@@ -99,9 +99,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "products_id"
           t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
-          t.index "products_id"
           t.index "user_id"
         end
       ERB
@@ -115,7 +113,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.references :products, :user
+          t.references :user
         end
       RUBY
     end
@@ -138,11 +136,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "products_id"
-          t.string "products_type"
           t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
           t.string "user_type"
-          t.index ["products_type", "products_id"]
           t.index ["user_type", "user_id"]
         end
       ERB
@@ -156,7 +151,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.references :products, :user, polymorphic: true
+          t.references :user, polymorphic: true
         end
       RUBY
     end
@@ -174,11 +169,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "products_id", unsigned: true
-          t.string "products_type"
           t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id", unsigned: true
           t.string "user_type"
-          t.index ["products_type", "products_id"]
           t.index ["user_type", "user_id"]
         end
       ERB
@@ -187,7 +179,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.references :products, :user, unsigned: true, polymorphic: true
+          t.references :user, unsigned: true, polymorphic: true
         end
       RUBY
     end
@@ -222,7 +214,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.references :products, :user
+          t.references :user
         end
       RUBY
     end
@@ -235,9 +227,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "products_id"
           t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
-          t.index ["products_id"], name: "index_employees_on_products_id", <%= i cond(5.0, using: :btree) %>
           t.index ["user_id"], name: "index_employees_on_user_id", <%= i cond(5.0, using: :btree) %>
         end
       ERB
@@ -276,7 +266,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.references :products, :user, polymorphic: true
+          t.references :user, polymorphic: true
         end
       RUBY
     end
@@ -289,11 +279,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "products_id"
-          t.string "products_type"
           t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
           t.string "user_type"
-          t.index ["products_type", "products_id"], name: "index_employees_on_products_type_and_products_id", <%= i cond(5.0, using: :btree) %>
           t.index ["user_type", "user_id"], name: "index_employees_on_user_type_and_user_id", <%= i cond(5.0, using: :btree) %>
         end
       ERB
@@ -314,10 +301,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when use references with fk (no change)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "products", force: :cascade do |t|
-        end
-
-        create_table "user", force: :cascade do |t|
+        create_table "users", force: :cascade do |t|
         end
 
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
@@ -326,23 +310,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "products_id"
           t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
-          t.index "products_id"
           t.index "user_id"
         end
 
-        add_foreign_key("employees", "products", **{:column=>"products_id"})
-        add_foreign_key("employees", "user")
+        add_foreign_key("employees", "users")
       ERB
     end
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "products", force: :cascade do |t|
-        end
-
-        create_table "user", force: :cascade do |t|
+        create_table "users", force: :cascade do |t|
         end
 
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
@@ -351,7 +329,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.references :products, :user, foreign_key: true
+          t.references :user, foreign_key: true
         end
       ERB
     end
@@ -375,9 +353,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
         end
-        create_table "products", force: :cascade do |t|
-        end
-        create_table "user", force: :cascade do |t|
+        create_table "users", force: :cascade do |t|
         end
       ERB
     end
@@ -390,11 +366,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.references :products, :user, foreign_key: true
+          t.references :user, foreign_key: true
         end
-        create_table "products", force: :cascade do |t|
-        end
-        create_table "user", force: :cascade do |t|
+        create_table "users", force: :cascade do |t|
         end
       ERB
     end
@@ -407,17 +381,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "products_id"
           t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
-          t.index ["products_id"], name: "index_employees_on_products_id", <%= i cond(5.0, using: :btree) %>
           t.index ["user_id"], name: "index_employees_on_user_id", <%= i cond(5.0, using: :btree) %>
         end
-        create_table "products", force: :cascade do |t|
+        create_table "users", force: :cascade do |t|
         end
-        create_table "user", force: :cascade do |t|
-        end
-        add_foreign_key("employees", "products", column: "products_id")
-        add_foreign_key("employees", "user")
+        add_foreign_key("employees", "users")
       ERB
     end
 
