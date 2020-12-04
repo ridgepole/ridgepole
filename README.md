@@ -125,6 +125,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 * `>= 0.8.11`
   * Fix FK index check support multiple PK ([pull#315](https://github.com/winebarrel/ridgepole/pull/315))
   * Support t.reference() foreign_key option ([pull#316](https://github.com/winebarrel/ridgepole/pull/316))
+* `>= 0.8.12`
+  * Pluralize column specified by `references` ([pull#317](https://github.com/winebarrel/ridgepole/pull/317))
 </details>
 
 ## Installation
