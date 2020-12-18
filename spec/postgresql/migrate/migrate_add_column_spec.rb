@@ -116,10 +116,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "titles", id: false, force: :cascade do |t|
-          t.integer "emp_no", null: false
-          t.string  "title", limit: 50, null: false
-          t.date    "from_date", null: false
-          t.date    "to_date"
+          t.integer   "emp_no", null: false
+          t.string    "title", limit: 50, null: false
+          t.date      "from_date", null: false
+          t.date      "to_date"
+          t.serial    "title_no", null: false
+          t.bigserial "title_bigno", null: false
           t.index ["emp_no"], name: "idx_titles_emp_no", <%= i cond(5.0, using: :btree) %>
         end
       ERB
@@ -148,6 +150,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         change_table("employees", bulk: true) do |t|
           t.column("age", :integer, **{:null=>false})
           t.column("updated_at", :date, **{})
+        end
+
+        change_table("titles", bulk: true) do |t|
+          t.column("title_no", :serial, **{:null=>false})
+          t.column("title_bigno", :bigserial, **{:null=>false})
         end
       RUBY
       delta.migrate
