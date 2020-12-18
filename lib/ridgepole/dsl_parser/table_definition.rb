@@ -38,6 +38,8 @@ module Ridgepole
         :boolean,
 
         # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/postgresql_adapter.rb#L79
+        :serial,
+        :bigserial,
         :daterange,
         :numrange,
         :tsrange,
