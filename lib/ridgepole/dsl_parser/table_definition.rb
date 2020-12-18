@@ -46,9 +46,9 @@ module Ridgepole
         tstzrange: {},
         int4range: {},
         int8range: {},
-        binary: {}, # rubocop:disable Lint/DuplicateHashKey
-        boolean: {}, # rubocop:disable Lint/DuplicateHashKey
-        bigint: {}, # rubocop:disable Lint/DuplicateHashKey
+        # binary: {}, # dup key
+        # boolean: {}, # dup key
+        # bigint: {}, # dup key
         xml: {},
         tsvector: {},
         hstore: {},
@@ -69,7 +69,7 @@ module Ridgepole
         virtual: {},
 
         # https://github.com/rails/rails/blob/v5.0.4/activerecord/lib/active_record/connection_adapters/abstract_mysql_adapter.rb#L53
-        json: {}, # rubocop:disable Lint/DuplicateHashKey
+        # json: {}, # dup key
       }.freeze
 
       TYPES.each do |column_type, default_options|
