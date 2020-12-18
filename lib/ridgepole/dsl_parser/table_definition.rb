@@ -22,59 +22,60 @@ module Ridgepole
 
       DEFAULT_PRIMARY_KEY_TYPE = Gem::Version.new(ActiveRecord::VERSION::STRING) >= Gem::Version.new('5.1') ? :bigint : :integer
 
-      TYPES = [
+      TYPES = {
         # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/abstract/schema_definitions.rb#L274
-        :string,
-        :text,
-        :integer,
-        :bigint,
-        :float,
-        :decimal,
-        :datetime,
-        :timestamp,
-        :time,
-        :date,
-        :binary,
-        :boolean,
+        string: {},
+        text: {},
+        integer: {},
+        bigint: {},
+        float: {},
+        decimal: {},
+        datetime: {},
+        timestamp: {},
+        time: {},
+        date: {},
+        binary: {},
+        boolean: {},
 
         # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/postgresql_adapter.rb#L79
-        :serial,
-        :bigserial,
-        :daterange,
-        :numrange,
-        :tsrange,
-        :tstzrange,
-        :int4range,
-        :int8range,
-        :binary,
-        :boolean,
-        :bigint,
-        :xml,
-        :tsvector,
-        :hstore,
-        :inet,
-        :cidr,
-        :macaddr,
-        :uuid,
-        :json,
-        :jsonb,
-        :ltree,
-        :citext,
-        :point,
-        :bit,
-        :bit_varying,
-        :money,
+        serial: { null: false },
+        bigserial: { null: false },
+        daterange: {},
+        numrange: {},
+        tsrange: {},
+        tstzrange: {},
+        int4range: {},
+        int8range: {},
+        # binary: {}, # dup key
+        # boolean: {}, # dup key
+        # bigint: {}, # dup key
+        xml: {},
+        tsvector: {},
+        hstore: {},
+        inet: {},
+        cidr: {},
+        macaddr: {},
+        uuid: {},
+        json: {},
+        jsonb: {},
+        ltree: {},
+        citext: {},
+        point: {},
+        bit: {},
+        bit_varying: {},
+        money: {},
 
         # https://github.com/rails/rails/blob/v5.1.1/activerecord/lib/active_record/connection_adapters/abstract/schema_definitions.rb#L184
-        :virtual,
+        virtual: {},
 
         # https://github.com/rails/rails/blob/v5.0.4/activerecord/lib/active_record/connection_adapters/abstract_mysql_adapter.rb#L53
-        :json
-      ].uniq
+        # json: {}, # dup key
+      }.freeze
 
-      TYPES.each do |column_type|
+      TYPES.each do |column_type, default_options|
         define_method column_type do |*args|
           options = args.extract_options!
+          options = default_options.merge(options)
           column_names = args
           column_names.each { |name| column(name, column_type, options) }
         end

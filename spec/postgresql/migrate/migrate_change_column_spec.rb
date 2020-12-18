@@ -157,6 +157,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
           t.text "desc"
+          t.serial "club_no"
+          t.bigserial "club_bigno"
         end
       ERB
     end
@@ -166,6 +168,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
           t.text "desc"
+          t.serial "club_no"
+          t.bigserial "club_bigno"
         end
       ERB
     end
