@@ -40,13 +40,5 @@ Layout/ClosingHeredocIndentation:
   Enabled: false
 Style/NumericPredicate:
   Enabled: false
-Lint/MissingSuper:
-  Enabled: false
-Style/StringConcatenation:
-  Enabled: false
-Style/SoleNestedConditional:
-  Enabled: false
-Lint/DuplicateBranch:
-  Enabled: false
-Style/OptionalBooleanParameter:
+Style/MethodMissingSuper:
   Enabled: false

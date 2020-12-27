@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = Gem::Requirement.new('>= 2.2.7') # rubocop:disable Gemspec/RequiredRubyVersion
+  spec.required_ruby_version = Gem::Requirement.new('>= 2.2.7')
 
   spec.add_dependency 'activerecord', '>= 5.0.1', '< 6.1'
   spec.add_dependency 'diffy'
