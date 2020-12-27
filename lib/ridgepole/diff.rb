@@ -203,10 +203,10 @@ module Ridgepole
     end
 
     def convert_to_primary_key_attrs(column_options)
-      options = column_options.dup
+      options = extract_id_options(column_options)
 
-      type = if options[:id]
-               options.delete(:id)
+      type = if options[:type]
+               options.delete(:type)
              else
                Ridgepole::DSLParser::TableDefinition::DEFAULT_PRIMARY_KEY_TYPE
              end
@@ -214,6 +214,32 @@ module Ridgepole
       options[:auto_increment] = true if %i[integer bigint].include?(type) && !options.key?(:default) && !Ridgepole::ConnectionAdapters.postgresql?
 
       { type: type, options: options }
+    end
+
+    def extract_id_options(table_options)
+      options = table_options.deep_dup
+
+      id_options = case options[:id]
+                   when Hash
+                     # >= 6.1 style id options
+                     # `{ id: { type: :bigint, unsigned: true } }`
+                     options.delete(:id)
+                   when NilClass
+                     {}
+                   else
+                     # < 6.1 style id options
+                     # `{ id: :bigint, unsigned: true }`
+                     { type: options.delete(:id) }
+                   end
+
+      id_options[:id] = false if table_options[:id] == false
+
+      # Correct primary key options
+      (PRIMARY_KEY_OPTIONS - [:id]).each do |key|
+        id_options[key] = options[key] if options.key?(key)
+      end
+
+      id_options
     end
 
     def build_attrs_if_changed(to_attrs, from_attrs, table_name, primary_key: false)
@@ -577,9 +603,11 @@ module Ridgepole
           table_options = parent_table_info.fetch(:options)
           next if table_options[:id] == false
 
+          parent_id_options = extract_id_options(table_options)
+
           parent_column_info = {
-            type: table_options[:id] || @options[:check_relation_type].to_sym,
-            unsigned: table_options[:unsigned],
+            type: parent_id_options[:type] || @options[:check_relation_type].to_sym,
+            unsigned: parent_id_options[:unsigned],
           }
 
           child_column_info = {
