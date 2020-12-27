@@ -114,9 +114,6 @@ module Ridgepole
 
       normalize_default_proc_options!(from, to)
 
-      from_options = from[:options] || {}
-      to_options = to[:options] || {}
-
       if @options[:ignore_table_comment]
         from.delete(:comment)
         to.delete(:comment)
@@ -127,6 +124,16 @@ module Ridgepole
       end
 
       if Ridgepole::ConnectionAdapters.mysql?
+        from_options = convert_to_table_options_attrs(from[:options], from[:charset], from[:collation])
+        to_options = convert_to_table_options_attrs(to[:options], to[:charset], to[:collation])
+
+        from[:options] = from_options if from_options
+        to[:options] = to_options if to_options
+        from.delete(:charset)
+        from.delete(:collation)
+        to.delete(:charset)
+        to.delete(:collation)
+
         if @options[:mysql_change_table_options] && (from_options != to_options)
           from.delete(:options)
           to.delete(:options)
@@ -174,6 +181,25 @@ module Ridgepole
     to: #{to}
       MSG
       end
+    end
+
+    def convert_to_table_options_attrs(raw_table_options, table_charset, table_collation)
+      if raw_table_options.blank? && ActiveRecord.gem_version >= Gem::Version.new('6.1.0')
+        # Implicit engine is InnoDB in 6.1.0
+        # related: https://github.com/rails/rails/pull/39365/files#diff-868f1dccfcbed26a288bf9f3fd8a39c863a4413ab0075e12b6805d9798f556d1R441
+        raw_table_options = 'ENGINE=InnoDB'.dup
+      end
+
+      # regexp is copied from https://github.com/rails/rails/pull/39365/files#diff-868f1dccfcbed26a288bf9f3fd8a39c863a4413ab0075e12b6805d9798f556d1R427
+      if / DEFAULT CHARSET=(?<charset>\w+)(?: COLLATE=(?<collation>\w+))?/ =~ raw_table_options
+        raw_table_options = Regexp.last_match.pre_match + Regexp.last_match.post_match # before part + after part
+        table_charset = charset
+        table_collation = collation if collation
+      end
+
+      raw_table_options << " DEFAULT CHARSET=#{table_charset}" if table_charset
+      raw_table_options << " COLLATE=#{table_collation}" if table_collation
+      raw_table_options
     end
 
     def convert_to_primary_key_attrs(column_options)
