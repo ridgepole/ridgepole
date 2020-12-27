@@ -3,7 +3,7 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   let(:actual_dsl) do
     erbh(<<-ERB)
-      create_table "employees", id: :integer, unsigned: true, force: :cascade do |t|
+      create_table "employees", <%= i cond(">= 6.1", { id: { type: :integer, unsigned: true } }, { id: :integer, unsigned: true }) %>, force: :cascade do |t|
       end
     ERB
   end
@@ -23,11 +23,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
       end
 
       it {
-        expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG)
+        expect(Ridgepole::Logger.instance).to receive(:warn).with(erbh(<<-ERB))
 [WARNING] Primary key definition of `employees` differ but `allow_pk_change` option is false
-  from: {:id=>:integer, :unsigned=>true}
+  from: <%= i cond(">= 6.1", "{:id=>{:type=>:integer, :unsigned=>true}}", "{:id=>:integer, :unsigned=>true}") %>
     to: {:id=>:bigint, :unsigned=>true}
-        MSG
+        ERB
 
         delta = subject.diff(expected_dsl)
         expect(delta.differ?).to be_falsey
@@ -58,7 +58,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:allow_pk_change) { true }
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "employees", id: :bigint, unsigned: true, force: :cascade do |t|
+        create_table "employees", <%= i cond(">= 6.1", { id: { type: :bigint, unsigned: true } }, { id: :bigint, unsigned: true }) %>, force: :cascade do |t|
         end
 
         create_table "salaries", force: :cascade do |t|
