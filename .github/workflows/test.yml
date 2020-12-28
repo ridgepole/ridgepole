@@ -33,13 +33,20 @@ jobs:
       - uses: actions/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-      - uses: actions/cache@v2
+      - name: Cache gems
+        uses: actions/cache@v2
         with:
           path: gemfiles/vendor/bundle
           key: ${{ runner.os }}-gems-${{ matrix.ruby }}-${{ matrix.gemfile }}-${{ hashFiles('ridgepole.gemspec', '**/Gemfile', '${{ matrix.gemfile }}') }}
           restore-keys: |
             ${{ runner.os }}-gems-${{ matrix.ruby }}-${{ matrix.gemfile }}-
-
+      - name: Cache rubocop
+        uses: actions/cache@v2
+        with:
+          path: .cache/rubocop_cache
+          key: ${{ runner.os }}-rubocop-${{ hashFiles('.rubocop.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-rubocop-${{ hashFiles('.rubocop.yml') }}
       - name: Setup dependencies
         run: |
           for i in {1..60}; do docker-compose up -d && break; sleep 1; done
