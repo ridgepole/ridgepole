@@ -8,7 +8,7 @@ module Ridgepole
     end
 
     def execute(sql)
-      cmd = Shellwords.join([@script, sql, JSON.dump(ActiveRecord::Base.connection_config)])
+      cmd = Shellwords.join([@script, sql, JSON.dump(ActiveRecord::Base.connection_pool.db_config.configuration_hash)])
       @logger.info("Execute #{@script}")
       script_basename = File.basename(@script)
 
