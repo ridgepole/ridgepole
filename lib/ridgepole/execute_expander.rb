@@ -46,7 +46,16 @@ module Ridgepole
       private
 
       def append_alter_extra(sql)
-        sql = sql + ',' + Ridgepole::ExecuteExpander.alter_extra if Ridgepole::ExecuteExpander.alter_extra && sql =~ /\AALTER\b/i
+        if Ridgepole::ExecuteExpander.alter_extra
+          case sql
+          when /\AALTER\b/i
+            sql += ',' + Ridgepole::ExecuteExpander.alter_extra
+          when /\A(CREATE|DROP)\s+INDEX\b/i
+            # https://dev.mysql.com/doc/refman/5.6/en/create-index.html
+            # https://dev.mysql.com/doc/refman/5.6/en/drop-index.html
+            sql += ' ' + Ridgepole::ExecuteExpander.alter_extra.tr(',', ' ')
+          end
+        end
 
         sql
       end
