@@ -121,7 +121,6 @@ ARGV.options do |opt|
     opt.on('-o', '--output SCHEMAFILE') { |v| output_file = v }
     opt.on('-t', '--tables TABLES', Array) { |v| options[:tables] = v }
     opt.on('',   '--ignore-tables REGEX_LIST', Array) { |v| options[:ignore_tables] = v.map { |i| Regexp.new(i) } }
-    opt.on('',   '--mysql-use-alter') { options[:mysql_use_alter] = true }
     opt.on('',   '--dump-without-table-options') { options[:dump_without_table_options] = true }
     opt.on('',   '--dump-with-default-fk-name') { options[:dump_with_default_fk_name] = true }
     opt.on('',   '--index-removed-drop-column') { options[:index_removed_drop_column] = true }

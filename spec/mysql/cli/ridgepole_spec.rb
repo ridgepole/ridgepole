@@ -43,7 +43,6 @@ describe 'ridgepole' do
         -o, --output SCHEMAFILE
         -t, --tables TABLES
             --ignore-tables REGEX_LIST
-            --mysql-use-alter
             --dump-without-table-options
             --dump-with-default-fk-name
             --index-removed-drop-column

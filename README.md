@@ -127,6 +127,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Support t.reference() foreign_key option ([pull#316](https://github.com/winebarrel/ridgepole/pull/316))
 * `>= 0.8.12`
   * Pluralize column specified by `references` ([pull#317](https://github.com/winebarrel/ridgepole/pull/317))
+* `>= 0.9.0`
+  * Remove `--mysql-alter-index` option ([pull#330](https://github.com/winebarrel/ridgepole/pull/330))
 </details>
 
 ## Installation
@@ -194,7 +196,6 @@ Usage: ridgepole [options]
     -o, --output SCHEMAFILE
     -t, --tables TABLES
         --ignore-tables REGEX_LIST
-        --mysql-use-alter
         --dump-without-table-options
         --dump-with-default-fk-name
         --index-removed-drop-column
@@ -402,20 +403,6 @@ Apply `Schemafile`
 -- remove_column("dept_manager", "to_date")
    (46.9ms)  ALTER TABLE `dept_manager` DROP `to_date`,LOCK=NONE
    -> 0.0471s
-```
-
-## Use ALTER instead of CREATE/DROP INDEX
-
-```sh
-$ ridgepole -a -c database.yml --mysql-use-alter --debug
-Apply `Schemafile`
-...
--- remove_index("dept_manager", {:name=>"emp_no"})
-   (19.2ms)  ALTER TABLE `dept_manager` DROP INDEX `emp_no`
-   -> 0.0200s
--- add_index("dept_manager", ["emp_no"], {:name=>"emp_no2", :using=>:btree})
-   (23.4ms)  ALTER TABLE `dept_manager` ADD  INDEX `emp_no2` USING btree (`emp_no`)
-   -> 0.0243s
 ```
 
 ## Relation column type check
