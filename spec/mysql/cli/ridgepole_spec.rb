@@ -23,6 +23,7 @@ describe 'ridgepole' do
         -f, --file SCHEMAFILE
             --dry-run
             --table-options OPTIONS
+            --table-hash-options OPTIONS
             --alter-extra ALTER_SPEC
             --external-script SCRIPT
             --bulk-change
@@ -188,6 +189,40 @@ describe 'ridgepole' do
           Ridgepole::Delta#migrate
           No change
         MSG
+      end
+    end
+
+    context 'apply with --table-hash-options' do
+      context 'given flatten json' do
+        it 'parses string to hash' do
+          out, status = run_cli(args: ['-c', conf, '-a', '--table-hash-options', %('{ id: "bigint", unsigned: true }')])
+
+          expect(status.success?).to be_truthy
+          expect(out).to match_fuzzy <<-MSG
+            Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false, :table_hash_options=>{:id=>:bigint, :unsigned=>true}}])
+            Apply `Schemafile`
+            Ridgepole::Client#diff
+            Ridgepole::Delta#differ?
+            Ridgepole::Delta#migrate
+            No change
+          MSG
+        end
+      end
+
+      context 'given nested json' do
+        it 'parses string to nested hash' do
+          out, status = run_cli(args: ['-c', conf, '-a', '--table-hash-options', %('id: { type: "bigint", unsigned: true }')])
+
+          expect(status.success?).to be_truthy
+          expect(out).to match_fuzzy <<-MSG
+            Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, {:dry_run=>false, :debug=>false, :color=>false, :table_hash_options=>{:id=>{:type=>:bigint, :unsigned=>true}}}])
+            Apply `Schemafile`
+            Ridgepole::Client#diff
+            Ridgepole::Delta#differ?
+            Ridgepole::Delta#migrate
+            No change
+          MSG
+        end
       end
     end
 
