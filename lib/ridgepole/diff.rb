@@ -195,43 +195,20 @@ module Ridgepole
     end
 
     def convert_to_primary_key_attrs(column_options)
-      options = extract_id_options(column_options)
+      type = Ridgepole::DSLParser::TableDefinition::DEFAULT_PRIMARY_KEY_TYPE
+      options = column_options.deep_dup
 
-      type = if options[:type]
-               options.delete(:type)
-             else
-               Ridgepole::DSLParser::TableDefinition::DEFAULT_PRIMARY_KEY_TYPE
-             end
+      if ActiveRecord.gem_version < Gem::Version.new('6.1.0')
+        type = options.delete(:id) if options[:id]
+      else
+        id = options[:id].is_a?(Hash) ? options.delete(:id) : {}
+        type = id.delete(:type) if id[:type]
+        options.merge!(id.slice(*PRIMARY_KEY_OPTIONS))
+      end
 
       options[:auto_increment] = true if %i[integer bigint].include?(type) && !options.key?(:default) && !Ridgepole::ConnectionAdapters.postgresql?
 
       { type: type, options: options }
-    end
-
-    def extract_id_options(table_options)
-      options = table_options.deep_dup
-
-      id_options = case options[:id]
-                   when Hash
-                     # >= 6.1 style id options
-                     # `{ id: { type: :bigint, unsigned: true } }`
-                     options.delete(:id)
-                   when NilClass
-                     {}
-                   else
-                     # < 6.1 style id options
-                     # `{ id: :bigint, unsigned: true }`
-                     { type: options.delete(:id) }
-                   end
-
-      id_options[:id] = false if table_options[:id] == false
-
-      # Correct primary key options
-      (PRIMARY_KEY_OPTIONS - [:id]).each do |key|
-        id_options[key] = options[key] if options.key?(key)
-      end
-
-      id_options
     end
 
     def build_attrs_if_changed(to_attrs, from_attrs, table_name, primary_key: false)
@@ -595,11 +572,16 @@ module Ridgepole
           table_options = parent_table_info.fetch(:options)
           next if table_options[:id] == false
 
-          parent_id_options = extract_id_options(table_options)
+          parent_type, parent_unsigned = if ActiveRecord.gem_version < Gem::Version.new('6.1')
+                                           [table_options[:id], table_options[:unsigned]]
+                                         else
+                                           id = table_options[:id].is_a?(Hash) ? table_options[:id] : {}
+                                           [id[:type], id[:unsigned]]
+                                         end
 
           parent_column_info = {
-            type: parent_id_options[:type] || @options[:check_relation_type].to_sym,
-            unsigned: parent_id_options[:unsigned],
+            type: parent_type || @options[:check_relation_type].to_sym,
+            unsigned: parent_unsigned,
           }
 
           child_column_info = {
