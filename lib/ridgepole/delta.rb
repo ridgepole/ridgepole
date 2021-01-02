@@ -296,7 +296,7 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
       if raw_table_options.blank? && ActiveRecord.gem_version >= Gem::Version.new('6.1.0')
         # Implicit engine is InnoDB in 6.1.0
         # related: https://github.com/rails/rails/pull/39365/files#diff-868f1dccfcbed26a288bf9f3fd8a39c863a4413ab0075e12b6805d9798f556d1R441
-        raw_table_options = 'ENGINE=InnoDB'.dup
+        raw_table_options = +'ENGINE=InnoDB'
       end
 
       raw_table_options << " DEFAULT CHARSET=#{table_charset}" if table_charset
