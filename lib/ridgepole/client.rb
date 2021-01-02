@@ -30,12 +30,19 @@ module Ridgepole
       logger.verbose_info('# Parse DSL')
       expected_definition, expected_execute = @parser.parse(dsl, opts)
       expected_definition.each do |_table, definition|
-        definition[:options][:options] ||= @options[:table_options] if @options[:table_options]
+        merge_table_options(definition)
       end
       logger.verbose_info('# Load tables')
       current_definition, _current_execute = @parser.parse(@dumper.dump, opts)
       logger.verbose_info('# Compare definitions')
       @diff.diff(current_definition, expected_definition, execute: expected_execute)
+    end
+
+    private
+
+    def merge_table_options(definition)
+      definition[:options].reverse_merge!(@options[:table_hash_options]) if @options[:table_hash_options]
+      definition[:options][:options] ||= @options[:table_options] if @options[:table_options]
     end
 
     class << self

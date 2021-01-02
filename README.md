@@ -129,6 +129,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Pluralize column specified by `references` ([pull#317](https://github.com/winebarrel/ridgepole/pull/317))
 * `>= 0.9.0`
   * Remove `--mysql-alter-index` option ([pull#330](https://github.com/winebarrel/ridgepole/pull/330))
+  * Add `--table-hash-options` option ([pull#331](https://github.com/winebarrel/ridgepole/pull/331))
 </details>
 
 ## Installation
@@ -176,6 +177,7 @@ Usage: ridgepole [options]
     -f, --file SCHEMAFILE
         --dry-run
         --table-options OPTIONS
+        --table-hash-options OPTIONS
         --alter-extra ALTER_SPEC
         --external-script SCRIPT
         --bulk-change
