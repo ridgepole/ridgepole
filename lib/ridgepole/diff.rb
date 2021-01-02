@@ -198,12 +198,12 @@ module Ridgepole
       type = Ridgepole::DSLParser::TableDefinition::DEFAULT_PRIMARY_KEY_TYPE
       options = column_options.deep_dup
 
-      if ActiveRecord.gem_version < Gem::Version.new('6.1.0')
-        type = options.delete(:id) if options[:id]
-      else
-        id = options[:id].is_a?(Hash) ? options.delete(:id) : {}
-        type = id.delete(:type) if id[:type]
-        options.merge!(id.slice(*PRIMARY_KEY_OPTIONS))
+      if options[:id].is_a?(Hash)
+        options_id = options.delete(:id)
+        type = options_id.delete(:type) if options_id[:type]
+        options.merge!(options_id.slice(*PRIMARY_KEY_OPTIONS))
+      elsif options[:id]
+        type = options.delete(:id)
       end
 
       options[:auto_increment] = true if %i[integer bigint].include?(type) && !options.key?(:default) && !Ridgepole::ConnectionAdapters.postgresql?
@@ -572,13 +572,12 @@ module Ridgepole
           table_options = parent_table_info.fetch(:options)
           next if table_options[:id] == false
 
-          parent_type, parent_unsigned = if ActiveRecord.gem_version < Gem::Version.new('6.1')
-                                           [table_options[:id], table_options[:unsigned]]
+          options_id = table_options[:id]
+          parent_type, parent_unsigned = if options_id.is_a?(Hash)
+                                           [options_id[:type], options_id[:unsigned]]
                                          else
-                                           id = table_options[:id].is_a?(Hash) ? table_options[:id] : {}
-                                           [id[:type], id[:unsigned]]
+                                           [table_options[:id], table_options[:unsigned]]
                                          end
-
           parent_column_info = {
             type: parent_type || @options[:check_relation_type].to_sym,
             unsigned: parent_unsigned,
