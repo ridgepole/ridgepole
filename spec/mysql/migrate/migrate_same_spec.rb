@@ -4,7 +4,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when database and definition are same' do
     let(:dsl) do
       erbh(<<-ERB)
-        create_table "clubs", <%= i cond('>= 5.1, < 6.1', id: :integer) %>, <%= i cond(">= 6.1", { id: { type: :integer, unsigned: true } }, { unsigned: true }) %>, force: :cascade do |t|
+        create_table "clubs", <%= i cond({ '>= 5.1, < 6.1' => { id: :integer, unsigned: true }, ">= 6.1" => { id: { type: :integer, unsigned: true } } }, { unsigned: true }) %>, force: :cascade do |t|
           t.string "name", default: "", null: false
           t.index ["name"], name: "idx_name", unique: true, <%= i cond(5.0, using: :btree) %>
         end
@@ -32,7 +32,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
         end
 
-        create_table "employee_clubs", <%= i cond('>= 5.1, < 6.1', id: :integer) %>, <%= i cond(">= 6.1", { id: { type: :integer, unsigned: true }}, { unsigned: true }) %>, force: :cascade do |t|
+        create_table "employee_clubs", <%= i cond({ '>= 5.1, < 6.1' => { id: :integer, unsigned: true }, ">= 6.1" => { id: { type: :integer, unsigned: true } } }, { unsigned: true }) %>, force: :cascade do |t|
           t.integer "emp_no", null: false, unsigned: true
           t.integer "club_id", null: false, unsigned: true
           t.index ["emp_no", "club_id"], name: "idx_emp_no_club_id", <%= i cond(5.0, using: :btree) %>
