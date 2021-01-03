@@ -60,6 +60,12 @@ jobs:
         env:
           BUNDLE_GEMFILE: ${{ matrix.gemfile }}
 
-      - run: ${{ matrix.env }} bundle exec rake
+      - name: Run tests
+        run: ${{ matrix.env }} bundle exec rake
         env:
           BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+
+      - name: Coveralls GitHub Action
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

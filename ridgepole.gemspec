@@ -26,7 +26,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'appraisal', '>= 2.2.0'
   spec.add_development_dependency 'bundler'
-  spec.add_development_dependency 'coveralls'
   spec.add_development_dependency 'erbh', '>= 0.1.2'
   spec.add_development_dependency 'hash_modern_inspect', '>= 0.1.1'
   spec.add_development_dependency 'hash_order_helper', '>= 0.1.6'
@@ -39,4 +38,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop', '>= 1.7.0'
   spec.add_development_dependency 'rubocop-rake', '>= 0.5.1'
   spec.add_development_dependency 'rubocop-rspec', '>= 2.1.0'
+  spec.add_development_dependency 'simplecov'
+  spec.add_development_dependency 'simplecov-lcov'
 end

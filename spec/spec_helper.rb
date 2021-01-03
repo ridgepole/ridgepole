@@ -7,7 +7,7 @@ require 'spec_condition'
 require 'cli_helper'
 require 'hide_pending_formatter'
 
-require 'processing_for_travis'
+require 'processing_for_ci'
 
 require 'ridgepole'
 require 'ridgepole/cli/config'
