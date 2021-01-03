@@ -6,6 +6,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 (like Chef/Puppet)
 
 [![Gem Version](https://badge.fury.io/rb/ridgepole.svg)](http://badge.fury.io/rb/ridgepole)
+[![Unstable Version](https://img.shields.io/badge/unstable-0.9.0.beta-brightgreen.svg?longCache=true&style=flat)](https://rubygems.org/gems/ridgepole/versions/0.9.0.beta)
 [![Build Status](https://github.com/winebarrel/ridgepole/workflows/test/badge.svg?branch=0.9)](https://github.com/winebarrel/ridgepole/actions)
 [![Coverage Status](https://coveralls.io/repos/github/winebarrel/ridgepole/badge.svg?branch=0.9)](https://coveralls.io/github/winebarrel/ridgepole?branch=0.8)
 
@@ -131,8 +132,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Remove `--mysql-alter-index` option ([pull#330](https://github.com/winebarrel/ridgepole/pull/330))
   * Add `--table-hash-options` option ([pull#331](https://github.com/winebarrel/ridgepole/pull/331))
   * Support Rails 6.1 ([pull#323](https://github.com/winebarrel/ridgepole/pull/323))
-  * Disable Rails 5.0 support([pull#335](https://github.com/winebarrel/ridgepole/pull/335))
-  * Fix PK AUTO_INCREMENT change bug([pull#334](https://github.com/winebarrel/ridgepole/pull/334))
+  * Disable Rails 5.0 support ([pull#335](https://github.com/winebarrel/ridgepole/pull/335))
+  * Fix PK AUTO_INCREMENT change bug ([pull#334](https://github.com/winebarrel/ridgepole/pull/334))
 </details>
 
 **Notice**
