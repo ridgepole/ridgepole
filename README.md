@@ -131,6 +131,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Remove `--mysql-alter-index` option ([pull#330](https://github.com/winebarrel/ridgepole/pull/330))
   * Add `--table-hash-options` option ([pull#331](https://github.com/winebarrel/ridgepole/pull/331))
   * Support Rails 6.1 ([pull#323](https://github.com/winebarrel/ridgepole/pull/323))
+  * Disable Rails 5.0 support([pull#335](https://github.com/winebarrel/ridgepole/pull/335))
 </details>
 
 ## Installation
