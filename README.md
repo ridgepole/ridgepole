@@ -133,6 +133,14 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Support Rails 6.1 ([pull#323](https://github.com/winebarrel/ridgepole/pull/323))
 </details>
 
+**Notice**
+
+ActiveRecord 6.1 is supported in ridgepole v0.9, but the ActiveRecord dump has been changed, so there is a difference between ActiveRecord 5.x/6.0 format.
+
+**If you use ActiveRecord 6.1, please modify Schemafile format**.
+
+cf. https://github.com/winebarrel/ridgepole/pull/323
+
 ## Installation
 
 Add this line to your application's Gemfile:
