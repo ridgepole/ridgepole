@@ -132,6 +132,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Add `--table-hash-options` option ([pull#331](https://github.com/winebarrel/ridgepole/pull/331))
   * Support Rails 6.1 ([pull#323](https://github.com/winebarrel/ridgepole/pull/323))
   * Disable Rails 5.0 support([pull#335](https://github.com/winebarrel/ridgepole/pull/335))
+  * Fix PK AUTO_INCREMENT change bug([pull#334](https://github.com/winebarrel/ridgepole/pull/334))
 </details>
 
 **Notice**
