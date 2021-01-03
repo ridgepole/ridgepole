@@ -76,4 +76,29 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_ruby expected_dsl
     }
   end
+
+  context 'when deafult: nil' do
+    let(:allow_pk_change) { true }
+
+    let(:actual_dsl) do
+      erbh(<<-ERB)
+        create_table "foo", id: :integer, unsigned: true, default: nil, force: :cascade do |t|
+        end
+      ERB
+    end
+
+    let(:expected_dsl) do
+      erbh(<<-ERB)
+        create_table "foo", id: :integer, default: nil, force: :cascade do |t|
+        end
+      ERB
+    end
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      delta.migrate
+      expect(subject.dump).to match_ruby expected_dsl
+    }
+  end
 end

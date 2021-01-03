@@ -119,10 +119,6 @@ module Ridgepole
         to.delete(:comment)
       end
 
-      [from, to].each do |table_attrs|
-        table_attrs.delete(:default) if table_attrs.key?(:default) && table_attrs[:default].nil?
-      end
-
       if Ridgepole::ConnectionAdapters.mysql?
         if @options[:mysql_change_table_options]
           from_options = from[:options] || {}
