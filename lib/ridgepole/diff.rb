@@ -114,9 +114,6 @@ module Ridgepole
 
       normalize_default_proc_options!(from, to)
 
-      from_options = from[:options] || {}
-      to_options = to[:options] || {}
-
       if @options[:ignore_table_comment]
         from.delete(:comment)
         to.delete(:comment)
@@ -127,10 +124,27 @@ module Ridgepole
       end
 
       if Ridgepole::ConnectionAdapters.mysql?
-        if @options[:mysql_change_table_options] && (from_options != to_options)
-          from.delete(:options)
-          to.delete(:options)
-          table_delta[:table_options] = to_options
+        if @options[:mysql_change_table_options]
+          from_options = from[:options] || {}
+          to_options = to[:options] || {}
+
+          if from_options != to_options
+            table_delta[:table_options] = to_options
+            from.delete(:options)
+            to.delete(:options)
+          end
+
+          if from[:charset] != to[:charset]
+            table_delta[:table_charset] = to[:charset]
+            from.delete(:charset)
+            to.delete(:charset)
+          end
+
+          if from[:collation] != to[:collation]
+            table_delta[:table_collation] = to[:collation]
+            from.delete(:collation)
+            to.delete(:collation)
+          end
         end
 
         if @options[:mysql_change_table_comment] && (from[:comment] != to[:comment])
@@ -142,7 +156,11 @@ module Ridgepole
 
       if @options[:dump_without_table_options]
         from.delete(:options)
+        from.delete(:charset)
+        from.delete(:collation)
         to.delete(:options)
+        to.delete(:charset)
+        to.delete(:collation)
       end
 
       pk_attrs = build_primary_key_attrs_if_changed(from, to, table_name)
@@ -177,13 +195,16 @@ module Ridgepole
     end
 
     def convert_to_primary_key_attrs(column_options)
-      options = column_options.dup
+      type = Ridgepole::DSLParser::TableDefinition::DEFAULT_PRIMARY_KEY_TYPE
+      options = column_options.deep_dup
 
-      type = if options[:id]
-               options.delete(:id)
-             else
-               Ridgepole::DSLParser::TableDefinition::DEFAULT_PRIMARY_KEY_TYPE
-             end
+      if options[:id].is_a?(Hash)
+        options_id = options.delete(:id)
+        type = options_id.delete(:type) if options_id[:type]
+        options.merge!(options_id.slice(*PRIMARY_KEY_OPTIONS))
+      elsif options[:id]
+        type = options.delete(:id)
+      end
 
       options[:auto_increment] = true if %i[integer bigint].include?(type) && !options.key?(:default) && !Ridgepole::ConnectionAdapters.postgresql?
 
@@ -551,9 +572,15 @@ module Ridgepole
           table_options = parent_table_info.fetch(:options)
           next if table_options[:id] == false
 
+          options_id = table_options[:id]
+          parent_type, parent_unsigned = if options_id.is_a?(Hash)
+                                           [options_id[:type], options_id[:unsigned]]
+                                         else
+                                           [table_options[:id], table_options[:unsigned]]
+                                         end
           parent_column_info = {
-            type: table_options[:id] || @options[:check_relation_type].to_sym,
-            unsigned: table_options[:unsigned],
+            type: parent_type || @options[:check_relation_type].to_sym,
+            unsigned: parent_unsigned,
           }
 
           child_column_info = {

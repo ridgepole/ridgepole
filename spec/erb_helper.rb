@@ -14,7 +14,11 @@ ERBh.define_method(:i) do |obj|
 end
 
 ERBh.define_method(:cond) do |conds, m, e = nil|
-  if condition(*Array(conds))
+  if conds.is_a?(Hash)
+    conds.find do |c, _|
+      condition(c)
+    end&.last || m
+  elsif condition(conds)
     m
   else
     e || (begin

@@ -292,6 +292,19 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
       buf.puts
     end
 
+    def append_change_table_raw_options(table_name, raw_table_options, table_charset, table_collation, buf)
+      if raw_table_options.blank? && ActiveRecord.gem_version >= Gem::Version.new('6.1.0')
+        # Implicit engine is InnoDB in 6.1.0
+        # related: https://github.com/rails/rails/pull/39365/files#diff-868f1dccfcbed26a288bf9f3fd8a39c863a4413ab0075e12b6805d9798f556d1R441
+        raw_table_options = +'ENGINE=InnoDB'
+      end
+
+      raw_table_options << " DEFAULT CHARSET=#{table_charset}" if table_charset
+      raw_table_options << " COLLATE=#{table_collation}" if table_collation
+
+      append_change_table_options(table_name, raw_table_options, buf)
+    end
+
     def append_change_table_comment(table_name, table_comment, buf)
       comment_literal = "COMMENT=#{ActiveRecord::Base.connection.quote(table_comment)}"
       append_change_table_options(table_name, comment_literal, buf)
@@ -303,6 +316,8 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
       indices = attrs[:indices] || {}
       foreign_keys = attrs[:foreign_keys] || {}
       table_options = attrs[:table_options]
+      table_charset = attrs[:table_charset]
+      table_collation = attrs[:table_collation]
       table_comment = attrs[:table_comment]
 
       if !definition.empty? || !indices.empty? || !primary_key_definition.empty?
@@ -316,7 +331,7 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
 
       append_change_foreign_keys(table_name, foreign_keys, pre_buf_for_fk, post_buf_for_fk, @options) unless foreign_keys.empty?
 
-      append_change_table_options(table_name, table_options, buf) if table_options
+      append_change_table_raw_options(table_name, table_options, table_charset, table_collation, buf) if table_options || table_charset || table_collation
 
       append_change_table_comment(table_name, table_comment, buf) if table_comment
 
