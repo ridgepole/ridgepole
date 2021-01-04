@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Ridgepole::Client (with integer pk)', condition: '>= 5.1.0' do
+describe 'Ridgepole::Client (with integer pk)' do
   context 'when with id:integer' do
     let(:dsl) do
       <<-RUBY
