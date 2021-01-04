@@ -7,7 +7,7 @@ describe 'Ridgepole::Client#dump' do
 
     it {
       expect(subject.dump).to match_fuzzy erbh(<<-ERB)
-        create_table "clubs", <%= i cond({ '>= 5.1, < 6.1' => { id: :integer, unsigned: true }, ">= 6.1" => { id: { type: :integer, unsigned: true } } }, { unsigned: true }) %>, force: :cascade do |t|
+        create_table "clubs", <%= i cond('< 6.1', { id: :integer, unsigned: true }, { id: { type: :integer, unsigned: true } }) %>, force: :cascade do |t|
           t.string "name", default: "", null: false
           t.index ["name"], name: "idx_name", unique: true
         end
@@ -35,7 +35,7 @@ describe 'Ridgepole::Client#dump' do
           t.index ["emp_no"], name: "emp_no"
         end
 
-        create_table "employee_clubs", <%= i cond({ '>= 5.1, < 6.1' => { id: :integer, unsigned: true }, ">= 6.1" => { id: { type: :integer, unsigned: true } } }, { unsigned: true }) %>, force: :cascade do |t|
+        create_table "employee_clubs", <%= i cond('< 6.1', { id: :integer, unsigned: true }, { id: { type: :integer, unsigned: true } }) %>, force: :cascade do |t|
           t.integer "emp_no", null: false, unsigned: true
           t.integer "club_id", null: false, unsigned: true
           t.index ["emp_no", "club_id"], name: "idx_emp_no_club_id"
