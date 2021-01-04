@@ -10,7 +10,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         t.string "name", null: false
         t.datetime "created_at", null: false
         t.datetime "updated_at", null: false
-        t.index "lower((name)::text)", name: "index_users_on_lower_name", <%= i cond(5.0, using: :btree) %>
+        t.index "lower((name)::text)", name: "index_users_on_lower_name"
       end
     ERB
 

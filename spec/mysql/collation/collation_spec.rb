@@ -8,7 +8,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
           t.string  "string", null: false, collation: "ascii_bin"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false
+          t.text    "text", null: false
         end
       ERB
     end
@@ -19,7 +19,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
           t.string  "string", null: false, collation: "ascii_bin"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, collation: "utf8mb4_bin"
+          t.text    "text", null: false, collation: "utf8mb4_bin"
         end
       ERB
     end
@@ -43,7 +43,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
           t.string  "string", null: false, collation: "ascii_bin"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, collation: "utf8mb4_bin"
+          t.text    "text", null: false, collation: "utf8mb4_bin"
         end
       ERB
     end
@@ -54,7 +54,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
           t.string  "string", null: false, collation: "ascii_bin"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false
+          t.text    "text", null: false
         end
       ERB
     end
@@ -78,7 +78,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
           t.string  "string", null: false, collation: "ascii_bin"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, collation: "utf8mb4_bin"
+          t.text    "text", null: false, collation: "utf8mb4_bin"
         end
       ERB
     end
@@ -89,7 +89,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
           t.string  "string", null: false, collation: "utf8mb4_bin"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, collation: "ascii_bin"
+          t.text    "text", null: false, collation: "ascii_bin"
         end
       ERB
     end
@@ -113,7 +113,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
           t.string  "string", null: false, collation: "ascii_bin"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, collation: "utf8mb4_bin"
+          t.text    "text", null: false, collation: "utf8mb4_bin"
         end
       ERB
     end

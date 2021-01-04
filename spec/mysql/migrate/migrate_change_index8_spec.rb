@@ -10,7 +10,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: <%= cond('< 5.2.0.beta2', '{ first_name: 10, last_name: 10 }', 10) %>, <%= i cond(5.0, using: :btree) %>
+          t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: <%= cond('< 5.2.0.beta2', '{ first_name: 10, last_name: 10 }', 10) %>
         end
       ERB
     end
@@ -23,7 +23,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: <%= cond('< 5.2.0.beta2', 10, '{ "first_name" => 10, "last_name" => 10, "foo" => nil }') %>, <%= i cond(5.0, using: :btree) %>
+          t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: <%= cond('< 5.2.0.beta2', 10, '{ "first_name" => 10, "last_name" => 10, "foo" => nil }') %>
         end
       ERB
     end
@@ -59,14 +59,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: <%= cond('< 5.2.0.beta2', 10, '{ "first_name" => 10, "last_name" => 10 }') %>, <%= i cond(5.0, using: :btree) %>
+          t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: <%= cond('< 5.2.0.beta2', 10, '{ "first_name" => 10, "last_name" => 10 }') %>
         end
       ERB
     end
 
     let(:actual_dsl_plus_index) do
       actual_dsl.sub(/\bend\b/, erbh(<<-ERB))
-          t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: <%= cond('< 5.2.0.beta2', '{ first_name: 10, last_name: 10 }', 10) %>, <%= i cond(5.0, using: :btree) %>
+          t.index ["first_name", "last_name"], name: "idx_first_name_last_name", length: <%= cond('< 5.2.0.beta2', '{ first_name: 10, last_name: 10 }', 10) %>
         end
       ERB
     end

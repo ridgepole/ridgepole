@@ -9,7 +9,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
@@ -26,7 +26,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
@@ -62,14 +62,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "users", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
           t.integer "invitation_id"
-          t.index ["invitation_id"], name: "idx_invitation_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["invitation_id"], name: "idx_invitation_id"
         end
 
         add_foreign_key "users", "invitations", name: "users_ibfk"
 
         create_table "invitations", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
           t.integer "user_id"
-          t.index ["user_id"], name: "idx_user_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["user_id"], name: "idx_user_id"
         end
 
         add_foreign_key "invitations", "users", name: "invitations_ibfk"
@@ -80,12 +80,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "invitations", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
           t.integer "user_id"
-          t.index ["user_id"], name: "idx_user_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["user_id"], name: "idx_user_id"
         end
 
         create_table "users", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
           t.integer "invitation_id"
-          t.index ["invitation_id"], name: "idx_invitation_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["invitation_id"], name: "idx_invitation_id"
         end
 
         add_foreign_key "invitations", "users", name: "invitations_ibfk"
@@ -113,7 +113,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         add_foreign_key "child", "parent"
@@ -130,7 +130,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
@@ -169,7 +169,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         add_foreign_key "child", "parent"
@@ -180,7 +180,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
@@ -207,7 +207,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
@@ -221,7 +221,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
       ERB
     end
@@ -243,7 +243,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
@@ -257,7 +257,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
       ERB
     end

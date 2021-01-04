@@ -11,8 +11,8 @@ describe 'Ridgepole::Client#diff -> migrate (with index)' do
           t.string  "dept_no", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
-          t.index ["dept_no"], name: "dept_no", <%= i cond(5.0, using: :btree) %>
-          t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
+          t.index ["dept_no"], name: "dept_no"
+          t.index ["emp_no"], name: "emp_no"
         end
       ERB
     end
@@ -30,8 +30,8 @@ describe 'Ridgepole::Client#diff -> migrate (with index)' do
           t.column("dept_no", :"string", **{:null=>false, :limit=>255})
           t.column("from_date", :"date", **{:null=>false})
           t.column("to_date", :"date", **{:null=>false})
-          t.index(["dept_no"], **<%= {:name=>"dept_no"} + cond(5.0, using: :btree) %>)
-          t.index(["emp_no"], **<%= {:name=>"emp_no"} + cond(5.0, using: :btree) %>)
+          t.index(["dept_no"], **<%= {:name=>"dept_no"} %>)
+          t.index(["emp_no"], **<%= {:name=>"emp_no"} %>)
         end
       ERB
 

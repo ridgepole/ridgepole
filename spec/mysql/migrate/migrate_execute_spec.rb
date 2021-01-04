@@ -11,7 +11,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "books", <%= i cond('>= 5.1',id: :integer) + {force: :cascad} %>e do |t|
           t.string  "title", null: false
           t.integer "author_id", null: false
-          t.index ["author_id"], name: "idx_author_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["author_id"], name: "idx_author_id"
         end
       ERB
     end
@@ -25,7 +25,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "books", <%= i cond('>= 5.1',id: :integer) + {force: :cascad} %>e do |t|
           t.string  "title", null: false
           t.integer "author_id", null: false
-          t.index ["author_id"], name: "idx_author_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["author_id"], name: "idx_author_id"
         end
 
         execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)") do |c|
@@ -48,7 +48,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           `title` varchar(255) NOT NULL,
           `author_id` int(11) NOT NULL,
           PRIMARY KEY (`id`),
-          KEY `idx_author_id` (`author_id`) <%= cond(5.0, 'USING BTREE') %>
+          KEY `idx_author_id` (`author_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
       ERB
 
@@ -64,7 +64,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           `title` varchar(255) NOT NULL,
           `author_id` int(11) NOT NULL,
           PRIMARY KEY (`id`),
-          KEY `idx_author_id` (`author_id`) <%= cond(5.0, 'USING BTREE') %>,
+          KEY `idx_author_id` (`author_id`),
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
       ERB
@@ -81,7 +81,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "books", <%= i cond('>= 5.1',id: :integer) + {force: :cascad} %>e do |t|
           t.string  "title", null: false
           t.integer "author_id", null: false
-          t.index ["author_id"], name: "idx_author_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["author_id"], name: "idx_author_id"
         end
         add_foreign_key "books", "authors", name: "fk_author"
       ERB
@@ -96,7 +96,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "books", <%= i cond('>= 5.1',id: :integer) + {force: :cascad} %>e do |t|
           t.string  "title", null: false
           t.integer "author_id", null: false
-          t.index ["author_id"], name: "idx_author_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["author_id"], name: "idx_author_id"
         end
 
         execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)") do |c|
@@ -121,7 +121,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           `title` varchar(255) NOT NULL,
           `author_id` int(11) NOT NULL,
           PRIMARY KEY (`id`),
-          KEY `idx_author_id` (`author_id`) <%= cond(5.0, 'USING BTREE') %>,
+          KEY `idx_author_id` (`author_id`),
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
       ERB
@@ -136,7 +136,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           `title` varchar(255) NOT NULL,
           `author_id` int(11) NOT NULL,
           PRIMARY KEY (`id`),
-          KEY `idx_author_id` (`author_id`) <%= cond(5.0, 'USING BTREE') %>,
+          KEY `idx_author_id` (`author_id`),
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
       ERB
@@ -153,7 +153,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "books", <%= i cond('>= 5.1',id: :integer) + {force: :cascad} %>e do |t|
           t.string  "title", null: false
           t.integer "author_id", null: false
-          t.index ["author_id"], name: "idx_author_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["author_id"], name: "idx_author_id"
         end
       ERB
     end
@@ -167,7 +167,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "books", <%= i cond('>= 5.1',id: :integer) + {force: :cascad} %>e do |t|
           t.string  "title", null: false
           t.integer "author_id", null: false
-          t.index ["author_id"], name: "idx_author_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["author_id"], name: "idx_author_id"
         end
 
         execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)") do |c|
@@ -190,7 +190,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           `title` varchar(255) NOT NULL,
           `author_id` int(11) NOT NULL,
           PRIMARY KEY (`id`),
-          KEY `idx_author_id` (`author_id`) <%= cond(5.0, 'USING BTREE') %>
+          KEY `idx_author_id` (`author_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
       ERB
 
@@ -206,7 +206,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           `title` varchar(255) NOT NULL,
           `author_id` int(11) NOT NULL,
           PRIMARY KEY (`id`),
-          KEY `idx_author_id` (`author_id`) <%= cond(5.0, 'USING BTREE') %>
+          KEY `idx_author_id` (`author_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
       ERB
     }
@@ -222,7 +222,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "books", <%= i cond('>= 5.1',id: :integer) + {force: :cascad} %>e do |t|
           t.string  "title", null: false
           t.integer "author_id", null: false
-          t.index ["author_id"], name: "idx_author_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["author_id"], name: "idx_author_id"
         end
         add_foreign_key "books", "authors", name: "fk_author"
       ERB
@@ -237,7 +237,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "books", <%= i cond('>= 5.1',id: :integer) + {force: :cascad} %>e do |t|
           t.string  "title", null: false
           t.integer "author_id", null: false
-          t.index ["author_id"], name: "idx_author_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["author_id"], name: "idx_author_id"
         end
 
         execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFERENCES authors (id)") do |c|
@@ -262,7 +262,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           `title` varchar(255) NOT NULL,
           `author_id` int(11) NOT NULL,
           PRIMARY KEY (`id`),
-          KEY `idx_author_id` (`author_id`) <%= cond(5.0, 'USING BTREE') %>,
+          KEY `idx_author_id` (`author_id`),
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
       ERB
@@ -279,7 +279,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           `title` varchar(255) NOT NULL,
           `author_id` int(11) NOT NULL,
           PRIMARY KEY (`id`),
-          KEY `idx_author_id` (`author_id`) <%= cond(5.0, 'USING BTREE') %>,
+          KEY `idx_author_id` (`author_id`),
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8
       ERB

@@ -6,7 +6,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
@@ -48,7 +48,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
@@ -62,7 +62,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
@@ -88,7 +88,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id", unsigned: true
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
@@ -114,7 +114,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
@@ -201,7 +201,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "child", force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" }) %> do |t|
           t.integer "parent_id"
           t.string "name"
-          t.index ["parent_id", "name"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id", "name"], name: "par_id"
         end
         add_foreign_key "child", "parent", name: "child_ibfk_1"
       ERB
