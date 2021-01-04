@@ -486,10 +486,6 @@ module Ridgepole
         to_attrs[:options].delete(:null)
       end
 
-      if Ridgepole::ConnectionAdapters.mysql? && ActiveRecord::VERSION::STRING.start_with?('5.0.')
-        Ridgepole::Logger.instance.warn("[WARNING] Table `#{table_name}`: `default: nil` is ignored when `null: false`. Please apply twice") if to_attrs[:options][:default].nil? && (to_attrs[:options][:null] == false)
-      end
-
       to_attrs
     end
 
