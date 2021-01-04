@@ -4,7 +4,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop fk' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
 
         create_table "child", force: :cascade do |t|
@@ -29,7 +29,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["parent_id"], name: "par_id"
         end
 
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
       ERB
     end
@@ -60,14 +60,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop fk when drop table' do
     let(:dsl) do
       erbh(<<-ERB)
-        create_table "users", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "users", id: :integer, force: :cascade do |t|
           t.integer "invitation_id"
           t.index ["invitation_id"], name: "idx_invitation_id"
         end
 
         add_foreign_key "users", "invitations", name: "users_ibfk"
 
-        create_table "invitations", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "invitations", id: :integer, force: :cascade do |t|
           t.integer "user_id"
           t.index ["user_id"], name: "idx_user_id"
         end
@@ -78,12 +78,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:sorted_dsl) do
       erbh(<<-ERB)
-        create_table "invitations", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "invitations", id: :integer, force: :cascade do |t|
           t.integer "user_id"
           t.index ["user_id"], name: "idx_user_id"
         end
 
-        create_table "users", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "users", id: :integer, force: :cascade do |t|
           t.integer "invitation_id"
           t.index ["invitation_id"], name: "idx_invitation_id"
         end
@@ -108,7 +108,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop fk without name' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
 
         create_table "child", force: :cascade do |t|
@@ -133,7 +133,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["parent_id"], name: "par_id"
         end
 
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
       ERB
     end
@@ -164,7 +164,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop fk when drop table without name' do
     let(:dsl) do
       erbh(<<-ERB)
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
 
         create_table "child", force: :cascade do |t|
@@ -183,7 +183,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["parent_id"], name: "par_id"
         end
 
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
 
         add_foreign_key "child", "parent"
@@ -210,7 +210,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["parent_id"], name: "par_id"
         end
 
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
@@ -246,7 +246,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["parent_id"], name: "par_id"
         end
 
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
 
         add_foreign_key "child", "parent"

@@ -4,11 +4,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when execute' do
     let(:dsl) do
       erbh(<<-ERB)
-        create_table "authors", <%= i cond('>= 5.1',id: :integer) + {force: :cascade} %> do |t|
+        create_table "authors", id: :integer, force: :cascade do |t|
           t.string "name", null: false
         end
 
-        create_table "books", <%= i cond('>= 5.1',id: :integer) + {force: :cascad} %>e do |t|
+        create_table "books", id: :integer, force: :cascade do |t|
           t.string  "title", null: false
           t.integer "author_id", null: false
           t.index ["author_id"], name: "idx_author_id"
@@ -18,11 +18,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:dsl_with_execute) do
       erbh(<<-ERB)
-        create_table "authors", <%= i cond('>= 5.1',id: :integer) + {force: :cascade} %> do |t|
+        create_table "authors", id: :integer, force: :cascade do |t|
           t.string "name", null: false
         end
 
-        create_table "books", <%= i cond('>= 5.1',id: :integer) + {force: :cascad} %>e do |t|
+        create_table "books", id: :integer, force: :cascade do |t|
           t.string  "title", null: false
           t.integer "author_id", null: false
           t.index ["author_id"], name: "idx_author_id"
@@ -74,11 +74,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when not execute' do
     let(:dsl) do
       erbh(<<-ERB)
-        create_table "authors", <%= i cond('>= 5.1',id: :integer) + {force: :cascade} %> do |t|
+        create_table "authors", id: :integer, force: :cascade do |t|
           t.string "name", null: false
         end
 
-        create_table "books", <%= i cond('>= 5.1',id: :integer) + {force: :cascad} %>e do |t|
+        create_table "books", id: :integer, force: :cascade do |t|
           t.string  "title", null: false
           t.integer "author_id", null: false
           t.index ["author_id"], name: "idx_author_id"
@@ -89,11 +89,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:dsl_with_execute) do
       erbh(<<-ERB)
-        create_table "authors", <%= i cond('>= 5.1',id: :integer) + {force: :cascade} %> do |t|
+        create_table "authors", id: :integer, force: :cascade do |t|
           t.string "name", null: false
         end
 
-        create_table "books", <%= i cond('>= 5.1',id: :integer) + {force: :cascad} %>e do |t|
+        create_table "books", id: :integer, force: :cascade do |t|
           t.string  "title", null: false
           t.integer "author_id", null: false
           t.index ["author_id"], name: "idx_author_id"
@@ -146,11 +146,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when execute (noop)' do
     let(:dsl) do
       erbh(<<-ERB)
-        create_table "authors", <%= i cond('>= 5.1',id: :integer) + {force: :cascade} %> do |t|
+        create_table "authors", id: :integer, force: :cascade do |t|
           t.string "name", null: false
         end
 
-        create_table "books", <%= i cond('>= 5.1',id: :integer) + {force: :cascad} %>e do |t|
+        create_table "books", id: :integer, force: :cascade do |t|
           t.string  "title", null: false
           t.integer "author_id", null: false
           t.index ["author_id"], name: "idx_author_id"
@@ -160,11 +160,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:dsl_with_execute) do
       erbh(<<-ERB)
-        create_table "authors", <%= i cond('>= 5.1',id: :integer) + {force: :cascade} %> do |t|
+        create_table "authors", id: :integer, force: :cascade do |t|
           t.string "name", null: false
         end
 
-        create_table "books", <%= i cond('>= 5.1',id: :integer) + {force: :cascad} %>e do |t|
+        create_table "books", id: :integer, force: :cascade do |t|
           t.string  "title", null: false
           t.integer "author_id", null: false
           t.index ["author_id"], name: "idx_author_id"
@@ -215,11 +215,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when not execute (noop)' do
     let(:dsl) do
       erbh(<<-ERB)
-        create_table "authors", <%= i cond('>= 5.1',id: :integer) + {force: :cascade} %> do |t|
+        create_table "authors", id: :integer, force: :cascade do |t|
           t.string "name", null: false
         end
 
-        create_table "books", <%= i cond('>= 5.1',id: :integer) + {force: :cascad} %>e do |t|
+        create_table "books", id: :integer, force: :cascade do |t|
           t.string  "title", null: false
           t.integer "author_id", null: false
           t.index ["author_id"], name: "idx_author_id"
@@ -230,11 +230,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:dsl_with_execute) do
       erbh(<<-ERB)
-        create_table "authors", <%= i cond('>= 5.1',id: :integer) + {force: :cascade} %> do |t|
+        create_table "authors", id: :integer, force: :cascade do |t|
           t.string "name", null: false
         end
 
-        create_table "books", <%= i cond('>= 5.1',id: :integer) + {force: :cascad} %>e do |t|
+        create_table "books", id: :integer, force: :cascade do |t|
           t.string  "title", null: false
           t.integer "author_id", null: false
           t.index ["author_id"], name: "idx_author_id"

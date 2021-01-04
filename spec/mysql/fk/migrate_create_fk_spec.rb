@@ -9,7 +9,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["parent_id"], name: "par_id"
         end
 
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
       ERB
     end
@@ -53,7 +53,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
 
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
       ERB
     end
@@ -65,7 +65,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["parent_id"], name: "par_id"
         end
 
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
@@ -95,7 +95,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         add_foreign_key "child", "parent", name: "child_ibfk_1"
 
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
       ERB
     end
@@ -117,7 +117,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["parent_id"], name: "par_id"
         end
 
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
       ERB
     end
@@ -156,7 +156,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         add_foreign_key "child", "parent", name: "child_ibfk_1"
 
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
       ERB
     end
@@ -173,7 +173,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create fk without any indexes for its column' do
     let(:dsl) do
       erbh(<<-ERB)
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+        create_table "parent", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
         end
 
         create_table "child", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -195,7 +195,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create fk with first key of multiple column indexes for its column' do
     let(:dsl) do
       erbh(<<-ERB)
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" }) %> do |t|
+        create_table "parent", id: :integer, force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" }) %> do |t|
         end
 
         create_table "child", force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" }) %> do |t|
@@ -243,10 +243,10 @@ end
 context 'when create fk on the first primary key' do
   let(:dsl) do
     erbh(<<-ERB)
-      create_table "users", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" }) %> do |t|
+      create_table "users", id: :integer, force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" }) %> do |t|
       end
 
-      create_table "employee", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" }) %> do |t|
+      create_table "employee", id: :integer, force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" }) %> do |t|
       end
 
       create_table "icons", primary_key: ["user_id", "employee_id"], force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" }) %> do |t|
@@ -270,10 +270,10 @@ end
 context 'when create fk on the second primary key' do
   let(:dsl) do
     erbh(<<-ERB)
-      create_table "users", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+      create_table "users", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
       end
 
-      create_table "employee", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+      create_table "employee", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
       end
 
       create_table "icons", primary_key: ["user_id", "employee_id"], force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

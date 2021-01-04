@@ -41,7 +41,7 @@ describe 'Ridgepole::Client.dump' do
           t.index ["emp_no", "club_id"], name: "idx_emp_no_club_id"
         end
 
-        create_table "employees", primary_key: "emp_no", id: :integer, <%= i cond('>= 5.1', default: nil) %>, force: :cascade do |t|
+        create_table "employees", primary_key: "emp_no", id: :integer, default: nil, force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name", limit: 16, null: false

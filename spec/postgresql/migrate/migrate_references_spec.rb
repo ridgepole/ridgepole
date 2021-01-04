@@ -5,8 +5,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "products_id"
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
+          t.bigint "products_id"
+          t.bigint "user_id"
           t.index "products_id"
           t.index "user_id"
         end
@@ -34,9 +34,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "products_id"
+          t.bigint "products_id"
           t.string "products_type"
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
+          t.bigint "user_id"
           t.string "user_type"
           t.index ["products_type", "products_id"]
           t.index ["user_type", "user_id"]
@@ -65,8 +65,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "products_id"
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
+          t.bigint "products_id"
+          t.bigint "user_id"
         end
       ERB
     end

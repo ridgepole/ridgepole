@@ -9,7 +9,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["parent_id"], name: "par_id"
         end
 
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
       ERB
     end
@@ -32,7 +32,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change fk with ignore:true' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
 
         create_table "child", force: :cascade do |t|
@@ -51,7 +51,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["parent_id"], name: "par_id"
         end
 
-        create_table "parent", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "parent", id: :integer, force: :cascade do |t|
         end
 
         add_foreign_key "child", "parent", name: "child_ibfk_1", ignore: true
