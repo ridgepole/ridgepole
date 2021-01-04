@@ -30,8 +30,8 @@ describe 'Ridgepole::Client#diff -> migrate (with index)', condition: '>= 5.1.0'
           t.column("dept_no", :"integer", **{:null=>false, :auto_increment=>true, :limit=>4})
           t.column("from_date", :"date", **{:null=>false})
           t.column("to_date", :"date", **{:null=>false})
-          t.index(["dept_no"], **<%= {:name=>"dept_no"} %>)
-          t.index(["emp_no"], **<%= {:name=>"emp_no"} %>)
+          t.index(["dept_no"], **{:name=>"dept_no"})
+          t.index(["emp_no"], **{:name=>"emp_no"})
         end
       ERB
 
