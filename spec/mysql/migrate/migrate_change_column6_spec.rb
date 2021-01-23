@@ -12,7 +12,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date     "hire_date", null: false
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
-          t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
+          t.binary   "registered_name"
         end
       ERB
     end
@@ -45,7 +45,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table_mysql('employees')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `employees` (
-          `id` <%= cond('>= 5.1','bigint(20)', 'int(11)') %> NOT NULL AUTO_INCREMENT,
+          `id` bigint(20) NOT NULL AUTO_INCREMENT,
           `ext_column` varchar(255) NOT NULL,
           `birth_date` date NOT NULL,
           `first_name` varchar(14) NOT NULL,
@@ -72,7 +72,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date     "hire_date", null: false
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
-          t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
+          t.binary   "registered_name"
         end
       ERB
     end
@@ -105,7 +105,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table_mysql('employees')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `employees` (
-          `emp_id` <%= cond('>= 5.1','bigint(20)', 'int(11)') %> NOT NULL AUTO_INCREMENT,
+          `emp_id` bigint(20) NOT NULL AUTO_INCREMENT,
           `ext_column` varchar(255) NOT NULL,
           `birth_date` date NOT NULL,
           `first_name` varchar(14) NOT NULL,
@@ -132,7 +132,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date     "hire_date", null: false
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
-          t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
+          t.binary   "registered_name"
         end
       ERB
     end
@@ -190,7 +190,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date     "hire_date", null: false
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
-          t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
+          t.binary   "registered_name"
         end
       ERB
     end
@@ -223,7 +223,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table_mysql('employees')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `employees` (
-          `id` <%= cond('>= 5.1','bigint(20)', 'int(11)') %> NOT NULL AUTO_INCREMENT,
+          `id` bigint(20) NOT NULL AUTO_INCREMENT,
           `ext_column` varchar(255) NOT NULL,
           `birth_date` date NOT NULL,
           `first_name` varchar(14) NOT NULL,

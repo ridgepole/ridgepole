@@ -7,7 +7,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.string "first_name", limit: 14, null: false
           t.string "last_name", limit: 16, null: false
-          t.index ["first_name", "last_name"], name: "first_name_last_name", unique: true, <%= i cond(5.0, using: :btree) %>
+          t.index ["first_name", "last_name"], name: "first_name_last_name", unique: true
         end
       ERB
     end

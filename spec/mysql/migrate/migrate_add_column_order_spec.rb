@@ -37,7 +37,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table_mysql('dept_emp')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `dept_emp` (
-          `id` <%= cond('>= 5.1','bigint(20)', 'int(11)') %> NOT NULL AUTO_INCREMENT,
+          `id` bigint(20) NOT NULL AUTO_INCREMENT,
           `emp_no0` int(11) NOT NULL,
           `emp_no` int(11) NOT NULL,
           `dept_no` varchar(4) NOT NULL,
@@ -129,7 +129,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table_mysql('dept_emp')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `dept_emp` (
-          `emp_no` <%= cond('>= 5.1','bigint(20)', 'int(11)') %> NOT NULL AUTO_INCREMENT,
+          `emp_no` bigint(20) NOT NULL AUTO_INCREMENT,
           `emp_no0` int(11) NOT NULL,
           `dept_no` varchar(4) NOT NULL,
           `from_date` date NOT NULL,

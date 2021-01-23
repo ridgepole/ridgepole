@@ -4,16 +4,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when create fk with column' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "direct_messages", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "direct_messages", id: :integer, force: :cascade do |t|
           t.integer "sender_id"
           t.integer "reciever_id"
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
-          t.index ["reciever_id"], name: "index_direct_messages_on_reciever_id", <%= i cond(5.0, using: :btree) %>
-          t.index ["sender_id"], name: "index_direct_messages_on_sender_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["reciever_id"], name: "index_direct_messages_on_reciever_id"
+          t.index ["sender_id"], name: "index_direct_messages_on_sender_id"
         end
 
-        create_table "users", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "users", id: :integer, force: :cascade do |t|
           t.string "email"
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
@@ -62,16 +62,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "direct_messages", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "direct_messages", id: :integer, force: :cascade do |t|
           t.integer "sender_id"
           t.integer "reciever_id"
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
-          t.index ["reciever_id"], name: "index_direct_messages_on_reciever_id", <%= i cond(5.0, using: :btree) %>
-          t.index ["sender_id"], name: "index_direct_messages_on_sender_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["reciever_id"], name: "index_direct_messages_on_reciever_id"
+          t.index ["sender_id"], name: "index_direct_messages_on_sender_id"
         end
 
-        create_table "users", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "users", id: :integer, force: :cascade do |t|
           t.string "email"
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
@@ -106,16 +106,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change fk with column' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "direct_messages", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "direct_messages", id: :integer, force: :cascade do |t|
           t.integer "sender_id"
           t.integer "reciever_id"
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
-          t.index ["reciever_id"], name: "index_direct_messages_on_reciever_id", <%= i cond(5.0, using: :btree) %>
-          t.index ["sender_id"], name: "index_direct_messages_on_sender_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["reciever_id"], name: "index_direct_messages_on_reciever_id"
+          t.index ["sender_id"], name: "index_direct_messages_on_sender_id"
         end
 
-        create_table "users", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "users", id: :integer, force: :cascade do |t|
           t.string "email"
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
@@ -128,16 +128,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "direct_messages", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "direct_messages", id: :integer, force: :cascade do |t|
           t.integer "sender_id"
           t.integer "reciever_id"
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
-          t.index ["reciever_id"], name: "index_direct_messages_on_reciever_id", <%= i cond(5.0, using: :btree) %>
-          t.index ["sender_id"], name: "index_direct_messages_on_sender_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["reciever_id"], name: "index_direct_messages_on_reciever_id"
+          t.index ["sender_id"], name: "index_direct_messages_on_sender_id"
         end
 
-        create_table "users", <%= i cond('>= 5.1',id: :integer) %>, force: :cascade do |t|
+        create_table "users", id: :integer, force: :cascade do |t|
           t.string "email"
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false

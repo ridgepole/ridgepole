@@ -22,12 +22,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "lessons", force: :cascade do |t|
           t.bigint "user_id2", null: false
-          t.index ["user_id2"], name: "index_lessons_on_user_id2", <%= i cond(5.0, using: :btree) %>
+          t.index ["user_id2"], name: "index_lessons_on_user_id2"
         end
 
         create_table "users", id: false, force: :cascade do |t|
           t.bigint "my_original_id", null: false
-          t.index ["my_original_id"], name: "index_users_on_my_original_id", unique: true, <%= i cond(5.0, using: :btree) %>
+          t.index ["my_original_id"], name: "index_users_on_my_original_id", unique: true
         end
 
         add_foreign_key "lessons", "users", primary_key: "my_original_id", column: "user_id2"

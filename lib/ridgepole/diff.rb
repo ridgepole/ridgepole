@@ -159,7 +159,7 @@ module Ridgepole
         to.delete(:collation)
       end
 
-      pk_attrs = build_primary_key_attrs_if_changed(from, to, table_name)
+      pk_attrs = build_primary_key_attrs_if_changed(from, to)
       if pk_attrs
         if @options[:allow_pk_change]
           if from[:id] == false
@@ -207,20 +207,20 @@ module Ridgepole
       { type: type, options: options }
     end
 
-    def build_attrs_if_changed(to_attrs, from_attrs, table_name, primary_key: false)
+    def build_attrs_if_changed(to_attrs, from_attrs, primary_key: false)
       normalize_column_options!(from_attrs, primary_key)
       normalize_column_options!(to_attrs, primary_key)
 
-      new_to_attrs = fix_change_column_options(table_name, from_attrs, to_attrs) unless compare_column_attrs(from_attrs, to_attrs)
+      new_to_attrs = fix_change_column_options(from_attrs, to_attrs) unless compare_column_attrs(from_attrs, to_attrs)
       new_to_attrs
     end
 
-    def build_primary_key_attrs_if_changed(from, to, table_name)
+    def build_primary_key_attrs_if_changed(from, to)
       from_column_attrs = convert_to_primary_key_attrs(from.slice(*PRIMARY_KEY_OPTIONS))
       to_column_attrs = convert_to_primary_key_attrs(to.slice(*PRIMARY_KEY_OPTIONS))
       return if from_column_attrs == to_column_attrs
 
-      build_attrs_if_changed(to_column_attrs, from_column_attrs, table_name, primary_key: true)
+      build_attrs_if_changed(to_column_attrs, from_column_attrs, primary_key: true)
     end
 
     def scan_definition_change(from, to, from_indices, table_name, table_options, table_delta)
@@ -242,7 +242,7 @@ module Ridgepole
         next if ignore_column
 
         if from_attrs
-          to_attrs = build_attrs_if_changed(to_attrs, from_attrs, table_name)
+          to_attrs = build_attrs_if_changed(to_attrs, from_attrs)
           if to_attrs
             definition_delta[:change] ||= {}
             definition_delta[:change][column_name] = to_attrs
@@ -471,7 +471,7 @@ module Ridgepole
     # XXX: MySQL only?
     # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/abstract_mysql_adapter.rb#L760
     # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/abstract/schema_creation.rb#L102
-    def fix_change_column_options(table_name, from_attrs, to_attrs)
+    def fix_change_column_options(from_attrs, to_attrs)
       # default: 0, null: false -> default: nil, null: false | default: nil
       # default: 0, null: false ->               null: false | default: nil
       # default: 0, null: false -> default: nil, null: true  | default: nil, null: true
@@ -484,10 +484,6 @@ module Ridgepole
       if (from_attrs[:options][:default] != to_attrs[:options][:default]) && (from_attrs[:options][:null] == to_attrs[:options][:null])
         to_attrs = to_attrs.deep_dup
         to_attrs[:options].delete(:null)
-      end
-
-      if Ridgepole::ConnectionAdapters.mysql? && ActiveRecord::VERSION::STRING.start_with?('5.0.')
-        Ridgepole::Logger.instance.warn("[WARNING] Table `#{table_name}`: `default: nil` is ignored when `null: false`. Please apply twice") if to_attrs[:options][:default].nil? && (to_attrs[:options][:null] == false)
       end
 
       to_attrs

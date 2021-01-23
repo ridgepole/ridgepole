@@ -10,7 +10,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.index ["gender"], name: "gender", <%= i cond(5.0, using: :btree) %>
+          t.index ["gender"], name: "gender"
         end
       ERB
     end
@@ -23,7 +23,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   :hire_date, null: false
-          t.index :gender, name: :gender, <%= i cond(5.0, using: :btree) %>
+          t.index :gender, name: :gender
         end
       ERB
     end
@@ -46,7 +46,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.index ["gender"], name: "gender", <%= i cond(5.0, using: :btree) %>
+          t.index ["gender"], name: "gender"
         end
       ERB
     end
@@ -59,7 +59,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   :hire_date2, null: false
-          t.index :last_name, name: :last_name, <%= i cond(5.0, using: :btree) %>
+          t.index :last_name, name: :last_name
         end
       ERB
     end
@@ -72,7 +72,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date2", null: false
-          t.index ["last_name"], name: "last_name", <%= i cond(5.0, using: :btree) %>
+          t.index ["last_name"], name: "last_name"
         end
       ERB
     end

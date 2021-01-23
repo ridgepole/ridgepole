@@ -63,7 +63,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         create_table "salaries", force: :cascade do |t|
           t.bigint "employee_id", null: false, unsigned: true
-          t.index ["employee_id"], name: "fk_salaries_employees", <%= i cond(5.0, using: :btree) %>
+          t.index ["employee_id"], name: "fk_salaries_employees"
         end
         add_foreign_key "salaries", "employees", name: "fk_salaries_employees"
       ERB
