@@ -14,7 +14,7 @@ ERBh.define_method(:i) do |obj|
 end
 
 ERBh.define_method(:cond) do |conds, m, e = nil|
-  if condition(*Array(conds))
+  if condition(conds)
     m
   else
     e || (begin

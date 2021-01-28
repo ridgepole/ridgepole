@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Ridgepole::Client#diff -> migrate', condition: '>= 5.1.0' do
+describe 'Ridgepole::Client#diff -> migrate' do
   let(:actual_dsl) do
     erbh(<<-ERB)
       create_table "employees", id: :serial, force: :cascade do |t|

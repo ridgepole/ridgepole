@@ -174,12 +174,12 @@ describe 'Ridgepole::Client.diff' do
     it {
       delta = subject.diff(actual_dsl, expected_dsl)
       expect(delta.differ?).to be_truthy
-      expect(delta.script).to match_ruby erbh(<<-ERB)
-        change_column("employee_clubs", "club_id", :integer, **<%= {:unsigned=>false, :null=>true, :default=>nil} + cond('>= 5.1', comment: nil) %>)
+      expect(delta.script).to match_ruby(<<-RUBY)
+        change_column("employee_clubs", "club_id", :integer, **{:unsigned=>false, :null=>true, :default=>nil, :comment=>nil})
 
-        change_column("employees", "last_name", :string, **<%= {:limit=>20, :default=>"XXX", :unsigned=>false} + cond('>= 5.1', comment: nil) %>)
-        change_column("employees", "gender", :string, **<%= {:limit=>2, :null=>false, :default=>nil, :unsigned=>false} + cond('>= 5.1', comment: nil) %>)
-      ERB
+        change_column("employees", "last_name", :string, **{:limit=>20, :default=>"XXX", :unsigned=>false, :comment=>nil})
+        change_column("employees", "gender", :string, **{:limit=>2, :null=>false, :default=>nil, :unsigned=>false, :comment=>nil})
+      RUBY
     }
 
     after do

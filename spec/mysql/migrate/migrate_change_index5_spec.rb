@@ -9,7 +9,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
-          t.index ["emp_no", "id"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
+          t.index ["emp_no", "id"], name: "emp_no"
         end
       ERB
     end
@@ -21,7 +21,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
-          t.index ["emp_no", "id"], name: "emp_no", unique: false, <%= i cond(5.0, using: :btree) %>
+          t.index ["emp_no", "id"], name: "emp_no", unique: false
         end
       ERB
     end
@@ -43,7 +43,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
-          t.index ["emp_no", "id"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
+          t.index ["emp_no", "id"], name: "emp_no"
         end
       ERB
     end
@@ -55,7 +55,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "salary", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
-          t.index ["emp_no", "id"], name: "emp_no", unique: true, <%= i cond(5.0, using: :btree) %>
+          t.index ["emp_no", "id"], name: "emp_no", unique: true
         end
       ERB
     end

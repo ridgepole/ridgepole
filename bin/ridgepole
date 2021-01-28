@@ -86,6 +86,19 @@ ARGV.options do |opt|
     opt.on('-f', '--file SCHEMAFILE') { |v| file = v }
     opt.on('',   '--dry-run') { options[:dry_run] = true }
     opt.on('',   '--table-options OPTIONS') { |v| options[:table_options] = v }
+    opt.on('',   '--table-hash-options OPTIONS') do |v|
+      # NOTE: Ruby2.4 doesn't support `symbolize_names: true`
+      hash = YAML.safe_load(v).deep_symbolize_keys
+
+      case hash[:id]
+      when String
+        hash[:id] = hash[:id].to_sym
+      when Hash
+        hash[:id][:type] = hash[:id][:type].to_sym if hash[:id][:type]
+      end
+
+      options[:table_hash_options] = hash
+    end
     opt.on('',   '--alter-extra ALTER_SPEC') { |v| options[:alter_extra] = v }
     opt.on('',   '--external-script SCRIPT') { |v| options[:external_script] = v }
     opt.on('',   '--bulk-change') do
@@ -121,7 +134,6 @@ ARGV.options do |opt|
     opt.on('-o', '--output SCHEMAFILE') { |v| output_file = v }
     opt.on('-t', '--tables TABLES', Array) { |v| options[:tables] = v }
     opt.on('',   '--ignore-tables REGEX_LIST', Array) { |v| options[:ignore_tables] = v.map { |i| Regexp.new(i) } }
-    opt.on('',   '--mysql-use-alter') { options[:mysql_use_alter] = true }
     opt.on('',   '--dump-without-table-options') { options[:dump_without_table_options] = true }
     opt.on('',   '--dump-with-default-fk-name') { options[:dump_with_default_fk_name] = true }
     opt.on('',   '--index-removed-drop-column') { options[:index_removed_drop_column] = true }
@@ -135,8 +147,6 @@ ARGV.options do |opt|
     opt.on('',   '--create-table-with-index') { options[:create_table_with_index] = true }
 
     opt.on('',   '--mysql-dump-auto-increment') do
-      raise OptionParser::InvalidOption, '`mysql-dump-auto-increment` is not available in `activerecord < 5.1`' if Gem::Version.new(ActiveRecord::VERSION::STRING) < Gem::Version.new('5.1')
-
       options[:mysql_dump_auto_increment] = true
     end
 

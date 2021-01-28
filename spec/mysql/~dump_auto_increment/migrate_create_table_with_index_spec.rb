@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Ridgepole::Client#diff -> migrate (with index)', condition: '>= 5.1.0' do
+describe 'Ridgepole::Client#diff -> migrate (with index)' do
   context 'when create table with auto increment column' do
     let(:actual_dsl) { '' }
 
@@ -11,8 +11,8 @@ describe 'Ridgepole::Client#diff -> migrate (with index)', condition: '>= 5.1.0'
           t.integer "dept_no", null: false, auto_increment: true
           t.date    "from_date", null: false
           t.date    "to_date", null: false
-          t.index ["dept_no"], name: "dept_no", <%= i cond(5.0, using: :btree) %>
-          t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
+          t.index ["dept_no"], name: "dept_no"
+          t.index ["emp_no"], name: "emp_no"
         end
       ERB
     end
@@ -30,8 +30,8 @@ describe 'Ridgepole::Client#diff -> migrate (with index)', condition: '>= 5.1.0'
           t.column("dept_no", :"integer", **{:null=>false, :auto_increment=>true, :limit=>4})
           t.column("from_date", :"date", **{:null=>false})
           t.column("to_date", :"date", **{:null=>false})
-          t.index(["dept_no"], **<%= {:name=>"dept_no"} + cond(5.0, using: :btree) %>)
-          t.index(["emp_no"], **<%= {:name=>"emp_no"} + cond(5.0, using: :btree) %>)
+          t.index(["dept_no"], **{:name=>"dept_no"})
+          t.index(["emp_no"], **{:name=>"emp_no"})
         end
       ERB
 

@@ -7,7 +7,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "club_id", null: false
-          t.index ["emp_no", "club_id"], name: "idx_emp_no_club_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["emp_no", "club_id"], name: "idx_emp_no_club_id"
         end
 
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
@@ -26,7 +26,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false
           t.integer "club_id", null: false
           t.string  "any_col", null: false, ignore: true
-          t.index ["emp_no", "club_id"], name: "idx_emp_no_club_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["emp_no", "club_id"], name: "idx_emp_no_club_id"
         end
 
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
@@ -56,7 +56,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "club_id", null: false
-          t.index ["emp_no", "club_id"], name: "idx_emp_no_club_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["emp_no", "club_id"], name: "idx_emp_no_club_id"
         end
 
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
@@ -74,7 +74,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "club_id", ignore: true
-          t.index ["emp_no", "club_id"], name: "idx_emp_no_club_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["emp_no", "club_id"], name: "idx_emp_no_club_id"
         end
 
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|

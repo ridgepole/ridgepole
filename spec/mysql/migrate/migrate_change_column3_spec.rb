@@ -99,7 +99,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
+          t.bigint "user_id"
           t.index "user_id"
         end
       ERB
@@ -136,7 +136,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
+          t.bigint "user_id"
           t.string "user_type"
           t.index ["user_type", "user_id"]
         end
@@ -169,7 +169,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id", unsigned: true
+          t.bigint "user_id", unsigned: true
           t.string "user_type"
           t.index ["user_type", "user_id"]
         end
@@ -227,8 +227,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
-          t.index ["user_id"], name: "index_employees_on_user_id", <%= i cond(5.0, using: :btree) %>
+          t.bigint "user_id"
+          t.index ["user_id"], name: "index_employees_on_user_id"
         end
       ERB
     end
@@ -279,9 +279,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
+          t.bigint "user_id"
           t.string "user_type"
-          t.index ["user_type", "user_id"], name: "index_employees_on_user_type_and_user_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["user_type", "user_id"], name: "index_employees_on_user_type_and_user_id"
         end
       ERB
     end
@@ -310,7 +310,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
+          t.bigint "user_id"
           t.index "user_id"
         end
 
@@ -381,8 +381,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
-          t.<%= cond('>= 5.1','bigint', 'integer') %> "user_id"
-          t.index ["user_id"], name: "index_employees_on_user_id", <%= i cond(5.0, using: :btree) %>
+          t.bigint "user_id"
+          t.index ["user_id"], name: "index_employees_on_user_id"
         end
         create_table "users", force: :cascade do |t|
         end

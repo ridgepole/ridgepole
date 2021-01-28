@@ -20,7 +20,7 @@ module Ridgepole
         }
       end
 
-      DEFAULT_PRIMARY_KEY_TYPE = Gem::Version.new(ActiveRecord::VERSION::STRING) >= Gem::Version.new('5.1') ? :bigint : :integer
+      DEFAULT_PRIMARY_KEY_TYPE = :bigint
 
       TYPES = {
         # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/abstract/schema_definitions.rb#L274

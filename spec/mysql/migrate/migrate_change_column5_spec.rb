@@ -12,7 +12,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date     "hire_date", null: false
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
-          t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
+          t.binary   "registered_name"
         end
       ERB
     end
@@ -70,7 +70,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date     "hire_date", null: false
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
-          t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
+          t.binary   "registered_name"
         end
       ERB
     end
@@ -98,7 +98,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date     "hire_date", null: false
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
-          t.binary   "registered_name", <%= i cond(5.0, limit: 65535) %>
+          t.binary   "registered_name"
         end
       ERB
     end

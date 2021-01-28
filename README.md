@@ -6,8 +6,9 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 (like Chef/Puppet)
 
 [![Gem Version](https://badge.fury.io/rb/ridgepole.svg)](http://badge.fury.io/rb/ridgepole)
-[![Build Status](https://github.com/winebarrel/ridgepole/workflows/test/badge.svg?branch=0.8)](https://github.com/winebarrel/ridgepole/actions)
-[![Coverage Status](https://coveralls.io/repos/github/winebarrel/ridgepole/badge.svg?branch=0.8)](https://coveralls.io/github/winebarrel/ridgepole?branch=0.8)
+[![Unstable Version](https://img.shields.io/badge/unstable-0.9.0.rc1-brightgreen.svg?longCache=true&style=flat)](https://rubygems.org/gems/ridgepole/versions/0.9.0.rc1)
+[![Build Status](https://github.com/winebarrel/ridgepole/workflows/test/badge.svg?branch=0.9)](https://github.com/winebarrel/ridgepole/actions)
+[![Coverage Status](https://coveralls.io/repos/github/winebarrel/ridgepole/badge.svg?branch=0.9)](https://coveralls.io/github/winebarrel/ridgepole?branch=0.9)
 
 <details><summary>ChangeLog</summary>
 
@@ -129,7 +130,21 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Pluralize column specified by `references` ([pull#317](https://github.com/winebarrel/ridgepole/pull/317))
 * `>= 0.8.13`
   * Support `serial` and `bigserial` column types  ([pull#321](https://github.com/winebarrel/ridgepole/pull/321))
+* `>= 0.9.0`
+  * Remove `--mysql-alter-index` option ([pull#330](https://github.com/winebarrel/ridgepole/pull/330))
+  * Add `--table-hash-options` option ([pull#331](https://github.com/winebarrel/ridgepole/pull/331))
+  * Support Rails 6.1 ([pull#323](https://github.com/winebarrel/ridgepole/pull/323))
+  * Disable Rails 5.0 support ([pull#335](https://github.com/winebarrel/ridgepole/pull/335))
+  * Fix PK AUTO_INCREMENT change bug ([pull#334](https://github.com/winebarrel/ridgepole/pull/334))
 </details>
+
+**Notice**
+
+ActiveRecord 6.1 is supported in ridgepole v0.9, but the ActiveRecord dump has been changed, so there is a difference between ActiveRecord 5.x/6.0 format.
+
+**If you use ActiveRecord 6.1, please modify Schemafile format**.
+
+cf. https://github.com/winebarrel/ridgepole/pull/323
 
 ## Installation
 
@@ -145,26 +160,6 @@ Or install it yourself as:
 
     $ gem install ridgepole
 
-## Omnibus Package (deb/rpm)
-
-see https://github.com/winebarrel/ridgepole/releases.
-
-### Install from deb
-
-```sh
-sudo dpkg -i ridgepole_x.x.x+xxx-x_amd64.deb
-sudo apt install build-essential libmysqlclient-dev
-sudo /opt/ridgepole/embedded/bin/gem install mysql2
-```
-
-### Install from rpm
-
-```sh
-sudo yum install ridgepole-x.x.x+xxx-x.el7.x86_64.rpm
-sudo yum install make gcc mariadb-devel
-sudo /opt/ridgepole/embedded/bin/gem install mysql2
-```
-
 ## Help
 ```
 Usage: ridgepole [options]
@@ -176,6 +171,7 @@ Usage: ridgepole [options]
     -f, --file SCHEMAFILE
         --dry-run
         --table-options OPTIONS
+        --table-hash-options OPTIONS
         --alter-extra ALTER_SPEC
         --external-script SCRIPT
         --bulk-change
@@ -196,7 +192,6 @@ Usage: ridgepole [options]
     -o, --output SCHEMAFILE
     -t, --tables TABLES
         --ignore-tables REGEX_LIST
-        --mysql-use-alter
         --dump-without-table-options
         --dump-with-default-fk-name
         --index-removed-drop-column
@@ -406,20 +401,6 @@ Apply `Schemafile`
    -> 0.0471s
 ```
 
-## Use ALTER instead of CREATE/DROP INDEX
-
-```sh
-$ ridgepole -a -c database.yml --mysql-use-alter --debug
-Apply `Schemafile`
-...
--- remove_index("dept_manager", {:name=>"emp_no"})
-   (19.2ms)  ALTER TABLE `dept_manager` DROP INDEX `emp_no`
-   -> 0.0200s
--- add_index("dept_manager", ["emp_no"], {:name=>"emp_no2", :using=>:btree})
-   (23.4ms)  ALTER TABLE `dept_manager` ADD  INDEX `emp_no2` USING btree (`emp_no`)
-   -> 0.0243s
-```
-
 ## Relation column type check
 
 ```ruby
@@ -468,6 +449,3 @@ bundle exec appraisal activerecord-5.1 rake
 * https://github.com/winebarrel/ridgepole-example
   * https://github.com/winebarrel/ridgepole-example/pull/1
   * https://github.com/winebarrel/ridgepole-example/pull/2
-
-## Similar tools
-* [Codenize.tools](http://codenize.tools/)

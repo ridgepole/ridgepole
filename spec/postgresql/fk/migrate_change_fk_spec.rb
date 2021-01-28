@@ -9,7 +9,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         add_foreign_key "child", "parent", name: "child_ibfk_1", on_delete: :cascade
@@ -20,7 +20,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         create_table "parent", force: :cascade do |t|
@@ -34,7 +34,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         create_table "parent", force: :cascade do |t|
@@ -65,7 +65,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         add_foreign_key "child", "parent", on_delete: :cascade
@@ -76,7 +76,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         create_table "parent", force: :cascade do |t|
@@ -90,7 +90,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "child", force: :cascade do |t|
           t.integer "parent_id"
-          t.index ["parent_id"], name: "par_id", <%= i cond(5.0, using: :btree) %>
+          t.index ["parent_id"], name: "par_id"
         end
 
         create_table "parent", force: :cascade do |t|

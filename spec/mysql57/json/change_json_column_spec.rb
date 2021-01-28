@@ -7,7 +7,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
           t.json    "attrs", null: false
-          t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
+          t.index ["title"], name: "index_books_on_title"
         end
       ERB
     end
@@ -17,7 +17,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
           t.json    "attrs"
-          t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
+          t.index ["title"], name: "index_books_on_title"
         end
       ERB
     end
@@ -40,7 +40,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
           t.json    "attrs", null: false
-          t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
+          t.index ["title"], name: "index_books_on_title"
         end
       ERB
     end
@@ -50,7 +50,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
           t.string  "attrs"
-          t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
+          t.index ["title"], name: "index_books_on_title"
         end
       ERB
     end
@@ -73,7 +73,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
           t.string  "attrs"
-          t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
+          t.index ["title"], name: "index_books_on_title"
         end
       ERB
     end
@@ -83,7 +83,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
           t.json    "attrs", null: false
-          t.index ["title"], name: "index_books_on_title", <%= i cond(5.0, using: :btree) %>
+          t.index ["title"], name: "index_books_on_title"
         end
       ERB
     end

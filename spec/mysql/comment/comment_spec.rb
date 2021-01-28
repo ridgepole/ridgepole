@@ -8,7 +8,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false
           t.integer "club_id", null: false
           t.string  "string", null: false
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false
+          t.text    "text", null: false
         end
       ERB
     end
@@ -19,7 +19,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false, comment: "any comment"
           t.integer "club_id", null: false, comment: "any comment2"
           t.string  "string", null: false, comment: "any comment3"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "any comment4"
+          t.text    "text", null: false, comment: "any comment4"
         end
       ERB
     end
@@ -43,7 +43,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false, comment: "any comment"
           t.integer "club_id", null: false, comment: "any comment2"
           t.string  "string", null: false, comment: "any comment3"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "any comment4"
+          t.text    "text", null: false, comment: "any comment4"
         end
       ERB
     end
@@ -54,7 +54,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false
           t.integer "club_id", null: false
           t.string  "string", null: false
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false
+          t.text    "text", null: false
         end
       ERB
     end
@@ -78,7 +78,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false, comment: "any comment"
           t.integer "club_id", null: false, comment: "any comment2"
           t.string  "string", null: false, comment: "any comment3"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "any comment4"
+          t.text    "text", null: false, comment: "any comment4"
         end
       ERB
     end
@@ -89,7 +89,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false, comment: "other comment"
           t.integer "club_id", null: false, comment: "other comment2"
           t.string  "string", null: false, comment: "other comment3"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "other comment4"
+          t.text    "text", null: false, comment: "other comment4"
         end
       ERB
     end
@@ -113,7 +113,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false, comment: "any comment"
           t.integer "club_id", null: false, comment: "any comment2"
           t.string  "string", null: false, comment: "any comment3"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "any comment4"
+          t.text    "text", null: false, comment: "any comment4"
         end
       ERB
     end
@@ -137,7 +137,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false, comment: "other comment"
           t.integer "club_id", null: false, comment: "other comment2"
           t.string  "string", null: false, comment: "other comment3"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "other comment4"
+          t.text    "text", null: false, comment: "other comment4"
         end
       ERB
     end
@@ -160,7 +160,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false, comment: "other comment"
           t.integer "club_id", null: false, comment: "other comment2"
           t.string  "string", null: false, comment: "other comment3"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, comment: "other comment4"
+          t.text    "text", null: false, comment: "other comment4"
         end
       ERB
     end

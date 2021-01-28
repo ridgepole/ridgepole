@@ -26,8 +26,8 @@ describe 'Ridgepole::Client (with new text/blob types)' do
       delta.migrate
 
       expect(subject.dump).to match_ruby erbh(<<-ERB)
-        create_table "foos", id: :integer, unsigned: true, force: :cascade do |t|
-          t.binary  "blob", <%= i cond(5.0, limit: 65535) %>
+        create_table "foos", <%= i cond(">= 6.1", { id: { type: :integer, unsigned: true } }, { id: :integer, unsigned: true }) %>, force: :cascade do |t|
+          t.binary  "blob"
           t.<%= cond('< 6.0.0.beta2', :blob, :binary) %> "tiny_blob", <%= i cond('< 6.0.0.beta2', {limit: 255}, {size: :tiny}) %>
           t.binary  "medium_blob", <%= i cond('< 6.0.0.beta2', {limit: 16777215}, {size: :medium}) %>
           t.binary  "long_blob", <%= i cond('< 6.0.0.beta2', {limit: 4294967295}, {size: :long}) %>

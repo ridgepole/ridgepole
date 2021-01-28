@@ -6,7 +6,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "departments", primary_key: "dept_no", force: :cascade do |t|
           t.string "dept_name", limit: 40, null: false
-          t.index ["dept_name"], name: "dept_name", unique: true, <%= i cond(5.0, using: :btree) %>
+          t.index ["dept_name"], name: "dept_name", unique: true
         end
 
         create_table "dept_emp", primary_key: ["emp_no", "dept_no"], force: :cascade do |t|
@@ -14,8 +14,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string  "dept_no", null: false
           t.date    "from_date", null: false, ignore: true
           t.date    "to_date", null: false
-          t.index ["dept_no"], name: "dept_no", <%= i cond(5.0, using: :btree) %>, ignore: true
-          t.index ["emp_no"], name: "emp_no", <%= i cond(5.0, using: :btree) %>
+          t.index ["dept_no"], name: "dept_no", ignore: true
+          t.index ["emp_no"], name: "emp_no"
         end
       ERB
     end
@@ -24,7 +24,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "departments", primary_key: "dept_no", force: :cascade do |t|
           t.string "dept_name", limit: 40, null: false
-          t.index ["dept_name"], name: "dept_name", unique: true, <%= i cond(5.0, using: :btree) %>
+          t.index ["dept_name"], name: "dept_name", unique: true
         end
       ERB
     end

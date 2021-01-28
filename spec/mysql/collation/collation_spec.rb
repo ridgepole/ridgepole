@@ -4,22 +4,22 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (add collation)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "employee_clubs", <%= i cond('>= 5.1', id: :bigint) %>, unsigned: true, force: :cascade do |t|
+        create_table "employee_clubs", <%= i cond("< 6.1", { id: :bigint, unsigned: true }, { id: { type: :bigint, unsigned: true } }) %>, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
           t.string  "string", null: false, collation: "ascii_bin"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false
+          t.text    "text", null: false
         end
       ERB
     end
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "employee_clubs", <%= i cond('>= 5.1', id: :bigint) %>, unsigned: true, force: :cascade do |t|
+        create_table "employee_clubs", <%= i cond("< 6.1", { id: :bigint, unsigned: true }, { id: { type: :bigint, unsigned: true } }) %>, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
           t.string  "string", null: false, collation: "ascii_bin"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, collation: "utf8mb4_bin"
+          t.text    "text", null: false, collation: "utf8mb4_bin"
         end
       ERB
     end
@@ -39,22 +39,22 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (delete collation)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "employee_clubs", <%= i cond('>= 5.1', id: :bigint) %>, unsigned: true, force: :cascade do |t|
+        create_table "employee_clubs", <%= i cond("< 6.1", { id: :bigint, unsigned: true }, { id: { type: :bigint, unsigned: true } }) %>, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
           t.string  "string", null: false, collation: "ascii_bin"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, collation: "utf8mb4_bin"
+          t.text    "text", null: false, collation: "utf8mb4_bin"
         end
       ERB
     end
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "employee_clubs", <%= i cond('>= 5.1', id: :bigint) %>, unsigned: true, force: :cascade do |t|
+        create_table "employee_clubs", <%= i cond("< 6.1", { id: :bigint, unsigned: true }, { id: { type: :bigint, unsigned: true } }) %>, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
           t.string  "string", null: false, collation: "ascii_bin"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false
+          t.text    "text", null: false
         end
       ERB
     end
@@ -74,22 +74,22 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (change collation)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "employee_clubs", <%= i cond('>= 5.1', id: :bigint) %>, unsigned: true, force: :cascade do |t|
+        create_table "employee_clubs", <%= i cond("< 6.1", { id: :bigint, unsigned: true }, { id: { type: :bigint, unsigned: true } }) %>, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
           t.string  "string", null: false, collation: "ascii_bin"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, collation: "utf8mb4_bin"
+          t.text    "text", null: false, collation: "utf8mb4_bin"
         end
       ERB
     end
 
     let(:expected_dsl) do
       erbh(<<-ERB)
-        create_table "employee_clubs", <%= i cond('>= 5.1', id: :bigint) %>, unsigned: true, force: :cascade do |t|
+        create_table "employee_clubs", <%= i cond("< 6.1", { id: :bigint, unsigned: true }, { id: { type: :bigint, unsigned: true } }) %>, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
           t.string  "string", null: false, collation: "utf8mb4_bin"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, collation: "ascii_bin"
+          t.text    "text", null: false, collation: "ascii_bin"
         end
       ERB
     end
@@ -109,11 +109,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change column (no change collation)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
-        create_table "employee_clubs", <%= i cond('>= 5.1', id: :bigint) %>, unsigned: true, force: :cascade do |t|
+        create_table "employee_clubs", <%= i cond("< 6.1", { id: :bigint, unsigned: true }, { id: { type: :bigint, unsigned: true } }) %>, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
           t.string  "string", null: false, collation: "ascii_bin"
-          t.text    "text", <%= i cond(5.0, limit: 65535) %>, null: false, collation: "utf8mb4_bin"
+          t.text    "text", null: false, collation: "utf8mb4_bin"
         end
       ERB
     end
