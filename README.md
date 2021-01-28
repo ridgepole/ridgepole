@@ -128,6 +128,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Support t.reference() foreign_key option ([pull#316](https://github.com/winebarrel/ridgepole/pull/316))
 * `>= 0.8.12`
   * Pluralize column specified by `references` ([pull#317](https://github.com/winebarrel/ridgepole/pull/317))
+* `>= 0.8.13`
+  * Support `serial` and `bigserial` column types  ([pull#321](https://github.com/winebarrel/ridgepole/pull/321))
 * `>= 0.9.0`
   * Remove `--mysql-alter-index` option ([pull#330](https://github.com/winebarrel/ridgepole/pull/330))
   * Add `--table-hash-options` option ([pull#331](https://github.com/winebarrel/ridgepole/pull/331))
