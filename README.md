@@ -130,7 +130,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 * `>= 0.8.13`
   * Support `serial` and `bigserial` column types  ([pull#321](https://github.com/winebarrel/ridgepole/pull/321))
 * `>= 0.9.0`
-  * Remove `--mysql-alter-index` option ([pull#330](https://github.com/winebarrel/ridgepole/pull/330))
+  * Remove `--mysql-use-alter` option ([pull#330](https://github.com/winebarrel/ridgepole/pull/330))
   * Add `--table-hash-options` option ([pull#331](https://github.com/winebarrel/ridgepole/pull/331))
   * Support Rails 6.1 ([pull#323](https://github.com/winebarrel/ridgepole/pull/323))
   * Disable Rails 5.0 support ([pull#335](https://github.com/winebarrel/ridgepole/pull/335))
