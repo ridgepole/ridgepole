@@ -132,6 +132,7 @@ module SpecHelper
         port: TEST_MYSQL_PORT,
         username: TEST_MYSQL_USER,
         password: TEST_MYSQL_PASS,
+        ssl_mode: 'DISABLED',
       }.merge(config)
     end
   end
