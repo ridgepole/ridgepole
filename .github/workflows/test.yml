@@ -41,8 +41,8 @@ jobs:
         run: |
           for i in {1..60}; do docker-compose up -d && break; sleep 1; done
           # Wait until database servers start
-          function mysql_ping { mysqladmin -u root -h 127.0.0.1 -P 13316 -ppassword ping; }
-          function mysql57_ping { mysqladmin -u root -h 127.0.0.1 -P 13317 -ppassword ping; }
+          function mysql_ping { mysqladmin -u root -h 127.0.0.1 -P 13316 -ppassword ping --ssl-mode=DISABLED; }
+          function mysql57_ping { mysqladmin -u root -h 127.0.0.1 -P 13317 -ppassword ping --ssl-mode=DISABLED; }
           function pg_ping { PGPASSWORD=password pg_isready -U postgres -h 127.0.0.1 -p 15442; }
           for i in {1..60}; do mysql_ping && break; sleep 1; done
           for i in {1..60}; do mysql57_ping && break; sleep 1; done
