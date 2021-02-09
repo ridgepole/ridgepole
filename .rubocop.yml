@@ -1,12 +1,13 @@
 AllCops:
   Exclude:
-    - 'gemfiles/**/*'
-    - 'omnibus-ridgepole/**/*'
+    - "gemfiles/**/*"
+    - "omnibus-ridgepole/**/*"
+    - "vendor/bundle/**/*"
   TargetRubyVersion: 2.4
   NewCops: enable
 Bundler/OrderedGems:
   Include:
-    - 'Appraisals'
+    - "Appraisals"
 Layout/HeredocIndentation:
   Enabled: false
 Metrics/AbcSize:
@@ -33,7 +34,7 @@ Style/GuardClause:
   Enabled: false
 Style/MixinUsage:
   Exclude:
-    - 'spec/**/*'
+    - "spec/**/*"
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: consistent_comma
 Layout/ClosingHeredocIndentation:

@@ -29,49 +29,36 @@ jobs:
             gemfile: gemfiles/activerecord_6.0.gemfile
           - ruby: 2.4
             gemfile: gemfiles/activerecord_6.1.gemfile
-
+    env:
+      BUNDLE_GEMFILE: ${{ matrix.gemfile }}
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-      - uses: actions/cache@v2
-        with:
-          path: gemfiles/vendor/bundle
-          key: ${{ runner.os }}-gems-${{ matrix.ruby }}-${{ matrix.gemfile }}-${{ hashFiles('ridgepole.gemspec', '**/Gemfile', '${{ matrix.gemfile }}') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-${{ matrix.ruby }}-${{ matrix.gemfile }}-
-
+          bundler-cache: true
       - name: Setup dependencies
         run: |
           for i in {1..60}; do docker-compose up -d && break; sleep 1; done
-
-          gem install bundler
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
-
           # Wait until database servers start
-          function mysql_ping { mysqladmin -u root -h 127.0.0.1 -P 13316 -ppassword ping; }
-          function mysql57_ping { mysqladmin -u root -h 127.0.0.1 -P 13317 -ppassword ping; }
+          function mysql_ping { mysqladmin -u root -h 127.0.0.1 -P 13316 ping --ssl-mode=DISABLED; }
+          function mysql57_ping { mysqladmin -u root -h 127.0.0.1 -P 13317 ping --ssl-mode=DISABLED; }
           function pg_ping { PGPASSWORD=password pg_isready -U postgres -h 127.0.0.1 -p 15442; }
           for i in {1..60}; do mysql_ping && break; sleep 1; done
           for i in {1..60}; do mysql57_ping && break; sleep 1; done
           for i in {1..60}; do pg_ping && break; sleep 1; done
         env:
-          BUNDLE_GEMFILE: ${{ matrix.gemfile }}
-
+          MYSQL_PWD: password
       - name: Run tests
         run: ${{ matrix.env }} bundle exec rake
         env:
           BUNDLE_GEMFILE: ${{ matrix.gemfile }}
-
       - name: Coveralls Parallel
         uses: coverallsapp/github-action@v1.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: run-${{ matrix.ruby }}-${{ matrix.env }}-${{ matrix.gemfile }}
           parallel: true
-
   finish:
     needs: build
     runs-on: ubuntu-latest
