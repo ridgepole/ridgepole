@@ -120,6 +120,10 @@ module Ridgepole
         @base.add_index(@table_name, name, options)
       end
 
+      def foreign_key(name, options = {})
+        @base.add_foreign_key(@table_name, name, options)
+      end
+
       def timestamps(*args)
         options = { null: false }.merge(args.extract_options!)
         column(:created_at, :datetime, options)
