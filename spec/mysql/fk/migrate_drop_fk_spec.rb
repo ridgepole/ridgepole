@@ -57,6 +57,61 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
+  context 'when drop fk using `t.foreign_key`' do
+    let(:actual_dsl) do
+      erbh(<<-ERB)
+        create_table "parent", id: :integer, force: :cascade do |t|
+        end
+
+        create_table "child", force: :cascade do |t|
+          t.integer "parent_id"
+          t.index ["parent_id"], name: "par_id"
+          t.foreign_key "parent", name: "child_ibfk_1"
+        end
+      ERB
+    end
+
+    let(:sorted_actual_dsl) do
+      expected_dsl + <<-RUBY
+        add_foreign_key "child", "parent", name: "child_ibfk_1"
+      RUBY
+    end
+
+    let(:expected_dsl) do
+      erbh(<<-ERB)
+        create_table "child", force: :cascade do |t|
+          t.integer "parent_id"
+          t.index ["parent_id"], name: "par_id"
+        end
+
+        create_table "parent", id: :integer, force: :cascade do |t|
+        end
+      ERB
+    end
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_fuzzy sorted_actual_dsl
+      delta.migrate
+      expect(subject.dump).to match_ruby expected_dsl
+    }
+
+    it {
+      delta = client(bulk_change: true).diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_fuzzy sorted_actual_dsl
+      expect(delta.script).to match_fuzzy <<-RUBY
+        remove_foreign_key("child", name: "child_ibfk_1")
+      RUBY
+      delta.migrate
+      expect(subject.dump).to match_ruby expected_dsl
+    }
+  end
+
   context 'when drop fk when drop table' do
     let(:dsl) do
       erbh(<<-ERB)
