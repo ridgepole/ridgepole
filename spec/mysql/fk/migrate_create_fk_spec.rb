@@ -43,6 +43,61 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
+  context 'when create fk using `t.foreign_key`' do
+    let(:actual_dsl) do
+      erbh(<<-ERB)
+        create_table "child", force: :cascade do |t|
+          t.integer "parent_id"
+          t.index ["parent_id"], name: "par_id"
+        end
+
+        create_table "parent", id: :integer, force: :cascade do |t|
+        end
+      ERB
+    end
+
+    let(:expected_dsl) do
+      erbh(actual_dsl + <<-ERB)
+        add_foreign_key "child", "parent", name: "child_ibfk_1"
+      ERB
+    end
+
+    let(:expected_dsl_using_t_foreign_key) do
+      erbh(<<-ERB)
+        create_table "child", force: :cascade do |t|
+          t.integer "parent_id"
+          t.index ["parent_id"], name: "par_id"
+          t.foreign_key "parent", name: "child_ibfk_1"
+        end
+
+        create_table "parent", id: :integer, force: :cascade do |t|
+        end
+      ERB
+    end
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(expected_dsl_using_t_foreign_key)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_ruby actual_dsl
+      delta.migrate
+      expect(subject.dump).to match_ruby expected_dsl
+    }
+
+    it {
+      delta = client(bulk_change: true).diff(expected_dsl_using_t_foreign_key)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_ruby actual_dsl
+      expect(delta.script).to match_fuzzy <<-RUBY
+        add_foreign_key("child", "parent", **{:name=>"child_ibfk_1"})
+      RUBY
+      delta.migrate
+      expect(subject.dump).to match_ruby expected_dsl
+    }
+  end
+
   context 'when create fk when create table' do
     let(:dsl) do
       erbh(<<-ERB)
