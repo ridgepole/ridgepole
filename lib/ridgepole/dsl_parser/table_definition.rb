@@ -13,11 +13,14 @@ module Ridgepole
 
       def column(name, type, options = {})
         name = name.to_s
+        index_options = options.key?(:index) ? options.delete(:index) : false
 
         @__definition[name] = {
           type: type,
           options: options,
         }
+
+        index(name, index_options.is_a?(Hash) ? index_options : {}) if index_options
       end
 
       DEFAULT_PRIMARY_KEY_TYPE = :bigint
