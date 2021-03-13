@@ -137,6 +137,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Fix PK AUTO_INCREMENT change bug ([pull#334](https://github.com/winebarrel/ridgepole/pull/334))
 * `>= 0.9.1`
   * Support `t.foreign_key` ([pull#348](https://github.com/winebarrel/ridgepole/pull/348))
+* `>= 0.9.2`
+  * Support `t.column index option` ([pull#353](https://github.com/winebarrel/ridgepole/pull/353))
 </details>
 
 **Notice**
