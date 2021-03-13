@@ -157,4 +157,64 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_ruby expected_dsl
     }
   end
+
+  context 'when using index option' do
+    let(:dsl) do
+      erbh(<<-ERB)
+        create_table "clubs", force: :cascade do |t|
+          t.string "name", default: "", null: false, index: { unique: true }
+        end
+
+        create_table "titles", id: false, force: :cascade do |t|
+          t.integer "emp_no", null: false, index: { name: "emp_no" }
+          t.string  "title", limit: 50, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date"
+        end
+      ERB
+    end
+
+    let(:actual_dsl) do
+      erbh(<<-ERB)
+        create_table "clubs", force: :cascade do |t|
+          t.string "name", default: "", null: false
+        end
+
+        create_table "titles", id: false, force: :cascade do |t|
+          t.integer "emp_no", null: false
+          t.string  "title", limit: 50, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date"
+        end
+      ERB
+    end
+
+    let(:expected_dsl) do
+      erbh(<<-ERB)
+        create_table "clubs", force: :cascade do |t|
+          t.string "name", default: "", null: false
+          t.index ["name"], name: "index_clubs_on_name", unique: true
+        end
+
+        create_table "titles", id: false, force: :cascade do |t|
+          t.integer "emp_no", null: false
+          t.string  "title", limit: 50, null: false
+          t.date    "from_date", null: false
+          t.date    "to_date"
+          t.index ["emp_no"], name: "emp_no"
+        end
+      ERB
+    end
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_ruby actual_dsl
+      delta.migrate
+      expect(subject.dump).to match_ruby expected_dsl
+    }
+  end
 end
