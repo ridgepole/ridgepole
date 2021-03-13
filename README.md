@@ -298,8 +298,8 @@ create_table "parent", force: :cascade do |t|
 end
 
 create_table "child", id: false, force: :cascade do |t|
-  t.integer "id"
-  t.integer "parent_id"
+  t.bigint "id"
+  t.bigint "parent_id"
 end
 
 add_index "child", ["parent_id"], name: "par_ind", using: :btree
