@@ -139,6 +139,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Support `t.foreign_key` ([pull#348](https://github.com/winebarrel/ridgepole/pull/348))
 * `>= 0.9.2`
   * Support `t.column index option` ([pull#353](https://github.com/winebarrel/ridgepole/pull/353))
+* `>= 0.9.3`
+  * Fix `limit` option for `t.integer` ([pull#354](https://github.com/winebarrel/ridgepole/pull/453))
 </details>
 
 **Notice**
