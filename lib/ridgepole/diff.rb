@@ -399,9 +399,13 @@ module Ridgepole
       if Ridgepole::ConnectionAdapters.mysql?
         opts[:unsigned] = false unless opts.key?(:unsigned)
 
-        if (attrs[:type] == :integer) && (opts[:limit] == Ridgepole::DefaultsLimit.default_limit(:bigint, @options))
-          attrs[:type] = :bigint
-          opts.delete(:limit)
+        if attrs[:type] == :integer && opts[:limit]
+          min = Ridgepole::DefaultsLimit.default_limit(:integer, @options)
+          max = Ridgepole::DefaultsLimit.default_limit(:bigint, @options)
+          if min < opts[:limit] && opts[:limit] <= max
+            attrs[:type] = :bigint
+            opts.delete(:limit)
+          end
         end
 
         if opts[:size] && (attrs[:type] == :text || attrs[:type] == :blob || attrs[:type] == :binary)
