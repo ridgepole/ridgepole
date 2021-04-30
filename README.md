@@ -140,7 +140,9 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 * `>= 0.9.2`
   * Support `t.column index option` ([pull#353](https://github.com/winebarrel/ridgepole/pull/353))
 * `>= 0.9.3`
-  * Fix `limit` option for `t.integer` ([pull#354](https://github.com/winebarrel/ridgepole/pull/453))
+  * Fix `limit` option for `t.integer` ([pull#354](https://github.com/winebarrel/ridgepole/pull/354))
+* `>= 0.9.4`
+  * Fix `--alter-extra` option for unique index ([pull#356](https://github.com/winebarrel/ridgepole/pull/356))
 </details>
 
 **Notice**
