@@ -186,6 +186,51 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
+  context 'when add unique index' do
+    let(:actual_dsl) do
+      erbh(<<-ERB)
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+          t.date   "birth_date", null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
+        end
+      ERB
+    end
+
+    let(:expected_dsl) do
+      erbh(<<-ERB)
+        create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+          t.date   "birth_date", null: false
+          t.string "first_name", limit: 14, null: false
+          t.string "last_name", limit: 16, null: false
+          t.string "gender", limit: 1, null: false
+          t.date   "hire_date", null: false
+          t.index  ["first_name"], name: "idx_first_name", unique: true
+        end
+      ERB
+    end
+
+    let(:alter_extra) { 'LOCK=DEFAULT, ALGORITHM=DEFAULT' }
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_ruby actual_dsl
+      migrated, sql = delta.migrate(alter_extra: alter_extra, noop: true)
+      expect(migrated).to be_truthy
+      expect(sql).to match_fuzzy erbh(<<-SQL)
+        CREATE UNIQUE INDEX `idx_first_name` ON `employees` (`first_name`)  LOCK=DEFAULT  ALGORITHM=DEFAULT
+      SQL
+      delta.migrate(alter_extra: alter_extra)
+      expect(subject.dump).to match_ruby expected_dsl
+    }
+  end
+
   context 'when drop index' do
     let(:actual_dsl) do
       erbh(<<-ERB)

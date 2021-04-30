@@ -50,7 +50,7 @@ module Ridgepole
           case sql
           when /\AALTER\b/i
             sql += ',' + Ridgepole::ExecuteExpander.alter_extra
-          when /\A(CREATE|DROP)\s+INDEX\b/i
+          when /\A(CREATE|DROP)\s+((ONLINE|OFFLINE)\s+)?((UNIQUE|FULLTEXT|SPATIAL)\s+)?INDEX\b/i
             # https://dev.mysql.com/doc/refman/5.6/en/create-index.html
             # https://dev.mysql.com/doc/refman/5.6/en/drop-index.html
             sql += ' ' + Ridgepole::ExecuteExpander.alter_extra.tr(',', ' ')
