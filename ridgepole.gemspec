@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.email         = ['sugawara@cookpad.com']
   spec.summary       = 'Ridgepole is a tool to manage DB schema.'
   spec.description   = 'Ridgepole is a tool to manage DB schema. It defines DB schema using Rails DSL, and updates DB schema according to DSL.'
-  spec.homepage      = 'https://github.com/winebarrel/ridgepole'
+  spec.homepage      = 'https://github.com/ridgepole/ridgepole'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files -z`.split("\x0")
