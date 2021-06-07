@@ -143,6 +143,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Fix `limit` option for `t.integer` ([pull#354](https://github.com/winebarrel/ridgepole/pull/354))
 * `>= 0.9.4`
   * Fix `--alter-extra` option for unique index ([pull#356](https://github.com/winebarrel/ridgepole/pull/356))
+* `>= 0.9.5`
+  * Call `super` in `disable_table_options.rb` ([pull#357](https://github.com/winebarrel/ridgepole/pull/357))
 </details>
 
 **Notice**
