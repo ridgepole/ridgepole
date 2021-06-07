@@ -36,6 +36,7 @@ module ActiveRecord
     class AbstractAdapter
       def self.inherited(subclass)
         subclass.prepend Ridgepole::Ext::AbstractAdapter::DisableTableOptions
+        super
       end
     end
   end
