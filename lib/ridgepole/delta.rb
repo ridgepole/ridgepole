@@ -191,7 +191,7 @@ module Ridgepole
       errmsg = lines.with_index.map do |l, i|
         line_num = i + 1
         prefix = line_num == err_num ? '* ' : '  '
-        format("#{prefix}%<line_num>#{digit_number}d: ", line_num: line_num) + l
+        format("#{prefix}%<line_num>#{digit_number}d: %<line>s", line_num: line_num, line: l)
       end
 
       if err_num > 0
