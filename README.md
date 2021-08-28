@@ -145,6 +145,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
   * Fix `--alter-extra` option for unique index ([pull#356](https://github.com/winebarrel/ridgepole/pull/356))
 * `>= 0.9.5`
   * Call `super` in `disable_table_options.rb` ([pull#357](https://github.com/winebarrel/ridgepole/pull/357))
+* `>= 0.9.6`
+  * Fix malformed error ([pull#362](https://github.com/winebarrel/ridgepole/pull/362))
 </details>
 
 **Notice**
