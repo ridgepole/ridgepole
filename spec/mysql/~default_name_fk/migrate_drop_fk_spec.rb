@@ -35,7 +35,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     before { subject.diff(actual_dsl).migrate }
-    subject { client(dump_with_default_fk_name: true) }
+    subject { client(dump_with_default_fk_name: true, force_drop_table: true) }
 
     it {
       delta = subject.diff(expected_dsl)
@@ -87,7 +87,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     before { subject.diff(dsl).migrate }
-    subject { client(dump_with_default_fk_name: true) }
+    subject { client(dump_with_default_fk_name: true, force_drop_table: true) }
 
     it {
       delta = subject.diff('')

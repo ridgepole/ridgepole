@@ -137,6 +137,7 @@ ARGV.options do |opt|
     opt.on('',   '--dump-without-table-options') { options[:dump_without_table_options] = true }
     opt.on('',   '--dump-with-default-fk-name') { options[:dump_with_default_fk_name] = true }
     opt.on('',   '--index-removed-drop-column') { options[:index_removed_drop_column] = true }
+    opt.on('',   '--drop-table') { options[:force_drop_table] = true }
     opt.on('',   '--skip-drop-table') { options[:skip_drop_table] = true }
     opt.on('',   '--mysql-change-table-options') { options[:mysql_change_table_options] = true }
     opt.on('',   '--mysql-change-table-comment') { options[:mysql_change_table_comment] = true }

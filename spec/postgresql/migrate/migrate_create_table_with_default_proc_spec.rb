@@ -17,7 +17,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) { dsl }
 
     before { subject.diff(actual_dsl).migrate }
-    subject { client }
+    subject { client(force_drop_table: true) }
 
     it {
       expect(Ridgepole::Logger.instance).to_not receive(:warn)
@@ -42,7 +42,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     before { subject.diff(dsl).migrate }
-    subject { client }
+    subject { client(force_drop_table: true) }
 
     it {
       expect(Ridgepole::Logger.instance).to_not receive(:warn)

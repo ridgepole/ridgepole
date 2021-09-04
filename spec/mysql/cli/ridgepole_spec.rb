@@ -47,6 +47,7 @@ describe 'ridgepole' do
             --dump-without-table-options
             --dump-with-default-fk-name
             --index-removed-drop-column
+            --drop-table
             --skip-drop-table
             --mysql-change-table-options
             --mysql-change-table-comment

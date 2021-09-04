@@ -73,7 +73,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       ERB
     end
 
-    before { client.diff('').migrate }
+    before { client(force_drop_table: true).diff('').migrate }
     subject { client(dump_with_default_fk_name: true) }
 
     it {
