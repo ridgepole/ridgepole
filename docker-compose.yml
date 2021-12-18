@@ -19,7 +19,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: password
   postgres:
-    image: "postgres:9.5"
+    image: "postgres:14"
     ports:
       - "15442:5432"
     environment:
