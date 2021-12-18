@@ -18,6 +18,7 @@ jobs:
         env:
           - MYSQL56=1
           - MYSQL57=1
+          - MYSQL80=1
           - POSTGRESQL=1
         gemfile:
           - gemfiles/activerecord_5.1.gemfile
@@ -41,11 +42,13 @@ jobs:
         run: |
           for i in {1..60}; do docker-compose up -d && break; sleep 1; done
           # Wait until database servers start
-          function mysql_ping { mysqladmin -u root -h 127.0.0.1 -P 13316 ping --ssl-mode=DISABLED; }
-          function mysql57_ping { mysqladmin -u root -h 127.0.0.1 -P 13317 ping --ssl-mode=DISABLED; }
+          function mysql_ping { mysqladmin -u root -h 127.0.0.1 -P 13316 ping; }
+          function mysql57_ping { mysqladmin -u root -h 127.0.0.1 -P 13317 ping; }
+          function mysql80_ping { mysqladmin -u root -h 127.0.0.1 -P 13318 ping; }
           function pg_ping { PGPASSWORD=password pg_isready -U postgres -h 127.0.0.1 -p 15442; }
           for i in {1..60}; do mysql_ping && break; sleep 1; done
           for i in {1..60}; do mysql57_ping && break; sleep 1; done
+          for i in {1..60}; do mysql80_ping && break; sleep 1; done
           for i in {1..60}; do pg_ping && break; sleep 1; done
         env:
           MYSQL_PWD: password

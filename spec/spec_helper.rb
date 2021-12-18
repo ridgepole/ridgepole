@@ -45,8 +45,6 @@ RSpec.configure do |config|
     end
 
     case example.metadata[:file_path]
-    when /mysql57/
-      skip unless condition(:mysql57)
     when /mysql/
       skip if condition(:postgresql)
     when /postgresql/
@@ -141,7 +139,7 @@ module SpecHelper
     if condition(:postgresql)
       show_create_table_postgresql(table_name)
     else
-      show_create_table_mysql(table_name)
+      normalize_mysql_ddl(show_create_table_mysql(table_name))
     end
   end
 
@@ -152,6 +150,10 @@ module SpecHelper
 
   def show_create_table_postgresql(table_name)
     `#{PG_DUMP} --schema-only #{TEST_SCHEMA} --table=#{table_name} | awk '/^CREATE TABLE/,/);/{print} /^CREATE INDEX/{print}'`.strip
+  end
+
+  def normalize_mysql_ddl(ddl)
+    ddl.gsub(/\(\d+\)/, '').gsub(/CHARSET=utf8$/, 'CHARSET=utf8mb3')
   end
 
   def tempfile(basename, content = '')

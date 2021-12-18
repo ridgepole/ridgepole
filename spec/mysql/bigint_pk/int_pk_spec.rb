@@ -18,7 +18,7 @@ describe 'Ridgepole::Client (with integer pk)' do
     before { subject.diff(dsl).migrate }
 
     specify do
-      expect(show_create_table(:books)).to include '`id` int(11) NOT NULL AUTO_INCREMENT'
+      expect(show_create_table(:books)).to include '`id` int NOT NULL AUTO_INCREMENT'
       expect(subject.dump).to match_ruby dsl
     end
   end
@@ -40,7 +40,7 @@ describe 'Ridgepole::Client (with integer pk)' do
     before { subject.diff(dsl).migrate }
 
     specify do
-      expect(show_create_table(:books)).to include '`id` bigint(20) NOT NULL AUTO_INCREMENT'
+      expect(show_create_table(:books)).to include '`id` bigint NOT NULL AUTO_INCREMENT'
       expect(subject.dump).to match_ruby dsl
     end
   end

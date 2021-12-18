@@ -24,7 +24,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when change options (no change)', condition: '< 6.1' do
-    let(:table_options) { 'ENGINE=InnoDB DEFAULT CHARSET=utf8' }
+    let(:table_options) { "ENGINE=InnoDB DEFAULT CHARSET=#{condition(:mysql80) ? 'utf8mb3' : 'utf8'}" }
 
     it {
       expect(Ridgepole::Logger.instance).to_not receive(:warn).with(warning_regexp)
@@ -55,7 +55,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
   end
 
   context 'when change options (no change)', condition: '>= 6.1' do
-    let(:table_hash_options) { { charset: 'utf8' } }
+    let(:table_hash_options) { { charset: condition(:mysql80) ? 'utf8mb3' : 'utf8' } }
 
     it {
       expect(Ridgepole::Logger.instance).to_not receive(:warn).with(warning_regexp)

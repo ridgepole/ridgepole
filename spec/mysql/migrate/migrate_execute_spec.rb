@@ -44,12 +44,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `title` varchar(255) NOT NULL,
-          `author_id` int(11) NOT NULL,
+          `id` int NOT NULL AUTO_INCREMENT,
+          `title` varchar NOT NULL,
+          `author_id` int NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       ERB
 
       delta.migrate
@@ -60,13 +60,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `title` varchar(255) NOT NULL,
-          `author_id` int(11) NOT NULL,
+          `id` int NOT NULL AUTO_INCREMENT,
+          `title` varchar NOT NULL,
+          `author_id` int NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`),
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       ERB
     }
   end
@@ -117,13 +117,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `title` varchar(255) NOT NULL,
-          `author_id` int(11) NOT NULL,
+          `id` int NOT NULL AUTO_INCREMENT,
+          `title` varchar NOT NULL,
+          `author_id` int NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`),
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       ERB
 
       migrated, _out = delta.migrate
@@ -132,13 +132,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `title` varchar(255) NOT NULL,
-          `author_id` int(11) NOT NULL,
+          `id` int NOT NULL AUTO_INCREMENT,
+          `title` varchar NOT NULL,
+          `author_id` int NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`),
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       ERB
     }
   end
@@ -186,12 +186,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `title` varchar(255) NOT NULL,
-          `author_id` int(11) NOT NULL,
+          `id` int NOT NULL AUTO_INCREMENT,
+          `title` varchar NOT NULL,
+          `author_id` int NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       ERB
 
       migrated, sql = delta.migrate(noop: true)
@@ -202,12 +202,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `title` varchar(255) NOT NULL,
-          `author_id` int(11) NOT NULL,
+          `id` int NOT NULL AUTO_INCREMENT,
+          `title` varchar NOT NULL,
+          `author_id` int NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       ERB
     }
   end
@@ -258,13 +258,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `title` varchar(255) NOT NULL,
-          `author_id` int(11) NOT NULL,
+          `id` int NOT NULL AUTO_INCREMENT,
+          `title` varchar NOT NULL,
+          `author_id` int NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`),
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       ERB
 
       migrated, sql = delta.migrate(noop: true)
@@ -275,13 +275,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
-          `id` int(11) NOT NULL AUTO_INCREMENT,
-          `title` varchar(255) NOT NULL,
-          `author_id` int(11) NOT NULL,
+          `id` int NOT NULL AUTO_INCREMENT,
+          `title` varchar NOT NULL,
+          `author_id` int NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`),
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       ERB
     }
   end

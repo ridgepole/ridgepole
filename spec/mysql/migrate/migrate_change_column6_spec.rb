@@ -43,20 +43,20 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
 
-      expect(show_create_table_mysql('employees')).to match_fuzzy erbh(<<-ERB)
+      expect(show_create_table('employees')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `employees` (
-          `id` bigint(20) NOT NULL AUTO_INCREMENT,
-          `ext_column` varchar(255) NOT NULL,
+          `id` bigint NOT NULL AUTO_INCREMENT,
+          `ext_column` varchar NOT NULL,
           `birth_date` date NOT NULL,
-          `first_name` varchar(14) NOT NULL,
-          `last_name` varchar(16) NOT NULL,
-          `gender` varchar(1) NOT NULL,
+          `first_name` varchar NOT NULL,
+          `last_name` varchar NOT NULL,
+          `gender` varchar NOT NULL,
           `hire_date` date NOT NULL,
           `created_at` datetime NOT NULL,
           `updated_at` datetime NOT NULL,
-          `registered_name` varbinary(255) DEFAULT NULL,
+          `registered_name` varbinary DEFAULT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       ERB
     }
   end
@@ -103,20 +103,20 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
 
-      expect(show_create_table_mysql('employees')).to match_fuzzy erbh(<<-ERB)
+      expect(show_create_table('employees')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `employees` (
-          `emp_id` bigint(20) NOT NULL AUTO_INCREMENT,
-          `ext_column` varchar(255) NOT NULL,
+          `emp_id` bigint NOT NULL AUTO_INCREMENT,
+          `ext_column` varchar NOT NULL,
           `birth_date` date NOT NULL,
-          `first_name` varchar(14) NOT NULL,
-          `last_name` varchar(16) NOT NULL,
-          `gender` varchar(1) NOT NULL,
+          `first_name` varchar NOT NULL,
+          `last_name` varchar NOT NULL,
+          `gender` varchar NOT NULL,
           `hire_date` date NOT NULL,
           `created_at` datetime NOT NULL,
           `updated_at` datetime NOT NULL,
-          `registered_name` varbinary(255) DEFAULT NULL,
+          `registered_name` varbinary DEFAULT NULL,
           PRIMARY KEY (`emp_id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       ERB
     }
   end
@@ -163,18 +163,18 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
 
-      expect(show_create_table_mysql('employees')).to match_fuzzy <<-SQL
+      expect(show_create_table('employees')).to match_fuzzy <<-SQL
         CREATE TABLE `employees` (
-          `ext_column` varchar(255) NOT NULL,
+          `ext_column` varchar NOT NULL,
           `birth_date` date NOT NULL,
-          `first_name` varchar(14) NOT NULL,
-          `last_name` varchar(16) NOT NULL,
-          `gender` varchar(1) NOT NULL,
+          `first_name` varchar NOT NULL,
+          `last_name` varchar NOT NULL,
+          `gender` varchar NOT NULL,
           `hire_date` date NOT NULL,
           `created_at` datetime NOT NULL,
           `updated_at` datetime NOT NULL,
-          `registered_name` varbinary(255) DEFAULT NULL
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+          `registered_name` varbinary DEFAULT NULL
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       SQL
     }
   end
@@ -221,20 +221,20 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl.sub(/, *primary_key: *"emp_id"/, '')
 
-      expect(show_create_table_mysql('employees')).to match_fuzzy erbh(<<-ERB)
+      expect(show_create_table('employees')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `employees` (
-          `id` bigint(20) NOT NULL AUTO_INCREMENT,
-          `ext_column` varchar(255) NOT NULL,
+          `id` bigint NOT NULL AUTO_INCREMENT,
+          `ext_column` varchar NOT NULL,
           `birth_date` date NOT NULL,
-          `first_name` varchar(14) NOT NULL,
-          `last_name` varchar(16) NOT NULL,
-          `gender` varchar(1) NOT NULL,
+          `first_name` varchar NOT NULL,
+          `last_name` varchar NOT NULL,
+          `gender` varchar NOT NULL,
           `hire_date` date NOT NULL,
           `created_at` datetime NOT NULL,
           `updated_at` datetime NOT NULL,
-          `registered_name` varbinary(255) DEFAULT NULL,
+          `registered_name` varbinary DEFAULT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       ERB
     }
   end

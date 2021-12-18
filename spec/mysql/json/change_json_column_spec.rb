@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when change virtual column / not null -> null' do
+  context 'when change virtual column / not null -> null', condition: %i[mysql57 mysql80] do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
@@ -34,7 +34,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
-  context 'when change virtual column / json -> string' do
+  context 'when change virtual column / json -> string', condition: %i[mysql57 mysql80] do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
@@ -67,7 +67,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
-  context 'when change virtual column / string -> json' do
+  context 'when change virtual column / string -> json', condition: %i[mysql57 mysql80] do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|

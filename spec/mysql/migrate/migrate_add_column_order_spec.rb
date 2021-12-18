@@ -35,16 +35,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
 
-      expect(show_create_table_mysql('dept_emp')).to match_fuzzy erbh(<<-ERB)
+      expect(show_create_table('dept_emp')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `dept_emp` (
-          `id` bigint(20) NOT NULL AUTO_INCREMENT,
-          `emp_no0` int(11) NOT NULL,
-          `emp_no` int(11) NOT NULL,
-          `dept_no` varchar(4) NOT NULL,
+          `id` bigint NOT NULL AUTO_INCREMENT,
+          `emp_no0` int NOT NULL,
+          `emp_no` int NOT NULL,
+          `dept_no` varchar NOT NULL,
           `from_date` date NOT NULL,
           `to_date` date NOT NULL,
           PRIMARY KEY (`id`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       ERB
     }
   end
@@ -83,14 +83,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
 
-      expect(show_create_table_mysql('dept_emp')).to match_fuzzy <<-SQL
+      expect(show_create_table('dept_emp')).to match_fuzzy <<-SQL
         CREATE TABLE `dept_emp` (
-          `emp_no0` int(11) NOT NULL,
-          `emp_no` int(11) NOT NULL,
-          `dept_no` varchar(4) NOT NULL,
+          `emp_no0` int NOT NULL,
+          `emp_no` int NOT NULL,
+          `dept_no` varchar NOT NULL,
           `from_date` date NOT NULL,
           `to_date` date NOT NULL
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       SQL
     }
   end
@@ -127,15 +127,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
 
-      expect(show_create_table_mysql('dept_emp')).to match_fuzzy erbh(<<-ERB)
+      expect(show_create_table('dept_emp')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `dept_emp` (
-          `emp_no` bigint(20) NOT NULL AUTO_INCREMENT,
-          `emp_no0` int(11) NOT NULL,
-          `dept_no` varchar(4) NOT NULL,
+          `emp_no` bigint NOT NULL AUTO_INCREMENT,
+          `emp_no0` int NOT NULL,
+          `dept_no` varchar NOT NULL,
           `from_date` date NOT NULL,
           `to_date` date NOT NULL,
           PRIMARY KEY (`emp_no`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       ERB
     }
   end
@@ -176,16 +176,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
 
-      expect(show_create_table_mysql('dept_emp')).to match_fuzzy <<-SQL
+      expect(show_create_table('dept_emp')).to match_fuzzy <<-SQL
         CREATE TABLE `dept_emp` (
-          `emp_no1` int(11) NOT NULL,
-          `emp_no2` int(11) NOT NULL,
-          `emp_no0` int(11) NOT NULL,
-          `dept_no` varchar(4) NOT NULL,
+          `emp_no1` int NOT NULL,
+          `emp_no2` int NOT NULL,
+          `emp_no0` int NOT NULL,
+          `dept_no` varchar NOT NULL,
           `from_date` date NOT NULL,
           `to_date` date NOT NULL,
           PRIMARY KEY (`emp_no1`,`emp_no2`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       SQL
     }
   end
@@ -226,16 +226,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
 
-      expect(show_create_table_mysql('dept_emp')).to match_fuzzy <<-SQL
+      expect(show_create_table('dept_emp')).to match_fuzzy <<-SQL
         CREATE TABLE `dept_emp` (
-          `emp_no0` int(11) NOT NULL,
-          `emp_no1` int(11) NOT NULL,
-          `emp_no2` int(11) NOT NULL,
-          `dept_no` varchar(4) NOT NULL,
+          `emp_no0` int NOT NULL,
+          `emp_no1` int NOT NULL,
+          `emp_no2` int NOT NULL,
+          `dept_no` varchar NOT NULL,
           `from_date` date NOT NULL,
           `to_date` date NOT NULL,
           PRIMARY KEY (`emp_no1`,`emp_no2`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       SQL
     }
   end

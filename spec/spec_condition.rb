@@ -12,6 +12,10 @@ module SpecCondition
       ENV['MYSQL57'] == '1'
     end
 
+    def mysql80?
+      ENV['MYSQL80'] == '1'
+    end
+
     def activerecord_5?
       (ActiveRecord::VERSION::MAJOR >= 5) && (ActiveRecord::VERSION::MAJOR < 6)
     end
