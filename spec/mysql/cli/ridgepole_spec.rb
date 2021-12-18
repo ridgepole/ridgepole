@@ -48,7 +48,6 @@ describe 'ridgepole' do
             --dump-with-default-fk-name
             --index-removed-drop-column
             --drop-table
-            --skip-drop-table
             --mysql-change-table-options
             --mysql-change-table-comment
             --check-relation-type DEF_PK
