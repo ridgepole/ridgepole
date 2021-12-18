@@ -11,11 +11,15 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 
 **Notice**
 
-ActiveRecord 6.1 is supported in ridgepole v0.9, but the ActiveRecord dump has been changed, so there is a difference between ActiveRecord 5.x/6.0 format.
-
-**If you use ActiveRecord 6.1, please modify Schemafile format**.
-
-cf. https://github.com/winebarrel/ridgepole/pull/323
+* ActiveRecord 6.1 is supported in ridgepole v0.9, but the ActiveRecord dump has been changed, so there is a difference between ActiveRecord 5.x/6.0 format.
+  * **If you use ActiveRecord 6.1, please modify Schemafile format**.
+  * cf. https://github.com/winebarrel/ridgepole/pull/323
+* `DROP TABLE` is skipped by default in v1.0 and later versions.
+  * If you want to `DROP TABLE`, please pass `--drop-table`.
+  * cf. https://github.com/ridgepole/ridgepole/pull/363
+* In Rails 7.0, the output of dumper is different from Rails 6.
+  * cf. https://github.com/rails/rails/issues/43909
+  * cf. https://github.com/rails/rails/commit/c2a6f618d22cca4d9b7be7fa7652e7aac509350c#diff-55f41513f027a3d219629f475f03c2d1105ca55c5093d691e1b3dc4710c6cc0b
 
 ## Installation
 

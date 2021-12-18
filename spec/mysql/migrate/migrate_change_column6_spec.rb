@@ -10,8 +10,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
           t.binary   "registered_name"
         end
       ERB
@@ -26,8 +26,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
           t.binary   "registered_name", limit: 255
         end
       ERB
@@ -70,8 +70,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
           t.binary   "registered_name"
         end
       ERB
@@ -86,8 +86,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
           t.binary   "registered_name", limit: 255
         end
       ERB
@@ -130,8 +130,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
           t.binary   "registered_name"
         end
       ERB
@@ -146,8 +146,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
           t.binary   "registered_name", limit: 255
         end
       ERB
@@ -188,8 +188,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
           t.binary   "registered_name"
         end
       ERB
@@ -204,8 +204,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
           t.binary   "registered_name", limit: 255
         end
       ERB

@@ -419,6 +419,9 @@ module Ridgepole
             opts[:limit] = 4_294_967_295
           end
         end
+
+        # Workaround for Active Record 7.0
+        opts.delete(:precision) if attrs[:type] == :datetime && opts[:precision].nil?
       end
     end
 

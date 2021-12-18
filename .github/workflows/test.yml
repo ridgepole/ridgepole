@@ -2,7 +2,25 @@ name: test
 
 on:
   push:
+    paths-ignore:
+      - .gitignore
+      - .rspec
+      - CHANGELOG.md
+      - docker-compose.yml
+      - Gemfile
+      - lib/ridgepole/version.rb
+      - README.md
+      - ridgepole.gemspec
   pull_request:
+    paths-ignore:
+      - .gitignore
+      - .rspec
+      - CHANGELOG.md
+      - docker-compose.yml
+      - Gemfile
+      - lib/ridgepole/version.rb
+      - README.md
+      - ridgepole.gemspec
 
 jobs:
   build:

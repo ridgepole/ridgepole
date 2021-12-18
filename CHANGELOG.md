@@ -2,6 +2,7 @@
 
 ## Unreleased (YYYY-MM-DD)
 
+* Support Rails 7.0
 * `--skip-drop-table` by default ([pull#363](https://github.com/winebarrel/ridgepole/pull/363))
 
 ## 0.9
