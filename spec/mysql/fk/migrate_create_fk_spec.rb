@@ -249,11 +249,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when create fk with first key of multiple column indexes for its column' do
     let(:dsl) do
-      erbh(<<-ERB)
-        create_table "parent", id: :integer, force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" }) %> do |t|
+      erbh(<<-ERB, utf8: condition(:mysql80) ? 'utf8mb3' : 'utf8')
+        create_table "parent", id: :integer, force: :cascade, <%= i cond('>= 6.1', { charset: @utf8 }, { options: "ENGINE=InnoDB DEFAULT CHARSET=\#{@utf8}" }) %> do |t|
         end
 
-        create_table "child", force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" }) %> do |t|
+        create_table "child", force: :cascade, <%= i cond('>= 6.1', { charset: @utf8 }, { options: "ENGINE=InnoDB DEFAULT CHARSET=\#{@utf8}" }) %> do |t|
           t.integer "parent_id"
           t.string "name"
           t.index ["parent_id", "name"], name: "par_id"
@@ -274,11 +274,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when create fk on the primary key' do
     let(:dsl) do
-      erbh(<<-ERB)
-        create_table "users", force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" }) %> do |t|
+      erbh(<<-ERB, utf8: condition(:mysql80) ? 'utf8mb3' : 'utf8')
+        create_table "users", force: :cascade, <%= i cond('>= 6.1', { charset: @utf8 }, { options: "ENGINE=InnoDB DEFAULT CHARSET=\#{@utf8}" }) %> do |t|
         end
 
-        create_table "icons", primary_key: "user_id", force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" }) %> do |t|
+        create_table "icons", primary_key: "user_id", force: :cascade, <%= i cond('>= 6.1', { charset: @utf8 }, { options: "ENGINE=InnoDB DEFAULT CHARSET=\#{@utf8}" }) %> do |t|
         end
         add_foreign_key "icons", "users", name: "fk_icons_users"
       ERB
@@ -297,14 +297,14 @@ end
 
 context 'when create fk on the first primary key' do
   let(:dsl) do
-    erbh(<<-ERB)
-      create_table "users", id: :integer, force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" }) %> do |t|
+    erbh(<<-ERB, utf8: condition(:mysql80) ? 'utf8mb3' : 'utf8')
+      create_table "users", id: :integer, force: :cascade, <%= i cond('>= 6.1', { charset: @utf8 }, { options: "ENGINE=InnoDB DEFAULT CHARSET=\#{@utf8}" }) %> do |t|
       end
 
-      create_table "employee", id: :integer, force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" }) %> do |t|
+      create_table "employee", id: :integer, force: :cascade, <%= i cond('>= 6.1', { charset: @utf8 }, { options: "ENGINE=InnoDB DEFAULT CHARSET=\#{@utf8}" }) %> do |t|
       end
 
-      create_table "icons", primary_key: ["user_id", "employee_id"], force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" }) %> do |t|
+      create_table "icons", primary_key: ["user_id", "employee_id"], force: :cascade, <%= i cond('>= 6.1', { charset: @utf8 }, { options: "ENGINE=InnoDB DEFAULT CHARSET=\#{@utf8}" }) %> do |t|
         t.integer "user_id", null: false
         t.integer "employee_id", null: false
       end

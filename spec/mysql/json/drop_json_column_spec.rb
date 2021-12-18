@@ -1,29 +1,24 @@
 # frozen_string_literal: true
 
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when change virtual column' do
+  context 'when add virtual column', condition: %i[mysql57 mysql80] do
     let(:actual_dsl) do
-      <<-RUBY
+      erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
-          t.string   "title"
-          t.virtual "upper_title", type: :string, null: false, as: "upper(`title`)"
-          t.virtual "title_length", type: :integer, null: false, as: "length(`title`)", stored: true
+          t.string  "title", null: false
+          t.json    "attrs", null: false
           t.index ["title"], name: "index_books_on_title"
-          t.index ["title_length"], name: "index_books_on_title_length"
         end
-      RUBY
+      ERB
     end
 
     let(:expected_dsl) do
-      <<-RUBY
+      erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
-          t.string   "title"
-          t.virtual "upper_title", type: :string, null: false, as: "length(`title`)"
-          t.virtual "title_length", type: :integer, null: false, as: "upper(`title`)", stored: true
+          t.string  "title", null: false
           t.index ["title"], name: "index_books_on_title"
-          t.index ["title_length"], name: "index_books_on_title_length"
         end
-      RUBY
+      ERB
     end
 
     before { subject.diff(actual_dsl).migrate }

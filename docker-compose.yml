@@ -1,15 +1,21 @@
 version: "3.8"
 services:
   mysql:
-    image: "mysql:5.6.38"
+    image: "mysql:5.6"
     ports:
       - "13316:3306"
     environment:
       MYSQL_ROOT_PASSWORD: password
   mysql57:
-    image: "mysql:5.7.20"
+    image: "mysql:5.7"
     ports:
       - "13317:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+  mysql80:
+    image: "mysql:8.0"
+    ports:
+      - "13318:3306"
     environment:
       MYSQL_ROOT_PASSWORD: password
   postgres:

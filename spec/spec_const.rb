@@ -1,11 +1,17 @@
 # frozen_string_literal: true
 
 TEST_MYSQL_HOST = ENV['DOCKER_HOST'] ? ENV['DOCKER_HOST'].gsub(%r{\Atcp://|:\d+\z}, '') : '127.0.0.1'
-TEST_MYSQL_PORT = ENV['MYSQL57'] == '1' ? 13_317 : 13_316
+TEST_MYSQL_PORT = if ENV['MYSQL57'] == '1'
+                    13317 # rubocop:disable Style/NumericLiterals
+                  elsif ENV['MYSQL80'] == '1'
+                    13318 # rubocop:disable Style/NumericLiterals
+                  else
+                    13316 # rubocop:disable Style/NumericLiterals
+                  end
 TEST_MYSQL_USER = 'root'
 TEST_MYSQL_PASS = 'password'
 
-MYSQL_CLI = "mysql -h #{TEST_MYSQL_HOST} -P #{TEST_MYSQL_PORT} -u #{TEST_MYSQL_USER} -p#{TEST_MYSQL_PASS} --ssl-mode=DISABLED 2>/dev/null"
+MYSQL_CLI = "mysql -h #{TEST_MYSQL_HOST} -P #{TEST_MYSQL_PORT} -u #{TEST_MYSQL_USER} -p#{TEST_MYSQL_PASS} 2>/dev/null"
 
 TEST_PG_HOST = ENV['DOCKER_HOST'] ? ENV['DOCKER_HOST'].gsub(%r{\Atcp://|:\d+\z}, '') : '127.0.0.1'
 TEST_PG_PORT = 15_442

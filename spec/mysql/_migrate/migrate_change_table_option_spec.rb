@@ -3,8 +3,8 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when change mysql table options' do
     let(:actual_dsl) do
-      erbh(<<-ERB)
-        create_table "employees", primary_key: "emp_no", force: :cascade, <%= i cond(">= 6.1", { charset: "utf8", options: "ENGINE=MyISAM" }, { options: "ENGINE=MyISAM DEFAULT CHARSET=utf8" }) %> do |t|
+      erbh(<<-ERB, utf8: condition(:mysql80) ? 'utf8mb3' : 'utf8')
+        create_table "employees", primary_key: "emp_no", force: :cascade, <%= i cond(">= 6.1", { charset: @utf8, options: "ENGINE=MyISAM" }, { options: "ENGINE=MyISAM DEFAULT CHARSET=\#{@utf8}" }) %> do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name", limit: 16, null: false
