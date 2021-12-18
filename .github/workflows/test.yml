@@ -8,6 +8,7 @@ on:
       - CHANGELOG.md
       - docker-compose.yml
       - Gemfile
+      - lib/ridgepole/version.rb
       - README.md
       - ridgepole.gemspec
   pull_request:
@@ -17,6 +18,7 @@ on:
       - CHANGELOG.md
       - docker-compose.yml
       - Gemfile
+      - lib/ridgepole/version.rb
       - README.md
       - ridgepole.gemspec
 
