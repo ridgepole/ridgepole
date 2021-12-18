@@ -5,11 +5,11 @@ describe 'Ridgepole::Client (use default:lambda)' do
     subject { client }
 
     it do
-      delta = subject.diff(<<-RUBY)
+      delta = subject.diff(erbh(<<-ERB))
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
+          t.datetime "bar", <%= i cond(">= 7.0", { precision: nil }) %>, default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      RUBY
+      ERB
 
       expect(delta.differ?).to be_truthy
       delta.migrate
@@ -24,11 +24,11 @@ describe 'Ridgepole::Client (use default:lambda)' do
 
   context 'when there is no difference' do
     let(:dsl) do
-      <<-RUBY
+      erbh(<<-ERB)
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
+          t.datetime "bar", <%= i cond(">= 7.0", { precision: nil }) %>, default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      RUBY
+      ERB
     end
 
     subject { client }
@@ -47,11 +47,11 @@ describe 'Ridgepole::Client (use default:lambda)' do
     subject { client }
 
     before do
-      subject.diff(<<-RUBY).migrate
+      subject.diff(erbh(<<-ERB)).migrate
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
+          t.datetime "bar", <%= i cond(">= 7.0", { precision: nil }) %>, default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      RUBY
+      ERB
     end
 
     it do
@@ -113,12 +113,12 @@ describe 'Ridgepole::Client (use default:lambda)' do
     end
 
     it do
-      delta = subject.diff(<<-RUBY)
+      delta = subject.diff(erbh(<<-ERB))
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
+          t.datetime "bar", <%= i cond(">= 7.0", { precision: nil }) %>, default: -> { "CURRENT_TIMESTAMP" }, null: false
           t.integer "zoo"
         end
-      RUBY
+      ERB
 
       expect(delta.differ?).to be_truthy
       delta.migrate
@@ -136,12 +136,12 @@ describe 'Ridgepole::Client (use default:lambda)' do
     subject { client }
 
     before do
-      subject.diff(<<-RUBY).migrate
+      subject.diff(erbh(<<-ERB)).migrate
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
+          t.datetime "bar", <%= i cond(">= 7.0", { precision: nil }) %>, default: -> { "CURRENT_TIMESTAMP" }, null: false
           t.integer "zoo"
         end
-      RUBY
+      ERB
     end
 
     it do

@@ -13,7 +13,10 @@ module Ridgepole
     end
 
     module ConnectionAdapterExt
-      def execute(sql, name = nil)
+      def execute(*args)
+        sql = args.fetch(0)
+        name = args[1]
+
         if Ridgepole::ExecuteExpander.noop
           if (callback = Ridgepole::ExecuteExpander.callback)
             sql = append_alter_extra(sql)

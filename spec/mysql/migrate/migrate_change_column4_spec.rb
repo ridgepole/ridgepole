@@ -18,18 +18,18 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     let(:expected_dsl) do
-      <<-RUBY
+      erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
           t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
           t.boolean  "registered"
         end
-      RUBY
+      ERB
     end
 
     before { subject.diff(actual_dsl).migrate }
@@ -58,18 +58,18 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     let(:expected_dsl) do
-      <<-RUBY
+      erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
           t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
           t.boolean  "registered", limit: 1
         end
-      RUBY
+      ERB
     end
 
     before { subject.diff(actual_dsl).migrate }
