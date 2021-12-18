@@ -1,6 +1,8 @@
 # Changelog
 
-## 1.0 (2021/12/19)
+## 1.0
+
+### 1.0.0 (2021/12/19)
 
 * Support Rails 7.0
 * `--skip-drop-table` by default ([pull#363](https://github.com/ridgepole/ridgepole/pull/363))
