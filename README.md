@@ -6,14 +6,14 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 (like Chef/Puppet)
 
 [![Gem Version](https://badge.fury.io/rb/ridgepole.svg)](http://badge.fury.io/rb/ridgepole)
-[![Build Status](https://github.com/winebarrel/ridgepole/workflows/test/badge.svg?branch=1.0)](https://github.com/winebarrel/ridgepole/actions)
-[![Coverage Status](https://coveralls.io/repos/github/winebarrel/ridgepole/badge.svg?branch=1.0)](https://coveralls.io/github/winebarrel/ridgepole?branch=1.0)
+[![Build Status](https://github.com/ridgepole/ridgepole/workflows/test/badge.svg?branch=1.0)](https://github.com/ridgepole/ridgepole/actions)
+[![Coverage Status](https://coveralls.io/repos/github/ridgepole/ridgepole/badge.svg?branch=1.0)](https://coveralls.io/github/ridgepole/ridgepole?branch=1.0)
 
 **Notice**
 
 * ActiveRecord 6.1 is supported in ridgepole v0.9, but the ActiveRecord dump has been changed, so there is a difference between ActiveRecord 5.x/6.0 format.
   * **If you use ActiveRecord 6.1, please modify Schemafile format**.
-  * cf. https://github.com/winebarrel/ridgepole/pull/323
+  * cf. https://github.com/ridgepole/ridgepole/pull/323
 * `DROP TABLE` is skipped by default in v1.0 and later versions.
   * If you want to `DROP TABLE`, please pass `--drop-table`.
   * cf. https://github.com/ridgepole/ridgepole/pull/363
@@ -321,6 +321,6 @@ bundle exec appraisal activerecord-5.1 rake
 
 ## Example project
 
-* https://github.com/winebarrel/ridgepole-example
-  * https://github.com/winebarrel/ridgepole-example/pull/1
-  * https://github.com/winebarrel/ridgepole-example/pull/2
+* https://github.com/ridgepole/ridgepole-example
+  * https://github.com/ridgepole/ridgepole-example/pull/1
+  * https://github.com/ridgepole/ridgepole-example/pull/2
