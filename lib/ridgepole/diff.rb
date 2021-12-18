@@ -41,7 +41,7 @@ module Ridgepole
 
       scan_relation_info(relation_info)
 
-      unless @options[:merge] || @options[:skip_drop_table]
+      if !@options[:merge] && @options[:force_drop_table]
         from.each do |table_name, from_attrs|
           next unless target?(table_name)
 

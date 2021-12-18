@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when skil drop table' do
+  context 'when skip drop table by default' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "clubs", force: :cascade do |t|
@@ -131,7 +131,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     before { subject.diff(actual_dsl).migrate }
-    subject { client(skip_drop_table: true) }
+    subject { client }
 
     it {
       delta = subject.diff(expected_dsl.gsub(/create_table "clubs".+\n\s*t\..+\n\s*end/, ''))
