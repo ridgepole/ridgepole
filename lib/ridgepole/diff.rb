@@ -37,6 +37,9 @@ module Ridgepole
           delta[:add] ||= {}
           delta[:add][table_name] = to_attrs
         end
+        delta[:change] ||= {}
+        delta[:change][table_name] ||= {}
+        scan_partition_change(table_name, from_attrs&.fetch(:partition, nil), to_attrs&.fetch(:partition, nil), delta[:change][table_name])
       end
 
       scan_relation_info(relation_info)
@@ -610,6 +613,54 @@ module Ridgepole
         MSG
         end
       end
+    end
+
+    def scan_partition_change(table_name, from, to, table_delta)
+      from = (from || {}).dup
+      to = (to || {}).dup
+      partition_delta = {}
+
+      return if to.empty? && from.empty?
+
+      if from.empty? && Ridgepole::ConnectionAdapters.mysql?
+        partition_delta[:add] ||= {}
+        partition_delta[:add][table_name] = to
+      else
+        if from.present? && (to[:type] != from[:type] || to[:columns] != from[:columns])
+          @logger.warn(<<-MSG)
+"[WARNING] '#{table_name}' partition is skipped because of the different partition type.
+  to: #{to[:type]} #{to[:columns]}
+  from: #{from[:type]}" #{from[:columns]}
+MSG
+          return
+        end
+
+        raise "All partition is different. please check partition settings.to:  #{to}, from: #{from}" if from[:partition_definitions].present? && (to[:partition_definitions] & from[:partition_definitions]).empty?
+
+        scan_partition_definition_chanage(from, to, table_delta)
+      end
+
+      table_delta[:partition] = partition_delta unless partition_delta.empty?
+    end
+
+    def scan_partition_definition_chanage(from, to, table_delta)
+      partition_definitions_delta = {}
+      attrs = { type: from[:type] || to[:type] }
+
+      from_partitions = (from[:partition_definitions] || []).index_by { |partition| partition[:name] }
+      to_partitions = (to[:partition_definitions] || []).index_by { |partition| partition[:name] }
+
+      (from_partitions.keys - to_partitions.keys).each do |name|
+        partition_definitions_delta[:delete] ||= {}
+        partition_definitions_delta[:delete][name] = attrs.merge(valuve: from_partitions[name][:values])
+      end
+
+      (to_partitions.keys - from_partitions.keys).each do |name|
+        partition_definitions_delta[:add] ||= {}
+        partition_definitions_delta[:add][name] = attrs.merge(values: to_partitions[name][:values])
+      end
+
+      table_delta[:partition_definitions] = partition_definitions_delta unless partition_definitions_delta.empty?
     end
 
     def check_table_existence(definition)

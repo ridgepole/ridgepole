@@ -66,4 +66,27 @@ describe 'Ridgepole::Client#dump' do
       ERB
     }
   end
+
+  context 'when there is a partition tables', condition: '>= 6.0' do
+    before { restore_tables_postgresql_partition }
+    subject { client }
+
+    it {
+      expect(subject.dump).to match_fuzzy erbh(<<-ERB)
+        create_table "list_partitions", id: false, options: "PARTITION BY LIST(id)", force: :cascade do |t|
+          t.integer "id", null: false
+          t.date "logdate", null: false
+        end
+        add_partition "list_partitions", :list, [:id], partition_definitions: [{ name: "list_partitions_p0", values: {:in=>[1]} } ,{ name: "list_partitions_p1", values: {:in=>[2, 3]} }]
+
+        create_table "range_partitions", id: false, options: "PARTITION BY RANGE(logdate)", force: :cascade do |t|
+          t.integer "id", null: false
+          t.date "logdate", null: false
+        end
+        add_partition "range_partitions", :range, [:logdate], partition_definitions: [{ name: "range_partitions_p0", values: {:from=>["MINVALUE"], :to=>["2021-01-01"]} } ,{ name: "range_partitions_p1", values: {:from=>["2021-01-01"], :to=>["2022-01-01"]} }]
+      ERB
+    }
+
+    after { drop_tables }
+  end
 end

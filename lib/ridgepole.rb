@@ -16,6 +16,9 @@ require 'diffy'
 module Ridgepole; end
 
 require 'ridgepole/ext/abstract_adapter/disable_table_options'
+require 'ridgepole/ext/abstract_adapter/partition_definition'
+require 'ridgepole/ext/abstract_adapter/partition_options'
+require 'ridgepole/ext/abstract_adapter/partitioning'
 require 'ridgepole/ext/pp_sort_hash'
 require 'ridgepole/ext/schema_dumper'
 require 'ridgepole/client'

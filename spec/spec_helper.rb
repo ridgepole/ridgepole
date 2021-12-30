@@ -102,6 +102,16 @@ module SpecHelper
     system_raise_on_fail("#{MYSQL_CLI} < #{sql_file}")
   end
 
+  def restore_tables_postgresql_partition
+    sql_file = File.expand_path('postgresql/ridgepole_test_tables_partition.sql', __dir__)
+    system_raise_on_fail("#{PG_PSQL} ridgepole_test -q -f #{sql_file} 2>/dev/null")
+  end
+
+  def drop_tables
+    connection = ActiveRecord::Base.connection
+    connection.tables.each { |table| connection.drop_table(table, if_exists: true) }
+  end
+
   def client(options = {}, config = {})
     config = conn_spec(config)
     default_options = { debug: condition(:debug) }

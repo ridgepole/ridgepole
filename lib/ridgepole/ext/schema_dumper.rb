@@ -45,6 +45,30 @@ module Ridgepole
           stream.puts add_foreign_key_statements.sort.join("\n")
         end
       end
+
+      def tables(stream)
+        original = ignore_tables.dup
+        ignore_tables.concat(@connection.partition_tables)
+        super
+      ensure
+        self.ignore_tables = original
+      end
+
+      def table(table, stream)
+        super
+        partition(table, stream)
+      end
+
+      def partition(table, stream)
+        if (partition = @connection.partition(table))
+          partition_definitions = partition.partition_definitions.map do |partition_definition|
+            "{ name: #{partition_definition.name.inspect}, values: #{partition_definition.values} }"
+          end.join(' ,')
+
+          stream.puts "  add_partition #{partition.table.inspect}, #{partition.type.inspect}, #{partition.columns.inspect}, partition_definitions: [#{partition_definitions}]"
+          stream.puts
+        end
+      end
     end
   end
 end

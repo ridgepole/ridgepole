@@ -24,10 +24,18 @@ Layout/LineLength:
   Enabled: false
 Metrics/MethodLength:
   Enabled: false
+Metrics/ModuleLength:
+  Max: 106
 Metrics/ParameterLists:
   Enabled: false
 Metrics/PerceivedComplexity:
   Enabled: false
+Naming/MethodName:
+  Exclude:
+    - "lib/ridgepole/ext/abstract_mysql_adapter/schema_creation.rb"
+Naming/MethodParameterName:
+  Exclude:
+    - "lib/ridgepole/ext/abstract_mysql_adapter/schema_creation.rb"
 Style/Documentation:
   Enabled: false
 Style/GuardClause:

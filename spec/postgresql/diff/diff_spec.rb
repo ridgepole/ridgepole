@@ -213,4 +213,36 @@ describe 'Ridgepole::Client.diff' do
       end
     end
   end
+
+  context 'when change partition' do
+    let(:actual_dsl) do
+      <<-RUBY
+        create_table "list_partitions", id: false, force: :cascade do |t|
+          t.integer "id", null: false
+          t.date "logdate", null: false
+        end
+        add_partition "list_partitions", :list, [:id], partition_definitions: [{ name: "list_partitions_p0", values: {:in=>[1]} }]
+      RUBY
+    end
+
+    let(:expected_dsl) do
+      <<-RUBY
+        create_table "list_partitions", id: false, force: :cascade do |t|
+          t.integer "id", null: false
+          t.date "logdate", null: false
+        end
+        add_partition "list_partitions", :list, [:id], partition_definitions: [{ name: "list_partitions_p0", values: {:in=>[1]} } ,{ name: "list_partitions_p1", values: {:in=>[2, 3]} }]
+      RUBY
+    end
+
+    subject { Ridgepole::Client }
+
+    it {
+      delta = subject.diff(actual_dsl, expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(delta.script).to match_fuzzy <<-RUBY
+        add_partition "list_partitions", name: "list_partitions_p1", values: {:in=>[2,3]}
+      RUBY
+    }
+  end
 end
