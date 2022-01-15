@@ -2,6 +2,12 @@
 
 ## 1.0
 
+### 1.0.1 (2022/01/15)
+
+* Fix code for RuboCop 1.24.1
+* Fix PostgreSQL spec for Rails 7.0
+* Update ERBh gem (for development)
+
 ### 1.0.0 (2021/12/19)
 
 * Support Rails 7.0
