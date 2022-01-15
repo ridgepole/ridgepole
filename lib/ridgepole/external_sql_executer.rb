@@ -25,20 +25,18 @@ module Ridgepole
             readable = ready[0]
 
             readable.each do |f|
-              begin
-                data = f.read_nonblock(1024)
-                next if data.nil?
+              data = f.read_nonblock(1024)
+              next if data.nil?
 
-                data.chomp!
+              data.chomp!
 
-                if f == stderr
-                  @logger.warn("[WARNING] #{script_basename}: #{data}")
-                else
-                  @logger.info("#{script_basename}: #{data}")
-                end
-              rescue EOFError
-                files.delete f
+              if f == stderr
+                @logger.warn("[WARNING] #{script_basename}: #{data}")
+              else
+                @logger.info("#{script_basename}: #{data}")
               end
+            rescue EOFError
+              files.delete f
             end
           end
         rescue EOFError

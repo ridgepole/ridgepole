@@ -29,7 +29,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       ERB
     end
 
-    let(:expected_dsl) { dsl.each_line.reject { |l| l =~ /ignore/ }.join }
+    let(:expected_dsl) { dsl.each_line.grep_v(/ignore/).join }
 
     before { subject.diff(actual_dsl).migrate }
     subject { client }
