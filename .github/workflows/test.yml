@@ -42,10 +42,15 @@ jobs:
           - gemfiles/activerecord_5.2.gemfile
           - gemfiles/activerecord_6.0.gemfile
           - gemfiles/activerecord_6.1.gemfile
+          - gemfiles/activerecord_7.0.gemfile
         exclude:
           - ruby: "3.0"
             gemfile: gemfiles/activerecord_5.1.gemfile
           - ruby: "3.0"
+            gemfile: gemfiles/activerecord_5.2.gemfile
+          - ruby: "3.1"
+            gemfile: gemfiles/activerecord_5.1.gemfile
+          - ruby: "3.1"
             gemfile: gemfiles/activerecord_5.2.gemfile
     env:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
