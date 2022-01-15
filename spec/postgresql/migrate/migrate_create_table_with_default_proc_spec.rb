@@ -8,8 +8,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
           t.string   "name"
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
         end
       ERB
     end
@@ -35,8 +35,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
           t.string   "name"
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
         end
       ERB
     end
@@ -60,8 +60,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v1()" }, force: :cascade do |t|
           t.string   "name"
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
         end
       ERB
     end
@@ -70,8 +70,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
           t.string   "name"
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
         end
       ERB
     end
