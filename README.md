@@ -303,16 +303,17 @@ Apply `Schemafile`
 
 ## Run tests
 
+
 ```sh
 docker-compose up -d
 bundle install
 bundle exec appraisal install
-bundle exec appraisal activerecord-5.1 rake
-# POSTGRESQL=1 bundle exec appraisal activerecord-5.1 rake
-# MYSQL57=1 bundle exec appraisal activerecord-5.1 rake
+bundle exec appraisal activerecord-7.0 rake
+# POSTGRESQL=1 bundle exec appraisal activerecord-7.0 rake
+# MYSQL57=1 bundle exec appraisal activerecord-7.0 rake
 ```
 
-**Notice:** mysql-client/postgresql-client is required.
+**Notice:** Ruby 2.6 or above/mysql-client/postgresql-client is required.
 
 ## Demo
 
