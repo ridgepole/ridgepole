@@ -2,6 +2,11 @@
 
 ## 1.0
 
+### 1.0.2 (Unreleased)
+
+* Add support for partitioning ([pull#374](https://github.com/ridgepole/ridgepole/pull/374))
+* Suppress warning of table option differences ([pull#378](https://github.com/ridgepole/ridgepole/pull/378))
+
 ### 1.0.1 (2022/01/15)
 
 * Fix code for RuboCop 1.24.1
