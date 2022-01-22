@@ -15,7 +15,12 @@ module Ridgepole
       @parser = Ridgepole::DSLParser.new(@options)
       @diff = Ridgepole::Diff.new(@options)
 
+      if Ridgepole::ConnectionAdapters.mysql?
+        require 'ridgepole/ext/abstract_mysql_adapter/partitioning'
+        require 'ridgepole/ext/abstract_mysql_adapter/schema_creation'
+      end
       require 'ridgepole/ext/abstract_mysql_adapter/dump_auto_increment' if @options[:mysql_dump_auto_increment]
+      require 'ridgepole/ext/postgresql_adapter/partitioning' if Ridgepole::ConnectionAdapters.postgresql?
     end
 
     def dump(&block)

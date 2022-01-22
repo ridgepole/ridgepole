@@ -301,6 +301,31 @@ Apply `Schemafile`
 ...
 ```
 
+## Partitioning
+
+**Notice:** PostgreSQL `PARTITION BY` must be specified with the create_table option.
+
+### List Partitioning
+
+```ruby
+create_table "articles", force: :cascade, options: "PARTITION BY LIST(id)" do |t|
+end
+
+add_partition("articles", :list, :id, partition_definitions: [{ name: 'p0', values: { in: [0,1,2] } }, { name: 'p1', values: { in: [3,4,5] } }])
+```
+
+### Range Partitioning
+
+```ruby
+create_table "articles", force: :cascade, options: "PARTITION BY RANGE(id)" do |t|
+end
+
+# postgresql
+add_partition("articles", :range, :id, partition_definitions: [{ name: 'p0', values: { from: 'MINVALUE', to: 5 }}, { name: 'p1', values: { from: 5, to: 10 } }])
+# mysql
+add_partition("articles", :range, :id, partition_definitions: [{ name: 'p0', values: { to: 5 }}, { name: 'p1', values: { to: 10 } }])
+```
+
 ## Run tests
 
 

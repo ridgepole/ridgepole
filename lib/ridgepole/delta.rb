@@ -310,11 +310,29 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
       append_change_table_options(table_name, comment_literal, buf)
     end
 
+    def append_change_partition(table_name, delta, buf)
+      (delta[:add] || {}).each do |_, attrs|
+        buf.puts "create_partition #{table_name.inspect}, **#{attrs.inspect}"
+      end
+    end
+
+    def append_change_partition_definitions(table_name, partition_definitions, buf, _post_buf_for_fk)
+      (partition_definitions[:add] || []).each do |partition_name, attrs|
+        buf.puts "add_partition #{table_name.inspect}, name: #{partition_name.inspect}, values: #{attrs[:values].inspect}"
+      end
+
+      (partition_definitions[:delete] || []).each do |partition_name, _attrs|
+        buf.puts "remove_partition #{table_name.inspect}, name: #{partition_name.inspect}"
+      end
+    end
+
     def append_change(table_name, attrs, buf, pre_buf_for_fk, post_buf_for_fk)
       definition = attrs[:definition] || {}
       primary_key_definition = attrs[:primary_key_definition] || {}
       indices = attrs[:indices] || {}
       foreign_keys = attrs[:foreign_keys] || {}
+      partition = attrs[:partition] || {}
+      partition_definitions = attrs[:partition_definitions] || {}
       table_options = attrs[:table_options]
       table_charset = attrs[:table_charset]
       table_collation = attrs[:table_collation]
@@ -334,6 +352,10 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
       append_change_table_raw_options(table_name, table_options, table_charset, table_collation, buf) if table_options || table_charset || table_collation
 
       append_change_table_comment(table_name, table_comment, buf) if table_comment
+
+      append_change_partition(table_name, partition, buf) unless partition.empty?
+
+      append_change_partition_definitions(table_name, partition_definitions, buf, post_buf_for_fk) unless partition_definitions.empty?
 
       buf.puts
       pre_buf_for_fk.puts

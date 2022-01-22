@@ -1,0 +1,12 @@
+DROP TABLE IF EXISTS list_partitions_p0;
+DROP TABLE IF EXISTS list_partitions_p1;
+DROP TABLE IF EXISTS list_partitions;
+DROP TABLE IF EXISTS range_partitions_p0;
+DROP TABLE IF EXISTS range_partitions_p1;
+DROP TABLE IF EXISTS range_partitions;
+CREATE TABLE list_partitions (id integer not null, logdate date not null) PARTITION BY LIST (id);
+CREATE TABLE list_partitions_p0 PARTITION OF list_partitions FOR VALUES IN(1);
+CREATE TABLE list_partitions_p1 PARTITION OF list_partitions FOR VALUES IN(2,3);
+CREATE TABLE range_partitions (id integer not null, logdate date not null) PARTITION BY RANGE (logdate);
+CREATE TABLE range_partitions_p0 PARTITION OF range_partitions FOR VALUES FROM (MINVALUE) TO ('2021-01-01');
+CREATE TABLE range_partitions_p1 PARTITION OF range_partitions FOR VALUES FROM ('2021-01-01') TO ('2022-01-01');

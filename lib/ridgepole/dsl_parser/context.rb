@@ -91,6 +91,22 @@ module Ridgepole
         }
       end
 
+      def add_partition(table_name, type, columns, partition_definitions: [])
+        partition_definitions.each do |partition_definition|
+          values = partition_definition.fetch(:values)
+          raise ArgumentError unless values.is_a?(Hash)
+
+          values[:in] = Array.wrap(values[:in]) if values.key?(:in)
+          values[:to] = Array.wrap(values[:to]) if values.key?(:to)
+          values[:from] = Array.wrap(values[:from]) if values.key?(:from)
+        end
+        @__definition[table_name][:partition] = {
+          type: type,
+          columns: Array.wrap(columns),
+          partition_definitions: partition_definitions,
+        }
+      end
+
       def require(file)
         schemafile = %r{\A/}.match?(file) ? file : File.join(@__working_dir, file)
 
