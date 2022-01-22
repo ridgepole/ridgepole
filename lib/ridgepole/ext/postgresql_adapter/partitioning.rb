@@ -73,7 +73,7 @@ module Ridgepole
         def cast_value(value)
           Integer(value)
         rescue ArgumentError
-          value.gsub("'", '').gsub('"', '')
+          value.delete(%q("')) # "
         end
 
         def quote_value(value)
