@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 describe 'Ridgepole::Client#diff -> migrate' do
-  before { subject.diff(actual_dsl).migrate }
+  before do
+    allow(Ridgepole::Logger.instance).to receive(:verbose_info)
+    subject.diff(actual_dsl).migrate
+  end
+
   subject { client(table_options: table_options, table_hash_options: table_hash_options, dump_without_table_options: dump_without_table_options) }
 
   let(:warning_regexp) { /Table option changes are ignored/ }
@@ -27,7 +31,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:table_options) { "ENGINE=InnoDB DEFAULT CHARSET=#{condition(:mysql80) ? 'utf8mb3' : 'utf8'}" }
 
     it {
-      expect(Ridgepole::Logger.instance).to_not receive(:warn).with(warning_regexp)
+      expect(Ridgepole::Logger.instance).to_not receive(:verbose_info).with(warning_regexp)
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_falsey
     }
@@ -37,7 +41,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:table_options) { 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4' }
 
     it {
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(warning_regexp)
+      expect(Ridgepole::Logger.instance).to receive(:verbose_info).with(warning_regexp)
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_falsey
     }
@@ -48,7 +52,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:dump_without_table_options) { true }
 
     it {
-      expect(Ridgepole::Logger.instance).to_not receive(:warn)
+      expect(Ridgepole::Logger.instance).to_not receive(:verbose_info).with(warning_regexp)
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_falsey
     }
@@ -58,7 +62,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:table_hash_options) { { charset: condition(:mysql80) ? 'utf8mb3' : 'utf8' } }
 
     it {
-      expect(Ridgepole::Logger.instance).to_not receive(:warn).with(warning_regexp)
+      expect(Ridgepole::Logger.instance).to_not receive(:verbose_info).with(warning_regexp)
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_falsey
     }
@@ -68,7 +72,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:table_hash_options) { { charset: 'utf8mb4' } }
 
     it {
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(warning_regexp)
+      expect(Ridgepole::Logger.instance).to receive(:verbose_info).with(warning_regexp)
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_falsey
     }
