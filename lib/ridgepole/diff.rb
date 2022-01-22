@@ -185,8 +185,8 @@ module Ridgepole
       to = to.except(*PRIMARY_KEY_OPTIONS)
 
       unless from == to
-        @logger.warn(<<-MSG)
-[WARNING] Table option changes are ignored on `#{table_name}`.
+        @logger.verbose_info(<<-MSG)
+# Table option changes are ignored on `#{table_name}`.
   from: #{from}
     to: #{to}
       MSG

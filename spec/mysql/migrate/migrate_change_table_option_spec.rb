@@ -30,8 +30,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     subject { client }
 
     it {
-      expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG)
-[WARNING] Table option changes are ignored on `employees`.
+      allow(Ridgepole::Logger.instance).to receive(:verbose_info)
+      expect(Ridgepole::Logger.instance).to receive(:verbose_info).with(<<-MSG)
+# Table option changes are ignored on `employees`.
   from: {:primary_key=>"emp_no"}
     to: {:primary_key=>"emp_no2"}
       MSG
