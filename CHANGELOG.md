@@ -2,7 +2,11 @@
 
 ## 1.0
 
-### 1.0.2 (Unreleased)
+### 1.0.3 (2022/02/12)
+
+* Support Rails 7.0.2 [pull#380](https://github.com/ridgepole/ridgepole/pull/380)
+
+### 1.0.2 (2022/02/06)
 
 * Add support for partitioning ([pull#374](https://github.com/ridgepole/ridgepole/pull/374))
 * Suppress warning of table option differences ([pull#378](https://github.com/ridgepole/ridgepole/pull/378))
