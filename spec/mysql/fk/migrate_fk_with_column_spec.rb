@@ -7,16 +7,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "direct_messages", id: :integer, force: :cascade do |t|
           t.integer "sender_id"
           t.integer "reciever_id"
-          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
-          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
           t.index ["reciever_id"], name: "index_direct_messages_on_reciever_id"
           t.index ["sender_id"], name: "index_direct_messages_on_sender_id"
         end
 
         create_table "users", id: :integer, force: :cascade do |t|
           t.string "email"
-          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
-          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
         end
       ERB
     end
@@ -65,16 +65,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "direct_messages", id: :integer, force: :cascade do |t|
           t.integer "sender_id"
           t.integer "reciever_id"
-          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
-          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
           t.index ["reciever_id"], name: "index_direct_messages_on_reciever_id"
           t.index ["sender_id"], name: "index_direct_messages_on_sender_id"
         end
 
         create_table "users", id: :integer, force: :cascade do |t|
           t.string "email"
-          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
-          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
         end
       ERB
     end
@@ -109,16 +109,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "direct_messages", id: :integer, force: :cascade do |t|
           t.integer "sender_id"
           t.integer "reciever_id"
-          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
-          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
           t.index ["reciever_id"], name: "index_direct_messages_on_reciever_id"
           t.index ["sender_id"], name: "index_direct_messages_on_sender_id"
         end
 
         create_table "users", id: :integer, force: :cascade do |t|
           t.string "email"
-          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
-          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
         end
 
         add_foreign_key "direct_messages", "users", column: "reciever_id", on_delete: :cascade
@@ -131,16 +131,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "direct_messages", id: :integer, force: :cascade do |t|
           t.integer "sender_id"
           t.integer "reciever_id"
-          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
-          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
           t.index ["reciever_id"], name: "index_direct_messages_on_reciever_id"
           t.index ["sender_id"], name: "index_direct_messages_on_sender_id"
         end
 
         create_table "users", id: :integer, force: :cascade do |t|
           t.string "email"
-          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
-          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
         end
 
         add_foreign_key "direct_messages", "users", column: "reciever_id"

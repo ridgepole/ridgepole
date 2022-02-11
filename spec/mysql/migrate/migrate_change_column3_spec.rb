@@ -3,17 +3,17 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when use timestamps (no change)' do
     let(:actual_dsl) do
-      erbh(<<-ERB)
+      <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
           t.string   "first_name", limit: 14, null: false
           t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", <%= i cond(">= 7.0", { precision: nil }) %>, null: false
-          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: nil }) %>, null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
         end
-      ERB
+      RUBY
     end
 
     let(:expected_dsl) do
@@ -72,8 +72,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
-          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
         end
       ERB
     end

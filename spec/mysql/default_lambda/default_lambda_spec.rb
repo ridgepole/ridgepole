@@ -7,18 +7,18 @@ describe 'Ridgepole::Client (use default:lambda)' do
     it do
       delta = subject.diff(erbh(<<-ERB))
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", <%= i cond(">= 7.0", { precision: nil }) %>, default: -> { "CURRENT_TIMESTAMP" }, null: false
+          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP<%= i cond(">= 7.0", "(6)") %>" }, null: false
         end
       ERB
 
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy <<-RUBY
+      expect(subject.dump).to match_fuzzy erbh(<<-ERB)
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
+          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP<%= i cond(">= 7.0", "(6)") %>" }, null: false
         end
-      RUBY
+      ERB
     end
   end
 
@@ -26,7 +26,7 @@ describe 'Ridgepole::Client (use default:lambda)' do
     let(:dsl) do
       erbh(<<-ERB)
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", <%= i cond(">= 7.0", { precision: nil }) %>, default: -> { "CURRENT_TIMESTAMP" }, null: false
+          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP<%= i cond(">= 7.0", "(6)") %>" }, null: false
         end
       ERB
     end
@@ -49,17 +49,17 @@ describe 'Ridgepole::Client (use default:lambda)' do
     before do
       subject.diff(erbh(<<-ERB)).migrate
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", <%= i cond(">= 7.0", { precision: nil }) %>, default: -> { "CURRENT_TIMESTAMP" }, null: false
+          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP<%= i cond(">= 7.0", "(6)") %>" }, null: false
         end
       ERB
     end
 
     it do
-      delta = subject.diff(<<-RUBY)
+      delta = subject.diff(erbh(<<-ERB))
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", default: -> { '"1970-01-01 00:00:00"' }, null: false
+          t.datetime "bar", <%= i cond(">= 7.0", { precision: 6 }) %>, default: -> { '"1970-01-01 00:00:00"' }, null: false
         end
-      RUBY
+      ERB
 
       expect(delta.differ?).to be_truthy
       delta.migrate
@@ -93,11 +93,11 @@ describe 'Ridgepole::Client (use default:lambda)' do
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy <<-RUBY
+      expect(subject.dump).to match_fuzzy erbh(<<-ERB)
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
+          t.datetime "bar", <%= i cond(">= 7.0", { precision: nil }) %>, default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      RUBY
+      ERB
     end
   end
 
@@ -115,7 +115,7 @@ describe 'Ridgepole::Client (use default:lambda)' do
     it do
       delta = subject.diff(erbh(<<-ERB))
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", <%= i cond(">= 7.0", { precision: nil }) %>, default: -> { "CURRENT_TIMESTAMP" }, null: false
+          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP<%= i cond(">= 7.0", "(6)") %>" }, null: false
           t.integer "zoo"
         end
       ERB
@@ -123,12 +123,12 @@ describe 'Ridgepole::Client (use default:lambda)' do
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy <<-RUBY
+      expect(subject.dump).to match_fuzzy erbh(<<-ERB)
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
+          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP<%= i cond(">= 7.0", "(6)") %>" }, null: false
           t.integer "zoo"
         end
-      RUBY
+      ERB
     end
   end
 
@@ -138,7 +138,7 @@ describe 'Ridgepole::Client (use default:lambda)' do
     before do
       subject.diff(erbh(<<-ERB)).migrate
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", <%= i cond(">= 7.0", { precision: nil }) %>, default: -> { "CURRENT_TIMESTAMP" }, null: false
+          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP<%= i cond(">= 7.0", "(6)") %>" }, null: false
           t.integer "zoo"
         end
       ERB
