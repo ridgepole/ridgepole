@@ -14,11 +14,11 @@ describe 'Ridgepole::Client (use default:lambda)' do
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy <<-RUBY
+      expect(subject.dump).to match_fuzzy erbh(<<-ERB)
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
+          t.datetime "bar", <%= i cond(">= 7.0", { precision: nil }) %>, default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      RUBY
+      ERB
     end
   end
 
@@ -66,7 +66,7 @@ describe 'Ridgepole::Client (use default:lambda)' do
 
       expect(subject.dump).to match_ruby erbh(<<-ERB)
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", default: "1970-01-01 00:00:00", null: false
+          t.datetime "bar", <%= i cond(">= 7.0", { precision: nil }) %>, default: "1970-01-01 00:00:00", null: false
         end
       ERB
     end
@@ -93,11 +93,11 @@ describe 'Ridgepole::Client (use default:lambda)' do
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy <<-RUBY
+      expect(subject.dump).to match_fuzzy erbh(<<-ERB)
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
+          t.datetime "bar", <%= i cond(">= 7.0", { precision: nil }) %>, default: -> { "CURRENT_TIMESTAMP" }, null: false
         end
-      RUBY
+      ERB
     end
   end
 
@@ -123,12 +123,12 @@ describe 'Ridgepole::Client (use default:lambda)' do
       expect(delta.differ?).to be_truthy
       delta.migrate
 
-      expect(subject.dump).to match_fuzzy <<-RUBY
+      expect(subject.dump).to match_fuzzy erbh(<<-ERB)
         create_table "foos", force: :cascade do |t|
-          t.datetime "bar", default: -> { "CURRENT_TIMESTAMP" }, null: false
+          t.datetime "bar", <%= i cond(">= 7.0", { precision: nil }) %>, default: -> { "CURRENT_TIMESTAMP" }, null: false
           t.integer "zoo"
         end
-      RUBY
+      ERB
     end
   end
 

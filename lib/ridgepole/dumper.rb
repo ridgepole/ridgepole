@@ -39,7 +39,7 @@ module Ridgepole
 
       dsl = stream.string.lines.select do |line|
         line !~ /\A#/ &&
-          line !~ /\AActiveRecord::Schema\.define/ &&
+          line !~ /\AActiveRecord::Schema(\[\d\.\d\])?\.define/ &&
           line !~ /\Aend/
       end
 

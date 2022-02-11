@@ -3,25 +3,25 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when add column (ext cols)' do
     let(:actual_dsl) do
-      erbh(<<-ERB)
+      <<-RUBY
         create_table "items", force: :cascade do |t|
           t.string   "name"
           t.integer  "price"
           t.text     "description"
-          t.datetime "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
-          t.datetime "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime "created_at", null: false
+          t.datetime "updated_at", null: false
         end
-      ERB
+      RUBY
     end
 
     let(:expected_dsl) do
-      erbh(<<-ERB)
+      <<-RUBY
         create_table "items", force: :cascade do |t|
           t.string      "name"
           t.integer     "price"
           t.text        "description"
-          t.datetime    "created_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
-          t.datetime    "updated_at", <%= i cond(">= 7.0", { precision: 6 }) %>, null: false
+          t.datetime    "created_at", null: false
+          t.datetime    "updated_at", null: false
           t.daterange   "daterange"
           t.numrange    "numrange"
           t.tsrange     "tsrange"
@@ -47,7 +47,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.bit_varying "bit varying"
           t.money       "money", scale: 2
         end
-      ERB
+      RUBY
     end
 
     before { subject.diff(actual_dsl).migrate }
