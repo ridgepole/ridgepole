@@ -11,7 +11,9 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 
 **Notice**
 
-For ActiveRecord 7.x series, please use AcriveRecord 7.0.2 or higher / Ridgepole 1.0.3 or higher.
+* ActiveRecord 7.x has some incompatible changes. If you get unintended differences in `datetime`, add `precision`.
+  * cf. https://github.com/ridgepole/ridgepole/issues/381
+* For ActiveRecord 7.x series, please use AcriveRecord 7.0.2 or higher / Ridgepole 1.0.3 or higher.
   * cf. https://github.com/ridgepole/ridgepole/pull/380
 * ActiveRecord 6.1 is supported in ridgepole v0.9, but the ActiveRecord dump has been changed, so there is a difference between ActiveRecord 5.x/6.0 format.
   * **If you use ActiveRecord 6.1, please modify Schemafile format**.
