@@ -25,7 +25,7 @@ DDL for the schema you are trying to change.
 (Using mysqldump/pg_dump, etc.)
 -->
 
-# Output of export
+# Export
 
 <!--
 Output of `ridgepole --export`.
