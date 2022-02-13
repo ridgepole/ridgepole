@@ -506,6 +506,14 @@ module Ridgepole
         attrs2.fetch(:options).delete(:comment)
       end
 
+      if attrs1[:options][:as] != attrs2[:options][:as] && attrs1[:options].fetch(:as, '').delete(' ') == attrs2[:options].fetch(:as, '').delete(' ')
+        @logger.warn(<<-MSG)
+[WARNING] Same expressions but only differed by white spaces were detected. This operation may fail.
+  Before: '#{attrs1[:options][:as]}'
+  After : '#{attrs2[:options][:as]}'
+        MSG
+      end
+
       attrs1 == attrs2
     end
 
