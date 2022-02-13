@@ -35,7 +35,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_ruby expected_dsl
     }
 
-    context 'when generated column has extra white spaces' do
+    context 'when generated column has extra white spaces', condition: %i[mysql57] do
       let(:expected_dsl) do
         <<-RUBY
         create_table "books", force: :cascade do |t|
