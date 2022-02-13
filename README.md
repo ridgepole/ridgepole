@@ -212,6 +212,18 @@ activerecord 5.0.0 and activerecord-mysql-awesome dumps a collation rather than 
 
 See `mysql> show character set;` to find charset / collation pair for your system.
 
+## Generated Column (MySQL)
+
+There should be NO extra white spaces in the expression (such as after comma).
+
+```ruby
+create_table "users", force: :cascade do |t|
+  t.string   "last_name"
+  t.string   "first_name"
+  t.virtual  "full_name", type: :string, as: "concat(`last_name`,' ',`first_name`)", stored: true
+end
+```
+
 ## Execute
 ```ruby
 create_table "authors", force: :cascade do |t|
