@@ -214,7 +214,8 @@ See `mysql> show character set;` to find charset / collation pair for your syste
 
 ## Generated Column (MySQL)
 
-There should be NO extra white spaces in the expression (such as after comma).
+There should be NO extra white spaces in the expression (such as after comma).  
+Quotes in expression may cause the operations failure with MySQL 8.0.
 
 ```ruby
 create_table "users", force: :cascade do |t|
