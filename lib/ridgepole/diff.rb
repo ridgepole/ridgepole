@@ -649,7 +649,7 @@ MSG
 
       (from_partitions.keys - to_partitions.keys).each do |name|
         partition_definitions_delta[:delete] ||= {}
-        partition_definitions_delta[:delete][name] = attrs.merge(valuve: from_partitions[name][:values])
+        partition_definitions_delta[:delete][name] = attrs.merge(values: from_partitions[name][:values])
       end
 
       (to_partitions.keys - from_partitions.keys).each do |name|
