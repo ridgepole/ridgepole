@@ -2,6 +2,10 @@
 
 ## 1.0
 
+### 1.0.4 (2022/03/28)
+
+* Add warning for generated column [pull#382](https://github.com/ridgepole/ridgepole/pull/382)
+
 ### 1.0.3 (2022/02/12)
 
 * Support Rails 7.0.2 [pull#380](https://github.com/ridgepole/ridgepole/pull/380)
