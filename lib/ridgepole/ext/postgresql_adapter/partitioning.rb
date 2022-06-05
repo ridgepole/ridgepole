@@ -64,6 +64,9 @@ module Ridgepole
                          from = match[:from].split(',').map(&:strip).map { |value| cast_value(value) }
                          to = match[:to].split(',').map(&:strip).map { |value| cast_value(value) }
                          { from: from, to: to }
+                       when :hash
+                         match = val_str.match(/FOR VALUES WITH \(modulus (?<modulus>\d+), remainder (?<remainder>\d+)\)/)
+                         { modulus: match[:modulus].to_i, remainder: match[:remainder].to_i }
                        else
                          raise NotImplementedError
                        end
@@ -71,7 +74,8 @@ module Ridgepole
             { name: name, values: values }
           end
 
-          ActiveRecord::ConnectionAdapters::PartitionOptions.new(table_name, options[:type], options[:columns], partition_definitions: partition_definitions)
+          ActiveRecord::ConnectionAdapters::PartitionOptions.new(table_name, options[:type], options[:columns],
+                                                                 partition_definitions: partition_definitions)
         end
 
         def cast_value(value)
@@ -109,6 +113,8 @@ module Ridgepole
                         from = values[:from].map { |v| quote_value(v) }.join(',')
                         to = values[:to].map { |v| quote_value(v) }.join(',')
                         "FOR VALUES FROM (#{from}) TO (#{to})"
+                      elsif values.key?(:modulus)
+                        "FOR VALUES WITH (modulus #{values[:modulus]}, remainder #{values[:remainder]})"
                       else
                         raise NotImplementedError
                       end

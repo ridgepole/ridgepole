@@ -21,7 +21,7 @@ Metrics/ClassLength:
 Metrics/CyclomaticComplexity:
   Enabled: false
 Layout/LineLength:
-  Enabled: false
+  Max: 200
 Metrics/MethodLength:
   Enabled: false
 Metrics/ModuleLength:

@@ -349,7 +349,10 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
 
       append_change_foreign_keys(table_name, foreign_keys, pre_buf_for_fk, post_buf_for_fk, @options) unless foreign_keys.empty?
 
-      append_change_table_raw_options(table_name, table_options, table_charset, table_collation, buf) if table_options || table_charset || table_collation
+      if table_options || table_charset || table_collation
+        append_change_table_raw_options(table_name, table_options, table_charset, table_collation,
+                                        buf)
+      end
 
       append_change_table_comment(table_name, table_comment, buf) if table_comment
 

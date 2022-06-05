@@ -40,7 +40,9 @@ module Ridgepole
         # NOTE: For composite primary keys, the first column of the primary key is used as the foreign key index
         next if Array(attrs[:options][:primary_key]).first == fk_index
 
-        raise "The column `#{fk_index}` of the table `#{table_name}` has a foreign key but no index. Although InnoDB creates an index automatically, please add one explicitly in order for ridgepole to manage it."
+        raise("The column `#{fk_index}` of the table `#{table_name}` has a foreign key but no index." \
+              ' Although InnoDB creates an index automatically,' \
+              'please add one explicitly in order for ridgepole to manage it.')
       end
     end
   end
