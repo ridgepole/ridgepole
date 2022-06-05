@@ -171,7 +171,6 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 6.0' do
       delta = client(bulk_change: true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
-      pp delta.script
       expect(delta.script).to match_fuzzy <<-RUBY
         add_partition "list_partitions", name: "list_partitions_default", values: {:default=>true}
       RUBY
