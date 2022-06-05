@@ -42,7 +42,7 @@ module Ridgepole
 
         raise("The column `#{fk_index}` of the table `#{table_name}` has a foreign key but no index." \
               ' Although InnoDB creates an index automatically,' \
-              'please add one explicitly in order for ridgepole to manage it.')
+              ' please add one explicitly in order for ridgepole to manage it.')
       end
     end
   end
