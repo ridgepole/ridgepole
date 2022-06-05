@@ -2,6 +2,10 @@
 
 ## 1.0
 
+### 1.0.6
+
+* Support Hash partition for PostgreSQL [pull#387](https://github.com/ridgepole/ridgepole/pull/387)
+
 ### 1.0.5 (2022/06/05)
 
 * Support DEFAULT partition for PostgreSQL [pull#386](https://github.com/ridgepole/ridgepole/pull/386)

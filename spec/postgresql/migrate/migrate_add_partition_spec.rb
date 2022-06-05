@@ -171,7 +171,6 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 6.0' do
       delta = client(bulk_change: true).diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
-      pp delta.script
       expect(delta.script).to match_fuzzy <<-RUBY
         add_partition "list_partitions", name: "list_partitions_default", values: {:default=>true}
       RUBY
@@ -218,6 +217,50 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 6.0' do
       expect(subject.dump).to match_ruby actual_dsl
       expect(delta.script).to match_fuzzy <<-RUBY
         add_partition "range_partitions", name: "pdefault", values: {:default=>true}
+      RUBY
+      delta.migrate
+      expect(subject.dump).to match_ruby expected_dsl
+    }
+  end
+
+  context 'when add hash partition' do
+    let(:actual_dsl) do
+      erbh(<<-ERB)
+        create_table "hash_partitions", id: false, force: :cascade, options: "PARTITION BY HASH(id)" do |t|
+          t.integer "id", null: false
+          t.date "logdate", null: false
+        end
+        add_partition "hash_partitions", :hash, [:id], partition_definitions: [{ name: "p0", values: {:modulus=>3, :remainder=>0} }]
+      ERB
+    end
+
+    let(:expected_dsl) do
+      erbh(<<-ERB)
+      create_table "hash_partitions", id: false, force: :cascade, options: "PARTITION BY HASH(id)" do |t|
+        t.integer "id", null: false
+        t.date "logdate", null: false
+      end
+      add_partition "hash_partitions", :hash, [:id], partition_definitions: [{ name: "p0", values: {:modulus=>3, :remainder=>0} }, { name: "p1", values: {:modulus=>3, :remainder=>1} }]
+    ERB
+    end
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_ruby actual_dsl
+      delta.migrate
+      expect(subject.dump).to match_ruby expected_dsl
+    }
+
+    it {
+      delta = client(bulk_change: true).diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_ruby actual_dsl
+      expect(delta.script).to match_fuzzy <<-RUBY
+        add_partition "hash_partitions", name: "p1", values: {:modulus=>3, :remainder=>1}
       RUBY
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl

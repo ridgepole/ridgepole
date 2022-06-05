@@ -46,7 +46,8 @@ module Ridgepole
 
         # SchemaStatements
         def create_partition(table_name, type:, columns:, partition_definitions:)
-          execute schema_creation.accept(ActiveRecord::ConnectionAdapters::PartitionOptions.new(table_name, type, columns, partition_definitions: partition_definitions))
+          execute schema_creation.accept(ActiveRecord::ConnectionAdapters::PartitionOptions.new(table_name, type, columns,
+                                                                                                partition_definitions: partition_definitions))
         end
 
         def add_partition(table_name, name:, values:)

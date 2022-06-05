@@ -640,7 +640,9 @@ MSG
           return
         end
 
-        raise "All partition is different. please check partition settings.to:  #{to}, from: #{from}" if from[:partition_definitions].present? && (to[:partition_definitions] & from[:partition_definitions]).empty?
+        if from[:partition_definitions].present? && (to[:partition_definitions] & from[:partition_definitions]).empty?
+          raise "All partition is different. please check partition settings.to:  #{to}, from: #{from}"
+        end
 
         scan_partition_definition_chanage(from, to, table_delta)
       end

@@ -243,7 +243,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       expect do
         subject.diff(dsl).migrate
-      end.to raise_error('The column `parent_id` of the table `child` has a foreign key but no index. Although InnoDB creates an index automatically, please add one explicitly in order for ridgepole to manage it.')
+      end.to raise_error(
+        'The column `parent_id` of the table `child` has a foreign key but no index.' \
+        ' Although InnoDB creates an index automatically,' \
+        ' please add one explicitly in order for ridgepole to manage it.'
+      )
     }
   end
 
@@ -344,6 +348,10 @@ context 'when create fk on the second primary key' do
   it {
     expect do
       subject.diff(dsl).migrate
-    end.to raise_error('The column `employee_id` of the table `icons` has a foreign key but no index. Although InnoDB creates an index automatically, please add one explicitly in order for ridgepole to manage it.')
+    end.to raise_error(
+      'The column `employee_id` of the table `icons` has a foreign key but no index.' \
+      ' Although InnoDB creates an index automatically,' \
+      ' please add one explicitly in order for ridgepole to manage it.'
+    )
   }
 end
