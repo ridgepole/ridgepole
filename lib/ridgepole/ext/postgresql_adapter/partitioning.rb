@@ -51,20 +51,24 @@ module Ridgepole
             ORDER BY p.relname
           SQL
 
-          partition_definitions = partition_info.map do |row|
-            values = case options[:type]
-                     when :list
-                       values = row[1].match(/FOR VALUES IN \((?<csv>.+)\)$/)[:csv].split(',').map(&:strip).map { |value| cast_value(value) }
-                       { in: Array.wrap(values) }
-                     when :range
-                       match = row[1].match(/FOR VALUES FROM \((?<from>.+)\) TO \((?<to>.+)\)/)
-                       from = match[:from].split(',').map(&:strip).map { |value| cast_value(value) }
-                       to = match[:to].split(',').map(&:strip).map { |value| cast_value(value) }
-                       { from: from, to: to }
+          partition_definitions = partition_info.map do |name, val_str|
+            values = if val_str == 'DEFAULT'
+                       { default: true }
                      else
-                       raise NotImplementedError
+                       case options[:type]
+                       when :list
+                         values = val_str.match(/FOR VALUES IN \((?<csv>.+)\)$/)[:csv].split(',').map(&:strip).map { |value| cast_value(value) }
+                         { in: Array.wrap(values) }
+                       when :range
+                         match = val_str.match(/FOR VALUES FROM \((?<from>.+)\) TO \((?<to>.+)\)/)
+                         from = match[:from].split(',').map(&:strip).map { |value| cast_value(value) }
+                         to = match[:to].split(',').map(&:strip).map { |value| cast_value(value) }
+                         { from: from, to: to }
+                       else
+                         raise NotImplementedError
+                       end
                      end
-            { name: row[0], values: values }
+            { name: name, values: values }
           end
 
           ActiveRecord::ConnectionAdapters::PartitionOptions.new(table_name, options[:type], options[:columns], partition_definitions: partition_definitions)
@@ -97,7 +101,9 @@ module Ridgepole
 
         # SchemaStatements
         def add_partition(table_name, name:, values:)
-          condition = if values.key?(:in)
+          condition = if values.key?(:default)
+                        'DEFAULT'
+                      elsif values.key?(:in)
                         "FOR VALUES IN (#{values[:in].map { |v| quote_value(v) }.join(',')})"
                       elsif values.key?(:to)
                         from = values[:from].map { |v| quote_value(v) }.join(',')
