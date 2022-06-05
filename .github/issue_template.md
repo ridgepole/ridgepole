@@ -1,9 +1,11 @@
-# Description
-
 <!--
 Please be sure to write the following information:
 (以下の情報を必ず書いてください)
+-->
 
+# Description
+
+<!--
 * Commands and arguments when executing Ridgepole
 * What wasn't as expected?
 * Middleware versions
