@@ -2,6 +2,10 @@
 
 ## 1.0
 
+### 1.0.5 (2022/06/05)
+
+* Support DEFAULT partition for PostgreSQL [pull#386](https://github.com/ridgepole/ridgepole/pull/386)
+
 ### 1.0.4 (2022/03/28)
 
 * Add warning for generated column [pull#382](https://github.com/ridgepole/ridgepole/pull/382)
