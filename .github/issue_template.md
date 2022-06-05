@@ -30,3 +30,9 @@ DDL for the schema you are trying to change.
 <!--
 Output of `ridgepole --export`.
 -->
+
+# Apply with `--verbose`
+
+<!--
+Output of `ridgepole --apply --verbose`.
+-->
