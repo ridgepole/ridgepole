@@ -96,7 +96,10 @@ module Ridgepole
           values = partition_definition.fetch(:values)
           raise ArgumentError unless values.is_a?(Hash)
 
-          values[:in] = Array.wrap(values[:in]).map(&:to_s) if values.key?(:in)
+          if values.key?(:in)
+            values[:in] = Array.wrap(values[:in])
+            values[:in] = values[:in].map(&:to_s) if Ridgepole::ConnectionAdapters.postgresql?
+          end
           values[:to] = Array.wrap(values[:to]) if values.key?(:to)
           values[:from] = Array.wrap(values[:from]) if values.key?(:from)
         end
