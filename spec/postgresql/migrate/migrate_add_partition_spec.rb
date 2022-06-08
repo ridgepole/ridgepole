@@ -40,7 +40,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 6.0' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
       expect(delta.script).to match_fuzzy <<-RUBY
-        add_partition "list_partitions", name: "list_partitions_p1", values: {:in=>[2, 3]}
+        add_partition "list_partitions", name: "list_partitions_p1", values: {:in=>["2", "3"]}
       RUBY
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
