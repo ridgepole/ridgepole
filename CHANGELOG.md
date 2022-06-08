@@ -2,6 +2,10 @@
 
 ## 1.0
 
+### 1.0.7 (2022/06/09)
+
+* Normalize list partition values for PostgreSQL [pull#389](https://github.com/ridgepole/ridgepole/pull/389)
+
 ### 1.0.6 (2022/06/06)
 
 * Support Hash partition for PostgreSQL [pull#387](https://github.com/ridgepole/ridgepole/pull/387)
