@@ -241,7 +241,7 @@ describe 'Ridgepole::Client.diff' do
       delta = subject.diff(actual_dsl, expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(delta.script).to match_fuzzy <<-RUBY
-        add_partition "list_partitions", name: "list_partitions_p1", values: {:in=>[2,3]}
+        add_partition "list_partitions", name: "list_partitions_p1", values: {:in=>["2","3"]}
       RUBY
     }
   end
