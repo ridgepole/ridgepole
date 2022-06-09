@@ -1,5 +1,12 @@
 # Ridgepole
 
+---
+
+**Notice**
+**I'm thinking of stopping support for partitioning. cf. https://github.com/ridgepole/ridgepole/issues/391**
+
+---
+
 Ridgepole is a tool to manage DB schema.
 
 It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.html#types-of-schema-dumps), and updates DB schema according to DSL.
