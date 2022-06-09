@@ -2,7 +2,8 @@
 
 ---
 
-**Notice**
+**Notice:**
+
 **I'm thinking of stopping support for partitioning. cf. https://github.com/ridgepole/ridgepole/issues/391**
 
 ---
