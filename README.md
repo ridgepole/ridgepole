@@ -224,7 +224,7 @@ See `mysql> show character set;` to find charset / collation pair for your syste
 
 ## Generated Column (MySQL)
 
-There should be NO extra white spaces in the expression (such as after comma).  
+There should be NO extra white spaces in the expression (such as after comma).
 Quotes in expression may cause the operations failure with MySQL 8.0.
 
 ```ruby
@@ -324,31 +324,6 @@ Apply `Schemafile`
               employees.id: bigint
   dept_manager.employee_id: integer
 ...
-```
-
-## Partitioning
-
-**Notice:** PostgreSQL `PARTITION BY` must be specified with the create_table option.
-
-### List Partitioning
-
-```ruby
-create_table "articles", force: :cascade, options: "PARTITION BY LIST(id)" do |t|
-end
-
-add_partition("articles", :list, :id, partition_definitions: [{ name: 'p0', values: { in: [0,1,2] } }, { name: 'p1', values: { in: [3,4,5] } }])
-```
-
-### Range Partitioning
-
-```ruby
-create_table "articles", force: :cascade, options: "PARTITION BY RANGE(id)" do |t|
-end
-
-# postgresql
-add_partition("articles", :range, :id, partition_definitions: [{ name: 'p0', values: { from: 'MINVALUE', to: 5 }}, { name: 'p1', values: { from: 5, to: 10 } }])
-# mysql
-add_partition("articles", :range, :id, partition_definitions: [{ name: 'p0', values: { to: 5 }}, { name: 'p1', values: { to: 10 } }])
 ```
 
 ## Run tests
