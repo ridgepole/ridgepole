@@ -1,13 +1,5 @@
 # Ridgepole
 
----
-
-**Notice:**
-
-**I'm thinking of stopping support for partitioning. cf. https://github.com/ridgepole/ridgepole/issues/391**
-
----
-
 Ridgepole is a tool to manage DB schema.
 
 It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.html#types-of-schema-dumps), and updates DB schema according to DSL.
@@ -19,6 +11,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 
 **Notice**
 
+* Partitioning is no longer supported in ridgepole v1.1.0.
 * ActiveRecord 7.x has some incompatible changes. If you get unintended differences in `datetime`, add `precision`.
   * cf. https://github.com/ridgepole/ridgepole/issues/381
 * For ActiveRecord 7.x series, please use AcriveRecord 7.0.2 or higher / Ridgepole 1.0.3 or higher.

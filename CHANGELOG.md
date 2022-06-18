@@ -2,6 +2,12 @@
 
 ## 1.0
 
+### 1.1.0 (2022/06/18)
+
+* Revert partitioning support [pull#392](https://github.com/ridgepole/ridgepole/pull/392)
+
+## 1.0
+
 ### 1.0.7 (2022/06/09)
 
 * Normalize list partition values for PostgreSQL [pull#389](https://github.com/ridgepole/ridgepole/pull/389)
