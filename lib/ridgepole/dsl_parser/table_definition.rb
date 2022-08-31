@@ -159,6 +159,10 @@ module Ridgepole
         end
       end
       alias belongs_to references
+
+      def check_constraint(expression, options = {})
+        @base.add_check_constraint(@table_name, expression, options)
+      end
     end
   end
 end

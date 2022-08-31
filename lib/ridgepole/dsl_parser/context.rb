@@ -91,6 +91,21 @@ module Ridgepole
         }
       end
 
+      def add_check_constraint(table_name, expression, options = {})
+        table_name = table_name.to_s
+        expression = expression.to_s
+        options[:name] = options[:name].to_s if options[:name]
+
+        idx = options[:name] || expression
+
+        @__definition[table_name] ||= {}
+        @__definition[table_name][:check_constraints] ||= {}
+        @__definition[table_name][:check_constraints][idx] = {
+          expression: expression,
+          options: options,
+        }
+      end
+
       def require(file)
         schemafile = %r{\A/}.match?(file) ? file : File.join(@__working_dir, file)
 

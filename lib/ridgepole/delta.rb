@@ -245,6 +245,12 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
         end
       end
 
+      unless (check_constraints = attrs[:check_constraints] || {}).empty?
+        check_constraints.each do |_, check_constraint_attrs|
+          append_add_check_constraint(table_name, check_constraint_attrs, buf, true)
+        end
+      end
+
       buf.puts(<<-RUBY)
 end
       RUBY
@@ -315,6 +321,7 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
       primary_key_definition = attrs[:primary_key_definition] || {}
       indices = attrs[:indices] || {}
       foreign_keys = attrs[:foreign_keys] || {}
+      check_constraints = attrs[:check_constraints] || {}
       table_options = attrs[:table_options]
       table_charset = attrs[:table_charset]
       table_collation = attrs[:table_collation]
@@ -330,6 +337,7 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
       end
 
       append_change_foreign_keys(table_name, foreign_keys, pre_buf_for_fk, post_buf_for_fk, @options) unless foreign_keys.empty?
+      append_change_check_constraints(table_name, check_constraints, buf) unless check_constraints.empty?
 
       if table_options || table_charset || table_collation
         append_change_table_raw_options(table_name, table_options, table_charset, table_collation,
@@ -509,6 +517,40 @@ add_foreign_key(#{table_name.inspect}, #{to_table.inspect}, **#{attrs_options.in
       buf.puts(<<-RUBY)
 remove_foreign_key(#{table_name.inspect}, #{target})
     RUBY
+    end
+
+    def append_change_check_constraints(table_name, delta, buf)
+      (delta[:delete] || {}).each do |_, attrs|
+        append_remove_check_constraint(table_name, attrs, buf)
+      end
+
+      (delta[:add] || {}).each do |_, attrs|
+        append_add_check_constraint(table_name, attrs, buf)
+      end
+    end
+
+    def append_add_check_constraint(table_name, attrs, buf, force_bulk_change = false)
+      expression = attrs.fetch(:expression)
+      attrs_options = attrs[:options] || {}
+
+      if force_bulk_change
+        buf.puts(<<-RUBY)
+  t.check_constraint(#{expression.inspect}, **#{attrs_options.inspect})
+        RUBY
+      else
+        buf.puts(<<-RUBY)
+add_check_constraint(#{table_name.inspect}, #{expression.inspect}, **#{attrs_options.inspect})
+        RUBY
+      end
+    end
+
+    def append_remove_check_constraint(table_name, attrs, buf)
+      expression = attrs.fetch(:expression)
+      attrs_options = attrs[:options] || {}
+
+      buf.puts(<<-RUBY)
+remove_check_constraint(#{table_name.inspect}, #{expression.inspect}, **#{attrs_options.inspect})
+      RUBY
     end
 
     def delta_execute
