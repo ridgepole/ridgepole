@@ -45,11 +45,7 @@ describe 'Ridgepole::Client.dump' do
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
           t.string "last_name", limit: 16, null: false
-          <%- if condition('< 6.0.0.beta2') -%>
-          t.string "gender", limit: 1, null: false
-          <%- else -%>
           t.column "gender", "enum('M','F')", null: false
-          <%- end -%>
           t.date   "hire_date", null: false
         end
 

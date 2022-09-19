@@ -18,9 +18,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_no", force: :cascade, <%= i cond(">= 6.1", { charset: "ascii" }, { options: "ENGINE=InnoDB DEFAULT CHARSET=ascii" }) %> do |t|
           t.date   "birth_date", null: false
-          t.string "first_name", limit: 14, null: false, <%= i cond('>= 5.2', collation: "utf8_general_ci") %>
-          t.string "last_name", limit: 16, null: false, <%= i cond('>= 5.2', collation: "utf8_general_ci") %>
-          t.string "gender", limit: 1, null: false, <%= i cond('>= 5.2', collation: "utf8_general_ci") %>
+          t.string "first_name", limit: 14, null: false, collation: "utf8_general_ci"
+          t.string "last_name", limit: 16, null: false, collation: "utf8_general_ci"
+          t.string "gender", limit: 1, null: false, collation: "utf8_general_ci"
           t.date   "hire_date", null: false
         end
       ERB
@@ -34,7 +34,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
       delta.migrate
-      expect(subject.dump).to match_ruby expected_dsl
+      expect(subject.dump.gsub('utf8mb3_general_ci', 'utf8_general_ci')).to match_ruby expected_dsl
     }
   end
 end

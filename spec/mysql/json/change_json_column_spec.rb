@@ -82,7 +82,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
           t.string  "title", null: false
-          t.json    "attrs", null: false
+          t.json    "attrs", null: false, collation: nil
           t.index ["title"], name: "index_books_on_title"
         end
       ERB
@@ -96,7 +96,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
       delta.migrate
-      expect(subject.dump).to match_ruby expected_dsl
+      expect(subject.dump).to match_ruby expected_dsl.gsub(', collation: nil', '') # for AR 7.0.4
     }
   end
 end
