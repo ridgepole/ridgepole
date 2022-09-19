@@ -23,17 +23,15 @@ jobs:
       fail-fast: false
       matrix:
         ruby:
-          - "2.7"
-          - "3.0"
-          - "3.1"
+          - "2.7.6"
+          - "3.0.4"
+          - "3.1.2"
         env:
           - MYSQL56=1
           - MYSQL57=1
           - MYSQL80=1
           - POSTGRESQL=1
         gemfile:
-          - gemfiles/activerecord_5.1.gemfile
-          - gemfiles/activerecord_5.2.gemfile
           - gemfiles/activerecord_6.0.gemfile
           - gemfiles/activerecord_6.1.gemfile
           - gemfiles/activerecord_7.0.gemfile

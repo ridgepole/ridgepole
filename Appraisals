@@ -1,22 +1,13 @@
 # frozen_string_literal: true
 
-appraise 'activerecord-5.1' do
-  gem 'activerecord', '~> 5.1.0'
-end
-
-appraise 'activerecord-5.2' do
-  gem 'activerecord', '~> 5.2.0'
-  gem 'mysql2', '~> 0.4.4'
-end
-
 appraise 'activerecord-6.0' do
-  gem 'activerecord', '~> 6.0.0'
+  gem 'activerecord', '~> 6.0.6'
 end
 
 appraise 'activerecord-6.1' do
-  gem 'activerecord', '~> 6.1.0'
+  gem 'activerecord', '~> 6.1.7'
 end
 
 appraise 'activerecord-7.0' do
-  gem 'activerecord', '~> 7.0.0'
+  gem 'activerecord', '~> 7.0.4'
 end

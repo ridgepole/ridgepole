@@ -142,9 +142,6 @@ describe 'Ridgepole::Client.diff' do
 
     subject { Ridgepole::Client }
 
-    # XXX: for AR 5.1
-    before { client }
-
     it {
       delta = subject.diff(actual_dsl, expected_dsl)
       expect(delta.differ?).to be_truthy
