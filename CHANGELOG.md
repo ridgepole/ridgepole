@@ -1,6 +1,13 @@
 # Changelog
 
-## 1.0
+## 1.2
+
+### 1.2.0 (not released)
+
+* Support check constraint [pull#393](https://github.com/ridgepole/ridgepole/pull/393) [pull#397](https://github.com/ridgepole/ridgepole/pull/397)
+* Drop suport Rails 5.x [pull#395](https://github.com/ridgepole/ridgepole/pull/395 )
+
+## 1.1
 
 ### 1.1.0 (2022/06/18)
 
