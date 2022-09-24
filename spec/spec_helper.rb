@@ -41,7 +41,7 @@ RSpec.configure do |config|
     conds = example.metadata[:condition]
 
     if conds
-      skip unless Array(conds).any? { |c| condition(*c) }
+      skip unless Array(conds).any? { |c| condition(c) }
     end
 
     case example.metadata[:file_path]
