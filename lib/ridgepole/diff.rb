@@ -473,7 +473,6 @@ module Ridgepole
       table_delta[:foreign_keys] = foreign_keys_delta unless foreign_keys_delta.empty?
     end
 
-    # NOTE: @options[:merge] not supported
     def scan_check_constraints_change(from, to, table_delta)
       from = (from || {}).dup
       to = (to || {}).dup
@@ -496,9 +495,11 @@ module Ridgepole
         end
       end
 
-      from.each do |name, from_attrs|
-        check_constraints_delta[:delete] ||= {}
-        check_constraints_delta[:delete][name] = from_attrs
+      unless @options[:merge]
+        from.each do |name, from_attrs|
+          check_constraints_delta[:delete] ||= {}
+          check_constraints_delta[:delete][name] = from_attrs
+        end
       end
 
       table_delta[:check_constraints] = check_constraints_delta unless check_constraints_delta.empty?
