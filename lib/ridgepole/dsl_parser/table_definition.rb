@@ -86,7 +86,7 @@ module Ridgepole
         oid: {},
 
         # https://github.com/ridgepole/ridgepole/issues/394
-        timestamptz: {}
+        timestamptz: {},
       }.freeze
 
       TYPES.each do |column_type, default_options|
