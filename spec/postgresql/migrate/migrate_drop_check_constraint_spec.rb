@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Ridgepole::Client#diff -> migrate' do
+describe 'Ridgepole::Client#diff -> migrate', condition: '>= 6.1' do
   context 'when drop check constraint' do
     let(:actual_dsl) do
       erbh(<<-ERB)
