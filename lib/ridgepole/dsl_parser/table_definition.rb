@@ -26,32 +26,41 @@ module Ridgepole
       DEFAULT_PRIMARY_KEY_TYPE = :bigint
 
       TYPES = {
-        # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/abstract/schema_definitions.rb#L274
-        string: {},
-        text: {},
-        integer: {},
+        # https://github.com/rails/rails/blob/main/activerecord/lib/active_record/connection_adapters/abstract/schema_definitions.rb#L300-L301
         bigint: {},
-        float: {},
-        decimal: {},
-        datetime: {},
-        timestamp: {},
-        time: {},
-        date: {},
         binary: {},
         boolean: {},
+        date: {},
+        datetime: {},
+        decimal: {},
+        float: {},
+        integer: {},
+        json: {},
+        string: {},
+        text: {},
+        time: {},
+        timestamp: {},
+        virtual: {},
 
-        # https://github.com/rails/rails/blob/v4.2.1/activerecord/lib/active_record/connection_adapters/postgresql_adapter.rb#L79
+        # https://github.com/rails/rails/blob/v6.0.6/activerecord/lib/active_record/connection_adapters/postgresql_adapter.rb#L101
         serial: { null: false },
         bigserial: { null: false },
+        # string: {},
+        # text: {},
+        # integer: {},
+        # float: {},
+        # decimal: {},
+        # datetime: {},
+        # time: {},
+        # date: {},
         daterange: {},
         numrange: {},
         tsrange: {},
         tstzrange: {},
         int4range: {},
         int8range: {},
-        # binary: {}, # dup key
-        # boolean: {}, # dup key
-        # bigint: {}, # dup key
+        # binary: {},
+        # boolean: {},
         xml: {},
         tsvector: {},
         hstore: {},
@@ -59,20 +68,22 @@ module Ridgepole
         cidr: {},
         macaddr: {},
         uuid: {},
-        json: {},
+        # json: {},
         jsonb: {},
         ltree: {},
         citext: {},
         point: {},
+        line: {},
+        lseg: {},
+        box: {},
+        path: {},
+        polygon: {},
+        circle: {},
         bit: {},
         bit_varying: {},
         money: {},
-
-        # https://github.com/rails/rails/blob/v5.1.1/activerecord/lib/active_record/connection_adapters/abstract/schema_definitions.rb#L184
-        virtual: {},
-
-        # https://github.com/rails/rails/blob/v5.0.4/activerecord/lib/active_record/connection_adapters/abstract_mysql_adapter.rb#L53
-        # json: {}, # dup key
+        interval: {},
+        oid: {},
       }.freeze
 
       TYPES.each do |column_type, default_options|
