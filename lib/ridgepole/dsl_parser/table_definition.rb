@@ -84,6 +84,9 @@ module Ridgepole
         money: {},
         interval: {},
         oid: {},
+
+        # https://github.com/ridgepole/ridgepole/issues/394
+        timestamptz: {}
       }.freeze
 
       TYPES.each do |column_type, default_options|
