@@ -341,6 +341,6 @@ bundle exec appraisal activerecord-7.0 rake
 
 ## Example project
 
-* https://github.com/ridgepole/ridgepole-example
-  * https://github.com/ridgepole/ridgepole-example/pull/1
-  * https://github.com/ridgepole/ridgepole-example/pull/2
+* https://github.com/winebarrel/ridgepole-example
+  * https://github.com/winebarrel/ridgepole-example/pull/1
+  * https://github.com/winebarrel/ridgepole-example/pull/2
