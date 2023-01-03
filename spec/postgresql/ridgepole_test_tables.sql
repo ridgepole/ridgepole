@@ -1,3 +1,6 @@
+-- TODO: Use create_enum
+CREATE TYPE mood AS ENUM ('sad', 'ok', 'happy');
+
 DROP TABLE IF EXISTS clubs;
 CREATE TABLE clubs (
   id serial PRIMARY KEY,
