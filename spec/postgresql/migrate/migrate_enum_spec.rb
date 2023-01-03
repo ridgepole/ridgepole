@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Ridgepole::Client#diff -> migrate' do
+describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
   context 'create table with enum' do
     let(:actual_dsl) do
       ''
