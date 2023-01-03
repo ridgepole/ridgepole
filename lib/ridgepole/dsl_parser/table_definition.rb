@@ -87,6 +87,8 @@ module Ridgepole
 
         # https://github.com/ridgepole/ridgepole/issues/394
         timestamptz: {},
+
+        enum: {},
       }.freeze
 
       TYPES.each do |column_type, default_options|
