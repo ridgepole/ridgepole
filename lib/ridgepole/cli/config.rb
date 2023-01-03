@@ -66,7 +66,7 @@ module Ridgepole
 
         query_hash =
           if uri.query
-            uri.query.split('&').map { |pair| pair.split('=') }.to_h
+            uri.query.split('&').to_h { |pair| pair.split('=') }
           else
             {}
           end

@@ -1,19 +1,14 @@
 version: "3.8"
 services:
-  mysql:
-    image: "mysql:5.6.51"
+  mysql57:
+    image: "mysql:5.7"
+    platform: linux/amd64
     ports:
       - "13316:3306"
     environment:
       MYSQL_ROOT_PASSWORD: password
-  mysql57:
-    image: "mysql:5.7.39"
-    ports:
-      - "13317:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: password
   mysql80:
-    image: "mysql:8.0.30"
+    image: "mysql:8.0"
     ports:
       - "13318:3306"
     environment:

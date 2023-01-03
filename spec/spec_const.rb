@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 TEST_MYSQL_HOST = ENV['DOCKER_HOST'] ? ENV['DOCKER_HOST'].gsub(%r{\Atcp://|:\d+\z}, '') : '127.0.0.1'
-TEST_MYSQL_PORT = if ENV['MYSQL57'] == '1'
-                    13317 # rubocop:disable Style/NumericLiterals
-                  elsif ENV['MYSQL80'] == '1'
+TEST_MYSQL_PORT = if ENV['MYSQL80'] == '1'
                     13318 # rubocop:disable Style/NumericLiterals
                   else
                     13316 # rubocop:disable Style/NumericLiterals

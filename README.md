@@ -329,7 +329,7 @@ bundle install
 bundle exec appraisal install
 bundle exec appraisal activerecord-7.0 rake
 # POSTGRESQL=1 bundle exec appraisal activerecord-7.0 rake
-# MYSQL57=1 bundle exec appraisal activerecord-7.0 rake
+# MYSQL80=1 bundle exec appraisal activerecord-7.0 rake
 ```
 
 **Notice:** Ruby 2.6 or above/mysql-client/postgresql-client is required.
