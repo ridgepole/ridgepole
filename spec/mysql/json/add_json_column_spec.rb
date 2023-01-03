@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when add virtual column', condition: %i[mysql57 mysql80] do
+  context 'when add virtual column' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|

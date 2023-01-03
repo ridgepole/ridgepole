@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when drop virtual column', condition: %i[mysql57 mysql80] do
+  context 'when drop virtual column' do
     let(:actual_dsl) do
       <<-RUBY
         create_table "books", force: :cascade do |t|

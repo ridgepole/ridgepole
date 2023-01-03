@@ -9,7 +9,7 @@ module SpecCondition
     end
 
     def mysql57?
-      ENV['MYSQL57'] == '1'
+      !postgresql? && !mysql80?
     end
 
     def mysql80?

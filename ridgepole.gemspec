@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
-  spec.required_ruby_version = Gem::Requirement.new('>= 2.2.7') # rubocop:disable Gemspec/RequiredRubyVersion
+  spec.required_ruby_version = Gem::Requirement.new('>= 2.7')
 
   spec.add_dependency 'activerecord', '>= 5.1', '< 7.1'
   spec.add_dependency 'diffy'
