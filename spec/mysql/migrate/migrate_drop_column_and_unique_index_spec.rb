@@ -22,7 +22,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
     before do
       subject.diff(actual_dsl).migrate
-      ActiveRecord::Base.connection.execute(<<-'SQL'
+      ActiveRecord::Base.connection.execute(<<-SQL
         insert into
           employees (first_name, last_name)
         values

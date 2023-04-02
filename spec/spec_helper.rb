@@ -28,12 +28,12 @@ RSpec.configure do |config|
     if condition(:debug) || condition(:verbose)
       ActiveRecord::Migration.verbose = true
       logger = Ridgepole::Logger.instance
-      logger.level = ::Logger::DEBUG
+      logger.level = Logger::DEBUG
       logger.verbose = condition(:verbose)
       ActiveRecord::Base.logger = logger
     else
       ActiveRecord::Migration.verbose = false
-      Ridgepole::Logger.instance.level = ::Logger::ERROR
+      Ridgepole::Logger.instance.level = Logger::ERROR
     end
   end
 

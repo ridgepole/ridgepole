@@ -47,14 +47,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
         '#   employees',
         '# Compare definitions',
         '#   employees',
-        " {:definition=>\n" \
-        "   {\"birth_date\"=>{:options=>{:null=>false}, :type=>:date},\n" \
-        "    \"first_name\"=>{:options=>{:limit=>14, :null=>false}, :type=>:string},\n" \
+        " {:definition=>\n   " \
+        "{\"birth_date\"=>{:options=>{:null=>false}, :type=>:date},\n    " \
+        "\"first_name\"=>{:options=>{:limit=>14, :null=>false}, :type=>:string},\n" \
         "-   \"gender\"=>{:options=>{:limit=>1, :null=>false}, :type=>:string},\n" \
-        "+   \"gender2\"=>{:options=>{:limit=>1, :null=>false}, :type=>:string},\n" \
-        "    \"hire_date\"=>{:options=>{:null=>false}, :type=>:date},\n" \
-        "    \"last_name\"=>{:options=>{:limit=>16, :null=>false}, :type=>:string}},\n" \
-        '  :options=>{:primary_key=>"emp_no"}}',
+        "+   \"gender2\"=>{:options=>{:limit=>1, :null=>false}, :type=>:string},\n    " \
+        "\"hire_date\"=>{:options=>{:null=>false}, :type=>:date},\n    " \
+        "\"last_name\"=>{:options=>{:limit=>16, :null=>false}, :type=>:string}},\n  " \
+        ':options=>{:primary_key=>"emp_no"}}',
         '# Load tables',
         '#   employees',
         '# Load tables',
