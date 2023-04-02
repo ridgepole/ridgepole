@@ -325,7 +325,7 @@ Apply `Schemafile`
 
 
 ```sh
-docker-compose up -d
+docker compose up -d
 bundle install
 bundle exec appraisal install
 bundle exec appraisal activerecord-7.0 rake
