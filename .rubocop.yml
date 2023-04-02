@@ -5,6 +5,7 @@ AllCops:
     - "vendor/bundle/**/*"
   TargetRubyVersion: 2.7
   NewCops: enable
+  SuggestExtensions: false
 Bundler/OrderedGems:
   Include:
     - "Appraisals"
@@ -52,4 +53,6 @@ Style/SoleNestedConditional:
 Lint/DuplicateBranch:
   Enabled: false
 Style/OptionalBooleanParameter:
+  Enabled: false
+Gemspec/DevelopmentDependencies:
   Enabled: false
