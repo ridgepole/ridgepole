@@ -38,7 +38,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '>= 3.0.0'
   spec.add_development_dependency 'rspec-match_fuzzy', '>= 0.1.3'
   spec.add_development_dependency 'rspec-match_ruby', '>= 0.1.3'
-  spec.add_development_dependency 'rubocop', '1.51.0'
+  spec.add_development_dependency 'rubocop', '1.54.0'
   spec.add_development_dependency 'rubocop-rake', '>= 0.5.1'
   spec.add_development_dependency 'rubocop-rspec', '>= 2.1.0'
   spec.add_development_dependency 'simplecov'
