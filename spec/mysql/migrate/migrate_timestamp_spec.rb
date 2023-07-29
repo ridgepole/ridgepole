@@ -38,7 +38,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = subject.diff(apply_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
-      delta.migrate()
+      delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
     }
   end
@@ -80,7 +80,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby export_dsl
-      delta.migrate()
+      delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
     }
   end
