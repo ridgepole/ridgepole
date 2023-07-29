@@ -145,8 +145,8 @@ module Ridgepole
 
       def timestamps(*args)
         options = { null: false }.merge(args.extract_options!)
-        column(:created_at, :datetime, options)
-        column(:updated_at, :datetime, options)
+        column(:created_at, :datetime, options.dup)
+        column(:updated_at, :datetime, options.dup)
       end
 
       def references(*args)
