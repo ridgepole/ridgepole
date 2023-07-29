@@ -2,6 +2,13 @@
 
 ## 1.2
 
+### 1.2.1 (2023/07/29)
+
+* Support `create_enum` [pull#405](https://github.com/ridgepole/ridgepole/pull/405)
+* Fix timestamps with index behavior [pull#428](https://github.com/ridgepole/ridgepole/pull/428)
+* Fix broken `DEFAULT CURRENT_TIMESTAMP` spec [pull#420](https://github.com/ridgepole/ridgepole/pull/420)
+* Add Ruby 3.2 to CI matrix [pull#419](https://github.com/ridgepole/ridgepole/pull/419)
+
 ### 1.2.0 (2022/09/24)
 
 * Updated supported column types [pull#399](https://github.com/ridgepole/ridgepole/pull/399) [pull#400](https://github.com/ridgepole/ridgepole/pull/400)
