@@ -132,7 +132,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
       delta.migrate
-      expect(subject.dump).to match_ruby expected_dsl.gsub(/, renamed_from: 'employees'/, '')
+      expect(subject.dump).to match_ruby expected_dsl.gsub(", renamed_from: 'employees'", '')
     }
   end
 
