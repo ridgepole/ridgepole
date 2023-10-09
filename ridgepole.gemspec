@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = Gem::Requirement.new('>= 2.7')
 
-  spec.add_dependency 'activerecord', '>= 5.1', '< 7.1'
+  spec.add_dependency 'activerecord', '>= 5.1', '< 7.2'
   spec.add_dependency 'diffy'
 
   spec.add_development_dependency 'appraisal', '>= 2.2.0'
