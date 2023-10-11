@@ -18,8 +18,6 @@ module Ridgepole
 
           if options && @__without_table_options
             options.delete(:options)
-
-            # For >= AR 6.1.0
             options.delete(:charset)
             options.delete(:collation)
           end
