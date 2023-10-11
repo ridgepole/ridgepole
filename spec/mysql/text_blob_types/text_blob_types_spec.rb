@@ -45,7 +45,7 @@ describe 'Ridgepole::Client (with new text/blob types)' do
     end
   end
 
-  context 'when compare new types', condition: '>= 6.0.0.beta2' do
+  context 'when compare new types' do
     subject { client }
 
     before do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Ridgepole::Client#diff -> migrate', condition: [['>= 6.1', :mysql80]] do
+describe 'Ridgepole::Client#diff -> migrate', condition: [[:mysql80]] do
   context 'when change check constraint' do
     let(:actual_dsl) do
       erbh(<<-ERB)

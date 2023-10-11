@@ -220,16 +220,5 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
       RUBY
     }
-
-    # duplicated index checker is deleted in 6.1
-    # https://github.com/rails/rails/commit/edb23791d2ee9df89c5a4f24d72940ff8eaec8fc#diff-5a1c923abf3a794dbc133959167f794b2479ea8bcd0b1deda7766c22f05e8dfeL1198
-    it 'detects duplicated index', condition: '< 6.1' do
-      delta = client(bulk_change: true).diff(expected_dsl)
-
-      # XXX: Can not add an index of the same name
-      expect do
-        delta.migrate
-      end.to raise_error(/Index name 'emp_no' on table 'dept_emp' already exists/)
-    end
   end
 end
