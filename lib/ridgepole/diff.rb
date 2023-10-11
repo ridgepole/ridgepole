@@ -102,6 +102,7 @@ module Ridgepole
       scan_indices_change(from[:indices], to[:indices], to[:definition], table_delta, from[:options], to[:options])
       scan_foreign_keys_change(from[:foreign_keys], to[:foreign_keys], table_delta, @options)
       scan_check_constraints_change(from[:check_constraints], to[:check_constraints], table_delta)
+      scan_exclusion_constraints_change(from[:exclusion_constraints], to[:exclusion_constraints], table_delta)
 
       unless table_delta.empty?
         delta[:change] ||= {}
@@ -507,6 +508,38 @@ module Ridgepole
       end
 
       table_delta[:check_constraints] = check_constraints_delta unless check_constraints_delta.empty?
+    end
+
+    def scan_exclusion_constraints_change(from, to, table_delta)
+      from = (from || {}).dup
+      to = (to || {}).dup
+      exclusion_constraints_delta = {}
+
+      to.each do |name, to_attrs|
+        from_attrs = from.delete(name)
+
+        if from_attrs
+          if from_attrs != to_attrs
+            exclusion_constraints_delta[:add] ||= {}
+            exclusion_constraints_delta[:add][name] = to_attrs
+
+            exclusion_constraints_delta[:delete] ||= {}
+            exclusion_constraints_delta[:delete][name] = from_attrs
+          end
+        else
+          exclusion_constraints_delta[:add] ||= {}
+          exclusion_constraints_delta[:add][name] = to_attrs
+        end
+      end
+
+      unless @options[:merge]
+        from.each do |name, from_attrs|
+          exclusion_constraints_delta[:delete] ||= {}
+          exclusion_constraints_delta[:delete][name] = from_attrs
+        end
+      end
+
+      table_delta[:exclusion_constraints] = exclusion_constraints_delta unless exclusion_constraints_delta.empty?
     end
 
     # XXX: MySQL only?

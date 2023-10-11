@@ -179,6 +179,10 @@ module Ridgepole
       def check_constraint(expression, options = {})
         @base.add_check_constraint(@table_name, expression, options)
       end
+
+      def exclusion_constraint(expression, options = {})
+        @base.add_exclusion_constraint(@table_name, expression, options)
+      end
     end
   end
 end

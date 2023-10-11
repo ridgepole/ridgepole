@@ -251,6 +251,12 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
         end
       end
 
+      unless (exclusion_constraints = attrs[:exclusion_constraints] || {}).empty?
+        exclusion_constraints.each do |_, exclusion_constraint_attrs|
+          append_add_exclusion_constraint(table_name, exclusion_constraint_attrs, buf, true)
+        end
+      end
+
       buf.puts(<<-RUBY)
 end
       RUBY
@@ -322,6 +328,7 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
       indices = attrs[:indices] || {}
       foreign_keys = attrs[:foreign_keys] || {}
       check_constraints = attrs[:check_constraints] || {}
+      exclusion_constraints = attrs[:exclusion_constraints] || {}
       table_options = attrs[:table_options]
       table_charset = attrs[:table_charset]
       table_collation = attrs[:table_collation]
@@ -338,6 +345,7 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
 
       append_change_foreign_keys(table_name, foreign_keys, pre_buf_for_fk, post_buf_for_fk, @options) unless foreign_keys.empty?
       append_change_check_constraints(table_name, check_constraints, buf) unless check_constraints.empty?
+      append_change_exclusion_constraints(table_name, exclusion_constraints, buf) unless exclusion_constraints.empty?
 
       if table_options || table_charset || table_collation
         append_change_table_raw_options(table_name, table_options, table_charset, table_collation,
@@ -550,6 +558,40 @@ add_check_constraint(#{table_name.inspect}, #{expression.inspect}, **#{attrs_opt
 
       buf.puts(<<-RUBY)
 remove_check_constraint(#{table_name.inspect}, #{expression.inspect}, **#{attrs_options.inspect})
+      RUBY
+    end
+
+    def append_change_exclusion_constraints(table_name, delta, buf)
+      (delta[:delete] || {}).each do |_, attrs|
+        append_remove_exclusion_constraint(table_name, attrs, buf)
+      end
+
+      (delta[:add] || {}).each do |_, attrs|
+        append_add_exclusion_constraint(table_name, attrs, buf)
+      end
+    end
+
+    def append_add_exclusion_constraint(table_name, attrs, buf, force_bulk_change = false)
+      expression = attrs.fetch(:expression)
+      attrs_options = attrs[:options] || {}
+
+      if force_bulk_change
+        buf.puts(<<-RUBY)
+  t.exclusion_constraint(#{expression.inspect}, **#{attrs_options.inspect})
+        RUBY
+      else
+        buf.puts(<<-RUBY)
+add_exclusion_constraint(#{table_name.inspect}, #{expression.inspect}, **#{attrs_options.inspect})
+        RUBY
+      end
+    end
+
+    def append_remove_exclusion_constraint(table_name, attrs, buf)
+      expression = attrs.fetch(:expression)
+      attrs_options = attrs[:options] || {}
+
+      buf.puts(<<-RUBY)
+remove_exclusion_constraint(#{table_name.inspect}, #{expression.inspect}, **#{attrs_options.inspect})
       RUBY
     end
 
