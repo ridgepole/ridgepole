@@ -12,7 +12,7 @@ describe 'Ridgepole::Client#dump' do
           t.index ["name"], name: "idx_name", unique: true
         end
 
-        create_table "departments", primary_key: "dept_no", <%= i cond(">= 6.1", { id: { type: :string, limit: 4 } }, { id: :string, limit: 4 }) %>, force: :cascade do |t|
+        create_table "departments", primary_key: "dept_no", id: { type: :string, limit: 4 }, force: :cascade do |t|
           t.string "dept_name", limit: 40, null: false
           t.index ["dept_name"], name: "idx_dept_name", unique: true
         end

@@ -68,7 +68,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
 
-        create_table "employees", <%= i cond(">= 6.1", { id: { type: :bigint, unsigned: true } }, { id: :bigint, unsigned: true }) %>, force: :cascade do |t|
+        create_table "employees", id: { type: :bigint, unsigned: true }, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.date    "birth_date", null: false
           t.string  "first_name", limit: 14, null: false
@@ -88,7 +88,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
 
-        create_table "employees", <%= i cond(">= 6.1", { id: { type: :bigint, unsigned: true } }, { id: :bigint, unsigned: true }) %>, force: :cascade do |t|
+        create_table "employees", id: { type: :bigint, unsigned: true }, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.date    "birth_date", null: false
           t.string  "first_name", limit: 14, null: false
@@ -179,7 +179,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
 
-        create_table "employees", <%= i cond(">= 6.1", { id: { type: :bigint, unsigned: true } }, { id: :bigint, unsigned: true }) %>, force: :cascade do |t|
+        create_table "employees", id: { type: :bigint, unsigned: true }, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.date    "birth_date", null: false
           t.string  "first_name", limit: 14, null: false
@@ -199,7 +199,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
 
-        create_table "employees", <%= i cond(">= 6.1", { id: { type: :bigint, unsigned: true } }, { id: :bigint, unsigned: true }) %>, force: :cascade do |t|
+        create_table "employees", id: { type: :bigint, unsigned: true }, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.date    "birth_date", null: false
           t.string  "first_name", limit: 14, null: false

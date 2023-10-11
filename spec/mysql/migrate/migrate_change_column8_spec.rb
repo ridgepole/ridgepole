@@ -15,7 +15,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   let(:actual_dsl) do
     erbh(<<-ERB)
-      create_table "employees", primary_key: "emp_no", force: :cascade, <%= i cond('>= 6.1', { charset: 'utf8' }, { options: 'ENGINE=InnoDB DEFAULT CHARSET=utf8' }) %> do |t|
+      create_table "employees", primary_key: "emp_no", force: :cascade, charset: 'utf8' do |t|
       end
     ERB
   end
