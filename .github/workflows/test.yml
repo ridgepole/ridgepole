@@ -32,7 +32,6 @@ jobs:
           - MYSQL80=1
           - POSTGRESQL=1
         gemfile:
-          - gemfiles/activerecord_6.0.gemfile
           - gemfiles/activerecord_6.1.gemfile
           - gemfiles/activerecord_7.0.gemfile
     env:
