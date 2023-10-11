@@ -183,6 +183,10 @@ module Ridgepole
       def exclusion_constraint(expression, options = {})
         @base.add_exclusion_constraint(@table_name, expression, options)
       end
+
+      def unique_constraint(column_name, options = {})
+        @base.add_unique_constraint(@table_name, column_name, options)
+      end
     end
   end
 end
