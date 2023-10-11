@@ -54,7 +54,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
           t.string  "string", null: false, collation: "ascii_bin"
-          t.text    "text", null: false, collation: nil
+          t.text    "text", null: false, collation: <%= i cond(">= 7.1", ":no_collation", 'nil') %>
         end
       ERB
     end
@@ -67,7 +67,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
       delta.migrate
-      expect(subject.dump).to match_ruby expected_dsl.gsub(', collation: nil', '') # for AR 7.0.4
+
+      if ActiveRecord.gem_version < Gem::Version.new('7.1.0')
+        expect(subject.dump).to match_ruby expected_dsl.gsub(', collation: nil', '') # for AR 7.0.4
+      else
+        expect(subject.dump).to match_ruby expected_dsl.gsub(', collation: :no_collation', '') # for AR 7.1.0
+      end
     end
   end
 
