@@ -399,10 +399,6 @@ module Ridgepole
       # XXX: MySQL only?
       opts[:default] = nil if !opts.key?(:default) && !primary_key
 
-      if ActiveRecord.gem_version >= Gem::Version.new('7.1.0')
-        opts[:collation] = :no_collation if opts.key?(:collation) && opts[:collation].nil?
-      end
-
       if Ridgepole::ConnectionAdapters.mysql?
         opts[:unsigned] = false unless opts.key?(:unsigned)
 
