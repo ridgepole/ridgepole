@@ -8,7 +8,7 @@ module Ridgepole
     end
 
     def execute(sql)
-      cmd = Shellwords.join([@script, sql, JSON.dump(connection_configuration_hash)])
+      cmd = Shellwords.join([@script, sql, JSON.dump(ActiveRecord::Base.connection_db_config.configuration_hash)])
       @logger.info("Execute #{@script}")
       script_basename = File.basename(@script)
 
@@ -44,17 +44,6 @@ module Ridgepole
         end
 
         raise "`#{@script}` execution failed" unless wait_thr.value.success?
-      end
-    end
-
-    private
-
-    def connection_configuration_hash
-      if ActiveRecord.gem_version < Gem::Version.new('6.1.0')
-        # NOTE: Remove code when stopping support for versions below 6.1
-        ActiveRecord::Base.connection_config
-      else
-        ActiveRecord::Base.connection_db_config.configuration_hash
       end
     end
   end

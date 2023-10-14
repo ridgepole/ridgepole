@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-appraise 'activerecord-6.0' do
-  gem 'activerecord', '~> 6.0.6'
-end
-
 appraise 'activerecord-6.1' do
   gem 'activerecord', '~> 6.1.7'
 end

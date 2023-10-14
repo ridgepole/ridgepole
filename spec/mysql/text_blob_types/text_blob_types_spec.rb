@@ -26,7 +26,7 @@ describe 'Ridgepole::Client (with new text/blob types)' do
       delta.migrate
 
       expect(subject.dump).to match_ruby erbh(<<-ERB)
-        create_table "foos", <%= i cond(">= 6.1", { id: { type: :integer, unsigned: true } }, { id: :integer, unsigned: true }) %>, force: :cascade do |t|
+        create_table "foos", id: { type: :integer, unsigned: true }, force: :cascade do |t|
           t.binary  "blob"
           t.binary  "tiny_blob", size: :tiny
           t.binary  "medium_blob", size: :medium
@@ -45,7 +45,7 @@ describe 'Ridgepole::Client (with new text/blob types)' do
     end
   end
 
-  context 'when compare new types', condition: '>= 6.0.0.beta2' do
+  context 'when compare new types' do
     subject { client }
 
     before do

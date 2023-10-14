@@ -312,7 +312,7 @@ end
 ```
 
 ```sh
-$ ridgepole -a -c database.yml --check-relation-type bigint # default primary key type (e.g. `<5.1`: integer, `>=5.1`: bigint for MySQL)
+$ ridgepole -a -c database.yml --check-relation-type bigint # default primary key type (e.g. bigint for MySQL)
 Apply `Schemafile`
 ...
 [WARNING] Relation column type is different.

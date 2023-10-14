@@ -7,7 +7,7 @@ describe 'Ridgepole::Client#dump' do
 
     it {
       expect(subject.dump).to match_fuzzy erbh(<<-ERB)
-        create_table "clubs", <%= i cond('< 6.1', { id: :integer, unsigned: true }, { id: { type: :integer, unsigned: true } }) %>, force: :cascade do |t|
+        create_table "clubs", id: { type: :integer, unsigned: true }, force: :cascade do |t|
           t.string "name", default: "", null: false
           t.index ["name"], name: "idx_name", unique: true
         end
