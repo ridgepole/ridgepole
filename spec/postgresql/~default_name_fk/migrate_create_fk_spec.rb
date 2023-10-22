@@ -51,7 +51,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "child", force: :cascade do |t|
-          t.integer "parent_id", unsigned: true
+          t.integer "parent_id"
           t.index ["parent_id"], name: "par_id"
         end
 
@@ -93,7 +93,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "child", force: :cascade do |t|
-          t.integer "parent_id", unsigned: true
+          t.integer "parent_id"
           t.index ["parent_id"], name: "par_id"
         end
 

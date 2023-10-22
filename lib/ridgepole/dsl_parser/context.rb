@@ -106,6 +106,36 @@ module Ridgepole
         }
       end
 
+      def add_exclusion_constraint(table_name, expression, options = {})
+        table_name = table_name.to_s
+        expression = expression.to_s
+        options[:name] = options[:name].to_s if options[:name]
+
+        idx = options[:name] || expression
+
+        @__definition[table_name] ||= {}
+        @__definition[table_name][:exclusion_constraints] ||= {}
+        @__definition[table_name][:exclusion_constraints][idx] = {
+          expression: expression,
+          options: options,
+        }
+      end
+
+      def add_unique_constraint(table_name, column_name, options = {})
+        table_name = table_name.to_s
+        column_name = Array(column_name).map(&:to_sym)
+        options[:name] = options[:name].to_s if options[:name]
+
+        idx = options[:name] || column_name
+
+        @__definition[table_name] ||= {}
+        @__definition[table_name][:unique_constraints] ||= {}
+        @__definition[table_name][:unique_constraints][idx] = {
+          column_name: column_name,
+          options: options,
+        }
+      end
+
       def require(file)
         schemafile = %r{\A/}.match?(file) ? file : File.join(@__working_dir, file)
 
