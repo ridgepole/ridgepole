@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0
+
+### 2.0.0.beta (2023/10/22)
+
+* Support Rails 7.1 [pull#441](https://github.com/ridgepole/ridgepole/pull/441)
+* Drop Rails 6.0 support [pull#440](https://github.com/ridgepole/ridgepole/pull/440)
+
 ## 1.2
 
 ### 1.2.1 (2023/07/29)
