@@ -11,8 +11,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 
 **Notice**
 
-* Support Rails 7.1 ridgepole v2.0.0.
-* Drop support AcriveRecord 6.0 in ridgepole v2.0.0.
+* Support Rails 7.1 ridgepole v2.0.0. (cf. https://github.com/ridgepole/ridgepole/pull/441)
+* Drop support AcriveRecord 6.0 in ridgepole v2.0.0. (cf. https://github.com/ridgepole/ridgepole/pull/440)
 * Drop support ActiveRecord 5.x in ridgepole v1.2.0.
 * Partitioning is no longer supported in ridgepole v1.1.0.
 * ActiveRecord 7.x has some incompatible changes. If you get unintended differences in `datetime` columns consider changing `precision`:
