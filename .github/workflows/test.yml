@@ -31,6 +31,7 @@ jobs:
           - MYSQL57=1
           - MYSQL80=1
           - POSTGRESQL=1
+          - TRILOGY=1
         gemfile:
           - gemfiles/activerecord_6.1.gemfile
           - gemfiles/activerecord_7.0.gemfile

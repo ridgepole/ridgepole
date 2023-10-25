@@ -16,6 +16,10 @@ module SpecCondition
       ENV['MYSQL80'] == '1'
     end
 
+    def trilogy_adapter?
+      ENV['TRILOGY'] == '1'
+    end
+
     def debug?
       ENV['DEBUG'] == '1'
     end

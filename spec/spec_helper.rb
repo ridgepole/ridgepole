@@ -123,8 +123,9 @@ module SpecHelper
         password: TEST_PG_PASS,
       }.merge(config)
     else
+      adapter = condition(:trilogy_adapter) ? 'trilogy' : 'mysql2'
       {
-        adapter: 'mysql2',
+        adapter: adapter,
         database: TEST_SCHEMA,
         host: TEST_MYSQL_HOST,
         port: TEST_MYSQL_PORT,
