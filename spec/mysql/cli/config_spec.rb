@@ -4,11 +4,12 @@ describe Ridgepole::Config do
   subject { Ridgepole::Config.load(config, env, spec_name) }
 
   let(:spec_name) { '' }
+  let(:adapter) { condition(:trilogy_adapter) ? 'trilogy' : 'mysql2' }
 
   context 'when passed toplevel yaml' do
     let(:config) do
       <<-YAML.strip_heredoc
-        adapter: mysql2
+        adapter: #{adapter}
         encoding: utf8
         database: blog
         username: root
@@ -16,7 +17,7 @@ describe Ridgepole::Config do
     end
     let(:env) { 'development' }
     specify do
-      expect(subject['adapter']).to eq 'mysql2'
+      expect(subject['adapter']).to eq adapter
       expect(subject['encoding']).to eq 'utf8'
       expect(subject['database']).to eq 'blog'
       expect(subject['username']).to eq 'root'
@@ -26,7 +27,7 @@ describe Ridgepole::Config do
   context 'when passed dynamic yaml' do
     let(:config) do
       <<-YAML.strip_heredoc
-        adapter: mysql2
+        adapter: #{adapter}
         encoding: utf8
         database: blog_<%= 1 + 2 %>
         username: user_<%= 3 * 4 %>
@@ -34,7 +35,7 @@ describe Ridgepole::Config do
     end
     let(:env) { 'development' }
     specify do
-      expect(subject['adapter']).to eq 'mysql2'
+      expect(subject['adapter']).to eq adapter
       expect(subject['encoding']).to eq 'utf8'
       expect(subject['database']).to eq 'blog_3'
       expect(subject['username']).to eq 'user_12'
@@ -48,7 +49,7 @@ describe Ridgepole::Config do
           adapter: sqlspecifye
           database: db/sample.db
         production:
-          adapter: mysql2
+          adapter: #{adapter}
           encoding: utf8
           database: blog
           username: root
@@ -67,7 +68,7 @@ describe Ridgepole::Config do
     context 'in production env' do
       let(:env) { 'production' }
       specify do
-        expect(subject['adapter']).to eq 'mysql2'
+        expect(subject['adapter']).to eq adapter
         expect(subject['encoding']).to eq 'utf8'
         expect(subject['database']).to eq 'blog'
         expect(subject['username']).to eq 'root'
@@ -78,7 +79,7 @@ describe Ridgepole::Config do
   context 'when passed yaml file' do
     let(:config) do
       <<-YAML.strip_heredoc
-        adapter: mysql2
+        adapter: #{adapter}
         encoding: utf8
         database: blog
         username: root
@@ -90,7 +91,7 @@ describe Ridgepole::Config do
         f.puts config
         f.flush
 
-        expect(subject['adapter']).to eq 'mysql2'
+        expect(subject['adapter']).to eq adapter
         expect(subject['encoding']).to eq 'utf8'
         expect(subject['database']).to eq 'blog'
         expect(subject['username']).to eq 'root'
@@ -113,11 +114,11 @@ describe Ridgepole::Config do
   end
 
   context 'when passed DATABASE_URL' do
-    let(:config) { 'mysql2://root:pass@127.0.0.1:3307/blog?pool=5&reaping_frequency=2' }
+    let(:config) { "#{adapter}://root:pass@127.0.0.1:3307/blog?pool=5&reaping_frequency=2" }
     let(:env) { 'development' }
 
     it {
-      expect(subject['adapter']).to eq 'mysql2'
+      expect(subject['adapter']).to eq adapter
       expect(subject['database']).to eq 'blog'
       expect(subject['username']).to eq 'root'
       expect(subject['password']).to eq 'pass'
@@ -145,11 +146,11 @@ describe Ridgepole::Config do
     let(:env) { 'development' }
 
     before do
-      allow(ENV).to receive(:fetch).with('DATABASE_URL').and_return('mysql2://root:pass@127.0.0.1:3307/blog')
+      allow(ENV).to receive(:fetch).with('DATABASE_URL').and_return("#{adapter}://root:pass@127.0.0.1:3307/blog")
     end
 
     it {
-      expect(subject['adapter']).to eq 'mysql2'
+      expect(subject['adapter']).to eq adapter
       expect(subject['database']).to eq 'blog'
       expect(subject['username']).to eq 'root'
       expect(subject['password']).to eq 'pass'
@@ -166,12 +167,12 @@ describe Ridgepole::Config do
             database: db/sample.db
         production:
           primary:
-            adapter: mysql2
+            adapter: #{adapter}
             encoding: utf8
             database: blog
             username: root
           primary_replica:
-            adapter: mysql2
+            adapter: #{adapter}
             encoding: utf8
             database: blog
             username: readonly
@@ -192,7 +193,7 @@ describe Ridgepole::Config do
       let(:env) { 'production' }
       let(:spec_name) { 'primary' }
       specify do
-        expect(subject['adapter']).to eq 'mysql2'
+        expect(subject['adapter']).to eq adapter
         expect(subject['encoding']).to eq 'utf8'
         expect(subject['database']).to eq 'blog'
         expect(subject['username']).to eq 'root'

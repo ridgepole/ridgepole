@@ -2,16 +2,19 @@
 
 module Ridgepole
   class DefaultsLimit
+    DEFAULT_LIMIT_FOR_MYSQL = {
+      boolean: 1,
+      integer: 4,
+      bigint: 8,
+      float: 24,
+      string: 255,
+      text: 65_535,
+      binary: 65_535,
+    }.freeze
+
     DEFAULTS_LIMITS = {
-      mysql2: {
-        boolean: 1,
-        integer: 4,
-        bigint: 8,
-        float: 24,
-        string: 255,
-        text: 65_535,
-        binary: 65_535,
-      },
+      mysql2: DEFAULT_LIMIT_FOR_MYSQL,
+      trilogy: DEFAULT_LIMIT_FOR_MYSQL,
     }.freeze
 
     class << self
