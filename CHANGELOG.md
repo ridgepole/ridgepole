@@ -2,6 +2,10 @@
 
 ## 2.0
 
+### 2.0.0 (2023/11/10)
+
+* Bump up version.
+
 ### 2.0.0.beta2 (2023/10/26)
 
 * Support Rails 7.1 [pull#447](https://github.com/ridgepole/ridgepole/pull/447)
