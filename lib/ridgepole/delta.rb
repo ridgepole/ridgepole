@@ -4,6 +4,10 @@ module Ridgepole
   class Delta
     SCRIPT_NAME = '<Schema>'
 
+    RIDGEPOLE_OPTIONS = %i[
+      renamed_from
+    ].freeze
+
     def initialize(delta, options = {})
       @delta = delta
       @options = options
@@ -235,7 +239,7 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
         normalize_limit(column_type, column_options)
 
         buf.puts(<<-RUBY)
-  t.column(#{column_name.inspect}, :#{column_type.to_s.inspect}, #{inspect_options_include_default_proc(column_options)})
+  t.column(#{column_name.inspect}, :#{column_type.to_s.inspect}, #{inspect_options_include_default_proc(normalize_options(column_options))})
       RUBY
       end
 
@@ -644,6 +648,12 @@ remove_unique_constraint(#{table_name.inspect}, #{column_name.inspect}, **#{attr
     def normalize_limit(column_type, column_options)
       default_limit = Ridgepole::DefaultsLimit.default_limit(column_type, @options)
       column_options[:limit] ||= default_limit if default_limit
+    end
+
+    def normalize_options(options)
+      opts = options.dup
+      RIDGEPOLE_OPTIONS.each { opts.delete(_1) }
+      opts
     end
 
     def inspect_options_include_default_proc(options)
