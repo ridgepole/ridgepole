@@ -106,7 +106,7 @@ $ git init
 Initialized empty Git repository in ...
 
 $ cat config.yml
-adapter: mysql2
+adapter: mysql2(or postgresql)
 encoding: utf8
 database: blog
 username: root
