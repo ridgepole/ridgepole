@@ -48,6 +48,7 @@ Or install it yourself as:
 
 ## Help
 ```
+$ ridgepole -h(or --help)
 Usage: ridgepole [options]
     -c, --config CONF_OR_FILE
     -E, --env ENVIRONMENT
