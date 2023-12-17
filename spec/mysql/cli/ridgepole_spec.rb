@@ -62,6 +62,7 @@ describe 'ridgepole' do
             --debug
             --[no-]color
         -v, --version
+        -h, --help
        MSG
     end
   end
