@@ -34,7 +34,7 @@ module Ridgepole
       return unless attrs[:foreign_keys]
       return unless attrs[:options][:options]&.include?('ENGINE=InnoDB')
 
-      attrs[:foreign_keys].each do |_, foreign_key_attrs|
+      attrs[:foreign_keys].each_value do |foreign_key_attrs|
         fk_index = foreign_key_attrs[:options][:column] || "#{foreign_key_attrs[:to_table].singularize}_id"
         next if attrs[:indices]&.any? { |_k, v| v[:column_name].first == fk_index }
         # NOTE: For composite primary keys, the first column of the primary key is used as the foreign key index
