@@ -29,7 +29,7 @@ module Ridgepole
 
       logger.verbose_info('# Parse DSL')
       expected_definition, expected_execute = @parser.parse(dsl, opts)
-      expected_definition.each do |_table, definition|
+      expected_definition.each_value do |definition|
         merge_table_options(definition)
       end
       logger.verbose_info('# Load tables')

@@ -126,7 +126,7 @@ module Ridgepole
         end
       end
 
-      ALIAS_TYPES.each do |alias_type, (column_type, default_options)|
+      ALIAS_TYPES.each do |alias_type, (column_type, default_options)| # rubocop:disable Style/HashEachMethods
         define_method alias_type do |*args|
           options = args.extract_options!
           options = default_options.merge(options)

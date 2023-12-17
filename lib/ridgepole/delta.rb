@@ -250,19 +250,19 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
       end
 
       unless (check_constraints = attrs[:check_constraints] || {}).empty?
-        check_constraints.each do |_, check_constraint_attrs|
+        check_constraints.each_value do |check_constraint_attrs|
           append_add_check_constraint(table_name, check_constraint_attrs, buf, true)
         end
       end
 
       unless (exclusion_constraints = attrs[:exclusion_constraints] || {}).empty?
-        exclusion_constraints.each do |_, exclusion_constraint_attrs|
+        exclusion_constraints.each_value do |exclusion_constraint_attrs|
           append_add_exclusion_constraint(table_name, exclusion_constraint_attrs, buf, true)
         end
       end
 
       unless (unique_constraints = attrs[:unique_constraints] || {}).empty?
-        unique_constraints.each do |_, unique_constraint_attrs|
+        unique_constraints.each_value do |unique_constraint_attrs|
           append_add_unique_constraint(table_name, unique_constraint_attrs, buf, true)
         end
       end
@@ -280,7 +280,7 @@ end
       end
 
       unless (foreign_keys = attrs[:foreign_keys] || {}).empty?
-        foreign_keys.each do |_, foreign_key_attrs|
+        foreign_keys.each_value do |foreign_key_attrs|
           append_add_foreign_key(table_name, foreign_key_attrs, post_buf_for_fk, @options)
         end
       end
@@ -506,11 +506,11 @@ remove_index(#{table_name.inspect}, #{target})
     end
 
     def append_change_foreign_keys(table_name, delta, pre_buf_for_fk, post_buf_for_fk, options)
-      (delta[:delete] || {}).each do |_, attrs|
+      (delta[:delete] || {}).each_value do |attrs|
         append_remove_foreign_key(table_name, attrs, pre_buf_for_fk, options)
       end
 
-      (delta[:add] || {}).each do |_, attrs|
+      (delta[:add] || {}).each_value do |attrs|
         append_add_foreign_key(table_name, attrs, post_buf_for_fk, options)
       end
     end
@@ -540,11 +540,11 @@ remove_foreign_key(#{table_name.inspect}, #{target})
     end
 
     def append_change_check_constraints(table_name, delta, buf)
-      (delta[:delete] || {}).each do |_, attrs|
+      (delta[:delete] || {}).each_value do |attrs|
         append_remove_check_constraint(table_name, attrs, buf)
       end
 
-      (delta[:add] || {}).each do |_, attrs|
+      (delta[:add] || {}).each_value do |attrs|
         append_add_check_constraint(table_name, attrs, buf)
       end
     end
@@ -574,11 +574,11 @@ remove_check_constraint(#{table_name.inspect}, #{expression.inspect}, **#{attrs_
     end
 
     def append_change_exclusion_constraints(table_name, delta, buf)
-      (delta[:delete] || {}).each do |_, attrs|
+      (delta[:delete] || {}).each_value do |attrs|
         append_remove_exclusion_constraint(table_name, attrs, buf)
       end
 
-      (delta[:add] || {}).each do |_, attrs|
+      (delta[:add] || {}).each_value do |attrs|
         append_add_exclusion_constraint(table_name, attrs, buf)
       end
     end
@@ -608,11 +608,11 @@ remove_exclusion_constraint(#{table_name.inspect}, #{expression.inspect}, **#{at
     end
 
     def append_change_unique_constraints(table_name, delta, buf)
-      (delta[:delete] || {}).each do |_, attrs|
+      (delta[:delete] || {}).each_value do |attrs|
         append_remove_unique_constraint(table_name, attrs, buf)
       end
 
-      (delta[:add] || {}).each do |_, attrs|
+      (delta[:add] || {}).each_value do |attrs|
         append_add_unique_constraint(table_name, attrs, buf)
       end
     end
