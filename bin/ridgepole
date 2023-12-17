@@ -155,8 +155,12 @@ ARGV.options do |opt|
   opt.on('', '--debug') { options[:debug] = true }
   opt.on('', '--[no-]color') { |v| options[:color] = v }
 
-  opt.on('-v', '--version') do
+  opt.on_tail('-v', '--version') do
     puts opt.ver
+    exit
+  end
+  opt.on_tail('-h', '--help') do
+    puts opt
     exit
   end
 

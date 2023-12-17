@@ -96,6 +96,7 @@ Usage: ridgepole [options]
         --debug
         --[no-]color
     -v, --version
+    -h, --help
 ```
 
 ## Usage
