@@ -28,6 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'diffy'
 
   spec.add_development_dependency 'appraisal', '>= 2.2.0'
+  spec.add_development_dependency 'bigdecimal'
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'erbh', '>= 0.2.1'
   spec.add_development_dependency 'hash_modern_inspect', '>= 0.1.1'
