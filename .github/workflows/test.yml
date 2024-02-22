@@ -42,6 +42,10 @@ jobs:
             env: TRILOGY=1
           - gemfile: gemfiles/activerecord_7.0.gemfile
             env: TRILOGY=1
+          - ruby: "3.3"
+            gemfile: gemfiles/activerecord_6.1.gemfile
+          - ruby: "3.3"
+            gemfile: gemfiles/activerecord_7.0.gemfile
     env:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
     steps:
