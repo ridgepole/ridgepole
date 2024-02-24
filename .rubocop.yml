@@ -3,6 +3,8 @@ AllCops:
     - "gemfiles/**/*"
     - "omnibus-ridgepole/**/*"
     - "vendor/bundle/**/*"
+    - "Schemafile"
+    - "**/*.schema"
   TargetRubyVersion: 2.7
   NewCops: enable
   SuggestExtensions: false
