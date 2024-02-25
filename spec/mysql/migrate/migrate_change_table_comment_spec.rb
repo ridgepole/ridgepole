@@ -10,6 +10,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
         t.string "gender", limit: 1, null: false
         t.date   "hire_date", null: false
       end
+
+      create_table "tenants", force: :cascade, comment: "old comment '" do |t|
+      end
     ERB
   end
 
@@ -21,6 +24,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
         t.string "last_name", limit: 16, null: false
         t.string "gender", limit: 1, null: false
         t.date   "hire_date", null: false
+      end
+
+      create_table "tenants", force: :cascade, comment: "new comment '" do |t|
       end
     ERB
   end
@@ -36,6 +42,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
 # Table option changes are ignored on `employees`.
   from: {:comment=>"old comment"}
     to: {:comment=>"new comment"}
+      MSG
+      expect(Ridgepole::Logger.instance).to receive(:verbose_info).once.with(<<-MSG)
+# Table option changes are ignored on `tenants`.
+  from: {:comment=>"old comment '"}
+    to: {:comment=>"new comment '"}
       MSG
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_falsey
