@@ -308,7 +308,7 @@ drop_table(#{table_name.inspect})
     def append_change_table_options(table_name, table_options, buf)
       # XXX: MySQL only
       buf.puts(<<-RUBY)
-execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name)} #{table_options}"
+execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name)} #{table_options.dump[1..-2]}"
     RUBY
 
       buf.puts
