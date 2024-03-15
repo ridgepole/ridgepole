@@ -28,12 +28,14 @@ module Ridgepole
         if (from_attrs = from.delete(table_name))
           @logger.verbose_info("#   #{table_name}")
 
-          unless (attrs_delta = diff_inspect(from_attrs, to_attrs)).empty?
-            @logger.verbose_info(attrs_delta)
-          end
+          unless @options[:drop_table_only]
+            unless (attrs_delta = diff_inspect(from_attrs, to_attrs)).empty?
+              @logger.verbose_info(attrs_delta)
+            end
 
-          scan_change(table_name, from_attrs, to_attrs, delta)
-        else
+            scan_change(table_name, from_attrs, to_attrs, delta)
+          end
+        elsif !@options[:drop_table_only]
           delta[:add] ||= {}
           delta[:add][table_name] = to_attrs
         end
@@ -41,7 +43,7 @@ module Ridgepole
 
       scan_relation_info(relation_info)
 
-      if !@options[:merge] && @options[:force_drop_table]
+      if !@options[:merge] && (@options[:force_drop_table] || @options[:drop_table_only])
         from.each do |table_name, from_attrs|
           next unless target?(table_name)
 
