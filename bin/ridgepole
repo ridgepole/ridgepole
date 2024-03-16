@@ -86,8 +86,7 @@ ARGV.options do |opt|
   opt.on('',   '--dry-run') { options[:dry_run] = true }
   opt.on('',   '--table-options OPTIONS') { |v| options[:table_options] = v }
   opt.on('',   '--table-hash-options OPTIONS') do |v|
-    # NOTE: Ruby2.4 doesn't support `symbolize_names: true`
-    hash = YAML.safe_load(v).deep_symbolize_keys
+    hash = YAML.safe_load(v, symbolize_names: true)
 
     case hash[:id]
     when String
@@ -265,15 +264,13 @@ begin
         else
           File.open(diff_file)
         end
-      elsif Gem::Version.new(Psych::VERSION) >= Gem::Version.new('3.1.0.pre1') # Ruby 2.6
+      else
         YAML.safe_load(
           diff_file,
           permitted_classes: [],
           permitted_symbols: [],
           aliases: true
         )
-      else
-        YAML.safe_load(diff_file, [], [], true)
       end
     end
 
