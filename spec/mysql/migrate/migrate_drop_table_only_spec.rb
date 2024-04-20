@@ -3,17 +3,20 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   context 'when drop table only' do
     let(:dsl) do
-      erbh(<<-ERB)
+      <<-ERB
+        # dropped
         create_table "clubs", force: :cascade do |t|
           t.string "name", default: "", null: false
           t.index ["name"], name: "idx_name", unique: true
         end
 
+        # changed
         create_table "departments", primary_key: "dept_no", force: :cascade do |t|
           t.string "dept_name", limit: 40, null: false
           t.index ["dept_name"], name: "dept_name", unique: true
         end
 
+        # dropped
         create_table "dept_emp", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.string  "dept_no", null: false
@@ -23,6 +26,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["emp_no"], name: "emp_no"
         end
 
+        # changed
         create_table "dept_manager", id: false, force: :cascade do |t|
           t.string  "dept_no", null: false
           t.integer "emp_no", null: false
@@ -32,6 +36,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.index ["emp_no"], name: "emp_no"
         end
 
+        # changed
         create_table "employee_clubs", force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "club_id", null: false
@@ -49,7 +54,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     end
 
     let(:migrate_dsl) do
-      erbh(<<-ERB)
+      <<-ERB
         create_table "departments", primary_key: "dept_no", force: :cascade do |t|
           t.string "dept_name", limit: 40, null: false
           t.date    "from_date", null: false
@@ -78,6 +83,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date   "hire_date", null: false
         end
 
+        # added
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
           t.integer "salary", null: false
@@ -85,12 +91,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
           t.date    "to_date", null: false
         end
 
+        # added
         add_index "salaries", ["emp_no"], name: "emp_no", using: :btree
       ERB
     end
 
     let(:expected_dsl) do
-      erbh(<<-ERB)
+      <<-ERB
         create_table "departments", primary_key: "dept_no", force: :cascade do |t|
           t.string "dept_name", limit: 40, null: false
           t.index ["dept_name"], name: "dept_name", unique: true
