@@ -2,6 +2,10 @@
 
 ## 2.0
 
+### 2.0.2 (2024/04/21)
+
+- Add `--drop-table-only` option [pull#477](https://github.com/ridgepole/ridgepole/pull/477)
+
 ### 2.0.2 (2024/02/25)
 
 - Fix bug that cannot include single quote in table comment [pull#467](https://github.com/ridgepole/ridgepole/pull/467)
