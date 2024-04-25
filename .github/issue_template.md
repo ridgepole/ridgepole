@@ -3,16 +3,20 @@ Please be sure to write the following information:
 (以下の情報を必ず書いてください)
 -->
 
+# Version
+
+<!--
+* Ridgepole
+* Ruby
+* Rails/Active Record
+* MySQL/PostgreSQL
+-->
+
 # Description
 
 <!--
 * Commands and arguments when executing Ridgepole
 * What wasn't as expected?
-* Middleware versions
-  * Ridgepole
-  * Ruby
-  * Rails/Active Record
-  * MySQL/PostgreSQL
 -->
 
 # Schemafile
