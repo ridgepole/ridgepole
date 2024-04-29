@@ -1,5 +1,3 @@
 # frozen_string_literal: true
 
-require_relative 'children/for_require_relative_spec'
-
 'This file is used by dsl_parser/context_spec.'

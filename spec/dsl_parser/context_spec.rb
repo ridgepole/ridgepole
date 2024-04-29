@@ -5,7 +5,7 @@ describe Ridgepole::DSLParser::Context do
     subject { context.require_relative(relative_path) }
 
     let!(:context) do
-      Ridgepole::DSLParser::Context.new
+      Ridgepole::DSLParser::Context.new(path: __FILE__)
     end
     let!(:relative_path) do
       '../fixtures/for_require_relative_spec.rb'
