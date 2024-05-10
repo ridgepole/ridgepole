@@ -64,7 +64,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [[:mysql80]] do
     end
 
     before { subject.diff(actual_dsl).migrate }
-    subject { client(marge: true) }
+    subject { client(merge: true) }
 
     it {
       delta = subject.diff(expected_dsl)

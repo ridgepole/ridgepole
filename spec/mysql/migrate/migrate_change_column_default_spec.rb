@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe 'Ridgepole::Client#diff -> migrate' do
-  context 'when default:0 -> (emply)' do
+  context 'when default:0 -> (empty)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
@@ -47,7 +47,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
-  context 'when default:0 -> (emply with null:false)' do
+  context 'when default:0 -> (employ with null:false)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|

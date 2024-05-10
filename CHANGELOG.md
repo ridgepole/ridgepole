@@ -45,7 +45,7 @@
 
 - Updated supported column types [pull#399](https://github.com/ridgepole/ridgepole/pull/399) [pull#400](https://github.com/ridgepole/ridgepole/pull/400)
 - Support check constraint [pull#393](https://github.com/ridgepole/ridgepole/pull/393) [pull#397](https://github.com/ridgepole/ridgepole/pull/397)
-- Drop suport Rails 5.x [pull#395](https://github.com/ridgepole/ridgepole/pull/395)
+- Drop support Rails 5.x [pull#395](https://github.com/ridgepole/ridgepole/pull/395)
 
 ## 1.1
 

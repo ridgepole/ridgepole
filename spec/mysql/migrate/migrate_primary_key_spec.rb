@@ -77,7 +77,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
-  context 'when deafult: nil' do
+  context 'when default: nil' do
     let(:allow_pk_change) { true }
 
     let(:actual_dsl) do
