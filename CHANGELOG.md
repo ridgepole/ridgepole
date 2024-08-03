@@ -14,10 +14,6 @@
 
 - Fix renamed_from bug [pull#453](https://github.com/ridgepole/ridgepole/pull/453)
 
-### 2.0.1 (2023/11/22)
-
-- Fix renamed_from bug [pull#453](https://github.com/ridgepole/ridgepole/pull/453)
-
 ### 2.0.0 (2023/11/10)
 
 - Bump up version.
