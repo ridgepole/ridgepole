@@ -92,7 +92,11 @@ module Ridgepole
       stream = StringIO.new
       conn.without_table_options(@options[:dump_without_table_options]) do
         ActiveRecord::SchemaDumper.with_default_fk_name(@options[:dump_with_default_fk_name]) do
-          ActiveRecord::SchemaDumper.dump(conn, stream)
+          if ActiveRecord.gem_version < Gem::Version.new('7.2.0')
+            ActiveRecord::SchemaDumper.dump(conn, stream)
+          else
+            ActiveRecord::SchemaDumper.dump(conn.pool, stream)
+          end
         end
       end
       stream
