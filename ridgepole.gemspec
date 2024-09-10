@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'activerecord', '>= 6.1', '< 8.0'
   spec.add_dependency 'diffy'
+  spec.add_dependency 'logger'
 
   spec.add_development_dependency 'appraisal', '>= 2.2.0'
   spec.add_development_dependency 'bigdecimal'
