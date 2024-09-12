@@ -1,6 +1,6 @@
 # Changelog
 
-## 2.0
+## 2.1
 
 ### 2.1.1 (2024/09/12)
 
@@ -9,6 +9,8 @@
 ### 2.1.0 (2024/08/11)
 
 - Support Rails 7.2 [pull#490](https://github.com/ridgepole/ridgepole/pull/490)
+
+## 2.0
 
 ### 2.0.3 (2024/04/21)
 
