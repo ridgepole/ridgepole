@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.0
+
+### 3.0.0 (2024/11/10)
+
+- Support Rails 8.0 [pull#504](https://github.com/ridgepole/ridgepole/pull/504)
+
 ## 2.1
 
 ### 2.1.1 (2024/09/12)
