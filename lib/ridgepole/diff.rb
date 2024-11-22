@@ -3,6 +3,7 @@
 module Ridgepole
   class Diff
     PRIMARY_KEY_OPTIONS = %i[id limit default null precision scale collation unsigned].freeze
+    REGEX_COLUMN_IDENTIFIER_QUOTATION_CHARS = /["`]/.freeze
 
     def initialize(options = {})
       @options = options
@@ -486,7 +487,7 @@ module Ridgepole
         from_attrs = from.delete(name)
 
         if from_attrs
-          if from_attrs != to_attrs
+          if normalize_check_constraint(from_attrs) != normalize_check_constraint(to_attrs)
             check_constraints_delta[:add] ||= {}
             check_constraints_delta[:add][name] = to_attrs
 
@@ -507,6 +508,12 @@ module Ridgepole
       end
 
       table_delta[:check_constraints] = check_constraints_delta unless check_constraints_delta.empty?
+    end
+
+    def normalize_check_constraint(attr)
+      attr = attr.dup
+      attr[:expression] = attr[:expression].gsub(REGEX_COLUMN_IDENTIFIER_QUOTATION_CHARS, '')
+      attr
     end
 
     def scan_exclusion_constraints_change(from, to, table_delta)
