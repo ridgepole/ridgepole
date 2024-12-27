@@ -25,8 +25,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       it {
         expect(Ridgepole::Logger.instance).to receive(:warn).with(erbh(<<-ERB))
 [WARNING] Primary key definition of `employees` differ but `allow_pk_change` option is false
-  from: {:id=>{:type=>:integer, :unsigned=>true}}
-    to: {:id=>:bigint, :unsigned=>true}
+  from: #{{ id: { type: :integer, unsigned: true } }}
+    to: #{{ id: :bigint, unsigned: true }}
         ERB
 
         delta = subject.diff(expected_dsl)

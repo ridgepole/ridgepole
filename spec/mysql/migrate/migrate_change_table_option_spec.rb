@@ -33,8 +33,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       allow(Ridgepole::Logger.instance).to receive(:verbose_info)
       expect(Ridgepole::Logger.instance).to receive(:verbose_info).with(<<-MSG)
 # Table option changes are ignored on `employees`.
-  from: {:primary_key=>"emp_no"}
-    to: {:primary_key=>"emp_no2"}
+  from: #{{ primary_key: 'emp_no' }}
+    to: #{{ primary_key: 'emp_no2' }}
       MSG
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_falsey

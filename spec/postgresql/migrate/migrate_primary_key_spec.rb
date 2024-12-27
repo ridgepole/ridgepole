@@ -28,8 +28,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       it {
         expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG)
 [WARNING] Primary key definition of `employees` differ but `allow_pk_change` option is false
-  from: {:id=>:serial}
-    to: {:id=>:bigint}
+  from: #{{ id: :serial }}
+    to: #{{ id: :bigint }}
         MSG
 
         delta = subject.diff(expected_dsl)

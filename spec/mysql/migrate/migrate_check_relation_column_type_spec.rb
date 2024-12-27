@@ -47,8 +47,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG)
 [WARNING] Relation column type is different.
-              employees.id: {:type=>:bigint}
-  dept_manager.employee_id: {:type=>:integer}
+              employees.id: #{{ type: :bigint }}
+  dept_manager.employee_id: #{{ type: :integer }}
       MSG
 
       delta = subject.diff(expected_dsl)
@@ -105,8 +105,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     it {
       expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG)
 [WARNING] Relation column type is different.
-              employees.id: {:type=>:bigint, :unsigned=>true}
-  dept_manager.employee_id: {:type=>:bigint}
+              employees.id: #{{ type: :bigint, unsigned: true }}
+  dept_manager.employee_id: #{{ type: :bigint }}
       MSG
 
       delta = subject.diff(expected_dsl)
