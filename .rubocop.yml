@@ -58,3 +58,5 @@ Style/OptionalBooleanParameter:
   Enabled: false
 Gemspec/DevelopmentDependencies:
   Enabled: false
+Lint/LiteralInInterpolation:
+  Enabled: false

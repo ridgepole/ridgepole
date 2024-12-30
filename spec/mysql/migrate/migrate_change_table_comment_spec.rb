@@ -40,13 +40,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
       allow(Ridgepole::Logger.instance).to receive(:verbose_info)
       expect(Ridgepole::Logger.instance).to receive(:verbose_info).with(<<-MSG)
 # Table option changes are ignored on `employees`.
-  from: {:comment=>"old comment"}
-    to: {:comment=>"new comment"}
+  from: #{{ comment: 'old comment' }}
+    to: #{{ comment: 'new comment' }}
       MSG
       expect(Ridgepole::Logger.instance).to receive(:verbose_info).once.with(<<-MSG)
 # Table option changes are ignored on `tenants`.
-  from: {:comment=>"old comment '"}
-    to: {:comment=>"new comment '"}
+  from: #{{ comment: "old comment '" }}
+    to: #{{ comment: "new comment '" }}
       MSG
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_falsey

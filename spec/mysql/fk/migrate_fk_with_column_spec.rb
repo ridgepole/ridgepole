@@ -44,8 +44,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
       expect(delta.script).to match_fuzzy <<-RUBY
-        add_foreign_key("direct_messages", "users", **{:column=>"reciever_id"})
-        add_foreign_key("direct_messages", "users", **{:column=>"sender_id"})
+        add_foreign_key("direct_messages", "users", **#{{ column: 'reciever_id' }})
+        add_foreign_key("direct_messages", "users", **#{{ column: 'sender_id' }})
       RUBY
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl

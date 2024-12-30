@@ -142,15 +142,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_ruby actual_dsl
       expect(delta.script).to match_fuzzy erbh(<<-ERB)
         change_table("clubs", bulk: true) do |t|
-          t.index(["name"], **{:name=>"idx_name", :unique=>true})
+          t.index(["name"], **#{{ name: 'idx_name', unique: true }})
         end
 
         change_table("employee_clubs", bulk: true) do |t|
-          t.index(["emp_no", "club_id"], **{:name=>"idx_emp_no_club_id"})
+          t.index(["emp_no", "club_id"], **#{{ name: 'idx_emp_no_club_id' }})
         end
 
         change_table("titles", bulk: true) do |t|
-          t.index(["emp_no"], **{:name=>"emp_no"})
+          t.index(["emp_no"], **#{{ name: 'emp_no' }})
         end
       ERB
       delta.migrate

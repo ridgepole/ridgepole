@@ -139,11 +139,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_ruby actual_dsl
       expect(delta.script).to match_fuzzy <<-RUBY
         change_table("employee_clubs", bulk: true) do |t|
-          t.change("club_id", :integer, **{:null=>true, :default=>nil})
+          t.change("club_id", :integer, **#{{ null: true, default: nil }})
         end
 
         change_table("employees", bulk: true) do |t|
-          t.change("last_name", :string, **{:limit=>20, :default=>"XXX"})
+          t.change("last_name", :string, **#{{ limit: 20, default: 'XXX' }})
         end
       RUBY
       delta.migrate

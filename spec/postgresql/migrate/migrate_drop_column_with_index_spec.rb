@@ -151,7 +151,7 @@ end
 
 change_table("employee_clubs", bulk: true) do |t|
   t.remove("club_id")
-  t.index(["emp_no"], **{:name=>"idx_employee_clubs_emp_no"})
+  t.index(["emp_no"], **#{{ name: 'idx_employee_clubs_emp_no' }})
 end
 
 change_table("employees", bulk: true) do |t|

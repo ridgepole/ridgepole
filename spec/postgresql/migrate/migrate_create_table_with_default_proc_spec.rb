@@ -85,8 +85,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       it {
         expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG)
 [WARNING] Primary key definition of `users` differ but `allow_pk_change` option is false
-  from: {:id=>:uuid, :default=>"uuid_generate_v1()"}
-    to: {:id=>:uuid, :default=>"uuid_generate_v4()"}
+  from: #{{ id: :uuid, default: 'uuid_generate_v1()' }}
+    to: #{{ id: :uuid, default: 'uuid_generate_v4()' }}
         MSG
 
         delta = subject.diff(expected_dsl)
