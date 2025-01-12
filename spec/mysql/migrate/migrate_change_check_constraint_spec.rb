@@ -74,4 +74,40 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [[:mysql80]] do
       expect(subject.dump).to match_ruby expected_dsl
     }
   end
+
+  context 'when do not change check constraint (but not quoted)' do
+    let(:actual_dsl) do
+      erbh(<<-ERB)
+        create_table "salaries", id: false, force: :cascade do |t|
+          t.integer "emp_no", null: false
+          t.integer "salary", null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
+          t.check_constraint "salary > 100", name: "salary_check"
+        end
+      ERB
+    end
+
+    let(:expected_dsl) do
+      erbh(<<-ERB)
+        create_table "salaries", id: false, force: :cascade do |t|
+          t.integer "emp_no", null: false
+          t.integer "salary", null: false
+          t.date    "from_date", null: false
+          t.date    "to_date", null: false
+          t.check_constraint "`salary` > 100", name: "salary_check"
+        end
+      ERB
+    end
+
+    before { subject.diff(expected_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(actual_dsl)
+      expect(delta.differ?).to be_falsey
+      delta.migrate
+      expect(subject.dump).to match_ruby expected_dsl
+    }
+  end
 end
