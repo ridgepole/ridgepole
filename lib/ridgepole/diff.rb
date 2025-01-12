@@ -3,7 +3,7 @@
 module Ridgepole
   class Diff
     PRIMARY_KEY_OPTIONS = %i[id limit default null precision scale collation unsigned].freeze
-    REGEX_COLUMN_IDENTIFIER_QUOTATION_CHARS = /["`]/.freeze
+    REGEX_COLUMN_IDENTIFIER_QUOTATION_CHARS = '"`'
 
     def initialize(options = {})
       @options = options
@@ -512,7 +512,7 @@ module Ridgepole
 
     def normalize_check_constraint(attr)
       attr = attr.dup
-      attr[:expression] = attr[:expression].gsub(REGEX_COLUMN_IDENTIFIER_QUOTATION_CHARS, '')
+      attr[:expression] = attr[:expression].delete(REGEX_COLUMN_IDENTIFIER_QUOTATION_CHARS)
       attr
     end
 
