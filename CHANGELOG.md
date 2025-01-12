@@ -2,6 +2,11 @@
 
 ## 3.0
 
+### 3.0.1 (2025/01/12)
+
+- Normalize `check_constraint` [pull#512](https://github.com/ridgepole/ridgepole/pull/512)
+- Support composite foreign key for non-primary key [pull#518](https://github.com/ridgepole/ridgepole/pull/518)
+
 ### 3.0.0 (2024/11/10)
 
 - Support Rails 8.0 [pull#504](https://github.com/ridgepole/ridgepole/pull/504)
