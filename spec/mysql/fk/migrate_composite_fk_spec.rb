@@ -40,7 +40,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.1' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
 
-      fk_script = if Gem::Version.new(RUBY_VERSION) < '3.4'
+      fk_script = if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('3.4')
                     'add_foreign_key("child", "parent", **{:column=>["parent_id", "target_date"], :primary_key=>["parent_id", "target_date"], :name=>"fk_parent_child"})'
                   else
                     'add_foreign_key("child", "parent", **{column: ["parent_id", "target_date"], primary_key: ["parent_id", "target_date"], name: "fk_parent_child"})'
@@ -107,7 +107,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.1' do
       delta = client(bulk_change: true).diff(expected_dsl_using_t_foreign_key)
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
-      fk_script = if Gem::Version.new(RUBY_VERSION) < '3.4'
+      fk_script = if Gem::Version.new(RUBY_VERSION) < Gem::Version.new('3.4')
                     'add_foreign_key("child", "parent", **{:name=>"fk_parent_child", :column=>["parent_id", "target_date"], :primary_key=>["parent_id", "target_date"]})'
                   else
                     'add_foreign_key("child", "parent", **{name: "fk_parent_child", column: ["parent_id", "target_date"], primary_key: ["parent_id", "target_date"]})'
