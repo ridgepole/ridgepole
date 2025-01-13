@@ -414,7 +414,7 @@ module Ridgepole
           end
         end
 
-        if opts[:size] && (attrs[:type] == :text || attrs[:type] == :blob || attrs[:type] == :binary)
+        if opts[:size] && %i[text blob binary].include?(attrs[:type])
           case opts.delete(:size)
           when :tiny
             attrs[:type] = :blob if attrs[:type] == :binary
