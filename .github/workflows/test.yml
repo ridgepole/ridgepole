@@ -70,8 +70,10 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler-cache: false
+          bundler-cache: true
       - name: Setup dependencies
+        run: bundle install
+      - name: Setup services
         run: |
           for i in {1..60}; do docker compose up -d && break; sleep 1; done
           # Wait until database servers start
