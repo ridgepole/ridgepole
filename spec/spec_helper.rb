@@ -2,6 +2,9 @@
 
 $LOAD_PATH << File.expand_path(__dir__)
 
+# NOTE: Fix for "uninitialized constant ActiveSupport::LoggerThreadSafeLevel::Logger"
+require 'logger'
+
 require 'spec_const'
 require 'spec_condition'
 require 'cli_helper'
