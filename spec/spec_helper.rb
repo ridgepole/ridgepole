@@ -2,6 +2,7 @@
 
 $LOAD_PATH << File.expand_path(__dir__)
 
+require 'logger'
 require 'spec_const'
 require 'spec_condition'
 require 'cli_helper'
