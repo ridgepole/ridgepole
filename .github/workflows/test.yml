@@ -109,5 +109,5 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh api /repos/ridgepole/ridgepole/actions/runs/${{ github.run_id }}/jobs \
+          gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs \
           | jq -e '.jobs | map(select(.name | test("^build")).conclusion) | any(. == "failure") | not'
