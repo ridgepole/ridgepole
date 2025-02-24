@@ -271,7 +271,7 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
 end
       RUBY
 
-      if !(@options[:create_table_with_index]) && !indices.empty?
+      if !@options[:create_table_with_index] && !indices.empty?
         append_change_table(table_name, buf) do
           indices.each do |index_name, index_attrs|
             append_add_index(table_name, index_name, index_attrs, buf)

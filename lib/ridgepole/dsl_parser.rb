@@ -23,11 +23,11 @@ module Ridgepole
     end
 
     def check_orphan_index(table_name, attrs)
-      raise "Table `#{table_name}` to create the index is not defined: #{attrs[:indices].keys.join(',')}" if attrs[:indices] && !(attrs[:definition])
+      raise "Table `#{table_name}` to create the index is not defined: #{attrs[:indices].keys.join(',')}" if attrs[:indices] && !attrs[:definition]
     end
 
     def check_orphan_foreign_key(table_name, attrs)
-      raise "Table `#{table_name}` to create the foreign key is not defined: #{attrs[:foreign_keys].keys.join(',')}" if attrs[:foreign_keys] && !(attrs[:definition])
+      raise "Table `#{table_name}` to create the foreign key is not defined: #{attrs[:foreign_keys].keys.join(',')}" if attrs[:foreign_keys] && !attrs[:definition]
     end
 
     def check_foreign_key_without_index(table_name, attrs)
