@@ -85,7 +85,7 @@ module Ridgepole
     end
 
     def target?(table_name)
-      !(@options[:tables]) || @options[:tables].include?(table_name)
+      !@options[:tables] || @options[:tables].include?(table_name)
     end
 
     def dump_from(conn)

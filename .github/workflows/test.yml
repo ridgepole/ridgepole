@@ -19,7 +19,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -96,7 +96,8 @@ jobs:
           flag-name: run-${{ matrix.ruby }}-${{ matrix.env }}-${{ matrix.gemfile }}
           parallel: true
   finish:
-    needs: build
+    needs: test
+    if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Coveralls Finished
@@ -104,3 +105,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel-finished: true
+      - name: Check test conclusion
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs \
+          | jq -e '.jobs | map(select(.name | test("^test ")).conclusion) | any(. == "failure") | not'
