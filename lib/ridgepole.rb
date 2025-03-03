@@ -2,7 +2,7 @@
 
 require 'logger'
 require 'open3'
-require 'pp' # rubocop:disable Lint/RedundantRequireStatement
+require 'pp'
 require 'shellwords'
 require 'singleton'
 require 'stringio'
