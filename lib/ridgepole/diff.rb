@@ -32,7 +32,7 @@ module Ridgepole
           unless @options[:drop_table_only]
             unless hash_deep_equal?(from_attrs, to_attrs)
               attrs_delta = diff_inspect(from_attrs, to_attrs)
-              @logger.verbose_info(attrs_delta)
+              @logger.verbose_info(attrs_delta) unless attrs_delta.empty?
             end
 
             scan_change(table_name, from_attrs, to_attrs, delta)
