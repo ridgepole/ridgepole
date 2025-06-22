@@ -13,6 +13,7 @@ Gem::Specification.new do |spec|
   spec.description   = 'Ridgepole is a tool to manage DB schema. It defines DB schema using Rails DSL, and updates DB schema according to DSL.'
   spec.homepage      = 'https://github.com/ridgepole/ridgepole'
   spec.license       = 'MIT'
+  spec.platform      = Gem::Platform::RUBY
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     `git ls-files -z`.split("\x0").reject do |f|
