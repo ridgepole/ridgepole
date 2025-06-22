@@ -2,6 +2,10 @@
 
 ## 3.0
 
+### 3.0.2 (2025/06/22)
+
+- Faster table definition comparisons [pull#549](https://github.com/ridgepole/ridgepole/pull/549)
+
 ### 3.0.1 (2025/01/12)
 
 - Normalize `check_constraint` [pull#512](https://github.com/ridgepole/ridgepole/pull/512)
