@@ -30,7 +30,8 @@ module Ridgepole
           @logger.verbose_info("#   #{table_name}")
 
           unless @options[:drop_table_only]
-            unless (attrs_delta = diff_inspect(from_attrs, to_attrs)).empty?
+            unless hash_deep_equal?(from_attrs, to_attrs)
+              attrs_delta = diff_inspect(from_attrs, to_attrs)
               @logger.verbose_info(attrs_delta)
             end
 
@@ -731,6 +732,17 @@ module Ridgepole
       @options[:tables].each do |table_name|
         @logger.warn "[WARNING] '#{table_name}' definition is not found" unless definition.key?(table_name)
       end
+    end
+
+    def hash_deep_equal?(hash1, hash2)
+      return false unless hash1.is_a?(Hash) && hash2.is_a?(Hash)
+      return false if hash1.keys.to_set != hash2.keys.to_set
+
+      hash1.each do |k, v|
+        return false unless hash2.key?(k) && v == hash2[k]
+      end
+
+      true
     end
   end
 end
