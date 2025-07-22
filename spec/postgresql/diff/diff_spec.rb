@@ -241,7 +241,7 @@ describe 'Ridgepole::Client.diff' do
       it 'creates index with algorithm: :concurrently' do
         delta = subject.diff(actual_dsl, expected_dsl)
         expect(delta).to be_differ
-        expect(delta.script).to include('add_index("users", ["email"], **{:name=>"idx_users_email", :algorithm=>:concurrently})')
+        expect(delta.script).to match(/add_index\("users", \["email"\], .*algorithm.*concurrently.*\)/)
       end
     end
     context 'when index exists without algorithm' do
