@@ -353,7 +353,11 @@ module Ridgepole
           normalize_index_options!(from_attrs[:options])
           normalize_index_options!(to_attrs[:options])
 
-          if from_attrs != to_attrs
+          # Create copies for comparison, excluding algorithm option
+          to_attrs_for_compare = to_attrs.deep_dup
+          to_attrs_for_compare[:options].delete(:algorithm) if to_attrs_for_compare[:options]
+
+          if from_attrs != to_attrs_for_compare
             indices_delta[:add] ||= {}
             indices_delta[:add][index_name] = to_attrs
 
