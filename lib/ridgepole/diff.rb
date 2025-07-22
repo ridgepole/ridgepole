@@ -355,7 +355,7 @@ module Ridgepole
 
           # Create copies for comparison, excluding algorithm option
           to_attrs_for_compare = to_attrs.deep_dup
-          to_attrs_for_compare[:options].delete(:algorithm) if to_attrs_for_compare[:options]
+          to_attrs_for_compare[:options]&.delete(:algorithm)
 
           if from_attrs != to_attrs_for_compare
             indices_delta[:add] ||= {}
