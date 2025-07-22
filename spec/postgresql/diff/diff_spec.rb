@@ -213,4 +213,65 @@ describe 'Ridgepole::Client.diff' do
       end
     end
   end
+
+  context 'when add index with algorithm: :concurrently' do
+    subject { Ridgepole::Client }
+
+    context 'when index does not exist' do
+      let(:actual_dsl) do
+        <<-RUBY
+          create_table "users", force: :cascade do |t|
+            t.string "name", null: false
+            t.string "email", null: false
+          end
+        RUBY
+      end
+
+      let(:expected_dsl) do
+        <<-RUBY
+          create_table "users", force: :cascade do |t|
+            t.string "name", null: false
+            t.string "email", null: false
+          end
+
+          add_index "users", ["email"], name: "idx_users_email", algorithm: :concurrently
+        RUBY
+      end
+
+      it 'creates index with algorithm: :concurrently' do
+        delta = subject.diff(actual_dsl, expected_dsl)
+        expect(delta).to be_differ
+        expect(delta.script).to include('add_index("users", ["email"], **{:name=>"idx_users_email", :algorithm=>:concurrently})')
+      end
+    end
+    context 'when index exists without algorithm' do
+      let(:actual_dsl) do
+        <<-RUBY
+          create_table "users", force: :cascade do |t|
+            t.string "name", null: false
+            t.string "email", null: false
+          end
+
+          add_index "users", ["email"], name: "idx_users_email"
+        RUBY
+      end
+
+      let(:expected_dsl) do
+        <<-RUBY
+          create_table "users", force: :cascade do |t|
+            t.string "name", null: false
+            t.string "email", null: false
+          end
+
+          add_index "users", ["email"], name: "idx_users_email", algorithm: :concurrently
+        RUBY
+      end
+
+      it 'recreates index with algorithm: :concurrently' do
+        delta = subject.diff(actual_dsl, expected_dsl)
+        expect(delta).to_not be_differ
+        expect(delta.script).to be_empty
+      end
+    end
+  end
 end
