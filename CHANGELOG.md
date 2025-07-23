@@ -2,6 +2,10 @@
 
 ## 3.0
 
+### 3.0.3 (2025/07/23)
+
+- Fix for index `algorithm` option [pull#555](https://github.com/ridgepole/ridgepole/pull/555)
+
 ### 3.0.2 (2025/06/22)
 
 - Faster table definition comparisons [pull#549](https://github.com/ridgepole/ridgepole/pull/549)
