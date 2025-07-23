@@ -353,11 +353,7 @@ module Ridgepole
           normalize_index_options!(from_attrs[:options])
           normalize_index_options!(to_attrs[:options])
 
-          # Create copies for comparison, excluding algorithm option
-          to_attrs_for_compare = to_attrs.deep_dup
-          to_attrs_for_compare[:options]&.delete(:algorithm)
-
-          if from_attrs != to_attrs_for_compare
+          if from_attrs != to_attrs
             indices_delta[:add] ||= {}
             indices_delta[:add][index_name] = to_attrs
 
@@ -437,6 +433,9 @@ module Ridgepole
       # XXX: MySQL only?
       opts[:using] = :btree unless opts.key?(:using)
       opts[:unique] = false unless opts.key?(:unique)
+
+      # 'algorithm: concurrently' is required for index creation but not stored in PostgreSQL DB metadata, so remove 'algorithm' to prevent diff
+      opts.delete(:algorithm)
     end
 
     def columns_all_include?(expected_columns, actual_columns, table_options)
