@@ -16,8 +16,8 @@ Gem::Specification.new do |spec|
   spec.platform      = Gem::Platform::RUBY
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    `git ls-files -z`.split("\x0").reject do |f|
-      f.match(%r{\A(?:(?:test|spec|features)/|\.(?:git|travis|circleci)|appveyor)})
+    `git ls-files -z`.split("\x0").select do |f|
+      f.match(%r{\A(lib|bin)/}) || %w[README.md LICENSE.txt CHANGELOG.md].include?(f)
     end
   end
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
