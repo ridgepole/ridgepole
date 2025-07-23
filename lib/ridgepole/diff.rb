@@ -433,6 +433,9 @@ module Ridgepole
       # XXX: MySQL only?
       opts[:using] = :btree unless opts.key?(:using)
       opts[:unique] = false unless opts.key?(:unique)
+
+      # 'algorithm: concurrently' is required for index creation but not stored in PostgreSQL DB metadata, so remove 'algorithm' to prevent diff
+      opts.delete(:algorithm)
     end
 
     def columns_all_include?(expected_columns, actual_columns, table_options)
