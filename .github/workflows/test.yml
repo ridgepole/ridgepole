@@ -75,7 +75,7 @@ jobs:
           bundler-cache: true
       - name: Setup services
         run: |
-          for i in {1..60}; do docker compose up -d && break; sleep 1; done
+          for i in {1..60}; do docker compose up -d --quiet-pull && break; sleep 1; done
           # Wait until database servers start
           function mysql57_ping { mysqladmin -u root -h 127.0.0.1 -P 13316 ping; }
           function mysql80_ping { mysqladmin -u root -h 127.0.0.1 -P 13318 ping; }
