@@ -95,6 +95,14 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           flag-name: run-${{ matrix.ruby }}-${{ matrix.env }}-${{ matrix.gemfile }}
           parallel: true
+      - name: Build and install gem
+        run: |
+          gem install securerandom -v '~> 0.3.2'
+          gem install zeitwerk -v '~> 2.6.18'
+          gem install activerecord -v "~> $(awk -F '[ ",]+' '/activerecord/{print $4}' ${{ matrix.gemfile }})"
+          gem build ridgepole.gemspec -o ridgepole.gem
+          gem install ridgepole.gem
+          ridgepole -v
   finish:
     needs: test
     if: always()
