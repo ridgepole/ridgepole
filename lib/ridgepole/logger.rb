@@ -3,6 +3,7 @@
 module Ridgepole
   class Logger < ::Logger
     include Singleton
+
     cattr_accessor :verbose
 
     def initialize
