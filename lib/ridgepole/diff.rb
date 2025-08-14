@@ -250,14 +250,14 @@ module Ridgepole
         next if ignore_column
 
         if from_attrs
-          # Check if this is a comment-only change
-          if comment_only_change?(from_attrs, to_attrs)
-            column_comments[column_name] = to_attrs[:options][:comment]
-          else
-            to_attrs = build_attrs_if_changed(to_attrs, from_attrs)
-            if to_attrs
+          changed_attrs = build_attrs_if_changed(to_attrs, from_attrs)
+          if changed_attrs
+            # Check if this is a comment-only change
+            if comment_only_change?(to_attrs, from_attrs)
+              column_comments[column_name] = to_attrs[:options][:comment]
+            else
               definition_delta[:change] ||= {}
-              definition_delta[:change][column_name] = to_attrs
+              definition_delta[:change][column_name] = changed_attrs
             end
           end
         else
@@ -633,12 +633,17 @@ module Ridgepole
       attrs1 == attrs2
     end
 
-    def comment_only_change?(from_attrs, to_attrs)
+    def comment_only_change?(to_attrs, from_attrs)
       return false if @options[:skip_column_comment_change]
 
-      # Check if attrs are same except for comment
-      compare_column_attrs(from_attrs, to_attrs, ignore_comment: true) &&
-        from_attrs.dig(:options, :comment) != to_attrs.dig(:options, :comment)
+      attrs1 = from_attrs.merge(options: from_attrs.fetch(:options, {}).dup)
+      attrs2 = to_attrs.merge(options: to_attrs.fetch(:options, {}).dup)
+      normalize_default_proc_options!(attrs1[:options], attrs2[:options])
+
+      comment1 = attrs1.fetch(:options).delete(:comment)
+      comment2 = attrs2.fetch(:options).delete(:comment)
+
+      attrs1 == attrs2 && comment1 != comment2
     end
 
     def normalize_default_proc_options!(opts1, opts2)
