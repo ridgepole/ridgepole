@@ -252,7 +252,6 @@ module Ridgepole
         if from_attrs
           changed_attrs = build_attrs_if_changed(to_attrs, from_attrs)
           if changed_attrs
-            # Check if this is a comment-only change
             if comment_only_change?(from_attrs, to_attrs)
               column_comments[column_name] = to_attrs[:options][:comment]
             else

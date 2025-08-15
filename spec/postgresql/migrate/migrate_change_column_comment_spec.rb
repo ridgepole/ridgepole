@@ -6,6 +6,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       create_table "users", force: :cascade do |t|
         t.string "name", null: false, comment: "User name"
         t.string "email", null: false, comment: "Email address"
+        t.integer "age", null: false, comment: "age"
+        t.string "address", null: false, comment: "address"
       end
     ERB
   end
@@ -14,14 +16,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
     erbh(<<-ERB)
       create_table "users", force: :cascade do |t|
         t.string "name", null: false, comment: "Full name"
-        t.string "email", null: false, comment: "Primary email"
+        t.text "email", null: false, comment: "Primary email"
+        t.integer "age", comment: "age"
+        t.string "address", null: false, comment: "address"
       end
     ERB
   end
 
   before { subject.diff(actual_dsl).migrate }
 
-  context 'when change column comment only' do
+  context 'when change column comment' do
     subject { client }
 
     it {
@@ -29,13 +33,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(delta.differ?).to be_truthy
       expect(subject.dump).to match_ruby actual_dsl
 
-      script = delta.script
-      expect(script).to include('change_column_comment("users", "name", "Full name")')
-      expect(script).to include('change_column_comment("users", "email", "Primary email")')
-      expect(script).not_to include('change_column("users", "name"')
-      expect(script).not_to include('change_column("users", "email"')
+      expect(delta.script).to match_fuzzy erbh(<<-ERB)
+        change_column("users", "email", :text, **#{{ null: false, comment: 'Primary email', default: nil }})
+        change_column("users", "age", :integer, **#{{ comment: 'age', null: true, default: nil }})
+        change_column_comment("users", "name", "Full name")
+      ERB
 
       delta.migrate
+      puts subject.dump
       expect(subject.dump).to match_ruby expected_dsl
     }
   end
@@ -47,38 +52,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta = subject.diff(expected_dsl)
       expect(delta.differ?).to be_truthy
 
-      script = delta.script
-      expect(script).to include('change_column_comment("users", "name", "Full name")')
-      expect(script).to include('change_column_comment("users", "email", "Primary email")')
-      expect(script).not_to include('t.change("name"')
-      expect(script).not_to include('t.change("email"')
-
-      delta.migrate
-      expect(subject.dump).to match_ruby expected_dsl
-    }
-  end
-
-  context 'when mixed changes' do
-    let(:expected_dsl) do
-      erbh(<<-ERB)
-        create_table "users", force: :cascade do |t|
-          t.string "name", null: false, comment: "Full name"
-          t.text "email", null: false, comment: "Primary email"
+      expect(delta.script).to match_fuzzy erbh(<<-ERB)
+        change_table("users", bulk: true) do |t|
+          t.change("email", :text, **#{{ null: false, comment: 'Primary email', default: nil }})
+          t.change("age", :integer, **#{{ comment: 'age', null: true, default: nil }})
         end
+        change_column_comment("users", "name", "Full name")
       ERB
-    end
-
-    subject { client }
-
-    it {
-      delta = subject.diff(expected_dsl)
-      expect(delta.differ?).to be_truthy
-      expect(subject.dump).to match_ruby actual_dsl
-
-      script = delta.script
-      expect(script).to include('change_column_comment("users", "name", "Full name")')
-      expect(script).to include('change_column("users", "email", :text')
-      expect(script).not_to include('change_column_comment("users", "email"')
 
       delta.migrate
       expect(subject.dump).to match_ruby expected_dsl
@@ -87,6 +67,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   context 'when skip_column_comment_change option is true' do
     subject { client(skip_column_comment_change: true) }
+
+    let(:expected_dsl) do
+      erbh(<<-ERB)
+        create_table "users", force: :cascade do |t|
+          t.string "name", null: false, comment: "Full name"
+          t.string "email", null: false, comment: "Primary address"
+          t.integer "age", null: false, comment: "age"
+          t.string "address", null: false, comment: "address"
+        end
+      ERB
+    end
 
     it {
       delta = subject.diff(expected_dsl)
