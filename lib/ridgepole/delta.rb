@@ -344,6 +344,7 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
       table_charset = attrs[:table_charset]
       table_collation = attrs[:table_collation]
       table_comment = attrs[:table_comment]
+      column_comments = attrs[:column_comments] || {}
 
       if !definition.empty? || !indices.empty? || !primary_key_definition.empty?
         append_change_table(table_name, buf) do
@@ -365,10 +366,19 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
       end
 
       append_change_table_comment(table_name, table_comment, buf) if table_comment
+      append_change_column_comments(table_name, column_comments, buf) unless column_comments.empty?
 
       buf.puts
       pre_buf_for_fk.puts
       post_buf_for_fk.puts
+    end
+
+    def append_change_column_comments(table_name, column_comments, buf)
+      column_comments.each do |column_name, comment|
+        buf.puts(<<-RUBY)
+change_column_comment(#{table_name.inspect}, #{column_name.inspect}, #{comment.inspect})
+        RUBY
+      end
     end
 
     def append_change_table(table_name, buf)
