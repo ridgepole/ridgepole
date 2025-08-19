@@ -40,7 +40,6 @@ describe 'Ridgepole::Client#diff -> migrate' do
       ERB
 
       delta.migrate
-      puts subject.dump
       expect(subject.dump).to match_ruby expected_dsl
     }
   end
