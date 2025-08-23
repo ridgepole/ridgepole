@@ -31,8 +31,9 @@ module Ridgepole
     end
 
     def check_foreign_key_without_index(table_name, attrs)
+      return if Ridgepole::ConnectionAdapters.postgresql?
       return unless attrs[:foreign_keys]
-      return unless attrs[:options][:options]&.include?('ENGINE=InnoDB')
+      return unless innodb_table?(attrs)
 
       attrs[:foreign_keys].each_value do |foreign_key_attrs|
         fk_index = foreign_key_attrs[:options][:column] || "#{foreign_key_attrs[:to_table].singularize}_id"
@@ -52,6 +53,11 @@ module Ridgepole
         # NOTE: For composite primary keys, the first column of the primary key is used as the foreign key index
         Array(index_column_name).first == fk_index
       end
+    end
+
+    def innodb_table?(attrs)
+      engine = attrs[:options][:options]&.match(/ENGINE=([^ ]+)/) && Regexp.last_match(1)
+      engine.nil? || engine == 'InnoDB'
     end
   end
 end
