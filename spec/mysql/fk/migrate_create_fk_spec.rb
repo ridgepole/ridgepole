@@ -225,7 +225,33 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
-  context 'when create fk without any indexes for its column' do
+  context 'when create fk without any indexes for its column without "ENGINE" option' do
+    let(:dsl) do
+      erbh(<<-ERB)
+        create_table "parent", id: :integer, force: :cascade, options: "DEFAULT CHARSET=utf8" do |t|
+        end
+
+        create_table "child", force: :cascade, options: "DEFAULT CHARSET=utf8" do |t|
+          t.integer "parent_id"
+        end
+        add_foreign_key "child", "parent", name: "child_ibfk_1"
+      ERB
+    end
+
+    subject { client(dump_without_table_options: false) }
+
+    it {
+      expect do
+        subject.diff(dsl).migrate
+      end.to raise_error(
+        'The column `parent_id` of the table `child` has a foreign key but no index. ' \
+        'Although InnoDB creates an index automatically, ' \
+        'please add one explicitly in order for ridgepole to manage it.'
+      )
+    }
+  end
+
+  context 'when create fk without any indexes for its column with "ENGINE=InnoDB" option' do
     let(:dsl) do
       erbh(<<-ERB)
         create_table "parent", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -248,6 +274,28 @@ describe 'Ridgepole::Client#diff -> migrate' do
         'Although InnoDB creates an index automatically, ' \
         'please add one explicitly in order for ridgepole to manage it.'
       )
+    }
+  end
+
+  context 'when create fk without any indexes for its column with "ENGINE=MyISAM" option' do
+    let(:dsl) do
+      erbh(<<-ERB)
+        create_table "parent", id: :integer, force: :cascade, options: "ENGINE=MyISAM DEFAULT CHARSET=utf8" do |t|
+        end
+
+        create_table "child", force: :cascade, options: "ENGINE=MyISAM DEFAULT CHARSET=utf8" do |t|
+          t.integer "parent_id"
+        end
+        add_foreign_key "child", "parent", name: "child_ibfk_1"
+      ERB
+    end
+
+    subject { client(dump_without_table_options: false) }
+
+    it {
+      expect do
+        subject.diff(dsl).migrate
+      end.to_not raise_error
     }
   end
 
