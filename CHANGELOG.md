@@ -2,6 +2,11 @@
 
 ## 3.0
 
+### 3.0.4 (2025/08/31)
+
+- Fix checking foreign key without index [pull#571](https://github.com/ridgepole/ridgepole/pull/571)
+- Use `change_column_comment` for comment-only column changes [pull#567](https://github.com/ridgepole/ridgepole/pull/567)
+
 ### 3.0.3 (2025/07/23)
 
 - Fix for index `algorithm` option [pull#555](https://github.com/ridgepole/ridgepole/pull/555)
