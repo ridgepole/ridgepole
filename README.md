@@ -329,6 +329,42 @@ Apply `Schemafile`
 ...
 ```
 
+## Define a partial index in PostgreSQL
+
+Partial indexes in PostgreSQL are normalized so differences are always detected.
+
+```ruby
+create_table "users", id: :serial, force: :cascade do |t|
+  t.text "email"
+  t.text "name"
+  t.index ["email"], name: "idx_users_email", unique: true, where: "email is not null"
+end
+```
+
+```sh
+% ridgepole -a -c database.yml --dry-run --verbose
+Apply `Schemafile` (dry-run)
+# Parse DSL
+# ...
+# Compare definitions
+#   users
+      :options=>
+       {:name=>"idx_users_email",
+        :unique=>true,
+-       :where=>"(email IS NOT NULL)"}}},
++       :where=>"email is not null"}}},
+  :options=>{:id=>:serial}}
+```
+
+Use a normalized WHERE clause to avoid detecting differences.
+
+```ruby
+#t.index ["email"], name: "idx_users_email", unique: true, where: "email is not null"
+t.index ["email"], name: "idx_users_email", unique: true, where: "(email IS NOT NULL)"
+```
+
+see https://github.com/ridgepole/ridgepole/issues/568
+
 ## Run tests
 
 
