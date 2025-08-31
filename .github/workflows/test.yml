@@ -4,15 +4,7 @@ on:
   push:
     branches:
       - "3.0"
-    paths-ignore:
-      - .gitignore
-      - CHANGELOG.md
-      - README.md
   pull_request:
-    paths-ignore:
-      - .gitignore
-      - CHANGELOG.md
-      - README.md
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
