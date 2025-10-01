@@ -181,6 +181,13 @@ create_table "user_comments", force: :cascade, renamed_from: "comments" do |t|
 end
 ```
 
+> [!note]
+> When using `renamed_from` on a table, Ridgepole will only perform the rename operation. All other changes to that table (columns, indexes, foreign keys, etc.) will not be detected during the same migration.
+>
+> If you need to rename AND modify a table, do it in two separate steps:
+> 1. First migration: Add `renamed_from` to rename the table
+> 2. Second migration: Remove `renamed_from` and apply your desired changes
+
 ## Foreign Key
 ```ruby
 create_table "parent", force: :cascade do |t|
