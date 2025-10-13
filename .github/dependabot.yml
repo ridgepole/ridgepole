@@ -4,6 +4,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 3
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -12,3 +14,5 @@ updates:
       dependencies:
         patterns:
           - "*"
+    cooldown:
+      default-days: 3
