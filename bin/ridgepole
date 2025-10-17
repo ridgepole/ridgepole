@@ -139,7 +139,7 @@ ARGV.options do |opt|
   opt.on('',   '--drop-table-only') { options[:drop_table_only] = true }
   opt.on('',   '--mysql-change-table-options') { options[:mysql_change_table_options] = true }
   opt.on('',   '--mysql-change-table-comment') { options[:mysql_change_table_comment] = true }
-  opt.on('',   '--postgresql-change-table-comment') { options[:postgresql_change_table_comment] = true }
+  opt.on('',   '--pg-change-table-comment') { options[:postgresql_change_table_comment] = true }
   opt.on('',   '--check-relation-type DEF_PK') { |v| options[:check_relation_type] = v }
   opt.on('',   '--ignore-table-comment') { options[:ignore_table_comment] = true }
   opt.on('',   '--skip-column-comment-change') { options[:skip_column_comment_change] = true }
