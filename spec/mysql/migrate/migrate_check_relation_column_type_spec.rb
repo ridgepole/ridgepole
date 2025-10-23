@@ -11,12 +11,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "employees", force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.date    "birth_date", null: false
+          t.integer "emp_no", null: false
           t.string  "first_name", limit: 14, null: false
-          t.string  "last_name", limit: 16, null: false
           t.string  "gender", limit: 1, null: false
           t.date    "hire_date", null: false
+          t.string  "last_name", limit: 16, null: false
         end
       ERB
     end
@@ -24,19 +24,19 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "dept_manager", force: :cascade do |t|
-          t.integer "employee_id"
           t.string  "dept_no", limit: 4, null: false
+          t.integer "employee_id"
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
 
         create_table "employees", force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.date    "birth_date", null: false
+          t.integer "emp_no", null: false
           t.string  "first_name", limit: 14, null: false
-          t.string  "last_name", limit: 16, null: false
           t.string  "gender", limit: 1, null: false
           t.date    "hire_date", null: false
+          t.string  "last_name", limit: 16, null: false
         end
       ERB
     end
@@ -69,12 +69,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "employees", id: { type: :bigint, unsigned: true }, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.date    "birth_date", null: false
+          t.integer "emp_no", null: false
           t.string  "first_name", limit: 14, null: false
-          t.string  "last_name", limit: 16, null: false
           t.string  "gender", limit: 1, null: false
           t.date    "hire_date", null: false
+          t.string  "last_name", limit: 16, null: false
         end
       ERB
     end
@@ -82,19 +82,19 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "dept_manager", force: :cascade do |t|
-          t.bigint "employee_id"
           t.string  "dept_no", limit: 4, null: false
+          t.bigint "employee_id"
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
 
         create_table "employees", id: { type: :bigint, unsigned: true }, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.date    "birth_date", null: false
+          t.integer "emp_no", null: false
           t.string  "first_name", limit: 14, null: false
-          t.string  "last_name", limit: 16, null: false
           t.string  "gender", limit: 1, null: false
           t.date    "hire_date", null: false
+          t.string  "last_name", limit: 16, null: false
         end
       ERB
     end
@@ -127,12 +127,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "employees", force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.date    "birth_date", null: false
+          t.integer "emp_no", null: false
           t.string  "first_name", limit: 14, null: false
-          t.string  "last_name", limit: 16, null: false
           t.string  "gender", limit: 1, null: false
           t.date    "hire_date", null: false
+          t.string  "last_name", limit: 16, null: false
         end
       ERB
     end
@@ -140,19 +140,19 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "dept_manager", force: :cascade do |t|
-          t.bigint "employee_id"
           t.string  "dept_no", limit: 4, null: false
+          t.bigint "employee_id"
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
 
         create_table "employees", force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.date    "birth_date", null: false
+          t.integer "emp_no", null: false
           t.string  "first_name", limit: 14, null: false
-          t.string  "last_name", limit: 16, null: false
           t.string  "gender", limit: 1, null: false
           t.date    "hire_date", null: false
+          t.string  "last_name", limit: 16, null: false
         end
       ERB
     end
@@ -180,12 +180,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "employees", id: { type: :bigint, unsigned: true }, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.date    "birth_date", null: false
+          t.integer "emp_no", null: false
           t.string  "first_name", limit: 14, null: false
-          t.string  "last_name", limit: 16, null: false
           t.string  "gender", limit: 1, null: false
           t.date    "hire_date", null: false
+          t.string  "last_name", limit: 16, null: false
         end
       ERB
     end
@@ -193,19 +193,19 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "dept_manager", force: :cascade do |t|
-          t.bigint "employee_id", unsigned: true
           t.string  "dept_no", limit: 4, null: false
+          t.bigint "employee_id", unsigned: true
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
 
         create_table "employees", id: { type: :bigint, unsigned: true }, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.date    "birth_date", null: false
+          t.integer "emp_no", null: false
           t.string  "first_name", limit: 14, null: false
-          t.string  "last_name", limit: 16, null: false
           t.string  "gender", limit: 1, null: false
           t.date    "hire_date", null: false
+          t.string  "last_name", limit: 16, null: false
         end
       ERB
     end

@@ -6,13 +6,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
+          t.datetime "created_at", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.string   "last_name", limit: 16, null: false
           t.boolean  "registered"
+          t.datetime "updated_at", null: false
         end
       RUBY
     end
@@ -21,13 +21,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
+          t.datetime "created_at", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.string   "last_name", limit: 16, null: false
           t.boolean  "registered"
+          t.datetime "updated_at", null: false
         end
       RUBY
     end
@@ -46,13 +46,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
+          t.datetime "created_at", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.string   "last_name", limit: 16, null: false
           t.boolean  "registered"
+          t.datetime "updated_at", null: false
         end
       RUBY
     end
@@ -61,13 +61,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
       <<-RUBY
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date     "birth_date", null: false
+          t.datetime "created_at", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
+          t.string   "last_name", limit: 16, null: false
+          t.boolean  "registered"
           t.datetime "updated_at", null: false
-          t.boolean  "registered", limit: 1
         end
       RUBY
     end

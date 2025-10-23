@@ -6,8 +6,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.index ["emp_no"], name: "emp_no"
         end
@@ -18,8 +18,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.index "emp_no", name: "emp_no"
         end
@@ -40,8 +40,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.index ["emp_no"], name: "emp_no"
         end
@@ -52,8 +52,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.index "salary", name: "emp_no"
         end
@@ -64,8 +64,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.index ["salary"], name: "emp_no"
         end

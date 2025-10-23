@@ -6,8 +6,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       <<-RUBY
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
         end
 

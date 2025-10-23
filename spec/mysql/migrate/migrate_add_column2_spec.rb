@@ -5,8 +5,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
+          t.integer "emp_no", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -16,9 +16,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       <<-RUBY
         create_table "dept_emp", id: false, force: :cascade do |t|
+          t.string  "dept_no", limit: 4, null: false
           t.integer "emp_no", limit: 4, null: false
           t.integer "emp_no2", null: false
-          t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -44,8 +44,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
+          t.integer "emp_no", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -55,9 +55,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       <<-RUBY
         create_table "dept_emp", id: false, force: :cascade do |t|
+          t.string  "dept_no", limit: 4, null: false
           t.integer "emp_no", limit: 3, null: false
           t.integer "emp_no2", null: false
-          t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -83,8 +83,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
+          t.integer "emp_no", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -94,9 +94,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       <<-RUBY
         create_table "dept_emp", id: false, force: :cascade do |t|
+          t.string  "dept_no", limit: 4, null: false
           t.integer "emp_no", limit: 3, null: false
           t.integer "emp_no2", limit: 4, null: false
-          t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -122,8 +122,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.bigint "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
+          t.bigint "emp_no", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -133,9 +133,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       <<-RUBY
         create_table "dept_emp", id: false, force: :cascade do |t|
+          t.string  "dept_no", limit: 4, null: false
           t.bigint "emp_no", limit: 9, null: false
           t.integer "emp_no2", null: false
-          t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end

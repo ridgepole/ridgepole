@@ -8,15 +8,15 @@ describe 'Ridgepole::Client (with new text/blob types)' do
       table_def = <<-RUBY
         create_table :foos, id: :unsigned_integer do |t|
           t.blob             :blob
-          t.tinyblob         :tiny_blob
-          t.mediumblob       :medium_blob
           t.longblob         :long_blob
-          t.tinytext         :tiny_text
-          t.mediumtext       :medium_text
           t.longtext         :long_text
+          t.mediumblob       :medium_blob
+          t.mediumtext       :medium_text
+          t.tinyblob         :tiny_blob
+          t.tinytext         :tiny_text
+          t.unsigned_bigint  :unsigned_bigint
           t.unsigned_decimal :unsigned_decimal
           t.unsigned_float   :unsigned_float
-          t.unsigned_bigint  :unsigned_bigint
           t.unsigned_integer :unsigned_integer
         end
       RUBY
@@ -28,15 +28,15 @@ describe 'Ridgepole::Client (with new text/blob types)' do
       expect(subject.dump).to match_ruby erbh(<<-ERB)
         create_table "foos", id: { type: :integer, unsigned: true }, force: :cascade do |t|
           t.binary  "blob"
-          t.binary  "tiny_blob", size: :tiny
-          t.binary  "medium_blob", size: :medium
           t.binary  "long_blob", size: :long
-          t.text    "tiny_text", size: :tiny
-          t.text    "medium_text", size: :medium
           t.text    "long_text", size: :long
+          t.binary  "medium_blob", size: :medium
+          t.text    "medium_text", size: :medium
+          t.binary  "tiny_blob", size: :tiny
+          t.text    "tiny_text", size: :tiny
+          t.bigint  "unsigned_bigint", unsigned: true
           t.decimal "unsigned_decimal", precision: 10, unsigned: true
           t.float   "unsigned_float", unsigned: true
-          t.bigint  "unsigned_bigint", unsigned: true
           t.integer "unsigned_integer", unsigned: true
         end
       ERB
@@ -70,15 +70,15 @@ describe 'Ridgepole::Client (with new text/blob types)' do
       delta = subject.diff(<<-RUBY)
         create_table "foos", force: :cascade do |t|
           t.binary "blob"
-          t.binary "tiny_blob", size: :tiny
-          t.binary "medium_blob", size: :medium
           t.binary "long_blob", size: :long
-          t.text "tiny_text", size: :tiny
-          t.text "medium_text", size: :medium
           t.text "long_text", size: :long
+          t.binary "medium_blob", size: :medium
+          t.text "medium_text", size: :medium
+          t.binary "tiny_blob", size: :tiny
+          t.text "tiny_text", size: :tiny
+          t.bigint "unsigned_bigint", unsigned: true
           t.decimal "unsigned_decimal", precision: 10, unsigned: true
           t.float "unsigned_float", unsigned: true
-          t.bigint "unsigned_bigint", unsigned: true
           t.integer "unsigned_integer", unsigned: true
         end
       RUBY

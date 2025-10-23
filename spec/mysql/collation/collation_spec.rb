@@ -5,8 +5,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", id: { type: :bigint, unsigned: true }, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
+          t.integer "emp_no", null: false
           t.string  "string", null: false, collation: "ascii_bin"
           t.text    "text", null: false
         end
@@ -16,8 +16,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", id: { type: :bigint, unsigned: true }, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
+          t.integer "emp_no", null: false
           t.string  "string", null: false, collation: "ascii_bin"
           t.text    "text", null: false, collation: "utf8mb4_bin"
         end
@@ -40,8 +40,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", id: { type: :bigint, unsigned: true }, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
+          t.integer "emp_no", null: false
           t.string  "string", null: false, collation: "ascii_bin"
           t.text    "text", null: false, collation: "utf8mb4_bin"
         end
@@ -51,8 +51,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", id: { type: :bigint, unsigned: true }, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
+          t.integer "emp_no", null: false
           t.string  "string", null: false, collation: "ascii_bin"
           t.text    "text", null: false, collation: <%= i cond(">= 7.1", ":no_collation", 'nil') %>
         end
@@ -80,8 +80,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", id: { type: :bigint, unsigned: true }, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
+          t.integer "emp_no", null: false
           t.string  "string", null: false, collation: "ascii_bin"
           t.text    "text", null: false, collation: "utf8mb4_bin"
         end
@@ -91,8 +91,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", id: { type: :bigint, unsigned: true }, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
+          t.integer "emp_no", null: false
           t.string  "string", null: false, collation: "utf8mb4_bin"
           t.text    "text", null: false, collation: "ascii_bin"
         end
@@ -115,8 +115,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", id: { type: :bigint, unsigned: true }, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.integer "club_id", null: false, unsigned: true
+          t.integer "emp_no", null: false
           t.string  "string", null: false, collation: "ascii_bin"
           t.text    "text", null: false, collation: "utf8mb4_bin"
         end

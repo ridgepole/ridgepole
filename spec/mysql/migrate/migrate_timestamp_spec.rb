@@ -5,7 +5,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       <<-RUBY
         create_table "clubs", force: :cascade do |t|
-          t.string "name", null: false
+          t.string "about", null: false
         end
       RUBY
     end
@@ -13,7 +13,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:apply_dsl) do
       <<-RUBY
         create_table "clubs", force: :cascade do |t|
-          t.string "name", null: false
+          t.string "about", null: false
           t.timestamps index: true
         end
       RUBY
@@ -22,7 +22,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       <<-RUBY
         create_table "clubs", force: :cascade do |t|
-          t.string "name", null: false
+          t.string "about", null: false
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
           t.index ["created_at"], name: "index_clubs_on_created_at"
@@ -47,7 +47,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       <<-RUBY
         create_table "clubs", force: :cascade do |t|
-          t.string "name", null: false
+          t.string "about", null: false
           t.timestamps index: true
         end
       RUBY
@@ -56,7 +56,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:export_dsl) do
       <<-RUBY
         create_table "clubs", force: :cascade do |t|
-          t.string "name", null: false
+          t.string "about", null: false
           t.datetime "created_at", null: false
           t.datetime "updated_at", null: false
           t.index ["created_at"], name: "index_clubs_on_created_at"
@@ -68,7 +68,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       <<-RUBY
         create_table "clubs", force: :cascade do |t|
-          t.string "name", null: false
+          t.string "about", null: false
         end
       RUBY
     end

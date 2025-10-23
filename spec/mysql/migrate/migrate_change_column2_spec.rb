@@ -7,9 +7,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
+          t.string "last_name", limit: 16, null: false
           t.index ["gender"], name: "gender"
         end
       ERB
@@ -20,8 +20,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table :employees, primary_key: :emp_no, force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
+          t.string "last_name", limit: 16, null: false
           t.date   :hire_date, null: false
           t.index :gender, name: :gender
         end
@@ -43,9 +43,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
+          t.string "last_name", limit: 16, null: false
           t.index ["gender"], name: "gender"
         end
       ERB
@@ -56,10 +56,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table :employees, primary_key: :emp_no, force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
-          t.date   :hire_date2, null: false
-          t.index :last_name, name: :last_name
+          t.date   :hire_date, null: false
+          t.string "last_name2", limit: 16, null: false
+          t.index :first_name, name: :first_name
         end
       ERB
     end
@@ -69,10 +69,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
-          t.date   "hire_date2", null: false
-          t.index ["last_name"], name: "last_name"
+          t.date   "hire_date", null: false
+          t.string "last_name2", limit: 16, null: false
+          t.index ["first_name"], name: "first_name"
         end
       ERB
     end

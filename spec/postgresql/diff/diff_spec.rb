@@ -21,8 +21,8 @@ describe 'Ridgepole::Client.diff' do
         add_index "departments", ["dept_name"], name: "idx_dept_name", unique: true, using: :btree
 
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
+          t.integer "emp_no", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -41,8 +41,8 @@ describe 'Ridgepole::Client.diff' do
         add_index "dept_manager", ["emp_no"], name: "idx_dept_manager_emp_no", using: :btree
 
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.integer "club_id", null: false
+          t.integer "emp_no", null: false
         end
 
         add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_employee_clubs_emp_no_club_id", using: :btree
@@ -50,14 +50,14 @@ describe 'Ridgepole::Client.diff' do
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name", limit: 16, null: false
           t.date   "hire_date", null: false
+          t.string "last_name", limit: 16, null: false
         end
 
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
         end
 
@@ -65,8 +65,8 @@ describe 'Ridgepole::Client.diff' do
 
         create_table "titles", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.string  "title", limit: 50, null: false
           t.date    "from_date", null: false
+          t.string  "title", limit: 50, null: false
           t.date    "to_date"
         end
 
@@ -89,8 +89,8 @@ describe 'Ridgepole::Client.diff' do
         add_index "departments", ["dept_name"], name: "idx_dept_name", unique: true, using: :btree
 
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
+          t.integer "emp_no", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -109,8 +109,8 @@ describe 'Ridgepole::Client.diff' do
         add_index "dept_manager", ["emp_no"], name: "idx_dept_manager_emp_no", using: :btree
 
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.integer "club_id", null: true
+          t.integer "emp_no", null: false
         end
 
         add_index "employee_clubs", ["emp_no", "club_id"], name: "idx_employee_clubs_emp_no_club_id", using: :btree
@@ -118,14 +118,14 @@ describe 'Ridgepole::Client.diff' do
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name", limit: 20, default: "XXX", null: false
           t.date   "hire_date", null: false
+          t.string "last_name", limit: 20, default: "XXX", null: false
         end
 
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
         end
 
@@ -133,8 +133,8 @@ describe 'Ridgepole::Client.diff' do
 
         create_table "titles", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.string  "title", limit: 50, null: false
           t.date    "from_date", null: false
+          t.string  "title", limit: 50, null: false
           t.date    "to_date"
         end
 
@@ -161,15 +161,15 @@ describe 'Ridgepole::Client.diff' do
     context 'when adding a column to the last' do
       let(:actual_dsl) { <<-RUBY }
       create_table "users", force: :cascade do |t|
-        t.string "name", null: false
+        t.datetime "created_at", null: false
       end
       RUBY
 
       let(:expected_dsl) { <<-RUBY }
       create_table "users", force: :cascade do |t|
-        t.string "name", null: false
         t.datetime "created_at", null: false
         t.datetime "updated_at", null: false
+        t.string "name", null: false
       end
       RUBY
 
@@ -187,15 +187,15 @@ describe 'Ridgepole::Client.diff' do
     context 'when adding a column to the middle' do
       let(:actual_dsl) { <<-RUBY }
       create_table "users", force: :cascade do |t|
-        t.datetime "created_at", null: false
+        t.string "name", null: false
       end
       RUBY
 
       let(:expected_dsl) { <<-RUBY }
       create_table "users", force: :cascade do |t|
-        t.string "name", null: false
-        t.integer "age", null: false
         t.datetime "created_at", null: false
+        t.integer "age", null: false
+        t.string "name", null: false
         t.datetime "updated_at", null: false
       end
       RUBY
@@ -204,7 +204,7 @@ describe 'Ridgepole::Client.diff' do
       before { client }
 
       it 'warns position' do
-        expect(Ridgepole::Logger.instance).to receive(:warn).with(/PostgreSQL doesn't support adding a new column .* users\.name/)
+        expect(Ridgepole::Logger.instance).to receive(:warn).with(/PostgreSQL doesn't support adding a new column .* users\.created_at/)
         expect(Ridgepole::Logger.instance).to receive(:warn).with(/PostgreSQL doesn't support adding a new column .* users\.age/)
         expect(Ridgepole::Logger.instance).to_not receive(:warn)
         delta = subject.diff(actual_dsl, expected_dsl)
@@ -221,8 +221,8 @@ describe 'Ridgepole::Client.diff' do
       let(:actual_dsl) do
         <<-RUBY
           create_table "users", force: :cascade do |t|
-            t.string "name", null: false
             t.string "email", null: false
+            t.string "name", null: false
           end
         RUBY
       end
@@ -230,8 +230,8 @@ describe 'Ridgepole::Client.diff' do
       let(:expected_dsl) do
         <<-RUBY
           create_table "users", force: :cascade do |t|
-            t.string "name", null: false
             t.string "email", null: false
+            t.string "name", null: false
           end
 
           add_index "users", ["email"], name: "idx_users_email", algorithm: :concurrently
@@ -250,8 +250,8 @@ describe 'Ridgepole::Client.diff' do
       let(:actual_dsl) do
         <<-RUBY
           create_table "users", force: :cascade do |t|
-            t.string "name", null: false
             t.string "email", null: false
+            t.string "name", null: false
           end
 
           add_index "users", ["email"], name: "idx_users_email"
@@ -261,8 +261,8 @@ describe 'Ridgepole::Client.diff' do
       let(:expected_dsl) do
         <<-RUBY
           create_table "users", force: :cascade do |t|
-            t.string "name", null: false
             t.string "email", null: false
+            t.string "name", null: false
           end
 
           add_index "users", ["email"], name: "idx_users_email", algorithm: :concurrently

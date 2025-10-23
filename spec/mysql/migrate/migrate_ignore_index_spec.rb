@@ -10,15 +10,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.integer "club_id", null: false
+          t.integer "emp_no", null: false
           t.index ["emp_no", "club_id"], name: "idx_emp_no_club_id", ignore: true
         end
 
         create_table "titles", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.string  "title", limit: 50, null: false
           t.date    "from_date", null: false
+          t.string  "title", limit: 50, null: false
           t.date    "to_date"
           t.index ["emp_no"], name: "emp_no", ignore: true
         end
@@ -32,14 +32,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.integer "club_id", null: false
+          t.integer "emp_no", null: false
         end
 
         create_table "titles", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.string  "title", limit: 50, null: false
           t.date    "from_date", null: false
+          t.string  "title", limit: 50, null: false
           t.date    "to_date"
         end
       ERB
@@ -61,8 +61,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.index ["emp_no"], name: "emp_no"
         end
@@ -73,8 +73,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.index ["from_date"], name: "emp_no", ignore: true
         end

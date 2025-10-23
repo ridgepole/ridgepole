@@ -5,13 +5,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:dsl) do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
-          t.integer "emp_no_int", limit: 4, null: false
           t.integer "emp_no_bigint5", limit: 5, null: false
           t.integer "emp_no_bigint6", limit: 6, null: false
           t.integer "emp_no_bigint7", limit: 7, null: false
           t.integer "emp_no_bigint8", limit: 8, null: false
-          t.float   "salary", null: false
+          t.integer "emp_no_int", limit: 4, null: false
           t.date    "from_date", null: false
+          t.float   "salary", null: false
           t.date    "to_date", null: false
         end
       ERB

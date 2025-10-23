@@ -9,8 +9,8 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "person", force: :cascade do |t|
-          t.text "name"
           t.enum "current_mood", enum_type: "mood"
+          t.text "name"
         end
       ERB
     end
@@ -31,7 +31,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
     let(:actual_dsl) do
       <<~RUBY
         create_table "person", force: :cascade do |t|
-          t.text "name"
+          t.text "about"
         end
       RUBY
     end
@@ -39,7 +39,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
     let(:expected_dsl) do
       <<~RUBY
         create_table "person", force: :cascade do |t|
-          t.text "name"
+          t.text "about"
           t.enum "current_mood", enum_type: "mood"
         end
       RUBY
@@ -61,7 +61,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
     let(:actual_dsl) do
       <<~RUBY
         create_table "person", force: :cascade do |t|
-          t.text "name"
+          t.text "about"
           t.enum "current_mood", enum_type: "mood"
         end
       RUBY
@@ -70,7 +70,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
     let(:expected_dsl) do
       <<~RUBY
         create_table "person", force: :cascade do |t|
-          t.text "name"
+          t.text "about"
         end
       RUBY
     end
@@ -91,7 +91,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
     let(:actual_dsl) do
       <<~RUBY
         create_table "person", force: :cascade do |t|
-          t.text "name"
+          t.text "about"
           t.enum "current_mood", enum_type: "mood"
         end
       RUBY
@@ -100,7 +100,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
     let(:expected_dsl) do
       <<~RUBY
         create_table "person", force: :cascade do |t|
-          t.text "name"
+          t.text "about"
           t.enum "current_mood", enum_type: "mood", null: false
         end
       RUBY
@@ -122,7 +122,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
     let(:actual_dsl) do
       <<~RUBY
         create_table "person", force: :cascade do |t|
-          t.text "name"
+          t.text "about"
           t.enum "current_mood", enum_type: "mood", null: false
         end
       RUBY
@@ -131,7 +131,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
     let(:expected_dsl) do
       <<~RUBY
         create_table "person", force: :cascade do |t|
-          t.text "name"
+          t.text "about"
           t.enum "current_mood", enum_type: "mood", null: true
         end
       RUBY

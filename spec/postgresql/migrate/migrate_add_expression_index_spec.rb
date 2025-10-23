@@ -7,8 +7,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) { '' }
     let(:expected_dsl) { erbh(<<-ERB) }
       create_table "users", force: :cascade do |t|
-        t.string "name", null: false
         t.datetime "created_at", null: false
+        t.string "name", null: false
         t.datetime "updated_at", null: false
         t.index "lower((name)::text)", name: "index_users_on_lower_name"
       end

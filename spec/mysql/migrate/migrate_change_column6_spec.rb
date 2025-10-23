@@ -6,13 +6,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "employees", force: :cascade do |t|
           t.date     "birth_date", null: false
+          t.datetime "created_at", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.string   "last_name", limit: 16, null: false
           t.binary   "registered_name"
+          t.datetime "updated_at", null: false
         end
       ERB
     end
@@ -20,15 +20,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees", force: :cascade do |t|
-          t.string   "ext_column", null: false
           t.date     "birth_date", null: false
+          t.datetime "created_at", null: false
+          t.string   "ext_column", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.string   "last_name", limit: 16, null: false
           t.binary   "registered_name", limit: 255
+          t.datetime "updated_at", null: false
         end
       ERB
     end
@@ -46,15 +46,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(show_create_table('employees')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `employees` (
           `id` bigint NOT NULL AUTO_INCREMENT,
-          `ext_column` varchar NOT NULL,
           `birth_date` date NOT NULL,
+          `created_at` datetime NOT NULL,
+          `ext_column` varchar NOT NULL,
           `first_name` varchar NOT NULL,
-          `last_name` varchar NOT NULL,
           `gender` varchar NOT NULL,
           `hire_date` date NOT NULL,
-          `created_at` datetime NOT NULL,
-          `updated_at` datetime NOT NULL,
+          `last_name` varchar NOT NULL,
           `registered_name` varbinary DEFAULT NULL,
+          `updated_at` datetime NOT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       ERB
@@ -66,13 +66,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_id", force: :cascade do |t|
           t.date     "birth_date", null: false
+          t.datetime "created_at", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.string   "last_name", limit: 16, null: false
           t.binary   "registered_name"
+          t.datetime "updated_at", null: false
         end
       ERB
     end
@@ -80,15 +80,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_id", force: :cascade do |t|
-          t.string   "ext_column", null: false
           t.date     "birth_date", null: false
+          t.datetime "created_at", null: false
+          t.string   "ext_column", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.string   "last_name", limit: 16, null: false
           t.binary   "registered_name", limit: 255
+          t.datetime "updated_at", null: false
         end
       ERB
     end
@@ -106,15 +106,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(show_create_table('employees')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `employees` (
           `emp_id` bigint NOT NULL AUTO_INCREMENT,
-          `ext_column` varchar NOT NULL,
           `birth_date` date NOT NULL,
+          `created_at` datetime NOT NULL,
+          `ext_column` varchar NOT NULL,
           `first_name` varchar NOT NULL,
-          `last_name` varchar NOT NULL,
           `gender` varchar NOT NULL,
           `hire_date` date NOT NULL,
-          `created_at` datetime NOT NULL,
-          `updated_at` datetime NOT NULL,
+          `last_name` varchar NOT NULL,
           `registered_name` varbinary DEFAULT NULL,
+          `updated_at` datetime NOT NULL,
           PRIMARY KEY (`emp_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       ERB
@@ -126,13 +126,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "employees", id: false, force: :cascade do |t|
           t.date     "birth_date", null: false
+          t.datetime "created_at", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.string   "last_name", limit: 16, null: false
           t.binary   "registered_name"
+          t.datetime "updated_at", null: false
         end
       ERB
     end
@@ -140,15 +140,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees", id: false, force: :cascade do |t|
-          t.string   "ext_column", null: false
           t.date     "birth_date", null: false
+          t.datetime "created_at", null: false
+          t.string   "ext_column", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.string   "last_name", limit: 16, null: false
           t.binary   "registered_name", limit: 255
+          t.datetime "updated_at", null: false
         end
       ERB
     end
@@ -165,15 +165,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table('employees')).to match_fuzzy <<-SQL
         CREATE TABLE `employees` (
-          `ext_column` varchar NOT NULL,
           `birth_date` date NOT NULL,
+          `created_at` datetime NOT NULL,
+          `ext_column` varchar NOT NULL,
           `first_name` varchar NOT NULL,
-          `last_name` varchar NOT NULL,
           `gender` varchar NOT NULL,
           `hire_date` date NOT NULL,
-          `created_at` datetime NOT NULL,
-          `updated_at` datetime NOT NULL,
-          `registered_name` varbinary DEFAULT NULL
+          `last_name` varchar NOT NULL,
+          `registered_name` varbinary DEFAULT NULL,
+          `updated_at` datetime NOT NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       SQL
     }
@@ -184,13 +184,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "employees", force: :cascade do |t|
           t.date     "birth_date", null: false
+          t.datetime "created_at", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.string   "last_name", limit: 16, null: false
           t.binary   "registered_name"
+          t.datetime "updated_at", null: false
         end
       ERB
     end
@@ -198,15 +198,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employees", primary_key: "emp_id", force: :cascade do |t|
-          t.string   "ext_column", null: false
           t.date     "birth_date", null: false
+          t.datetime "created_at", null: false
+          t.string   "ext_column", null: false
           t.string   "first_name", limit: 14, null: false
-          t.string   "last_name", limit: 16, null: false
           t.string   "gender", limit: 1, null: false
           t.date     "hire_date", null: false
-          t.datetime "created_at", null: false
-          t.datetime "updated_at", null: false
+          t.string   "last_name", limit: 16, null: false
           t.binary   "registered_name", limit: 255
+          t.datetime "updated_at", null: false
         end
       ERB
     end
@@ -224,15 +224,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(show_create_table('employees')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `employees` (
           `id` bigint NOT NULL AUTO_INCREMENT,
-          `ext_column` varchar NOT NULL,
           `birth_date` date NOT NULL,
+          `created_at` datetime NOT NULL,
+          `ext_column` varchar NOT NULL,
           `first_name` varchar NOT NULL,
-          `last_name` varchar NOT NULL,
           `gender` varchar NOT NULL,
           `hire_date` date NOT NULL,
-          `created_at` datetime NOT NULL,
-          `updated_at` datetime NOT NULL,
+          `last_name` varchar NOT NULL,
           `registered_name` varbinary DEFAULT NULL,
+          `updated_at` datetime NOT NULL,
           PRIMARY KEY (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
       ERB

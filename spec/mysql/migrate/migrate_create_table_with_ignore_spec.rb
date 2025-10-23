@@ -10,8 +10,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "dept_emp", primary_key: ["emp_no", "dept_no"], force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.string  "dept_no", null: false
+          t.integer "emp_no", null: false
           t.date    "from_date", null: false, ignore: true
           t.date    "to_date", null: false
           t.index ["dept_no"], name: "dept_no", ignore: true

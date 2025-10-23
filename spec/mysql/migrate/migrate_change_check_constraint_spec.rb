@@ -6,8 +6,8 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [[:mysql80]] do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.check_constraint "`salary` > 100", name: "salary_check"
         end
@@ -18,8 +18,8 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [[:mysql80]] do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.check_constraint "`salary` > 200", name: "salary_check"
         end
@@ -43,8 +43,8 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [[:mysql80]] do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.check_constraint "`salary` > 100", name: "salary_check"
         end
@@ -55,8 +55,8 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [[:mysql80]] do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.check_constraint "`salary` > 200", name: "salary_check"
         end
@@ -80,8 +80,8 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [[:mysql80]] do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.check_constraint "salary > 100", name: "salary_check"
         end
@@ -92,8 +92,8 @@ describe 'Ridgepole::Client#diff -> migrate', condition: [[:mysql80]] do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.check_constraint "`salary` > 100", name: "salary_check"
         end

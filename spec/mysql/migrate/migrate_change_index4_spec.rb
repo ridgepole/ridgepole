@@ -6,8 +6,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "salaries", force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.index ["emp_no", "id"], name: "emp_no"
         end
@@ -18,8 +18,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "salaries", force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.index ["salary", "id"], name: "emp_no"
         end
@@ -43,8 +43,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.index ["emp_no"], name: "emp_no"
         end
@@ -55,8 +55,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.index ["salary"], name: "emp_no"
         end
@@ -79,8 +79,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "salaries", primary_key: "emp_no", force: :cascade do |t|
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.index ["salary", "emp_no"], name: "emp_no"
         end
@@ -90,8 +90,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "salaries", primary_key: "emp_no", force: :cascade do |t|
-          t.integer "salary", null: false
           t.date    "from_date", null: false
+          t.integer "salary", null: false
           t.date    "to_date", null: false
           t.index ["from_date", "emp_no"], name: "emp_no"
         end
