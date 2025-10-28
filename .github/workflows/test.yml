@@ -3,7 +3,7 @@ name: test
 on:
   push:
     branches:
-      - "3.0"
+      - main
   pull_request:
 
 concurrency:
