@@ -51,6 +51,7 @@ describe 'ridgepole' do
             --drop-table-only
             --mysql-change-table-options
             --mysql-change-table-comment
+            --pg-change-table-comment
             --check-relation-type DEF_PK
             --ignore-table-comment
             --skip-column-comment-change
@@ -64,7 +65,7 @@ describe 'ridgepole' do
             --[no-]color
         -v, --version
         -h, --help
-       MSG
+      MSG
     end
   end
 
