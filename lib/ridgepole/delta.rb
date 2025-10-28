@@ -328,8 +328,14 @@ execute "ALTER TABLE #{ActiveRecord::Base.connection.quote_table_name(table_name
     end
 
     def append_change_table_comment(table_name, table_comment, buf)
-      comment_literal = "COMMENT=#{ActiveRecord::Base.connection.quote(table_comment)}"
-      append_change_table_options(table_name, comment_literal, buf)
+      if Ridgepole::ConnectionAdapters.postgresql?
+        buf.puts(<<-RUBY)
+change_table_comment(#{table_name.inspect}, #{table_comment.inspect})
+        RUBY
+      else
+        comment_literal = "COMMENT=#{ActiveRecord::Base.connection.quote(table_comment)}"
+        append_change_table_options(table_name, comment_literal, buf)
+      end
     end
 
     def append_change(table_name, attrs, buf, pre_buf_for_fk, post_buf_for_fk)

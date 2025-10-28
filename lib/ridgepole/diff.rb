@@ -157,6 +157,14 @@ module Ridgepole
         end
       end
 
+      if Ridgepole::ConnectionAdapters.postgresql?
+        if @options[:postgresql_change_table_comment] && (from[:comment] != to[:comment])
+          from.delete(:comment)
+          to_comment = to.delete(:comment)
+          table_delta[:table_comment] = to_comment
+        end
+      end
+
       if @options[:dump_without_table_options]
         from.delete(:options)
         from.delete(:charset)
