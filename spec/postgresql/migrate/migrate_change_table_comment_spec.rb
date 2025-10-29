@@ -3,12 +3,12 @@
 describe 'Ridgepole::Client#diff -> migrate' do
   let(:actual_dsl) do
     erbh(<<-ERB)
-      create_table "employees", force: :cascade, comment: "old comment" do |t|
+      create_table "employees", comment: "old comment", force: :cascade do |t|
         t.date   "birth_date", null: false
         t.string "first_name", limit: 14, null: false
-        t.string "last_name", limit: 16, null: false
         t.string "gender", limit: 1, null: false
         t.date   "hire_date", null: false
+        t.string "last_name", limit: 16, null: false
       end
 
       create_table "tenants", force: :cascade, comment: "old comment '" do |t|
@@ -18,12 +18,12 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
   let(:expected_dsl) do
     erbh(<<-ERB)
-      create_table "employees", force: :cascade, comment: "new comment" do |t|
+      create_table "employees", comment: "new comment", force: :cascade do |t|
         t.date   "birth_date", null: false
         t.string "first_name", limit: 14, null: false
-        t.string "last_name", limit: 16, null: false
         t.string "gender", limit: 1, null: false
         t.date   "hire_date", null: false
+        t.string "last_name", limit: 16, null: false
       end
 
       create_table "tenants", force: :cascade, comment: "new comment '" do |t|
