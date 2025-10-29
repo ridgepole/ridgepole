@@ -2,6 +2,11 @@
 
 ## 3.0
 
+### 3.1.0 (N/A)
+
+- Support Rails 8.1 [pull#589](https://github.com/ridgepole/ridgepole/pull/589)
+- Support for migrating PostgreSQL table comments [pull#587](https://github.com/ridgepole/ridgepole/pull/587)
+
 ### 3.0.4 (2025/08/31)
 
 - Fix checking foreign key without index [pull#571](https://github.com/ridgepole/ridgepole/pull/571)
