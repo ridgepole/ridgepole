@@ -5,8 +5,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
+          t.integer "emp_no", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -16,9 +16,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", force: :cascade do |t|
-          t.integer "emp_no0", null: false
-          t.integer "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
+          t.integer "emp_no", null: false
+          t.integer "emp_no0", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -38,9 +38,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(show_create_table('dept_emp')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `dept_emp` (
           `id` bigint NOT NULL AUTO_INCREMENT,
-          `emp_no0` int NOT NULL,
-          `emp_no` int NOT NULL,
           `dept_no` varchar NOT NULL,
+          `emp_no` int NOT NULL,
+          `emp_no0` int NOT NULL,
           `from_date` date NOT NULL,
           `to_date` date NOT NULL,
           PRIMARY KEY (`id`)
@@ -53,8 +53,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
+          t.integer "emp_no", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -64,9 +64,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", id: false, force: :cascade do |t|
-          t.integer "emp_no0", null: false
-          t.integer "emp_no", null: false
           t.string  "dept_no", limit: 4, null: false
+          t.integer "emp_no", null: false
+          t.integer "emp_no0", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -85,9 +85,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table('dept_emp')).to match_fuzzy <<-SQL
         CREATE TABLE `dept_emp` (
-          `emp_no0` int NOT NULL,
-          `emp_no` int NOT NULL,
           `dept_no` varchar NOT NULL,
+          `emp_no` int NOT NULL,
+          `emp_no0` int NOT NULL,
           `from_date` date NOT NULL,
           `to_date` date NOT NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
@@ -109,8 +109,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", primary_key: "emp_no", force: :cascade do |t|
-          t.integer "emp_no0", null: false
           t.string  "dept_no", limit: 4, null: false
+          t.integer "emp_no0", null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -130,8 +130,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(show_create_table('dept_emp')).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `dept_emp` (
           `emp_no` bigint NOT NULL AUTO_INCREMENT,
-          `emp_no0` int NOT NULL,
           `dept_no` varchar NOT NULL,
+          `emp_no0` int NOT NULL,
           `from_date` date NOT NULL,
           `to_date` date NOT NULL,
           PRIMARY KEY (`emp_no`)
@@ -144,9 +144,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", primary_key: ["emp_no1", "emp_no2"], force: :cascade do |t|
+          t.string  "dept_no", limit: 4, null: false
           t.integer "emp_no1", null: false
           t.integer "emp_no2", null: false
-          t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -156,10 +156,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", primary_key: ["emp_no1", "emp_no2"], force: :cascade do |t|
+          t.string  "dept_no", limit: 4, null: false
+          t.integer "emp_no0", null: false
           t.integer "emp_no1", null: false
           t.integer "emp_no2", null: false
-          t.integer "emp_no0", null: false
-          t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -178,10 +178,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table('dept_emp')).to match_fuzzy <<-SQL
         CREATE TABLE `dept_emp` (
+          `dept_no` varchar NOT NULL,
+          `emp_no0` int NOT NULL,
           `emp_no1` int NOT NULL,
           `emp_no2` int NOT NULL,
-          `emp_no0` int NOT NULL,
-          `dept_no` varchar NOT NULL,
           `from_date` date NOT NULL,
           `to_date` date NOT NULL,
           PRIMARY KEY (`emp_no1`,`emp_no2`)
@@ -194,9 +194,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", primary_key: ["emp_no1", "emp_no2"], force: :cascade do |t|
+          t.string  "dept_no", limit: 4, null: false
           t.integer "emp_no1", null: false
           t.integer "emp_no2", null: false
-          t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -206,10 +206,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "dept_emp", primary_key: ["emp_no1", "emp_no2"], force: :cascade do |t|
+          t.string  "dept_no", limit: 4, null: false
           t.integer "emp_no0", null: false
           t.integer "emp_no1", null: false
           t.integer "emp_no2", null: false
-          t.string  "dept_no", limit: 4, null: false
           t.date    "from_date", null: false
           t.date    "to_date", null: false
         end
@@ -228,10 +228,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(show_create_table('dept_emp')).to match_fuzzy <<-SQL
         CREATE TABLE `dept_emp` (
+          `dept_no` varchar NOT NULL,
           `emp_no0` int NOT NULL,
           `emp_no1` int NOT NULL,
           `emp_no2` int NOT NULL,
-          `dept_no` varchar NOT NULL,
           `from_date` date NOT NULL,
           `to_date` date NOT NULL,
           PRIMARY KEY (`emp_no1`,`emp_no2`)

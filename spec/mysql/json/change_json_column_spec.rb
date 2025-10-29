@@ -5,8 +5,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
-          t.string  "title", null: false
           t.json    "attrs", null: false
+          t.string  "title", null: false
           t.index ["title"], name: "index_books_on_title"
         end
       ERB
@@ -15,8 +15,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
-          t.string  "title", null: false
           t.json    "attrs"
+          t.string  "title", null: false
           t.index ["title"], name: "index_books_on_title"
         end
       ERB
@@ -38,8 +38,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
-          t.string  "title", null: false
           t.json    "attrs", null: false
+          t.string  "title", null: false
           t.index ["title"], name: "index_books_on_title"
         end
       ERB
@@ -48,8 +48,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
-          t.string  "title", null: false
           t.string  "attrs"
+          t.string  "title", null: false
           t.index ["title"], name: "index_books_on_title"
         end
       ERB
@@ -71,8 +71,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
-          t.string  "title", null: false
           t.string  "attrs"
+          t.string  "title", null: false
           t.index ["title"], name: "index_books_on_title"
         end
       ERB
@@ -81,8 +81,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "books", force: :cascade do |t|
-          t.string  "title", null: false
           t.json    "attrs", null: false, collation: nil
+          t.string  "title", null: false
           t.index ["title"], name: "index_books_on_title"
         end
       ERB

@@ -9,8 +9,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", id: :integer, force: :cascade do |t|
-          t.string  "title", null: false
           t.integer "author_id", null: false
+          t.string  "title", null: false
           t.index ["author_id"], name: "idx_author_id"
         end
       ERB
@@ -23,8 +23,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", id: :integer, force: :cascade do |t|
-          t.string  "title", null: false
           t.integer "author_id", null: false
+          t.string  "title", null: false
           t.index ["author_id"], name: "idx_author_id"
         end
 
@@ -45,8 +45,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
           `id` int NOT NULL AUTO_INCREMENT,
-          `title` varchar NOT NULL,
           `author_id` int NOT NULL,
+          `title` varchar NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
@@ -61,8 +61,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
           `id` int NOT NULL AUTO_INCREMENT,
-          `title` varchar NOT NULL,
           `author_id` int NOT NULL,
+          `title` varchar NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`),
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
@@ -79,8 +79,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", id: :integer, force: :cascade do |t|
-          t.string  "title", null: false
           t.integer "author_id", null: false
+          t.string  "title", null: false
           t.index ["author_id"], name: "idx_author_id"
         end
         add_foreign_key "books", "authors", name: "fk_author"
@@ -94,8 +94,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", id: :integer, force: :cascade do |t|
-          t.string  "title", null: false
           t.integer "author_id", null: false
+          t.string  "title", null: false
           t.index ["author_id"], name: "idx_author_id"
         end
 
@@ -118,8 +118,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
           `id` int NOT NULL AUTO_INCREMENT,
-          `title` varchar NOT NULL,
           `author_id` int NOT NULL,
+          `title` varchar NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`),
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
@@ -133,8 +133,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
           `id` int NOT NULL AUTO_INCREMENT,
-          `title` varchar NOT NULL,
           `author_id` int NOT NULL,
+          `title` varchar NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`),
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
@@ -151,8 +151,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", id: :integer, force: :cascade do |t|
-          t.string  "title", null: false
           t.integer "author_id", null: false
+          t.string  "title", null: false
           t.index ["author_id"], name: "idx_author_id"
         end
       ERB
@@ -165,8 +165,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", id: :integer, force: :cascade do |t|
-          t.string  "title", null: false
           t.integer "author_id", null: false
+          t.string  "title", null: false
           t.index ["author_id"], name: "idx_author_id"
         end
 
@@ -187,8 +187,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
           `id` int NOT NULL AUTO_INCREMENT,
-          `title` varchar NOT NULL,
           `author_id` int NOT NULL,
+          `title` varchar NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
@@ -203,8 +203,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
           `id` int NOT NULL AUTO_INCREMENT,
-          `title` varchar NOT NULL,
           `author_id` int NOT NULL,
+          `title` varchar NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
@@ -220,8 +220,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", id: :integer, force: :cascade do |t|
-          t.string  "title", null: false
           t.integer "author_id", null: false
+          t.string  "title", null: false
           t.index ["author_id"], name: "idx_author_id"
         end
         add_foreign_key "books", "authors", name: "fk_author"
@@ -235,8 +235,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "books", id: :integer, force: :cascade do |t|
-          t.string  "title", null: false
           t.integer "author_id", null: false
+          t.string  "title", null: false
           t.index ["author_id"], name: "idx_author_id"
         end
 
@@ -259,8 +259,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
           `id` int NOT NULL AUTO_INCREMENT,
-          `title` varchar NOT NULL,
           `author_id` int NOT NULL,
+          `title` varchar NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`),
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)
@@ -276,8 +276,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(show_create_table(:books)).to match_fuzzy erbh(<<-ERB)
         CREATE TABLE `books` (
           `id` int NOT NULL AUTO_INCREMENT,
-          `title` varchar NOT NULL,
           `author_id` int NOT NULL,
+          `title` varchar NOT NULL,
           PRIMARY KEY (`id`),
           KEY `idx_author_id` (`author_id`),
           CONSTRAINT `fk_author` FOREIGN KEY (`author_id`) REFERENCES `authors` (`id`)

@@ -5,7 +5,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "users", force: :cascade do |t|
-          t.string "name"
+          t.date "birth_date"
         end
       ERB
     end
@@ -13,7 +13,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "users", force: :cascade do |t|
-          t.string "name"
+          t.date "birth_date"
           t.timestamptz "created_at", null: false
           t.timestamptz "updated_at", null: false
         end
@@ -36,7 +36,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "users", force: :cascade do |t|
-          t.string "name"
+          t.date "birth_date"
           t.timestamptz "created_at", null: false
           t.timestamptz "updated_at", null: false
         end
@@ -46,7 +46,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "users", force: :cascade do |t|
-          t.string "name"
+          t.date "birth_date"
         end
       ERB
     end
@@ -67,7 +67,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "users", force: :cascade do |t|
-          t.string "name"
+          t.date "birth_date"
           t.datetime "created_at", precision: nil, null: false
           t.datetime "updated_at", precision: nil, null: false
         end
@@ -77,7 +77,7 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "users", force: :cascade do |t|
-          t.string "name"
+          t.date "birth_date"
           t.timestamptz "created_at", null: false
           t.timestamptz "updated_at", null: false
         end

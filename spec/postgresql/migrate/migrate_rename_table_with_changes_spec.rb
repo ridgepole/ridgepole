@@ -5,9 +5,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "comments", force: :cascade do |t|
-          t.string "commenter", limit: 255
-          t.text   "body"
           t.integer "article_id"
+          t.text   "body"
+          t.string "commenter", limit: 255
         end
       ERB
     end
@@ -15,9 +15,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "user_comments", force: :cascade, renamed_from: "comments" do |t|
-          t.string "commenter", limit: 255
-          t.text   "body"
           t.integer "article_id"
+          t.text   "body"
+          t.string "commenter", limit: 255
           t.string "status", limit: 255
         end
       ERB
@@ -33,9 +33,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_fuzzy <<-RUBY
         create_table "user_comments", force: :cascade do |t|
-          t.string "commenter", limit: 255
-          t.text   "body"
           t.integer "article_id"
+          t.text   "body"
+          t.string "commenter", limit: 255
         end
       RUBY
       expect(subject.dump).not_to match_fuzzy <<-RUBY
@@ -48,9 +48,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "comments", force: :cascade do |t|
-          t.string "commenter", limit: 255
-          t.text   "body"
           t.integer "article_id"
+          t.text   "body"
+          t.string "commenter", limit: 255
         end
       ERB
     end
@@ -58,9 +58,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "user_comments", force: :cascade, renamed_from: "comments" do |t|
-          t.string "commenter", limit: 255
-          t.text   "body"
           t.integer "article_id"
+          t.text   "body"
+          t.string "commenter", limit: 255
           t.index ["article_id"], name: "index_article_id"
         end
       ERB
@@ -76,9 +76,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_fuzzy <<-RUBY
         create_table "user_comments", force: :cascade do |t|
-          t.string "commenter", limit: 255
-          t.text   "body"
           t.integer "article_id"
+          t.text   "body"
+          t.string "commenter", limit: 255
         end
       RUBY
       expect(subject.dump).not_to match_fuzzy <<-RUBY
@@ -91,9 +91,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "comments", force: :cascade do |t|
-          t.string "commenter", limit: 255
-          t.text   "body"
           t.integer "article_id"
+          t.text   "body"
+          t.string "commenter", limit: 255
         end
       ERB
     end
@@ -101,9 +101,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "user_comments", force: :cascade, renamed_from: "comments" do |t|
-          t.string "commenter", limit: 255
-          t.text   "body"
           t.bigint "article_id"
+          t.text   "body"
+          t.string "commenter", limit: 255
         end
       ERB
     end
@@ -118,9 +118,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
       delta.migrate
       expect(subject.dump).to match_fuzzy <<-RUBY
         create_table "user_comments", force: :cascade do |t|
-          t.string "commenter", limit: 255
-          t.text   "body"
           t.integer "article_id"
+          t.text   "body"
+          t.string "commenter", limit: 255
         end
       RUBY
       expect(subject.dump).not_to match_fuzzy <<-RUBY
@@ -137,9 +137,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "comments", force: :cascade do |t|
-          t.string "commenter", limit: 255
-          t.text   "body"
           t.integer "article_id"
+          t.text   "body"
+          t.string "commenter", limit: 255
         end
       ERB
     end
@@ -151,9 +151,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "user_comments", force: :cascade, renamed_from: "comments" do |t|
-          t.string "commenter", limit: 255
-          t.text   "body"
           t.integer "article_id"
+          t.text   "body"
+          t.string "commenter", limit: 255
         end
 
         add_foreign_key "user_comments", "articles", name: "fk_comments_articles"
@@ -174,9 +174,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "user_comments", force: :cascade do |t|
-          t.string "commenter", limit: 255
-          t.text   "body"
           t.integer "article_id"
+          t.text   "body"
+          t.string "commenter", limit: 255
         end
       RUBY
       expect(subject.dump).not_to match_fuzzy <<-RUBY

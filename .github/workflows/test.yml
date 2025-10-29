@@ -34,6 +34,7 @@ jobs:
           - gemfiles/activerecord_7.1.gemfile
           - gemfiles/activerecord_7.2.gemfile
           - gemfiles/activerecord_8.0.gemfile
+          - gemfiles/activerecord_8.1.gemfile
         exclude:
           - gemfile: gemfiles/activerecord_6.1.gemfile
             env: TRILOGY=1
@@ -57,6 +58,12 @@ jobs:
             gemfile: gemfiles/activerecord_8.0.gemfile
           - ruby: "3.1"
             gemfile: gemfiles/activerecord_8.0.gemfile
+          - ruby: "2.7"
+            gemfile: gemfiles/activerecord_8.1.gemfile
+          - ruby: "3.0"
+            gemfile: gemfiles/activerecord_8.1.gemfile
+          - ruby: "3.1"
+            gemfile: gemfiles/activerecord_8.1.gemfile
     env:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
     steps:

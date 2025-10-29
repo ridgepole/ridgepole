@@ -6,8 +6,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       erbh(<<-ERB)
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.float   "salary", limit: 24, null: false
           t.date    "from_date", null: false
+          t.float   "salary", limit: 24, null: false
           t.date    "to_date", null: false
         end
       ERB
@@ -17,8 +17,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       <<-RUBY
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.float   "salary", null: false
           t.date    "from_date", null: false
+          t.float   "salary", null: false
           t.date    "to_date", null: false
         end
       RUBY
@@ -38,8 +38,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       <<-RUBY
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.float   "salary", limit: 24, null: false
           t.date    "from_date", null: false
+          t.float   "salary", limit: 24, null: false
           t.date    "to_date", null: false
         end
       RUBY
@@ -49,8 +49,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       <<-RUBY
         create_table "salaries", id: false, force: :cascade do |t|
           t.integer "emp_no", null: false
-          t.float   "salary", null: false
           t.date    "from_date", null: false
+          t.float   "salary", null: false
           t.date    "to_date", null: false
         end
       RUBY

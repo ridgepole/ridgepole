@@ -6,8 +6,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       <<-RUBY
         create_table "books", force: :cascade do |t|
           t.string   "title"
-          t.virtual  "upper_title", type: :string, as: "upper(`title`)"
           t.virtual  "title_length", type: :integer, as: "length(`title`)", stored: true
+          t.virtual  "upper_title", type: :string, as: "upper(`title`)"
           t.index ["title"], name: "index_books_on_title"
           t.index ["title_length"], name: "index_books_on_title_length"
         end

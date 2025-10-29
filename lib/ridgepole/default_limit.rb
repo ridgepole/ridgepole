@@ -3,14 +3,15 @@
 module Ridgepole
   class DefaultsLimit
     DEFAULT_LIMIT_FOR_MYSQL = {
-      boolean: 1,
       integer: 4,
       bigint: 8,
       float: 24,
       string: 255,
       text: 65_535,
       binary: 65_535,
-    }.freeze
+    }.merge(
+      (ActiveRecord.gem_version < Gem::Version.new('8.1.0.beta1') ? { boolean: 1 } : {})
+    ).freeze
 
     DEFAULTS_LIMITS = {
       mysql2: DEFAULT_LIMIT_FOR_MYSQL,

@@ -5,17 +5,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.integer "club_id", null: false
+          t.integer "emp_no", null: false
           t.index ["emp_no", "club_id"], name: "idx_emp_no_club_id"
         end
 
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
+          t.string "last_name", limit: 16, null: false
         end
       ERB
     end
@@ -23,19 +23,19 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no", null: false
-          t.integer "club_id", null: false
           t.string  "any_col", null: false, ignore: true
+          t.integer "club_id", null: false
+          t.integer "emp_no", null: false
           t.index ["emp_no", "club_id"], name: "idx_emp_no_club_id"
         end
 
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
+          t.integer "age", null: false, ignore: true
           t.date    "birth_date", null: false
           t.string  "first_name", limit: 14, null: false
-          t.string  "last_name", limit: 16, null: false
           t.string  "gender", limit: 1, null: false
           t.date    "hire_date", null: false
-          t.integer "age", null: false, ignore: true
+          t.string  "last_name", limit: 16, null: false
           t.date    "updated_at", ignore: true
         end
       ERB
@@ -54,17 +54,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.integer "club_id", null: false
+          t.integer "emp_no", null: false
           t.index ["emp_no", "club_id"], name: "idx_emp_no_club_id"
         end
 
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
+          t.string "last_name", limit: 16, null: false
         end
       ERB
     end
@@ -72,17 +72,17 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.integer "club_id", ignore: true
+          t.integer "emp_no", null: false
           t.index ["emp_no", "club_id"], name: "idx_emp_no_club_id"
         end
 
         create_table "employees", primary_key: "emp_no", force: :cascade do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name", limit: 20, default: "XXX", null: false, ignore: true
           t.string "gender", limit: 2, null: false, ignore: true
           t.date   "hire_date", null: false
+          t.string "last_name", limit: 20, default: "XXX", null: false, ignore: true
         end
       ERB
     end

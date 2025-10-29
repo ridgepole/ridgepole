@@ -7,9 +7,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "employees", primary_key: "emp_no", force: :cascade, charset: "<%= @utf8 %>", options: "ENGINE=MyISAM"  do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false
-          t.string "last_name", limit: 16, null: false
           t.string "gender", limit: 1, null: false
           t.date   "hire_date", null: false
+          t.string "last_name", limit: 16, null: false
         end
       ERB
     end
@@ -19,9 +19,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
         create_table "employees", primary_key: "emp_no", force: :cascade, charset: "ascii"  do |t|
           t.date   "birth_date", null: false
           t.string "first_name", limit: 14, null: false, collation: "utf8_general_ci"
-          t.string "last_name", limit: 16, null: false, collation: "utf8_general_ci"
           t.string "gender", limit: 1, null: false, collation: "utf8_general_ci"
           t.date   "hire_date", null: false
+          t.string "last_name", limit: 16, null: false, collation: "utf8_general_ci"
         end
       ERB
     end

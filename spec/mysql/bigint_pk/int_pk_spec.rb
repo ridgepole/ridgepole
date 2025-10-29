@@ -5,9 +5,9 @@ describe 'Ridgepole::Client (with integer pk)' do
     let(:dsl) do
       <<-RUBY
         create_table "books", id: :integer, force: :cascade do |t|
-          t.string   "title", null: false
           t.integer  "author_id", null: false
           t.datetime "created_at"
+          t.string   "title", null: false
           t.datetime "updated_at"
         end
       RUBY
@@ -27,9 +27,9 @@ describe 'Ridgepole::Client (with integer pk)' do
     let(:dsl) do
       <<-RUBY
         create_table "books", force: :cascade do |t|
-          t.string   "title", null: false
           t.integer  "author_id", null: false
           t.datetime "created_at"
+          t.string   "title", null: false
           t.datetime "updated_at"
         end
       RUBY

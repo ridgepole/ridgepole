@@ -5,8 +5,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.integer "club_id", null: false
+          t.integer "emp_no", null: false
           t.string  "string", null: false
           t.text    "text", null: false
         end
@@ -16,8 +16,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no", null: false, comment: "any comment"
           t.integer "club_id", null: false, comment: "any comment2"
+          t.integer "emp_no", null: false, comment: "any comment"
           t.string  "string", null: false, comment: "any comment3"
           t.text    "text", null: false, comment: "any comment4"
         end
@@ -40,8 +40,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no", null: false, comment: "any comment"
           t.integer "club_id", null: false, comment: "any comment2"
+          t.integer "emp_no", null: false, comment: "any comment"
           t.string  "string", null: false, comment: "any comment3"
           t.text    "text", null: false, comment: "any comment4"
         end
@@ -51,8 +51,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no", null: false
           t.integer "club_id", null: false
+          t.integer "emp_no", null: false
           t.string  "string", null: false
           t.text    "text", null: false
         end
@@ -75,8 +75,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no", null: false, comment: "any comment"
           t.integer "club_id", null: false, comment: "any comment2"
+          t.integer "emp_no", null: false, comment: "any comment"
           t.string  "string", null: false, comment: "any comment3"
           t.text    "text", null: false, comment: "any comment4"
         end
@@ -86,8 +86,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no", null: false, comment: "other comment"
           t.integer "club_id", null: false, comment: "other comment2"
+          t.integer "emp_no", null: false, comment: "other comment"
           t.string  "string", null: false, comment: "other comment3"
           t.text    "text", null: false, comment: "other comment4"
         end
@@ -110,8 +110,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade do |t|
-          t.integer "emp_no", null: false, comment: "any comment"
           t.integer "club_id", null: false, comment: "any comment2"
+          t.integer "emp_no", null: false, comment: "any comment"
           t.string  "string", null: false, comment: "any comment3"
           t.text    "text", null: false, comment: "any comment4"
         end
@@ -134,8 +134,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade, comment: "table comment" do |t|
-          t.integer "emp_no", null: false, comment: "other comment"
           t.integer "club_id", null: false, comment: "other comment2"
+          t.integer "emp_no", null: false, comment: "other comment"
           t.string  "string", null: false, comment: "other comment3"
           t.text    "text", null: false, comment: "other comment4"
         end
@@ -157,8 +157,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "employee_clubs", force: :cascade, comment: "table comment" do |t|
-          t.integer "emp_no", null: false, comment: "other comment"
           t.integer "club_id", null: false, comment: "other comment2"
+          t.integer "emp_no", null: false, comment: "other comment"
           t.string  "string", null: false, comment: "other comment3"
           t.text    "text", null: false, comment: "other comment4"
         end

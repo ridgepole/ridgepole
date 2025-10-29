@@ -306,8 +306,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
         end
 
         create_table "child", force: :cascade, charset: "<%= @utf8 %>" do |t|
-          t.integer "parent_id"
           t.string "name"
+          t.integer "parent_id"
           t.index ["parent_id", "name"], name: "par_id"
         end
         add_foreign_key "child", "parent", name: "child_ibfk_1"
@@ -357,8 +357,8 @@ context 'when create fk on the first primary key' do
       end
 
       create_table "icons", primary_key: ["user_id", "employee_id"], force: :cascade, charset: "<%= @utf8 %>" do |t|
-        t.integer "user_id", null: false
         t.integer "employee_id", null: false
+        t.integer "user_id", null: false
       end
       add_foreign_key "icons", "users", name: "fk_icons_users"
     ERB
@@ -384,8 +384,8 @@ context 'when create fk on the second primary key' do
       end
 
       create_table "icons", primary_key: ["user_id", "employee_id"], force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-        t.integer "user_id", null: false
         t.integer "employee_id", null: false
+        t.integer "user_id", null: false
       end
       add_foreign_key "icons", "employees", name: "fk_icons_employees"
     ERB

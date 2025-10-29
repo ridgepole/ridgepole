@@ -4,10 +4,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
   let(:actual_dsl) do
     erbh(<<-ERB)
       create_table "users", force: :cascade do |t|
-        t.string "name", null: false, comment: "User name"
-        t.string "email", null: false, comment: "Email address"
-        t.integer "age", null: false, comment: "age"
         t.string "address", null: false, comment: "address"
+        t.integer "age", null: false, comment: "age"
+        t.string "email", null: false, comment: "Email address"
+        t.string "name", null: false, comment: "User name"
       end
     ERB
   end
@@ -15,10 +15,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
   let(:expected_dsl) do
     erbh(<<-ERB)
       create_table "users", force: :cascade do |t|
-        t.string "name", null: false, comment: "Full name"
-        t.text "email", null: false, comment: "Primary email"
-        t.integer "age", comment: "age"
         t.string "address", null: false, comment: "address"
+        t.integer "age", comment: "age"
+        t.text "email", null: false, comment: "Primary email"
+        t.string "name", null: false, comment: "Full name"
       end
     ERB
   end
@@ -34,8 +34,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_ruby actual_dsl
 
       expect(delta.script).to match_fuzzy erbh(<<-ERB)
-        change_column("users", "email", :text, **#{{ null: false, comment: 'Primary email', default: nil, unsigned: false }})
         change_column("users", "age", :integer, **#{{ comment: 'age', null: true, default: nil, unsigned: false }})
+        change_column("users", "email", :text, **#{{ null: false, comment: 'Primary email', default: nil, unsigned: false }})
         change_column_comment("users", "name", "Full name")
       ERB
 
@@ -53,8 +53,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
       expect(delta.script).to match_fuzzy erbh(<<-ERB)
         change_table("users", bulk: true) do |t|
-          t.change("email", :text, **#{{ null: false, comment: 'Primary email', default: nil, unsigned: false }})
           t.change("age", :integer, **#{{ comment: 'age', null: true, default: nil, unsigned: false }})
+          t.change("email", :text, **#{{ null: false, comment: 'Primary email', default: nil, unsigned: false }})
         end
         change_column_comment("users", "name", "Full name")
       ERB
@@ -70,10 +70,10 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "users", force: :cascade do |t|
-          t.string "name", null: false, comment: "Full name"
-          t.string "email", null: false, comment: "Primary address"
-          t.integer "age", null: false, comment: "age"
           t.string "address", null: false, comment: "address"
+          t.integer "age", null: false, comment: "age"
+          t.string "email", null: false, comment: "Primary address"
+          t.string "name", null: false, comment: "Full name"
         end
       ERB
     end

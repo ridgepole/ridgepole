@@ -7,8 +7,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-          t.string   "name"
           t.datetime "created_at", null: false
+          t.string   "name"
           t.datetime "updated_at", null: false
         end
       ERB
@@ -34,8 +34,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:dsl) do
       erbh(<<-ERB)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-          t.string   "name"
           t.datetime "created_at", null: false
+          t.string   "name"
           t.datetime "updated_at", null: false
         end
       ERB
@@ -59,8 +59,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v1()" }, force: :cascade do |t|
-          t.string   "name"
           t.datetime "created_at", null: false
+          t.string   "name"
           t.datetime "updated_at", null: false
         end
       ERB
@@ -69,8 +69,8 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "users", id: :uuid, default: -> { "uuid_generate_v4()" }, force: :cascade do |t|
-          t.string   "name"
           t.datetime "created_at", null: false
+          t.string   "name"
           t.datetime "updated_at", null: false
         end
       ERB
