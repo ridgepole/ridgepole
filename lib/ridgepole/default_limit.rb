@@ -10,9 +10,7 @@ module Ridgepole
       text: 65_535,
       binary: 65_535,
     }.tap do |limits|
-      if ActiveRecord.gem_version < Gem::Version.new('8.1.0.beta1')
-        limits[:boolean] = 1
-      end
+      limits[:boolean] = 1 if ActiveRecord.gem_version < Gem::Version.new('8.1.0.beta1')
     end.freeze
 
     DEFAULTS_LIMITS = {
