@@ -9,9 +9,9 @@ module Ridgepole
       string: 255,
       text: 65_535,
       binary: 65_535,
-    }.merge(
-      (ActiveRecord.gem_version < Gem::Version.new('8.1.0.beta1') ? { boolean: 1 } : {})
-    ).freeze
+    }.tap do |limits|
+      limits[:boolean] = 1 if ActiveRecord.gem_version < Gem::Version.new('8.1.0.beta1')
+    end.freeze
 
     DEFAULTS_LIMITS = {
       mysql2: DEFAULT_LIMIT_FOR_MYSQL,
