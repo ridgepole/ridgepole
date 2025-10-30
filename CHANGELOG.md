@@ -2,7 +2,7 @@
 
 ## 3.0
 
-### 3.1.0 (N/A)
+### 3.1.0 (2025/10/30)
 
 - Support Rails 8.1 [pull#589](https://github.com/ridgepole/ridgepole/pull/589)
 - Support for migrating PostgreSQL table comments [pull#587](https://github.com/ridgepole/ridgepole/pull/587)
