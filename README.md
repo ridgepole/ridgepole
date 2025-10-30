@@ -10,6 +10,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 [![Coverage Status](https://coveralls.io/repos/github/ridgepole/ridgepole/badge.svg?branch=3.0)](https://coveralls.io/github/ridgepole/ridgepole?branch=3.0)
 
 > [!note]
+> * ridgepole v3.1.0
+>   * Support Rails 8.1 (cf. https://github.com/ridgepole/ridgepole/pull/589)
 > * ridgepole v3.0.0
 >   * Support Rails 8.0 (cf. https://github.com/ridgepole/ridgepole/pull/504)
 > * ridgepole v2.0.0
