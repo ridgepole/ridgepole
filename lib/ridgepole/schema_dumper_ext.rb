@@ -12,6 +12,21 @@ module Ridgepole
   end
 end
 
+module Ridgepole
+  module SchemaDumperDisableSortColumnsExt
+    def table(table, stream)
+      def @connection.columns(*_args)
+        cols = super
+        def cols.sort_by(*_args, &_block)
+          self
+        end
+        cols
+      end
+      super
+    end
+  end
+end
+
 module ActiveRecord
   class SchemaDumper
     prepend Ridgepole::SchemaDumperExt
