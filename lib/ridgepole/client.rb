@@ -16,7 +16,7 @@ module Ridgepole
       @diff = Ridgepole::Diff.new(@options)
 
       require 'ridgepole/ext/abstract_mysql_adapter/dump_auto_increment' if @options[:mysql_dump_auto_increment]
-      ActiveRecord::SchemaDumper.prepend Ridgepole::SchemaDumperDisableSortColumnsExt if @options[:disable_sort_columns]
+      require 'ridgepole/ext/schema_dumper/disable_sort_columns' if @options[:disable_sort_columns]
     end
 
     def dump(&block)
