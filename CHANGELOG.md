@@ -2,6 +2,10 @@
 
 ## 3.0
 
+### 3.1.1 (2025/10/31)
+
+- Add `--disable-sort-columns` option [pull#601](https://github.com/ridgepole/ridgepole/pull/601)
+
 ### 3.1.0 (2025/10/30)
 
 - Support Rails 8.1 [pull#589](https://github.com/ridgepole/ridgepole/pull/589)
