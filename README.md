@@ -12,7 +12,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 > [!warning]
 > The order of columns when exporting has changed in Rails 8.1. https://github.com/rails/rails/pull/53281
 >
-> If you do not want to sort the column, use `--disable-sort-columns` option.
+> If you do not want to sort the columns, use `--disable-sort-columns` option.
 
 > [!note]
 > * ridgepole v3.1.0
