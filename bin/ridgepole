@@ -187,7 +187,12 @@ begin
   client = Ridgepole::Client.new(Ridgepole::Config.load(config, env, spec_name), options) if config
 
   ActiveRecord::Base.logger = logger
-  ActiveSupport::LogSubscriber.colorize_logging = options[:color]
+
+  if ActiveRecord.gem_version >= Gem::Version.new('8.2.0.alpha')
+    ActiveSupport.colorize_logging = options[:color]
+  else
+    ActiveSupport::LogSubscriber.colorize_logging = options[:color]
+  end
 
   case mode
   when :export
