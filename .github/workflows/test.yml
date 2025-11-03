@@ -102,13 +102,12 @@ jobs:
           flag-name: run-${{ matrix.ruby }}-${{ matrix.env }}-${{ matrix.gemfile }}
           parallel: true
       - name: Build and install gem
-        # NOTE: Rails 8.2 is not yet published on RubyGems and currently exists only on GitHub,
-        # so we skip the build and install step for activerecord_8.2.gemfile.
-        if: ${{ matrix.gemfile != 'gemfiles/activerecord_8.2.gemfile' }}
+        env:
+          BUNDLE_GEMFILE: ${{ matrix.gemfile }}
         run: |
           gem install securerandom -v '~> 0.3.2'
           gem install zeitwerk -v '~> 2.6.18'
-          gem install activerecord -v "~> $(awk -F '[ ",]+' '/activerecord/{print $4}' ${{ matrix.gemfile }})"
+          bundle install
           gem build ridgepole.gemspec -o ridgepole.gem
           gem install ridgepole.gem
           ridgepole -v
