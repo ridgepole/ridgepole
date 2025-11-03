@@ -214,6 +214,35 @@ describe 'Ridgepole::Client.diff' do
     end
   end
 
+  context 'when applying foreign key with specific schema (issue #606)' do
+    let(:actual_dsl) { <<-RUBY }
+    create_table "users", force: :cascade do |t|
+      t.string "name", null: false
+    end
+    create_table "entries", force: :cascade do |t|
+      t.references :user, null: false, foreign_key: true
+    end
+    RUBY
+
+    let(:expected_dsl) { <<-RUBY }
+    create_table "users", force: :cascade do |t|
+      t.string "name", null: false
+    end
+    create_table "entries", force: :cascade do |t|
+      t.bigint "user_id", null: false
+      t.foreign_key :users, column: :user_id
+      t.index ["user_id"]
+    end
+    RUBY
+
+    subject { Ridgepole::Client }
+
+    it {
+      delta = subject.diff(actual_dsl, expected_dsl)
+      expect(delta.differ?).to be_falsey
+    }
+  end
+
   context 'when add index with algorithm: :concurrently' do
     subject { Ridgepole::Client }
 

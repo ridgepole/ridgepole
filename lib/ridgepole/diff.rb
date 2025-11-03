@@ -465,6 +465,23 @@ module Ridgepole
       to = (to || {}).dup
       foreign_keys_delta = {}
 
+      # Converts conventionally named (i.e., the combination of a singular table name with `_id` suffix)
+      # foreign key column names to void.
+      #
+      # Example:
+      # in `foreign_key_name_or_tables`, it converts the foreign key column name to nil
+      #   - ["my_table", "referenced_table", "referenced_table_id"] => ["my_table", "referenced_table", nil]
+      # in `to_attrs`, it drops `column` option value
+      #   - {to_table: "referenced_table", options: {column: "referenced_table_id"}} => {to_table: "referenced_table", options: {}}
+      to = to.to_h do |foreign_key_name_or_tables, to_attrs|
+        foreign_key_column_name = "#{foreign_key_name_or_tables[1].singularize}_id"
+
+        foreign_key_name_or_tables[2] = nil if foreign_key_column_name == foreign_key_name_or_tables[2]
+        to_attrs[:options].delete(:column) if to_attrs[:options][:column] == foreign_key_column_name
+
+        [foreign_key_name_or_tables, to_attrs]
+      end
+
       to.each do |foreign_key_name_or_tables, to_attrs|
         ignore_fk = to_attrs.fetch(:options, {}).delete(:ignore)
         from_attrs = from.delete(foreign_key_name_or_tables)
