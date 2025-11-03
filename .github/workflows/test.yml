@@ -110,7 +110,7 @@ jobs:
           bundle config unset path
           bundle install
           gem build ridgepole.gemspec -o ridgepole.gem
-          gem install ridgepole.gem --pre
+          gem install ridgepole.gem
           ridgepole -v
   finish:
     needs: test
