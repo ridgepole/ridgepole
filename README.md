@@ -211,6 +211,31 @@ add_index "child", ["parent_id"], name: "par_ind", using: :btree
 add_foreign_key "child", "parent", name: "child_ibfk_1"
 ```
 
+## CHECK Constraint
+
+```ruby
+create_table "products", force: :cascade do |t|
+  t.string  "name", null: false
+  t.decimal "price", precision: 10, scale: 2
+  t.integer "quantity"
+
+  t.check_constraint "price > 0", name: "price_check"
+  t.check_constraint "quantity >= 0", name: "quantity_check"
+end
+```
+
+> [!important]
+> **Matching Schemafile to Database Output**
+>
+> CHECK constraint expressions may be formatted differently by your database when exported. For example:
+> - DSL: `"(price > 0)"`
+> - Database export: `` "`price` > 0" `` (MySQL) or `"((price > 0))"` (PostgreSQL)
+>
+> To avoid unnecessary migrations where constraints are dropped and recreated:
+> Please modify your Schemafile to match exactly what the SchemaDumper outputs. This approach maintains simplicity and prevents migration issues instead of maintaining complex normalization logic in Ridgepole.
+>
+> Run `ridgepole --export` to see the exact format your database uses, then update your Schemafile accordingly.
+
 ## Ignore Column/Index/FK
 
 ```ruby

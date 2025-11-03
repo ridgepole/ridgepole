@@ -2,6 +2,10 @@
 
 ## 3.0
 
+### 3.1.2 (2025/11/03)
+
+- Normalize foreign key columns. [pull#607](https://github.com/ridgepole/ridgepole/pull/607)
+
 ### 3.1.1 (2025/10/31)
 
 - Add `--disable-sort-columns` option [pull#601](https://github.com/ridgepole/ridgepole/pull/601)
