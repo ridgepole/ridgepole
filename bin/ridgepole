@@ -188,10 +188,10 @@ begin
 
   ActiveRecord::Base.logger = logger
 
-  if ActiveRecord.gem_version >= Gem::Version.new('8.2.0.alpha')
-    ActiveSupport.colorize_logging = options[:color]
-  else
+  if ActiveRecord.gem_version < Gem::Version.new('8.2.0.alpha')
     ActiveSupport::LogSubscriber.colorize_logging = options[:color]
+  else
+    ActiveSupport.colorize_logging = options[:color]
   end
 
   case mode
