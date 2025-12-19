@@ -38,38 +38,45 @@ jobs:
           - gemfiles/activerecord_8.1.gemfile
           - gemfiles/activerecord_8.2.gemfile
         exclude:
+          # TRILOGY
           - gemfile: gemfiles/activerecord_6.1.gemfile
             env: TRILOGY=1
           - gemfile: gemfiles/activerecord_7.0.gemfile
             env: TRILOGY=1
+          # activerecord 6.1
           - ruby: "3.3"
             gemfile: gemfiles/activerecord_6.1.gemfile
           - ruby: "3.4"
             gemfile: gemfiles/activerecord_6.1.gemfile
           - ruby: "4.0"
             gemfile: gemfiles/activerecord_6.1.gemfile
+          # activerecord 7.0
           - ruby: "3.3"
             gemfile: gemfiles/activerecord_7.0.gemfile
           - ruby: "3.4"
             gemfile: gemfiles/activerecord_7.0.gemfile
           - ruby: "4.0"
             gemfile: gemfiles/activerecord_7.0.gemfile
+          # activerecord 7.2
           - ruby: "2.7"
             gemfile: gemfiles/activerecord_7.2.gemfile
           - ruby: "3.0"
             gemfile: gemfiles/activerecord_7.2.gemfile
+          # activerecord 8.0
           - ruby: "2.7"
             gemfile: gemfiles/activerecord_8.0.gemfile
           - ruby: "3.0"
             gemfile: gemfiles/activerecord_8.0.gemfile
           - ruby: "3.1"
             gemfile: gemfiles/activerecord_8.0.gemfile
+          # activerecord 8.1
           - ruby: "2.7"
             gemfile: gemfiles/activerecord_8.1.gemfile
           - ruby: "3.0"
             gemfile: gemfiles/activerecord_8.1.gemfile
           - ruby: "3.1"
             gemfile: gemfiles/activerecord_8.1.gemfile
+          # activerecord 8.2
           - ruby: "2.7"
             gemfile: gemfiles/activerecord_8.2.gemfile
           - ruby: "3.0"
