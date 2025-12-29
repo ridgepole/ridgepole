@@ -7,7 +7,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 
 [![Gem Version](https://badge.fury.io/rb/ridgepole.svg)](https://badge.fury.io/rb/ridgepole)
 [![test](https://github.com/ridgepole/ridgepole/actions/workflows/test.yml/badge.svg)](https://github.com/ridgepole/ridgepole/actions/workflows/test.yml)
-[![Coverage Status](https://coveralls.io/repos/github/ridgepole/ridgepole/badge.svg?branch=3.0)](https://coveralls.io/github/ridgepole/ridgepole?branch=3.0)
+[![codecov](https://codecov.io/gh/ridgepole/ridgepole/graph/badge.svg)](https://codecov.io/gh/ridgepole/ridgepole)
 
 > [!warning]
 > The order of columns when exporting has changed in Rails 8.1. https://github.com/rails/rails/pull/53281
