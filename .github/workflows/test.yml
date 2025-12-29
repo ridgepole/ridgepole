@@ -25,66 +25,66 @@ jobs:
           - "3.4"
           - "4.0"
         env:
-          - MYSQL57=1
-          - MYSQL80=1
-          - POSTGRESQL=1
-          - TRILOGY=1
+          - MYSQL57
+          - MYSQL80
+          - POSTGRESQL
+          - TRILOGY
         gemfile:
-          - gemfiles/activerecord_6.1.gemfile
-          - gemfiles/activerecord_7.0.gemfile
-          - gemfiles/activerecord_7.1.gemfile
-          - gemfiles/activerecord_7.2.gemfile
-          - gemfiles/activerecord_8.0.gemfile
-          - gemfiles/activerecord_8.1.gemfile
-          - gemfiles/activerecord_8.2.gemfile
+          - activerecord_6.1.gemfile
+          - activerecord_7.0.gemfile
+          - activerecord_7.1.gemfile
+          - activerecord_7.2.gemfile
+          - activerecord_8.0.gemfile
+          - activerecord_8.1.gemfile
+          - activerecord_8.2.gemfile
         exclude:
           # TRILOGY
-          - gemfile: gemfiles/activerecord_6.1.gemfile
-            env: TRILOGY=1
-          - gemfile: gemfiles/activerecord_7.0.gemfile
-            env: TRILOGY=1
+          - gemfile: activerecord_6.1.gemfile
+            env: TRILOGY
+          - gemfile: activerecord_7.0.gemfile
+            env: TRILOGY
           # activerecord 6.1
           - ruby: "3.3"
-            gemfile: gemfiles/activerecord_6.1.gemfile
+            gemfile: activerecord_6.1.gemfile
           - ruby: "3.4"
-            gemfile: gemfiles/activerecord_6.1.gemfile
+            gemfile: activerecord_6.1.gemfile
           - ruby: "4.0"
-            gemfile: gemfiles/activerecord_6.1.gemfile
+            gemfile: activerecord_6.1.gemfile
           # activerecord 7.0
           - ruby: "3.3"
-            gemfile: gemfiles/activerecord_7.0.gemfile
+            gemfile: activerecord_7.0.gemfile
           - ruby: "3.4"
-            gemfile: gemfiles/activerecord_7.0.gemfile
+            gemfile: activerecord_7.0.gemfile
           - ruby: "4.0"
-            gemfile: gemfiles/activerecord_7.0.gemfile
+            gemfile: activerecord_7.0.gemfile
           # activerecord 7.2
           - ruby: "2.7"
-            gemfile: gemfiles/activerecord_7.2.gemfile
+            gemfile: activerecord_7.2.gemfile
           - ruby: "3.0"
-            gemfile: gemfiles/activerecord_7.2.gemfile
+            gemfile: activerecord_7.2.gemfile
           # activerecord 8.0
           - ruby: "2.7"
-            gemfile: gemfiles/activerecord_8.0.gemfile
+            gemfile: activerecord_8.0.gemfile
           - ruby: "3.0"
-            gemfile: gemfiles/activerecord_8.0.gemfile
+            gemfile: activerecord_8.0.gemfile
           - ruby: "3.1"
-            gemfile: gemfiles/activerecord_8.0.gemfile
+            gemfile: activerecord_8.0.gemfile
           # activerecord 8.1
           - ruby: "2.7"
-            gemfile: gemfiles/activerecord_8.1.gemfile
+            gemfile: activerecord_8.1.gemfile
           - ruby: "3.0"
-            gemfile: gemfiles/activerecord_8.1.gemfile
+            gemfile: activerecord_8.1.gemfile
           - ruby: "3.1"
-            gemfile: gemfiles/activerecord_8.1.gemfile
+            gemfile: activerecord_8.1.gemfile
           # activerecord 8.2
           - ruby: "2.7"
-            gemfile: gemfiles/activerecord_8.2.gemfile
+            gemfile: activerecord_8.2.gemfile
           - ruby: "3.0"
-            gemfile: gemfiles/activerecord_8.2.gemfile
+            gemfile: activerecord_8.2.gemfile
           - ruby: "3.1"
-            gemfile: gemfiles/activerecord_8.2.gemfile
+            gemfile: activerecord_8.2.gemfile
     env:
-      BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+      BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
       - uses: ruby/setup-ruby@8aeb6ff8030dd539317f8e1769a044873b56ea71 # v1.268.0
@@ -104,19 +104,16 @@ jobs:
         env:
           MYSQL_PWD: password
       - name: Run tests
-        run: ${{ matrix.env }} bundle exec rake
+        run: env ${{ matrix.env }}=1 bundle exec rake
         env:
-          BUNDLE_GEMFILE: ${{ matrix.gemfile }}
           RUBYOPT: --enable-frozen-string-literal
-      - name: Coveralls Parallel
-        uses: coverallsapp/github-action@5cbfd81b66ca5d10c19b062c04de0199c215fb6e # v2.3.7
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          flag-name: run-${{ matrix.ruby }}-${{ matrix.env }}-${{ matrix.gemfile }}
-          parallel: true
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          flags: ${{ matrix.ruby }},${{ matrix.gemfile }},${{ matrix.env }}
       - name: Build and install gem
-        env:
-          BUNDLE_GEMFILE: ${{ matrix.gemfile }}
         run: |
           gem install securerandom -v '~> 0.3.2'
           gem install zeitwerk -v '~> 2.6.18'
@@ -130,11 +127,6 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: Coveralls Finished
-        uses: coverallsapp/github-action@5cbfd81b66ca5d10c19b062c04de0199c215fb6e # v2.3.7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel-finished: true
       - name: Check test conclusion
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
