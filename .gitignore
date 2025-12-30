@@ -23,3 +23,4 @@ _site/
 config.yml
 /gemfiles/*.lock
 *.swp
+junit_format/

@@ -27,6 +27,8 @@ require 'hash_order_helper'
 require 'erb_helper'
 
 RSpec.configure do |config|
+  config.add_formatter('RspecJunitFormatter', 'junit_format/rspec_xml') if ENV['CI']
+
   config.before(:all) do
     if condition(:debug) || condition(:verbose)
       ActiveRecord::Migration.verbose = true
