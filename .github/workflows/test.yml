@@ -113,6 +113,13 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
           flags: ${{ matrix.ruby }},${{ matrix.gemfile }},${{ matrix.env }}
+      - name: Upload test results to Codecov
+        uses: codecov/test-results-action@0fa95f0e1eeaafde2c782583b36b28ad0d8c77d3 # v1.2.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          flags: ${{ matrix.ruby }},${{ matrix.gemfile }},${{ matrix.env }}
+          directory: junit_format
       - name: Build and install gem
         run: |
           gem install securerandom -v '~> 0.3.2'

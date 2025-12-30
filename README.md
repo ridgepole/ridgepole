@@ -412,9 +412,9 @@ see https://github.com/ridgepole/ridgepole/issues/568
 docker compose up -d
 bundle install
 bundle exec appraisal install
-bundle exec appraisal activerecord-7.0 rake
-# POSTGRESQL=1 bundle exec appraisal activerecord-7.0 rake
-# MYSQL80=1 bundle exec appraisal activerecord-7.0 rake
+bundle exec appraisal activerecord-8.2 rake
+# POSTGRESQL=1 bundle exec appraisal activerecord-8.2 rake
+# MYSQL80=1 bundle exec appraisal activerecord-8.2 rake
 ```
 
 > [!note]
