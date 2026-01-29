@@ -75,7 +75,7 @@ module Ridgepole
           buf = StringIO.new
 
           callback = proc do |sql, _name|
-            buf.puts sql if sql =~ /\A(CREATE|ALTER|DROP|RENAME)\b/i
+            buf.puts sql if sql =~ /\A(CREATE|ALTER|DROP|RENAME|COMMENT)\b/i
           end
 
           eval_script_block = proc do
