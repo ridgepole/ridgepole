@@ -83,6 +83,8 @@ jobs:
             gemfile: activerecord_8.2.gemfile
           - ruby: "3.1"
             gemfile: activerecord_8.2.gemfile
+          - ruby: "3.2"
+            gemfile: activerecord_8.2.gemfile
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}
     steps:
