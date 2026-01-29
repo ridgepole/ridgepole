@@ -84,4 +84,33 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect(subject.dump).to match_ruby actual_dsl
     }
   end
+
+  context 'when only change column comment (noop)' do
+    subject { client }
+
+    let(:expected_dsl) do
+      erbh(<<-ERB)
+        create_table "users", force: :cascade do |t|
+          t.string "address", null: false, comment: "address"
+          t.integer "age", null: false, comment: "age"
+          t.string "email", null: false, comment: "Email address"
+          t.string "name", null: false, comment: "Full name"
+        end
+      ERB
+    end
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_ruby actual_dsl
+
+      migrated, sql = delta.migrate(noop: true)
+      expect(migrated).to be_truthy
+      expect(subject.dump).to match_ruby actual_dsl
+
+      expect(sql).to match_fuzzy(<<-SQL)
+        COMMENT ON COLUMN "users"."name" IS 'Full name'
+      SQL
+    }
+  end
 end
