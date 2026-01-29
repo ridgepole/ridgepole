@@ -2,6 +2,10 @@
 
 ## 3.0
 
+### 3.1.3 (2026/01/29)
+
+- Show `COMMENT` SQL in dry-run. [pull#632](https://github.com/ridgepole/ridgepole/pull/632)
+
 ### 3.1.2 (2025/11/03)
 
 - Normalize foreign key columns. [pull#607](https://github.com/ridgepole/ridgepole/pull/607)
