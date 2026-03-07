@@ -62,3 +62,7 @@ Lint/LiteralInInterpolation:
   Enabled: false
 Naming/PredicateMethod:
   Enabled: false
+Style/OneClassPerFile:
+  Enabled: false
+Style/FileOpen:
+  Enabled: false
