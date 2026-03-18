@@ -59,11 +59,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       context 'migrated again without change' do
         before { subject.diff(expected_dsl).migrate }
         it {
-          if SpecCondition.mysql80?
-            expect { delta.migrate }.to raise_error(RuntimeError) # FIXME?
-          else
-            expect { delta.migrate }.not_to raise_error
-          end
+          expect { delta.migrate }.not_to raise_error
         }
       end
     end
@@ -99,7 +95,9 @@ describe 'Ridgepole::Client#diff -> migrate' do
           expect(delta.differ?).to be_truthy # because of white spaces
           expect(subject.dump).to match_ruby expected_dsl.sub("concat(`title`, ' ', `sub_title`)", "concat(`title`,' ',`sub_title`)")
           expect(subject.dump).not_to match_ruby expected_dsl
-          expect { delta.migrate }.to raise_error(RuntimeError)
+          # Previously this raised RuntimeError due to DEFAULT NULL being added to virtual column
+          # ALTER statements (cf. #482). Now that the bug is fixed, the ALTER succeeds as a no-op.
+          expect { delta.migrate }.not_to raise_error
         }
       end
     end
