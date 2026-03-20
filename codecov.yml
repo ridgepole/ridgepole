@@ -1,2 +1,11 @@
 coverage:
   range: 80..90
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 10%
+    patch:
+      default:
+        target: auto
+        threshold: 10%

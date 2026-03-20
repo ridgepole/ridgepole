@@ -13,19 +13,16 @@ module Ridgepole
     end
 
     module ConnectionAdapterExt
-      def execute(*args)
-        sql = args.fetch(0)
-        name = args[1]
-
+      def execute_expander_internal_execute(sql, &block)
         if Ridgepole::ExecuteExpander.noop
           if (callback = Ridgepole::ExecuteExpander.callback)
             sql = append_alter_extra(sql)
-            callback.call(sql, name)
+            callback.call(sql)
           end
 
           if /\A(SELECT|SHOW)\b/i.match?(sql)
             begin
-              super(sql, name)
+              block.call(sql)
             rescue StandardError
               Stub.new
             end
@@ -34,7 +31,7 @@ module Ridgepole
           end
         elsif Ridgepole::ExecuteExpander.use_script
           if /\A(SELECT|SHOW)\b/i.match?(sql)
-            super(sql, name)
+            block.call(sql)
           else
             sql = append_alter_extra(sql)
             Ridgepole::ExecuteExpander.sql_executer.execute(sql)
@@ -42,8 +39,26 @@ module Ridgepole
           end
         else
           sql = append_alter_extra(sql)
+          block.call(sql)
+        end
+      end
+
+      def execute(*args)
+        name = args[1]
+        execute_expander_internal_execute(args.fetch(0)) do |sql|
           super(sql, name)
         end
+      end
+
+      def execute_batch(statements, name = nil, **kwargs)
+        new_statements = []
+        statements.each do |statement|
+          execute_expander_internal_execute(statement) do |sql|
+            new_statements << sql
+          end
+        end
+        super(new_statements, name, **kwargs) unless new_statements.empty?
+        statements
       end
 
       private
