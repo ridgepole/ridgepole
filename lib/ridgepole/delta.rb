@@ -243,10 +243,18 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
       RUBY
       end
 
-      if @options[:create_table_with_index] && !indices.empty?
-        indices.each do |index_name, index_attrs|
-          append_add_index(table_name, index_name, index_attrs, buf, true)
-        end
+      # Partition indices: indices referencing auto_increment columns must be
+      # inside CREATE TABLE on MySQL to avoid "must be defined as a key" error.
+      # cf. https://github.com/ridgepole/ridgepole/issues/494
+      if @options[:create_table_with_index]
+        indices_in_create = indices
+        indices_after_create = {}
+      else
+        indices_in_create, indices_after_create = partition_indices_for_create(definition, indices)
+      end
+
+      indices_in_create.each do |index_name, index_attrs|
+        append_add_index(table_name, index_name, index_attrs, buf, true)
       end
 
       unless (check_constraints = attrs[:check_constraints] || {}).empty?
@@ -271,9 +279,9 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
 end
       RUBY
 
-      if !@options[:create_table_with_index] && !indices.empty?
+      unless indices_after_create.empty?
         append_change_table(table_name, buf) do
-          indices.each do |index_name, index_attrs|
+          indices_after_create.each do |index_name, index_attrs|
             append_add_index(table_name, index_name, index_attrs, buf)
           end
         end
@@ -287,6 +295,30 @@ end
 
       buf.puts
       post_buf_for_fk.puts
+    end
+
+    def partition_indices_for_create(definition, indices)
+      return [{}, indices] unless Ridgepole::ConnectionAdapters.mysql?
+
+      auto_increment_columns = definition.select do |_col_name, col_attrs|
+        col_attrs.dig(:options, :auto_increment)
+      end.keys
+
+      return [{}, indices] if auto_increment_columns.empty?
+
+      in_create = {}
+      after_create = {}
+
+      indices.each do |idx_name, idx_attrs|
+        columns = Array(idx_attrs[:column_name])
+        if (columns & auto_increment_columns).any?
+          in_create[idx_name] = idx_attrs
+        else
+          after_create[idx_name] = idx_attrs
+        end
+      end
+
+      [in_create, after_create]
     end
 
     def append_rename_table(to_table_name, from_table_name, buf)
