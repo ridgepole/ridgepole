@@ -2,6 +2,10 @@
 
 ## 3.0
 
+### 3.1.5 (2026/03/21)
+
+- Fix for creating table with non-PK auto_increment column. [pull#650](https://github.com/ridgepole/ridgepole/pull/650)
+
 ### 3.1.4 (2026/03/20)
 
 - Fix for errors when changing generated columns. [pull#642](https://github.com/ridgepole/ridgepole/pull/642) [pull#646](https://github.com/ridgepole/ridgepole/pull/646)
