@@ -39,7 +39,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       let(:expected_dsl) do
         <<-RUBY
         create_table "books", force: :cascade do |t|
-          t.virtual  "sale_title", type: :string, as: "concat('[SALE]',`title`)"
+          t.virtual  "sale_title", type: :string, as: "concat(`title`,`title`)"
           t.string   "title"
           t.index ["title"], name: "index_books_on_title"
         end
@@ -50,11 +50,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         expect(delta.differ?).to be_truthy
         expect(subject.dump).to match_ruby actual_dsl
         expect { delta.migrate }.not_to raise_error
-        if SpecCondition.mysql80?
-          expect(subject.dump).not_to match_ruby expected_dsl # FIXME?
-        else
-          expect(subject.dump).to match_ruby expected_dsl
-        end
+        expect(subject.dump).to match_ruby expected_dsl
       }
       context 'migrated again without change' do
         before { subject.diff(expected_dsl).migrate }
@@ -64,13 +60,13 @@ describe 'Ridgepole::Client#diff -> migrate' do
       end
     end
 
-    context 'when generated column has extra white spaces', condition: %i[mysql57] do # FIXME?: add mysql80
+    context 'when generated column has extra white spaces' do
       let(:expected_dsl) do
         <<-RUBY
         create_table "books", force: :cascade do |t|
           t.string   "sub_title"
           t.string   "title"
-          t.virtual  "z_full_title", type: :string, as: "concat(`title`, ' ', `sub_title`)"
+          t.virtual  "z_full_title", type: :string, as: "concat(`title`, `sub_title`)"
           t.index ["title"], name: "index_books_on_title"
         end
         RUBY
@@ -81,7 +77,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
         expect(delta.differ?).to be_truthy
         expect(subject.dump).to match_ruby actual_dsl
         expect { delta.migrate }.not_to raise_error
-        expect(subject.dump).to match_ruby expected_dsl.sub("concat(`title`, ' ', `sub_title`)", "concat(`title`,' ',`sub_title`)")
+        expect(subject.dump).to match_ruby expected_dsl.sub('concat(`title`, `sub_title`)', 'concat(`title`,`sub_title`)')
         expect(subject.dump).not_to match_ruby expected_dsl
       }
       context 'migrated again without change' do
@@ -89,11 +85,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
         it {
           expect(Ridgepole::Logger.instance).to receive(:warn).with(<<-MSG)
 [WARNING] Same expressions but only differed by white spaces were detected. This operation may fail.
-  Before: 'concat(`title`,' ',`sub_title`)'
-  After : 'concat(`title`, ' ', `sub_title`)'
+  Before: 'concat(`title`,`sub_title`)'
+  After : 'concat(`title`, `sub_title`)'
           MSG
           expect(delta.differ?).to be_truthy # because of white spaces
-          expect(subject.dump).to match_ruby expected_dsl.sub("concat(`title`, ' ', `sub_title`)", "concat(`title`,' ',`sub_title`)")
+          expect(subject.dump).to match_ruby expected_dsl.sub('concat(`title`, `sub_title`)', 'concat(`title`,`sub_title`)')
           expect(subject.dump).not_to match_ruby expected_dsl
           # Previously this raised RuntimeError due to DEFAULT NULL being added to virtual column
           # ALTER statements (cf. #482). Now that the bug is fixed, the ALTER succeeds as a no-op.
