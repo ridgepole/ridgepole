@@ -103,6 +103,7 @@ module Ridgepole
 
       scan_options_change(table_name, from[:options], to[:options], table_delta)
       scan_definition_change(from[:definition], to[:definition], from[:indices], table_name, from[:options], table_delta)
+      apply_column_renames_to_indices(from[:indices], table_delta.dig(:definition, :rename))
       scan_indices_change(from[:indices], to[:indices], to[:definition], table_delta, from[:options], to[:options])
       scan_foreign_keys_change(from[:foreign_keys], to[:foreign_keys], table_delta, @options)
       scan_check_constraints_change(from[:check_constraints], to[:check_constraints], table_delta)
@@ -339,6 +340,19 @@ module Ridgepole
 
         from.delete(from_column_name)
         to.delete(column_name)
+      end
+    end
+
+    def apply_column_renames_to_indices(indices, renames)
+      return unless indices && renames
+
+      # renames: { new_column_name => old_column_name }
+      rename_map = renames.invert # { old_column_name => new_column_name }
+
+      indices.each_value do |attrs|
+        next unless attrs[:column_name].is_a?(Array)
+
+        attrs[:column_name] = attrs[:column_name].map { |col| rename_map[col] || col }
       end
     end
 
