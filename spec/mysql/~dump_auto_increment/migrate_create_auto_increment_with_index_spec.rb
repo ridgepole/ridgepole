@@ -5,14 +5,14 @@ describe 'Ridgepole::Client#diff -> migrate' do
     let(:actual_dsl) { '' }
 
     let(:expected_dsl) do
-      erbh(<<-ERB)
+      <<-RUBY
         create_table "sample_table", id: { type: :string, limit: 26 }, force: :cascade do |t|
           t.datetime "created_at", null: false
           t.bigint "partition_key", null: false, unsigned: true, auto_increment: true
           t.datetime "updated_at", null: false
           t.index ["partition_key", "id"], name: "idx_partition_key_and_id", unique: true
         end
-      ERB
+      RUBY
     end
 
     before { subject.diff(actual_dsl).migrate }
