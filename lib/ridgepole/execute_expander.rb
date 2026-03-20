@@ -13,10 +13,7 @@ module Ridgepole
     end
 
     module ConnectionAdapterExt
-      def execute(*args)
-        sql = args.fetch(0)
-        name = args[1]
-
+      def execute_expander_internal_execute(sql, &block)
         # Generated/virtual columns cannot have DEFAULT values in MySQL.
         # Rails' change_column always adds DEFAULT from the existing column,
         # so we strip it from the SQL for virtual columns.
@@ -26,12 +23,12 @@ module Ridgepole
         if Ridgepole::ExecuteExpander.noop
           if (callback = Ridgepole::ExecuteExpander.callback)
             sql = append_alter_extra(sql)
-            callback.call(sql, name)
+            callback.call(sql)
           end
 
           if /\A(SELECT|SHOW)\b/i.match?(sql)
             begin
-              super(sql, name)
+              block.call(sql)
             rescue StandardError
               Stub.new
             end
@@ -40,7 +37,7 @@ module Ridgepole
           end
         elsif Ridgepole::ExecuteExpander.use_script
           if /\A(SELECT|SHOW)\b/i.match?(sql)
-            super(sql, name)
+            block.call(sql)
           else
             sql = append_alter_extra(sql)
             Ridgepole::ExecuteExpander.sql_executer.execute(sql)
@@ -48,33 +45,26 @@ module Ridgepole
           end
         else
           sql = append_alter_extra(sql)
+          block.call(sql)
+        end
+      end
+
+      def execute(*args)
+        name = args[1]
+        execute_expander_internal_execute(args.fetch(0)) do |sql|
           super(sql, name)
         end
       end
 
       def execute_batch(statements, name = nil, **kwargs)
-        if Ridgepole::ExecuteExpander.noop
-          statements.each do |sql|
-            sql = sql.sub(/DEFAULT\s+NULL\b/i, '') if Ridgepole::ConnectionAdapters.mysql? && /\AALTER\b/i.match?(sql) && /\bAS\s*\(/i.match?(sql)
-
-            if (callback = Ridgepole::ExecuteExpander.callback)
-              sql = append_alter_extra(sql)
-              callback.call(sql, name)
-            end
+        new_statements = []
+        statements.each do |statement|
+          execute_expander_internal_execute(statement) do |sql|
+            new_statements << sql
           end
-
-          Stub.new
-        elsif Ridgepole::ExecuteExpander.use_script
-          statements.each do |sql|
-            sql = sql.sub(/DEFAULT\s+NULL\b/i, '') if Ridgepole::ConnectionAdapters.mysql? && /\AALTER\b/i.match?(sql) && /\bAS\s*\(/i.match?(sql)
-            sql = append_alter_extra(sql)
-            Ridgepole::ExecuteExpander.sql_executer.execute(sql)
-          end
-
-          nil
-        else
-          super
         end
+        super(new_statements, name, **kwargs) unless new_statements.empty?
+        statements
       end
 
       private

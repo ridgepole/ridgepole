@@ -74,7 +74,7 @@ module Ridgepole
           ActiveRecord::Migration.disable_logging = true
           buf = StringIO.new
 
-          callback = proc do |sql, _name|
+          callback = proc do |sql|
             buf.puts sql if sql =~ /\A(CREATE|ALTER|DROP|RENAME|COMMENT)\b/i
           end
 
