@@ -50,12 +50,14 @@ module Ridgepole
         end
       end
 
-      def execute_batch(statements, name = nil, **)
+      def execute_batch(statements, name = nil, **kwargs)
+        new_statements = []
         statements.each do |statement|
-          internal_execute(statement) do |sql|
-            super([sql], name)
+          internal_execute_expander_execute(statement) do |sql|
+            new_statements << sql
           end
         end
+        super(new_statements, name, **kwargs) unless statements.empty?
       end
 
       private
