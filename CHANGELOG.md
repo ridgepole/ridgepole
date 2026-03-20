@@ -2,6 +2,11 @@
 
 ## 3.0
 
+### 3.1.4 (2026/03/20)
+
+- Fix for errors when changing generated columns. [pull#642](https://github.com/ridgepole/ridgepole/pull/642) [pull#646](https://github.com/ridgepole/ridgepole/pull/646)
+- Fix for changes to `create_table` in ActiveRecord 8.2. [pull#645](https://github.com/ridgepole/ridgepole/pull/645)
+
 ### 3.1.3 (2026/01/29)
 
 - Show `COMMENT` SQL in dry-run. [pull#632](https://github.com/ridgepole/ridgepole/pull/632)
