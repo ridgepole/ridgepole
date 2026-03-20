@@ -52,6 +52,31 @@ module Ridgepole
         end
       end
 
+      def execute_batch(statements, name = nil, **kwargs)
+        if Ridgepole::ExecuteExpander.noop
+          statements.each do |sql|
+            sql = sql.sub(/DEFAULT\s+NULL\b/i, '') if Ridgepole::ConnectionAdapters.mysql? && /\AALTER\b/i.match?(sql) && /\bAS\s*\(/i.match?(sql)
+
+            if (callback = Ridgepole::ExecuteExpander.callback)
+              sql = append_alter_extra(sql)
+              callback.call(sql, name)
+            end
+          end
+
+          Stub.new
+        elsif Ridgepole::ExecuteExpander.use_script
+          statements.each do |sql|
+            sql = sql.sub(/DEFAULT\s+NULL\b/i, '') if Ridgepole::ConnectionAdapters.mysql? && /\AALTER\b/i.match?(sql) && /\bAS\s*\(/i.match?(sql)
+            sql = append_alter_extra(sql)
+            Ridgepole::ExecuteExpander.sql_executer.execute(sql)
+          end
+
+          nil
+        else
+          super
+        end
+      end
+
       private
 
       def append_alter_extra(sql)
