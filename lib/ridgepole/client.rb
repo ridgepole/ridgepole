@@ -10,7 +10,7 @@ module Ridgepole
       # XXX: If the required processing in class method?
       @options[:index_removed_drop_column] = true if !@options.key?(:index_removed_drop_column) && (Ridgepole::DefaultsLimit.adapter == :postgresql)
 
-      Ridgepole::ExecuteExpander.expand_execute(ActiveRecord::Base.connection)
+      Ridgepole::ExecuteExpander.expand_execute(ActiveRecord::Base.connection, @options)
       @dumper = Ridgepole::Dumper.new(@options)
       @parser = Ridgepole::DSLParser.new(@options)
       @diff = Ridgepole::Diff.new(@options)

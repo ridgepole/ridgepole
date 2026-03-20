@@ -18,8 +18,10 @@ module Ridgepole
         # Rails' change_column always adds DEFAULT from the existing column,
         # so we strip it from the SQL for virtual columns.
         # cf. https://github.com/ridgepole/ridgepole/issues/482
-        sql = sql.sub(/DEFAULT\s+NULL\b/i, '') if Ridgepole::ConnectionAdapters.mysql? && /\AALTER\b/i.match?(sql) && /\bAS\s*\(/i.match?(sql)
-
+        if Ridgepole::ConnectionAdapters.mysql? && !Ridgepole::ExecuteExpander.options[:bulk_change]
+          # NOTE: bulk_change does not support changing MySQL generated columns with `DEFAULT NULL`.
+          sql = sql.sub(/\bDEFAULT\s+NULL\z/i, '') if /\AALTER\s+TABLE\b/i.match?(sql) && /\bAS\s*\(/i.match?(sql) && /\bDEFAULT\s+NULL\z/i.match?(sql)
+        end
         if Ridgepole::ExecuteExpander.noop
           if (callback = Ridgepole::ExecuteExpander.callback)
             sql = append_alter_extra(sql)
@@ -90,6 +92,7 @@ module Ridgepole
     cattr_accessor :use_script,   instance_writer: false, instance_reader: false
     cattr_accessor :sql_executer, instance_writer: false, instance_reader: false
     cattr_accessor :alter_extra,  instance_writer: false, instance_reader: false
+    cattr_accessor :options,      instance_writer: false, instance_reader: false
 
     class << self
       def without_operation(callback = nil)
@@ -117,8 +120,10 @@ module Ridgepole
         self.alter_extra = nil
       end
 
-      def expand_execute(connection)
+      def expand_execute(connection, options)
         return if connection.is_a?(ConnectionAdapterExt)
+
+        self.options = options
 
         connection.class_eval do
           prepend ConnectionAdapterExt
