@@ -246,11 +246,11 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
       # Partition indices: indices referencing auto_increment columns must be
       # inside CREATE TABLE on MySQL to avoid "must be defined as a key" error.
       # cf. https://github.com/ridgepole/ridgepole/issues/494
-      indices_in_create, indices_after_create = partition_indices_for_create(definition, indices)
-
       if @options[:create_table_with_index]
         indices_in_create = indices
         indices_after_create = {}
+      else
+        indices_in_create, indices_after_create = partition_indices_for_create(definition, indices)
       end
 
       indices_in_create.each do |index_name, index_attrs|
