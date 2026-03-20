@@ -410,15 +410,17 @@ module Ridgepole
 
     def normalize_column_options!(attrs, primary_key = false)
       opts = attrs[:options]
-      opts[:null] = true if !opts.key?(:null) && !primary_key
+      opts[:null] = true if !opts.key?(:null) && !primary_key && attrs[:type] != :virtual
       default_limit = Ridgepole::DefaultsLimit.default_limit(attrs[:type], @options)
       opts.delete(:limit) if opts[:limit] == default_limit
 
       # XXX: MySQL only?
-      opts[:default] = nil if !opts.key?(:default) && !primary_key
+      # Generated/virtual columns cannot have DEFAULT values in MySQL.
+      # cf. https://github.com/ridgepole/ridgepole/issues/482
+      opts[:default] = nil if !opts.key?(:default) && !primary_key && attrs[:type] != :virtual
 
       if Ridgepole::ConnectionAdapters.mysql?
-        opts[:unsigned] = false unless opts.key?(:unsigned)
+        opts[:unsigned] = false if !opts.key?(:unsigned) && attrs[:type] != :virtual
 
         if attrs[:type] == :integer && opts[:limit]
           min = Ridgepole::DefaultsLimit.default_limit(:integer, @options)

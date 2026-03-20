@@ -446,6 +446,13 @@ rename_column(#{table_name.inspect}, #{from_column_name.inspect}, #{to_column_na
       # Fix for https://github.com/rails/rails/commit/7f0567b43b73b1bd1a16bfac9cd32fcbf1321b51
       if Ridgepole::ConnectionAdapters.mysql?
         options[:comment] = nil unless options.key?(:comment)
+
+        # Generated/virtual columns cannot have DEFAULT values in MySQL.
+        # cf. https://github.com/ridgepole/ridgepole/issues/482
+        if type == :virtual
+          options.delete(:default)
+          options.delete(:unsigned)
+        end
       end
 
       if @options[:bulk_change]

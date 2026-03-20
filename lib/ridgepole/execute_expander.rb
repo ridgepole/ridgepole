@@ -14,6 +14,12 @@ module Ridgepole
 
     module ConnectionAdapterExt
       def execute_expander_internal_execute(sql, &block)
+        # Generated/virtual columns cannot have DEFAULT values in MySQL.
+        # Rails' change_column always adds DEFAULT from the existing column,
+        # so we strip it from the SQL for virtual columns.
+        # cf. https://github.com/ridgepole/ridgepole/issues/482
+        sql = sql.sub(/DEFAULT\s+NULL\b/i, '') if Ridgepole::ConnectionAdapters.mysql? && /\AALTER\b/i.match?(sql) && /\bAS\s*\(/i.match?(sql)
+
         if Ridgepole::ExecuteExpander.noop
           if (callback = Ridgepole::ExecuteExpander.callback)
             sql = append_alter_extra(sql)
