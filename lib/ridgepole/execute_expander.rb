@@ -17,6 +17,12 @@ module Ridgepole
         sql = args.fetch(0)
         name = args[1]
 
+        # Generated/virtual columns cannot have DEFAULT values in MySQL.
+        # Rails' change_column always adds DEFAULT from the existing column,
+        # so we strip it from the SQL for virtual columns.
+        # cf. https://github.com/ridgepole/ridgepole/issues/482
+        sql = sql.sub(/DEFAULT\s+NULL\b/i, '') if Ridgepole::ConnectionAdapters.mysql? && /\AALTER\b/i.match?(sql) && /\bAS\s*\(/i.match?(sql)
+
         if Ridgepole::ExecuteExpander.noop
           if (callback = Ridgepole::ExecuteExpander.callback)
             sql = append_alter_extra(sql)
@@ -43,6 +49,41 @@ module Ridgepole
         else
           sql = append_alter_extra(sql)
           super(sql, name)
+        end
+      end
+
+      # Rails 8.2+ uses execute_batch for DDL operations like create_table
+      # instead of routing each statement through execute. We override this
+      # method to properly handle noop and use_script modes.
+      # cf. https://github.com/ridgepole/ridgepole/issues/482
+      def execute_batch(statements, name = nil, **kwargs)
+        if Ridgepole::ExecuteExpander.noop
+          statements.each do |sql|
+            if (callback = Ridgepole::ExecuteExpander.callback)
+              sql = append_alter_extra(sql)
+              callback.call(sql, name)
+            end
+
+            next unless /\A(SELECT|SHOW)\b/i.match?(sql)
+
+            begin
+              super([sql], name, **kwargs)
+            rescue StandardError
+              # ignore errors in noop mode
+            end
+          end
+        elsif Ridgepole::ExecuteExpander.use_script
+          statements.each do |sql|
+            if /\A(SELECT|SHOW)\b/i.match?(sql)
+              super([sql], name, **kwargs)
+            else
+              sql = append_alter_extra(sql)
+              Ridgepole::ExecuteExpander.sql_executer.execute(sql)
+            end
+          end
+        else
+          statements = statements.map { |sql| append_alter_extra(sql) }
+          super(statements, name, **kwargs)
         end
       end
 
