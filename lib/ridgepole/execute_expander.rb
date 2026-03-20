@@ -57,7 +57,8 @@ module Ridgepole
             new_statements << sql
           end
         end
-        super(new_statements, name, **kwargs) unless statements.empty?
+        super(new_statements, name, **kwargs) unless new_statements.empty?
+        statements
       end
 
       private
