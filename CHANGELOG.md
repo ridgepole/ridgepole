@@ -4,6 +4,7 @@
 
 ### 3.1.5 (N/A)
 
+- Fix for renaming references column. [pull#652](https://github.com/ridgepole/ridgepole/pull/652)
 - Fix for creating table with non-PK auto_increment column. [pull#650](https://github.com/ridgepole/ridgepole/pull/650)
 
 ### 3.1.4 (2026/03/20)
