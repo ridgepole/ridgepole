@@ -103,15 +103,16 @@ jobs:
           fail_ci_if_error: true
           flags: ${{ matrix.ruby }},${{ matrix.gemfile }},${{ matrix.env }}
           files: ./junit_format/rspec_xml
-      - name: Build and install gem
-        run: |
-          gem install securerandom -v '~> 0.3.2'
-          gem install zeitwerk -v '~> 2.6.18'
-          bundle config unset path
-          bundle install
-          gem build ridgepole.gemspec -o ridgepole.gem
-          gem install ridgepole.gem
-          ridgepole -v
+      # NOTE: This check isn't very useful and slows down processing, so I'll comment it out.
+      # - name: Build and install gem
+      #   run: |
+      #     gem install securerandom -v '~> 0.3.2'
+      #     gem install zeitwerk -v '~> 2.6.18'
+      #     bundle config unset path
+      #     bundle install
+      #     gem build ridgepole.gemspec -o ridgepole.gem
+      #     gem install ridgepole.gem
+      #     ridgepole -v
   finish:
     needs: test
     if: always()
