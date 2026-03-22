@@ -125,4 +125,4 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs \
-          | jq -e '.jobs | map(select(.name | test("^test ")).conclusion) | any(. == "failure") | not'
+          | jq -e '.jobs | map(select(.name | test("^test ")).conclusion) | any(. != "success") | not'
