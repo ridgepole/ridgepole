@@ -14,7 +14,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         ruby:
           - "2.7"
@@ -23,6 +23,7 @@ jobs:
           - "3.2"
           - "3.3"
           - "3.4"
+          - "3.5"
           - "4.0"
         env:
           - MYSQL57
@@ -39,52 +40,34 @@ jobs:
           - activerecord_8.2.gemfile
         exclude:
           # TRILOGY
-          - gemfile: activerecord_6.1.gemfile
-            env: TRILOGY
-          - gemfile: activerecord_7.0.gemfile
-            env: TRILOGY
+          - { gemfile: activerecord_6.1.gemfile, env: TRILOGY }
+          - { gemfile: activerecord_7.0.gemfile, env: TRILOGY }
           # activerecord 6.1
-          - ruby: "3.3"
-            gemfile: activerecord_6.1.gemfile
-          - ruby: "3.4"
-            gemfile: activerecord_6.1.gemfile
-          - ruby: "4.0"
-            gemfile: activerecord_6.1.gemfile
+          - { ruby: "3.3", gemfile: activerecord_6.1.gemfile }
+          - { ruby: "3.4", gemfile: activerecord_6.1.gemfile }
+          - { ruby: "3.5", gemfile: activerecord_6.1.gemfile }
+          - { ruby: "4.0", gemfile: activerecord_6.1.gemfile }
           # activerecord 7.0
-          - ruby: "3.3"
-            gemfile: activerecord_7.0.gemfile
-          - ruby: "3.4"
-            gemfile: activerecord_7.0.gemfile
-          - ruby: "4.0"
-            gemfile: activerecord_7.0.gemfile
+          - { ruby: "3.3", gemfile: activerecord_7.0.gemfile }
+          - { ruby: "3.4", gemfile: activerecord_7.0.gemfile }
+          - { ruby: "3.5", gemfile: activerecord_7.0.gemfile }
+          - { ruby: "4.0", gemfile: activerecord_7.0.gemfile }
           # activerecord 7.2
-          - ruby: "2.7"
-            gemfile: activerecord_7.2.gemfile
-          - ruby: "3.0"
-            gemfile: activerecord_7.2.gemfile
+          - { ruby: "2.7", gemfile: activerecord_7.2.gemfile }
+          - { ruby: "3.0", gemfile: activerecord_7.2.gemfile }
           # activerecord 8.0
-          - ruby: "2.7"
-            gemfile: activerecord_8.0.gemfile
-          - ruby: "3.0"
-            gemfile: activerecord_8.0.gemfile
-          - ruby: "3.1"
-            gemfile: activerecord_8.0.gemfile
+          - { ruby: "2.7", gemfile: activerecord_8.0.gemfile }
+          - { ruby: "3.0", gemfile: activerecord_8.0.gemfile }
+          - { ruby: "3.1", gemfile: activerecord_8.0.gemfile }
           # activerecord 8.1
-          - ruby: "2.7"
-            gemfile: activerecord_8.1.gemfile
-          - ruby: "3.0"
-            gemfile: activerecord_8.1.gemfile
-          - ruby: "3.1"
-            gemfile: activerecord_8.1.gemfile
+          - { ruby: "2.7", gemfile: activerecord_8.1.gemfile }
+          - { ruby: "3.0", gemfile: activerecord_8.1.gemfile }
+          - { ruby: "3.1", gemfile: activerecord_8.1.gemfile }
           # activerecord 8.2
-          - ruby: "2.7"
-            gemfile: activerecord_8.2.gemfile
-          - ruby: "3.0"
-            gemfile: activerecord_8.2.gemfile
-          - ruby: "3.1"
-            gemfile: activerecord_8.2.gemfile
-          - ruby: "3.2"
-            gemfile: activerecord_8.2.gemfile
+          - { ruby: "2.7", gemfile: activerecord_8.2.gemfile }
+          - { ruby: "3.0", gemfile: activerecord_8.2.gemfile }
+          - { ruby: "3.1", gemfile: activerecord_8.2.gemfile }
+          - { ruby: "3.2", gemfile: activerecord_8.2.gemfile }
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}
     steps:
