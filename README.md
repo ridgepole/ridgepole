@@ -15,6 +15,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 > If you do not want to sort the columns, use `--disable-sort-columns` option.
 
 > [!note]
+> * ridgepole v3.2.0
+>   * Use `udiff` instead of `diffy` (cf. https://github.com/ridgepole/ridgepole/pull/657)
 > * ridgepole v3.1.0
 >   * Support Rails 8.1 (cf. https://github.com/ridgepole/ridgepole/pull/589)
 > * ridgepole v3.0.0

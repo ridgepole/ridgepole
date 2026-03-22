@@ -2,6 +2,10 @@
 
 ## 3.0
 
+### 3.2.0-beta (2026/03/22)
+
+- Use `udiff` instead of `diffy`. [pull#657](https://github.com/ridgepole/ridgepole/pull/657)
+
 ### 3.1.5 (2026/03/21)
 
 - Fix for renaming references column. [pull#652](https://github.com/ridgepole/ridgepole/pull/652)
