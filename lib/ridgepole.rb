@@ -11,7 +11,7 @@ require 'active_record'
 require 'active_support'
 require 'active_support/core_ext'
 
-require 'diffy'
+require 'udiff'
 
 module Ridgepole; end
 
