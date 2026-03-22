@@ -2,7 +2,7 @@
 
 ## 3.0
 
-### 3.2.0-beta (2026/03/22)
+### 3.2.0.beta (2026/03/22)
 
 - Use `udiff` instead of `diffy`. [pull#657](https://github.com/ridgepole/ridgepole/pull/657)
 
