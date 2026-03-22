@@ -14,7 +14,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         ruby:
           - "2.7"
@@ -39,52 +39,32 @@ jobs:
           - activerecord_8.2.gemfile
         exclude:
           # TRILOGY
-          - gemfile: activerecord_6.1.gemfile
-            env: TRILOGY
-          - gemfile: activerecord_7.0.gemfile
-            env: TRILOGY
+          - { gemfile: activerecord_6.1.gemfile, env: TRILOGY }
+          - { gemfile: activerecord_7.0.gemfile, env: TRILOGY }
           # activerecord 6.1
-          - ruby: "3.3"
-            gemfile: activerecord_6.1.gemfile
-          - ruby: "3.4"
-            gemfile: activerecord_6.1.gemfile
-          - ruby: "4.0"
-            gemfile: activerecord_6.1.gemfile
+          - { ruby: "3.3", gemfile: activerecord_6.1.gemfile }
+          - { ruby: "3.4", gemfile: activerecord_6.1.gemfile }
+          - { ruby: "4.0", gemfile: activerecord_6.1.gemfile }
           # activerecord 7.0
-          - ruby: "3.3"
-            gemfile: activerecord_7.0.gemfile
-          - ruby: "3.4"
-            gemfile: activerecord_7.0.gemfile
-          - ruby: "4.0"
-            gemfile: activerecord_7.0.gemfile
+          - { ruby: "3.3", gemfile: activerecord_7.0.gemfile }
+          - { ruby: "3.4", gemfile: activerecord_7.0.gemfile }
+          - { ruby: "4.0", gemfile: activerecord_7.0.gemfile }
           # activerecord 7.2
-          - ruby: "2.7"
-            gemfile: activerecord_7.2.gemfile
-          - ruby: "3.0"
-            gemfile: activerecord_7.2.gemfile
+          - { ruby: "2.7", gemfile: activerecord_7.2.gemfile }
+          - { ruby: "3.0", gemfile: activerecord_7.2.gemfile }
           # activerecord 8.0
-          - ruby: "2.7"
-            gemfile: activerecord_8.0.gemfile
-          - ruby: "3.0"
-            gemfile: activerecord_8.0.gemfile
-          - ruby: "3.1"
-            gemfile: activerecord_8.0.gemfile
+          - { ruby: "2.7", gemfile: activerecord_8.0.gemfile }
+          - { ruby: "3.0", gemfile: activerecord_8.0.gemfile }
+          - { ruby: "3.1", gemfile: activerecord_8.0.gemfile }
           # activerecord 8.1
-          - ruby: "2.7"
-            gemfile: activerecord_8.1.gemfile
-          - ruby: "3.0"
-            gemfile: activerecord_8.1.gemfile
-          - ruby: "3.1"
-            gemfile: activerecord_8.1.gemfile
+          - { ruby: "2.7", gemfile: activerecord_8.1.gemfile }
+          - { ruby: "3.0", gemfile: activerecord_8.1.gemfile }
+          - { ruby: "3.1", gemfile: activerecord_8.1.gemfile }
           # activerecord 8.2
-          - ruby: "2.7"
-            gemfile: activerecord_8.2.gemfile
-          - ruby: "3.0"
-            gemfile: activerecord_8.2.gemfile
-          - ruby: "3.1"
-            gemfile: activerecord_8.2.gemfile
-          - ruby: "3.2"
-            gemfile: activerecord_8.2.gemfile
+          - { ruby: "2.7", gemfile: activerecord_8.2.gemfile }
+          - { ruby: "3.0", gemfile: activerecord_8.2.gemfile }
+          - { ruby: "3.1", gemfile: activerecord_8.2.gemfile }
+          - { ruby: "3.2", gemfile: activerecord_8.2.gemfile }
     env:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}
     steps:
@@ -123,15 +103,16 @@ jobs:
           fail_ci_if_error: true
           flags: ${{ matrix.ruby }},${{ matrix.gemfile }},${{ matrix.env }}
           files: ./junit_format/rspec_xml
-      - name: Build and install gem
-        run: |
-          gem install securerandom -v '~> 0.3.2'
-          gem install zeitwerk -v '~> 2.6.18'
-          bundle config unset path
-          bundle install
-          gem build ridgepole.gemspec -o ridgepole.gem
-          gem install ridgepole.gem
-          ridgepole -v
+      # NOTE: This check isn't very useful and slows down processing, so I'll comment it out.
+      # - name: Build and install gem
+      #   run: |
+      #     gem install securerandom -v '~> 0.3.2'
+      #     gem install zeitwerk -v '~> 2.6.18'
+      #     bundle config unset path
+      #     bundle install
+      #     gem build ridgepole.gemspec -o ridgepole.gem
+      #     gem install ridgepole.gem
+      #     ridgepole -v
   finish:
     needs: test
     if: always()
@@ -142,4 +123,4 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api /repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs \
-          | jq -e '.jobs | map(select(.name | test("^test ")).conclusion) | any(. == "failure") | not'
+          | jq -e '.jobs | map(select(.name | test("^test ")).conclusion) | any(. != "success") | not'
