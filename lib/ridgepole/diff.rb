@@ -697,10 +697,9 @@ module Ridgepole
       obj1 = Ridgepole::Ext::PpSortHash.extend_if_hash(obj1)
       obj2 = Ridgepole::Ext::PpSortHash.extend_if_hash(obj2)
 
-      diffy = Diffy::Diff.new(
+      diffy = Udiff::Diff.new(
         obj1.pretty_inspect,
-        obj2.pretty_inspect,
-        diff: '-u'
+        obj2.pretty_inspect
       )
 
       diffy.to_s(@options[:color] ? :color : :text).gsub(/\s+\z/m, '')

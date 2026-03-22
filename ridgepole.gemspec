@@ -26,8 +26,8 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = Gem::Requirement.new('>= 2.7')
 
   spec.add_dependency 'activerecord', '>= 6.1', '< 8.3'
-  spec.add_dependency 'diffy'
   spec.add_dependency 'logger'
+  spec.add_dependency 'udiff', '>= 0.2.0'
 
   spec.add_development_dependency 'appraisal', '>= 2.2.0'
   spec.add_development_dependency 'bigdecimal'
