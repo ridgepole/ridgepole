@@ -69,7 +69,7 @@ jobs:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: ruby/setup-ruby@09a7688d3b55cf0e976497ff046b70949eeaccfd # v1.288.0
+      - uses: ruby/setup-ruby@319994f95fa847cf3fb3cd3dbe89f6dcde9f178f # v1.295.0
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: true
@@ -90,13 +90,13 @@ jobs:
         env:
           RUBYOPT: --enable-frozen-string-literal
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        uses: codecov/codecov-action@1af58845a975a7985b0beb0cbe6fbbb71a41dbad # v5.5.3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
           flags: ${{ matrix.ruby }},${{ matrix.gemfile }},${{ matrix.env }}
       - name: Upload test results to Codecov
-        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
+        uses: codecov/codecov-action@1af58845a975a7985b0beb0cbe6fbbb71a41dbad # v5.5.3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           report_type: test_results
