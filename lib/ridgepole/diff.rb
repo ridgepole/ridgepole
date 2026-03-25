@@ -445,6 +445,15 @@ module Ridgepole
           end
         end
 
+        # Since ActiveRecord >= 7.0.5, datetime/timestamp columns default to precision: 6 on MySQL.
+        # Strip precision: 6 when it matches the default to avoid spurious diffs.
+        # cf. https://github.com/ridgepole/ridgepole/issues/515
+        if %i[datetime timestamp].include?(attrs[:type]) &&
+           opts[:precision] == 6 &&
+           ActiveRecord.gem_version >= Gem::Version.new('7.0.5')
+          opts.delete(:precision)
+        end
+
         if opts[:size] && %i[text blob binary].include?(attrs[:type])
           case opts.delete(:size)
           when :tiny
