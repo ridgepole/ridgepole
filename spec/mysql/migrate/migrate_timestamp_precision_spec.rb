@@ -63,4 +63,33 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0.5' do
       expect(delta.differ?).to be_truthy
     }
   end
+
+  context 'when datetime without precision' do
+    let(:create_dsl) do
+      erbh(<<-ERB)
+        create_table "timestamps_test", force: :cascade do |t|
+          t.datetime "created_at"
+        end
+      ERB
+    end
+
+    let(:change_dsl) do
+      erbh(<<-ERB)
+        create_table "timestamps_test", force: :cascade do |t|
+          t.timestamp "created_at", null: false, default: "1970-01-01 00:00:01"
+        end
+      ERB
+    end
+
+    before { subject.diff(create_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(change_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_ruby create_dsl
+      delta.migrate
+      expect(subject.dump).to match_ruby change_dsl
+    }
+  end
 end
