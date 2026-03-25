@@ -1,10 +1,16 @@
 # Changelog
 
-## 3.0
+## 3.2
+
+### 3.2.0 (N/A)
+
+- Fix spurious diff for `timestamp`/`datetime` with `precision: 6` on MySQL. [pull#665](https://github.com/ridgepole/ridgepole/pull/665)
 
 ### 3.2.0.beta (2026/03/22)
 
 - Use `udiff` instead of `diffy`. [pull#657](https://github.com/ridgepole/ridgepole/pull/657)
+
+## 3.1
 
 ### 3.1.5 (2026/03/21)
 
@@ -32,6 +38,8 @@
 
 - Support Rails 8.1 [pull#589](https://github.com/ridgepole/ridgepole/pull/589)
 - Support for migrating PostgreSQL table comments [pull#587](https://github.com/ridgepole/ridgepole/pull/587)
+
+## 3.0
 
 ### 3.0.4 (2025/08/31)
 
