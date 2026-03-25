@@ -303,6 +303,12 @@ execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFE
 end
 ```
 
+You can use `execute` to manage database views:
+
+```ruby
+execute("CREATE OR REPLACE VIEW `active_users` AS SELECT `users`.* FROM `users` WHERE `users`.`active` = 1")
+```
+
 ## Diff
 ```sh
 $ ridgepole --diff file1.schema file2.schema
