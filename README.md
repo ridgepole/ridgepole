@@ -323,6 +323,26 @@ execute("CREATE OR REPLACE VIEW `active_users` AS #{view_select}") do |c|
 end
 ```
 
+#### PostgreSQL
+
+```ruby
+# NOTE: view_select must match the normalized form stored in pg_views.definition
+view_select = <<~EOS.strip
+  SELECT users.name
+     FROM users
+    WHERE (users.active = false);
+EOS
+
+execute("CREATE OR REPLACE VIEW active_users AS #{view_select}") do |c|
+  definition = c.raw_connection.query(<<-SQL).first&.dig("definition")
+    SELECT definition FROM pg_views
+      WHERE schemaname = 'public'
+        AND viewname = 'active_users';
+  SQL
+  definition&.strip != view_select
+end
+```
+
 ## Diff
 ```sh
 $ ridgepole --diff file1.schema file2.schema
