@@ -303,10 +303,26 @@ execute("ALTER TABLE books ADD CONSTRAINT fk_author FOREIGN KEY (author_id) REFE
 end
 ```
 
-You can use `execute` to manage database views:
+### Manage View using `execute`
+
+#### MySQL
 
 ```ruby
-execute("CREATE OR REPLACE VIEW `active_users` AS SELECT `users`.* FROM `users` WHERE `users`.`active` = 1")
+require 'digest/sha1'
+
+# NOTE: view_select must match the normalized form stored in information_schema.views.VIEW_DEFINITION
+view_select = <<-EOS.strip
+  select `mydb`.`users`.`id` AS `id`,`mydb`.`users`.`name` AS `name`,`mydb`.`users`.`active` AS `active` from `mydb`.`users` where (`mydb`.`users`.`active` = 1)
+EOS
+
+execute("CREATE OR REPLACE VIEW `active_users` AS #{view_select}") do |c|
+  sha = c.raw_connection.query(<<-SQL).first&.first
+    SELECT SHA(VIEW_DEFINITION) FROM information_schema.views
+     WHERE TABLE_SCHEMA = 'mydb'
+       AND TABLE_NAME = 'active_users';
+  SQL
+  sha != Digest::SHA1.hexdigest(view_select)
+end
 ```
 
 ## Diff
