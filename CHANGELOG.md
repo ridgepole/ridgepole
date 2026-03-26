@@ -5,9 +5,6 @@
 ### 3.2.0 (N/A)
 
 - Fix spurious diff for `timestamp`/`datetime` with `precision: 6` on MySQL. [pull#665](https://github.com/ridgepole/ridgepole/pull/665)
-
-### 3.2.0.beta (2026/03/22)
-
 - Use `udiff` instead of `diffy`. [pull#657](https://github.com/ridgepole/ridgepole/pull/657)
 
 ## 3.1
