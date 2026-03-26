@@ -311,7 +311,6 @@ end
 require 'digest/sha1'
 
 # NOTE: view_select must match the normalized form stored in information_schema.views.VIEW_DEFINITION
-# NOTE: view_select must match the normalized form stored in information_schema.views.VIEW_DEFINITION
 view_select = <<-EOS.strip
   select `mydb`.`users`.`id` AS `id`,`mydb`.`users`.`name` AS `name`,`mydb`.`users`.`active` AS `active` from `mydb`.`users` where (`mydb`.`users`.`active` = 1)
 EOS
