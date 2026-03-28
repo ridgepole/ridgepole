@@ -315,11 +315,11 @@ EOS
 
 execute("CREATE OR REPLACE VIEW `active_users` AS #{view_select}") do |c|
   definition = c.raw_connection.query(<<-SQL).first&.first
-    SELECT SHA(VIEW_DEFINITION) FROM information_schema.views
+    SELECT VIEW_DEFINITION FROM information_schema.views
      WHERE TABLE_SCHEMA = 'mydb'
        AND TABLE_NAME = 'active_users';
   SQL
-  definition != view_select
+  definition&.strip != view_select
 end
 ```
 
