@@ -475,6 +475,27 @@ module Ridgepole
 
       # 'algorithm: concurrently' is required for index creation but not stored in PostgreSQL DB metadata, so remove 'algorithm' to prevent diff
       opts.delete(:algorithm)
+
+      # PostgreSQL's pg_get_indexdef() wraps WHERE clauses in parentheses
+      # (e.g., "(deleted_at IS NULL)"), but Schemafile definitions typically
+      # omit them (e.g., "deleted_at IS NULL"). Strip the outermost parentheses
+      # to prevent spurious diffs for partial indexes.
+      opts[:where] = strip_outer_parentheses(opts[:where]) if opts[:where].is_a?(String)
+    end
+
+    def strip_outer_parentheses(str)
+      return str unless str.start_with?('(') && str.end_with?(')')
+
+      depth = 0
+      str.each_char.with_index do |char, i|
+        depth += 1 if char == '('
+        depth -= 1 if char == ')'
+        # If depth reaches 0 before the last character,
+        # the outermost parentheses do not wrap the entire expression
+        return str if depth == 0 && i < str.length - 1
+      end
+
+      str[1..-2]
     end
 
     def columns_all_include?(expected_columns, actual_columns, table_options)
