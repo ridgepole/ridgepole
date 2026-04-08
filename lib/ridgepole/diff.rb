@@ -679,7 +679,43 @@ module Ridgepole
         MSG
       end
 
+      normalize_generated_column_expression!(attrs1)
+      normalize_generated_column_expression!(attrs2)
+
       attrs1 == attrs2
+    end
+
+    def normalize_generated_column_expression!(attrs)
+      return unless Ridgepole::ConnectionAdapters.mysql?
+      return unless attrs[:type] == :virtual
+
+      expr = attrs.dig(:options, :as)
+      return unless expr
+
+      attrs[:options][:as] = normalize_generated_column_expression(expr)
+    end
+
+    def normalize_generated_column_expression(expr)
+      expr = downcase_outside_quoted_strings(expr)
+
+      expr.gsub(/\(\s*([^()]+?\s+is\s+(?:not\s+)?null)\s*\)/, '\1')
+    end
+
+    def downcase_outside_quoted_strings(expr)
+      quote = nil
+      escaped = false
+
+      expr.each_char.map do |char|
+        if quote
+          current = char
+          escaped = !escaped && char == '\\' && quote != '`'
+          quote = nil if char == quote && !escaped
+          current
+        else
+          quote = char if ['"', "'", '`'].include?(char)
+          char.downcase
+        end
+      end.join
     end
 
     def comment_only_change?(attrs1, attrs2)

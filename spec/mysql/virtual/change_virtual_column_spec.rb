@@ -154,4 +154,32 @@ describe 'Ridgepole::Client#diff -> migrate' do
       expect { delta.migrate }.to raise_error(RuntimeError)
     }
   end
+
+  context 'when generated column expression is normalized by MySQL (issue #680)' do
+    let(:expected_dsl) do
+      <<-RUBY
+        create_table "generated_column_repros", id: { type: :bigint, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+          t.datetime "deleted_at"
+          t.virtual "active_unique_key", type: :integer, as: "if(`deleted_at` IS NULL,1,NULL)", stored: true
+        end
+      RUBY
+    end
+
+    subject { client(dump_without_table_options: false) }
+
+    it {
+      subject.diff(expected_dsl).migrate
+
+      expect(subject.dump).to match_ruby <<-RUBY
+        create_table "generated_column_repros", id: { type: :bigint, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+          t.virtual "active_unique_key", type: :integer, as: "if((`deleted_at` is null),1,NULL)", stored: true
+          t.datetime "deleted_at"
+        end
+      RUBY
+
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_falsey
+      expect(delta.script).to eq ''
+    }
+  end
 end
