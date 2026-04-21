@@ -43,6 +43,11 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 >   * cf. https://github.com/rails/rails/commit/c2a6f618d22cca4d9b7be7fa7652e7aac509350c#diff-55f41513f027a3d219629f475f03c2d1105ca55c5093d691e1b3dc4710c6cc0b
 > * SQLite does not support.
 
+> [!TIP]
+> Currently developing a similar tool for PostgreSQL.
+> 
+> see https://github.com/winebarrel/pistachio
+
 ## Installation
 
 Add this line to your application's Gemfile:
