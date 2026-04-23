@@ -9,6 +9,11 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 [![test](https://github.com/ridgepole/ridgepole/actions/workflows/test.yml/badge.svg)](https://github.com/ridgepole/ridgepole/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/ridgepole/ridgepole/graph/badge.svg)](https://codecov.io/gh/ridgepole/ridgepole)
 
+> [!TIP]
+> Currently developing a similar tool for PostgreSQL.
+> 
+> see https://github.com/winebarrel/pistachio
+
 > [!warning]
 > The order of columns when exporting has changed in Rails 8.1. https://github.com/rails/rails/pull/53281
 >
@@ -42,11 +47,6 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 >   * cf. https://github.com/rails/rails/issues/43909
 >   * cf. https://github.com/rails/rails/commit/c2a6f618d22cca4d9b7be7fa7652e7aac509350c#diff-55f41513f027a3d219629f475f03c2d1105ca55c5093d691e1b3dc4710c6cc0b
 > * SQLite does not support.
-
-> [!TIP]
-> Currently developing a similar tool for PostgreSQL.
-> 
-> see https://github.com/winebarrel/pistachio
 
 ## Installation
 
