@@ -103,6 +103,7 @@ jobs:
           fail_ci_if_error: true
           flags: ${{ matrix.ruby }},${{ matrix.gemfile }},${{ matrix.env }}
           files: ./junit_format/rspec_xml
+          version: 11.2.7
       # NOTE: This check isn't very useful and slows down processing, so I'll comment it out.
       # - name: Build and install gem
       #   run: |
