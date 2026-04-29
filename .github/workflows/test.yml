@@ -93,14 +93,14 @@ jobs:
         uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6.0.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           flags: ${{ matrix.ruby }},${{ matrix.gemfile }},${{ matrix.env }}
       - name: Upload test results to Codecov
         uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2 # v6.0.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           report_type: test_results
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           flags: ${{ matrix.ruby }},${{ matrix.gemfile }},${{ matrix.env }}
           files: ./junit_format/rspec_xml
       # NOTE: This check isn't very useful and slows down processing, so I'll comment it out.
