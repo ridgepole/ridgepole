@@ -368,12 +368,11 @@ module Ridgepole
           matching = from.select { |_name, attrs| attrs[:column_name] == index_name }
 
           if matching.size > 1
-            kept, *removed = matching.keys
             @logger.warn(
               "[WARNING] Multiple existing indexes on `#{table_name}` match column #{index_name.inspect}: " \
               "#{matching.keys.map(&:inspect).join(', ')}. " \
-              "Ridgepole will keep `#{kept}` and remove #{removed.map(&:inspect).join(', ')}. " \
-              'Specify `name:` explicitly to disambiguate.'
+              'The choice of which index to keep depends on iteration order; ' \
+              'specify `name:` explicitly to disambiguate.'
             )
           end
 
