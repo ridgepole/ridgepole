@@ -367,7 +367,7 @@ module Ridgepole
         if index_name.is_a?(Array)
           matching = from.select { |_name, attrs| attrs[:column_name] == index_name }
 
-          if matching.size > 1
+          if matching.size > 1 && !ignore_index
             @logger.warn(
               "[WARNING] Multiple existing indexes on `#{table_name}` match column #{index_name.inspect}: " \
               "#{matching.keys.map(&:inspect).join(', ')}. " \

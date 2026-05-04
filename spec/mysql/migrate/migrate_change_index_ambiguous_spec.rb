@@ -64,4 +64,33 @@ describe 'Ridgepole::Client#diff -> migrate' do
       subject.diff(expected_dsl)
     end
   end
+
+  context 'when the anonymous Schemafile index has ignore: true' do
+    let(:actual_dsl) do
+      erbh(<<-ERB)
+        create_table "idx_test", force: :cascade do |t|
+          t.integer "col_a", null: false
+          t.index ["col_a"], name: "idx_keep_me"
+          t.index ["col_a"], name: "idx_remove_me"
+        end
+      ERB
+    end
+
+    let(:expected_dsl) do
+      erbh(<<-ERB)
+        create_table "idx_test", force: :cascade do |t|
+          t.integer "col_a", null: false
+          t.index ["col_a"], ignore: true
+        end
+      ERB
+    end
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it 'does not emit the ambiguity warning' do
+      expect(Ridgepole::Logger.instance).not_to receive(:warn)
+      subject.diff(expected_dsl)
+    end
+  end
 end
