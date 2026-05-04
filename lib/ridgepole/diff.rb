@@ -104,7 +104,7 @@ module Ridgepole
       scan_options_change(table_name, from[:options], to[:options], table_delta)
       scan_definition_change(from[:definition], to[:definition], from[:indices], table_name, from[:options], table_delta)
       apply_column_renames_to_indices(from[:indices], table_delta.dig(:definition, :rename))
-      scan_indices_change(from[:indices], to[:indices], to[:definition], table_delta, from[:options], to[:options])
+      scan_indices_change(table_name, from[:indices], to[:indices], to[:definition], table_delta, from[:options], to[:options])
       scan_foreign_keys_change(from[:foreign_keys], to[:foreign_keys], table_delta, @options)
       scan_check_constraints_change(from[:check_constraints], to[:check_constraints], table_delta)
       scan_exclusion_constraints_change(from[:exclusion_constraints], to[:exclusion_constraints], table_delta)
@@ -356,7 +356,7 @@ module Ridgepole
       end
     end
 
-    def scan_indices_change(from, to, to_columns, table_delta, _from_table_options, to_table_options)
+    def scan_indices_change(table_name, from, to, to_columns, table_delta, _from_table_options, to_table_options)
       from = (from || {}).dup
       to = (to || {}).dup
       indices_delta = {}
@@ -365,7 +365,18 @@ module Ridgepole
         ignore_index = to_attrs.fetch(:options, {}).delete(:ignore)
 
         if index_name.is_a?(Array)
-          from_index_name, from_attrs = from.find { |_name, attrs| attrs[:column_name] == index_name }
+          matching = from.select { |_name, attrs| attrs[:column_name] == index_name }
+
+          if matching.size > 1 && !ignore_index
+            @logger.warn(
+              "[WARNING] Multiple existing indexes on `#{table_name}` match column #{index_name.inspect}: " \
+              "#{matching.keys.map(&:inspect).join(', ')}. " \
+              'The choice of which index to keep depends on iteration order; ' \
+              'specify `name:` explicitly to disambiguate.'
+            )
+          end
+
+          from_index_name, from_attrs = matching.first
 
           if from_attrs
             from.delete(from_index_name)
