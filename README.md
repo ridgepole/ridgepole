@@ -10,9 +10,10 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 [![codecov](https://codecov.io/gh/ridgepole/ridgepole/graph/badge.svg)](https://codecov.io/gh/ridgepole/ridgepole)
 
 > [!TIP]
-> Currently developing a similar tool for PostgreSQL.
+> Currently developing similar tools.
 > 
-> see https://github.com/winebarrel/pistachio
+> * https://github.com/winebarrel/pistachio
+> * https://github.com/winebarrel/myschema
 
 > [!warning]
 > The order of columns when exporting has changed in Rails 8.1. https://github.com/rails/rails/pull/53281
