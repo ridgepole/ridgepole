@@ -31,6 +31,42 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
+  context 'when drop check constraint with column' do
+    let(:actual_dsl) do
+      erbh(<<-ERB)
+        create_table "products", force: :cascade do |t|
+          t.string "name", null: false
+          t.integer "price", null: false
+          t.integer "quantity", null: false
+          t.check_constraint "price > 0", name: "price_positive"
+          t.check_constraint "quantity >= 0", name: "quantity_non_negative"
+        end
+      ERB
+    end
+
+    let(:expected_dsl) do
+      erbh(<<-ERB)
+        create_table "products", force: :cascade do |t|
+          t.string "name", null: false
+          t.integer "quantity", null: false
+          t.check_constraint "quantity >= 0", name: "quantity_non_negative"
+        end
+      ERB
+    end
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it 'removes check constraint before removing column' do
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+
+      # Migration should succeed (will fail if constraints are not removed before columns)
+      expect { delta.migrate }.not_to raise_error
+      expect(subject.dump).to match_ruby expected_dsl
+    end
+  end
+
   context 'when drop check constraint (merge: true)' do
     let(:actual_dsl) do
       erbh(<<-ERB)
