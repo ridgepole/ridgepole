@@ -2,6 +2,10 @@
 
 ## 3.2
 
+### 3.2.2 (2026/06/14)
+
+- Fix constraint removal order when dropping columns. [pull#705](https://github.com/ridgepole/ridgepole/pull/705)
+
 ### 3.2.1 (2026/05/04)
 
 - Warn when an anonymous index ambiguously matches multiple DB indexes. [pull#692](https://github.com/ridgepole/ridgepole/pull/692)
