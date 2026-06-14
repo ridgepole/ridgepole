@@ -37,9 +37,9 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.1' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "reservations", force: :cascade do |t|
+          t.string "guest_name", null: false
           t.daterange "reservation_period", null: false
           t.integer "room_number", null: false
-          t.string "guest_name", null: false
           t.exclusion_constraint "reservation_period WITH &&", using: :gist, name: "no_overlapping"
         end
       ERB
@@ -48,8 +48,8 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.1' do
     let(:expected_dsl) do
       erbh(<<-ERB)
         create_table "reservations", force: :cascade do |t|
-          t.integer "room_number", null: false
           t.string "guest_name", null: false
+          t.integer "room_number", null: false
         end
       ERB
     end
