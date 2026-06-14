@@ -31,11 +31,11 @@ module Ridgepole
 
     def script
       buf = StringIO.new
-      pre_buf_for_fk = StringIO.new
-      post_buf_for_fk = StringIO.new
+      pre_buf = StringIO.new
+      post_buf = StringIO.new
 
       (@delta[:add] || {}).each do |table_name, attrs|
-        append_create_table(table_name, attrs, buf, post_buf_for_fk)
+        append_create_table(table_name, attrs, buf, post_buf)
       end
 
       (@delta[:rename] || {}).each do |table_name, attrs|
@@ -43,7 +43,7 @@ module Ridgepole
       end
 
       (@delta[:change] || {}).each do |table_name, attrs|
-        append_change(table_name, attrs, buf, pre_buf_for_fk, post_buf_for_fk)
+        append_change(table_name, attrs, buf, pre_buf, post_buf)
       end
 
       (@delta[:delete] || {}).each do |table_name, attrs|
@@ -51,9 +51,9 @@ module Ridgepole
       end
 
       [
-        pre_buf_for_fk,
+        pre_buf,
         buf,
-        post_buf_for_fk
+        post_buf
       ].map { |b| b.string.strip }.join("\n\n").strip
     end
 
@@ -221,7 +221,7 @@ module Ridgepole
       end
     end
 
-    def append_create_table(table_name, attrs, buf, post_buf_for_fk)
+    def append_create_table(table_name, attrs, buf, post_buf)
       options = attrs[:options] || {}
       definition = attrs[:definition] || {}
       indices = attrs[:indices] || {}
@@ -289,12 +289,12 @@ end
 
       unless (foreign_keys = attrs[:foreign_keys] || {}).empty?
         foreign_keys.each_value do |foreign_key_attrs|
-          append_add_foreign_key(table_name, foreign_key_attrs, post_buf_for_fk, @options)
+          append_add_foreign_key(table_name, foreign_key_attrs, post_buf, @options)
         end
       end
 
       buf.puts
-      post_buf_for_fk.puts
+      post_buf.puts
     end
 
     def partition_indices_for_create(definition, indices)
@@ -370,7 +370,7 @@ change_table_comment(#{table_name.inspect}, #{table_comment.inspect})
       end
     end
 
-    def append_change(table_name, attrs, buf, pre_buf_for_fk, post_buf_for_fk)
+    def append_change(table_name, attrs, buf, pre_buf, post_buf)
       definition = attrs[:definition] || {}
       primary_key_definition = attrs[:primary_key_definition] || {}
       indices = attrs[:indices] || {}
@@ -393,10 +393,10 @@ change_table_comment(#{table_name.inspect}, #{table_comment.inspect})
         end
       end
 
-      append_change_foreign_keys(table_name, foreign_keys, pre_buf_for_fk, post_buf_for_fk, @options) unless foreign_keys.empty?
-      append_change_check_constraints(table_name, check_constraints, buf) unless check_constraints.empty?
-      append_change_exclusion_constraints(table_name, exclusion_constraints, buf) unless exclusion_constraints.empty?
-      append_change_unique_constraints(table_name, unique_constraints, buf) unless unique_constraints.empty?
+      append_change_foreign_keys(table_name, foreign_keys, pre_buf, post_buf, @options) unless foreign_keys.empty?
+      append_change_check_constraints(table_name, check_constraints, pre_buf, post_buf) unless check_constraints.empty?
+      append_change_exclusion_constraints(table_name, exclusion_constraints, pre_buf, post_buf) unless exclusion_constraints.empty?
+      append_change_unique_constraints(table_name, unique_constraints, pre_buf, post_buf) unless unique_constraints.empty?
 
       if table_options || table_charset || table_collation
         append_change_table_raw_options(table_name, table_options, table_charset, table_collation,
@@ -407,8 +407,8 @@ change_table_comment(#{table_name.inspect}, #{table_comment.inspect})
       append_change_column_comments(table_name, column_comments, buf) unless column_comments.empty?
 
       buf.puts
-      pre_buf_for_fk.puts
-      post_buf_for_fk.puts
+      pre_buf.puts
+      post_buf.puts
     end
 
     def append_change_column_comments(table_name, column_comments, buf)
@@ -560,13 +560,13 @@ remove_index(#{table_name.inspect}, #{target})
       end
     end
 
-    def append_change_foreign_keys(table_name, delta, pre_buf_for_fk, post_buf_for_fk, options)
+    def append_change_foreign_keys(table_name, delta, pre_buf, post_buf, options)
       (delta[:delete] || {}).each_value do |attrs|
-        append_remove_foreign_key(table_name, attrs, pre_buf_for_fk, options)
+        append_remove_foreign_key(table_name, attrs, pre_buf, options)
       end
 
       (delta[:add] || {}).each_value do |attrs|
-        append_add_foreign_key(table_name, attrs, post_buf_for_fk, options)
+        append_add_foreign_key(table_name, attrs, post_buf, options)
       end
     end
 
@@ -594,13 +594,13 @@ remove_foreign_key(#{table_name.inspect}, #{target})
     RUBY
     end
 
-    def append_change_check_constraints(table_name, delta, buf)
+    def append_change_check_constraints(table_name, delta, pre_buf, post_buf)
       (delta[:delete] || {}).each_value do |attrs|
-        append_remove_check_constraint(table_name, attrs, buf)
+        append_remove_check_constraint(table_name, attrs, pre_buf)
       end
 
       (delta[:add] || {}).each_value do |attrs|
-        append_add_check_constraint(table_name, attrs, buf)
+        append_add_check_constraint(table_name, attrs, post_buf)
       end
     end
 
@@ -628,13 +628,13 @@ remove_check_constraint(#{table_name.inspect}, #{expression.inspect}, **#{attrs_
       RUBY
     end
 
-    def append_change_exclusion_constraints(table_name, delta, buf)
+    def append_change_exclusion_constraints(table_name, delta, pre_buf, post_buf)
       (delta[:delete] || {}).each_value do |attrs|
-        append_remove_exclusion_constraint(table_name, attrs, buf)
+        append_remove_exclusion_constraint(table_name, attrs, pre_buf)
       end
 
       (delta[:add] || {}).each_value do |attrs|
-        append_add_exclusion_constraint(table_name, attrs, buf)
+        append_add_exclusion_constraint(table_name, attrs, post_buf)
       end
     end
 
@@ -662,13 +662,13 @@ remove_exclusion_constraint(#{table_name.inspect}, #{expression.inspect}, **#{at
       RUBY
     end
 
-    def append_change_unique_constraints(table_name, delta, buf)
+    def append_change_unique_constraints(table_name, delta, pre_buf, post_buf)
       (delta[:delete] || {}).each_value do |attrs|
-        append_remove_unique_constraint(table_name, attrs, buf)
+        append_remove_unique_constraint(table_name, attrs, pre_buf)
       end
 
       (delta[:add] || {}).each_value do |attrs|
-        append_add_unique_constraint(table_name, attrs, buf)
+        append_add_unique_constraint(table_name, attrs, post_buf)
       end
     end
 
