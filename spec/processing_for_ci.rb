@@ -8,6 +8,6 @@ if ENV['CI']
     c.report_with_single_file = true
     c.single_report_path = 'coverage/lcov.info'
   end
-  SimpleCov.formatters = SimpleCov::Formatter::MultiFormatter.new([SimpleCov::Formatter::LcovFormatter])
+  SimpleCov.formatters = [SimpleCov::Formatter::LcovFormatter]
   SimpleCov.start
 end
