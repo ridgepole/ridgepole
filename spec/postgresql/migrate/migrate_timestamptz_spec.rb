@@ -14,8 +14,8 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
       erbh(<<-ERB)
         create_table "users", force: :cascade do |t|
           t.date "birth_date"
-          t.timestamptz "created_at", null: false
-          t.timestamptz "updated_at", null: false
+          t.timestamptz "created_at", <%= i cond(">= 8.2.0.alpha", { precision: 6 }) %>, null: false
+          t.timestamptz "updated_at", <%= i cond(">= 8.2.0.alpha", { precision: 6 }) %>, null: false
         end
       ERB
     end
@@ -37,8 +37,8 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
       erbh(<<-ERB)
         create_table "users", force: :cascade do |t|
           t.date "birth_date"
-          t.timestamptz "created_at", null: false
-          t.timestamptz "updated_at", null: false
+          t.timestamptz "created_at", <%= i cond(">= 8.2.0.alpha", { precision: 6 }) %>, null: false
+          t.timestamptz "updated_at", <%= i cond(">= 8.2.0.alpha", { precision: 6 }) %>, null: false
         end
       ERB
     end
@@ -68,8 +68,8 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
       erbh(<<-ERB)
         create_table "users", force: :cascade do |t|
           t.date "birth_date"
-          t.datetime "created_at", precision: nil, null: false
-          t.datetime "updated_at", precision: nil, null: false
+          t.datetime "created_at", <%= i cond("< 8.2.0.alpha", { precision: nil }) %>, null: false
+          t.datetime "updated_at", <%= i cond("< 8.2.0.alpha", { precision: nil }) %>, null: false
         end
       ERB
     end
@@ -78,8 +78,8 @@ describe 'Ridgepole::Client#diff -> migrate', condition: '>= 7.0' do
       erbh(<<-ERB)
         create_table "users", force: :cascade do |t|
           t.date "birth_date"
-          t.timestamptz "created_at", null: false
-          t.timestamptz "updated_at", null: false
+          t.timestamptz "created_at", <%= i cond(">= 8.2.0.alpha", { precision: 6 }) %>, null: false
+          t.timestamptz "updated_at", <%= i cond(">= 8.2.0.alpha", { precision: 6 }) %>, null: false
         end
       ERB
     end
