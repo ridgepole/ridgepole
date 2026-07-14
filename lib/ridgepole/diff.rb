@@ -524,7 +524,7 @@ module Ridgepole
         next if ignore_fk
 
         if from_attrs
-          if from_attrs != to_attrs
+          if from_attrs != to_attrs && !ignorable_validate_diff?(from_attrs, to_attrs)
             foreign_keys_delta[:add] ||= {}
             foreign_keys_delta[:add][foreign_key_name_or_tables] = to_attrs
 
@@ -558,7 +558,9 @@ module Ridgepole
         from_attrs = from.delete(name)
 
         if from_attrs
-          if normalize_check_constraint(from_attrs) != normalize_check_constraint(to_attrs)
+          from_normalized = normalize_check_constraint(from_attrs)
+          to_normalized = normalize_check_constraint(to_attrs)
+          if from_normalized != to_normalized && !ignorable_validate_diff?(from_normalized, to_normalized)
             check_constraints_delta[:add] ||= {}
             check_constraints_delta[:add][name] = to_attrs
 
@@ -585,6 +587,20 @@ module Ridgepole
       attr = attr.dup
       attr[:expression] = attr[:expression].delete(REGEX_COLUMN_IDENTIFIER_QUOTATION_CHARS)
       attr
+    end
+
+    # 'validate: false' (NOT VALID) is a strategy for ALTER TABLE ADD CONSTRAINT to avoid
+    # ACCESS EXCLUSIVE lock on large tables. NOT VALID state itself is persisted by the DB,
+    # but PostgreSQL ignores NOT VALID for constraints created inline within CREATE TABLE, so
+    # whether the resulting constraint is NOT VALID depends on how it was created. Restoring
+    # NOT VALID via DROP + ADD has no benefit, so ignore the diff when the DB dump lacks
+    # :validate and the DSL specifies validate: false.
+    def ignorable_validate_diff?(from_attrs, to_attrs)
+      from_options = from_attrs[:options] || {}
+      to_options = to_attrs[:options] || {}
+      return false unless to_options[:validate] == false && !from_options.key?(:validate)
+
+      from_attrs == to_attrs.merge(options: to_options.except(:validate))
     end
 
     def scan_exclusion_constraints_change(from, to, table_delta)

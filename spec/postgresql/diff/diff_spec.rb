@@ -305,4 +305,137 @@ describe 'Ridgepole::Client.diff' do
       end
     end
   end
+
+  context 'when add foreign key with validate: false' do
+    subject { Ridgepole::Client }
+
+    context 'when foreign key does not exist' do
+      let(:actual_dsl) do
+        <<-RUBY
+          create_table "users", force: :cascade do |t|
+            t.string "name", null: false
+          end
+
+          create_table "entries", force: :cascade do |t|
+            t.bigint "user_id", null: false
+          end
+        RUBY
+      end
+
+      let(:expected_dsl) do
+        <<-RUBY
+          create_table "users", force: :cascade do |t|
+            t.string "name", null: false
+          end
+
+          create_table "entries", force: :cascade do |t|
+            t.bigint "user_id", null: false
+          end
+
+          add_foreign_key "entries", "users", validate: false
+        RUBY
+      end
+
+      it 'creates foreign key with validate: false' do
+        delta = subject.diff(actual_dsl, expected_dsl)
+        expect(delta).to be_differ
+        expect(delta.script).to match_ruby(<<-RUBY)
+          add_foreign_key("entries", "users", **{validate: false})
+        RUBY
+      end
+    end
+
+    context 'when foreign key exists without validate' do
+      let(:actual_dsl) do
+        <<-RUBY
+          create_table "users", force: :cascade do |t|
+            t.string "name", null: false
+          end
+
+          create_table "entries", force: :cascade do |t|
+            t.bigint "user_id", null: false
+          end
+
+          add_foreign_key "entries", "users"
+        RUBY
+      end
+
+      let(:expected_dsl) do
+        <<-RUBY
+          create_table "users", force: :cascade do |t|
+            t.string "name", null: false
+          end
+
+          create_table "entries", force: :cascade do |t|
+            t.bigint "user_id", null: false
+          end
+
+          add_foreign_key "entries", "users", validate: false
+        RUBY
+      end
+
+      it 'does not recreate foreign key just for validate: false' do
+        delta = subject.diff(actual_dsl, expected_dsl)
+        expect(delta).to_not be_differ
+        expect(delta.script).to be_empty
+      end
+    end
+  end
+
+  context 'when add check constraint with validate: false' do
+    subject { Ridgepole::Client }
+
+    context 'when check constraint does not exist' do
+      let(:actual_dsl) do
+        <<-RUBY
+          create_table "products", force: :cascade do |t|
+            t.integer "price", null: false
+          end
+        RUBY
+      end
+
+      let(:expected_dsl) do
+        <<-RUBY
+          create_table "products", force: :cascade do |t|
+            t.integer "price", null: false
+            t.check_constraint "price > 0", name: "products_price_check", validate: false
+          end
+        RUBY
+      end
+
+      it 'creates check constraint with validate: false' do
+        delta = subject.diff(actual_dsl, expected_dsl)
+        expect(delta).to be_differ
+        expect(delta.script).to match_ruby(<<-RUBY)
+          add_check_constraint("products", "price > 0", **{name: "products_price_check", validate: false})
+        RUBY
+      end
+    end
+
+    context 'when check constraint exists without validate' do
+      let(:actual_dsl) do
+        <<-RUBY
+          create_table "products", force: :cascade do |t|
+            t.integer "price", null: false
+            t.check_constraint "price > 0", name: "products_price_check"
+          end
+        RUBY
+      end
+
+      let(:expected_dsl) do
+        <<-RUBY
+          create_table "products", force: :cascade do |t|
+            t.integer "price", null: false
+            t.check_constraint "price > 0", name: "products_price_check", validate: false
+          end
+        RUBY
+      end
+
+      it 'does not recreate check constraint just for validate: false' do
+        delta = subject.diff(actual_dsl, expected_dsl)
+        expect(delta).to_not be_differ
+        expect(delta.script).to be_empty
+      end
+    end
+  end
 end
