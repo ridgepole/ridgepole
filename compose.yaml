@@ -1,19 +1,19 @@
 services:
   mysql57:
-    image: "mysql:5.7"
+    image: "mirror.gcr.io/library/mysql:5.7"
     platform: linux/amd64
     ports:
       - "13316:3306"
     environment:
       MYSQL_ROOT_PASSWORD: password
   mysql80:
-    image: "mysql:8.0"
+    image: "mirror.gcr.io/library/mysql:8.0"
     ports:
       - "13318:3306"
     environment:
       MYSQL_ROOT_PASSWORD: password
   postgres:
-    image: "postgres:14"
+    image: "mirror.gcr.io/library/postgres:14"
     ports:
       - "15442:5432"
     environment:
