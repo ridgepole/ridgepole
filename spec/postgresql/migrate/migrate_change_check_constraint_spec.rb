@@ -63,7 +63,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
-  context 'when change check constraint from validate: false to validated' do
+  context 'when change check constraint from validate: false to validated', condition: '>= 7.1.0' do
     let(:base_dsl) do
       erbh(<<-ERB)
         create_table "clubs", force: :cascade do |t|

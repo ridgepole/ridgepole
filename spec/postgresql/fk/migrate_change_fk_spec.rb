@@ -57,7 +57,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
-  context 'when change fk from validate: false to validated' do
+  context 'when change fk from validate: false to validated', condition: '>= 7.1.0' do
     let(:actual_dsl) do
       erbh(<<-ERB)
         create_table "parent", force: :cascade do |t|
