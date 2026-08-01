@@ -2,6 +2,11 @@
 
 ## 3.2
 
+### 3.2.3 (2026/08/01)
+
+- Emit `validate_constraint` when DB is NOT VALID and DSL implies validated. [pull#718](https://github.com/ridgepole/ridgepole/pull/718)
+- Ignore `validate: false` diff when existing constraint lacks `:validate`. [pull#716](https://github.com/ridgepole/ridgepole/pull/716)
+
 ### 3.2.2 (2026/06/14)
 
 - Fix constraint removal order when dropping columns. [pull#705](https://github.com/ridgepole/ridgepole/pull/705)
