@@ -57,6 +57,65 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
+  context 'when change fk from validate: false to validated', condition: '>= 7.1.0' do
+    let(:actual_dsl) do
+      erbh(<<-ERB)
+        create_table "parent", force: :cascade do |t|
+        end
+
+        create_table "child", force: :cascade do |t|
+          t.integer "parent_id"
+          t.index ["parent_id"], name: "par_id"
+        end
+
+        add_foreign_key "child", "parent", validate: false
+      ERB
+    end
+
+    let(:sorted_actual_dsl) do
+      erbh(<<-ERB)
+        create_table "child", force: :cascade do |t|
+          t.integer "parent_id"
+          t.index ["parent_id"], name: "par_id"
+        end
+
+        create_table "parent", force: :cascade do |t|
+        end
+
+        add_foreign_key "child", "parent", validate: false
+      ERB
+    end
+
+    let(:expected_dsl) do
+      erbh(<<-ERB)
+        create_table "child", force: :cascade do |t|
+          t.integer "parent_id"
+          t.index ["parent_id"], name: "par_id"
+        end
+
+        create_table "parent", force: :cascade do |t|
+        end
+
+        add_foreign_key "child", "parent"
+      ERB
+    end
+
+    before { subject.diff(actual_dsl).migrate }
+
+    subject { client }
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(delta.script).to match_ruby(<<-RUBY)
+        validate_foreign_key("child", "parent")
+      RUBY
+      expect(subject.dump).to match_fuzzy sorted_actual_dsl
+      delta.migrate
+      expect(subject.dump).to match_ruby expected_dsl
+    }
+  end
+
   context 'when change fk without name' do
     let(:actual_dsl) do
       erbh(<<-ERB)

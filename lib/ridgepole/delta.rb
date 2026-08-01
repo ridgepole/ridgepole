@@ -568,6 +568,10 @@ remove_index(#{table_name.inspect}, #{target})
       (delta[:add] || {}).each_value do |attrs|
         append_add_foreign_key(table_name, attrs, post_buf, options)
       end
+
+      (delta[:validate] || {}).each_value do |attrs|
+        append_validate_foreign_key(table_name, attrs, post_buf)
+      end
     end
 
     def append_add_foreign_key(table_name, attrs, buf, _options)
@@ -594,6 +598,21 @@ remove_foreign_key(#{table_name.inspect}, #{target})
     RUBY
     end
 
+    def append_validate_foreign_key(table_name, attrs, buf)
+      attrs_options = attrs[:options] || {}
+      fk_name = attrs_options[:name]
+
+      target = if fk_name
+                 "name: #{fk_name.inspect}"
+               else
+                 attrs.fetch(:to_table).inspect
+               end
+
+      buf.puts(<<-RUBY)
+validate_foreign_key(#{table_name.inspect}, #{target})
+      RUBY
+    end
+
     def append_change_check_constraints(table_name, delta, pre_buf, post_buf)
       (delta[:delete] || {}).each_value do |attrs|
         append_remove_check_constraint(table_name, attrs, pre_buf)
@@ -601,6 +620,10 @@ remove_foreign_key(#{table_name.inspect}, #{target})
 
       (delta[:add] || {}).each_value do |attrs|
         append_add_check_constraint(table_name, attrs, post_buf)
+      end
+
+      (delta[:validate] || {}).each_value do |attrs|
+        append_validate_check_constraint(table_name, attrs, post_buf)
       end
     end
 
@@ -625,6 +648,15 @@ add_check_constraint(#{table_name.inspect}, #{expression.inspect}, **#{attrs_opt
 
       buf.puts(<<-RUBY)
 remove_check_constraint(#{table_name.inspect}, #{expression.inspect}, **#{attrs_options.inspect})
+      RUBY
+    end
+
+    def append_validate_check_constraint(table_name, attrs, buf)
+      attrs_options = attrs[:options] || {}
+      name = attrs_options[:name]
+
+      buf.puts(<<-RUBY)
+validate_check_constraint(#{table_name.inspect}, name: #{name.inspect})
       RUBY
     end
 

@@ -525,12 +525,17 @@ module Ridgepole
 
         if from_attrs
           if from_attrs != to_attrs && !ignorable_validate_diff?(from_attrs, to_attrs)
-            foreign_keys_delta[:add] ||= {}
-            foreign_keys_delta[:add][foreign_key_name_or_tables] = to_attrs
+            if validate_only_diff?(from_attrs, to_attrs)
+              foreign_keys_delta[:validate] ||= {}
+              foreign_keys_delta[:validate][foreign_key_name_or_tables] = to_attrs
+            else
+              foreign_keys_delta[:add] ||= {}
+              foreign_keys_delta[:add][foreign_key_name_or_tables] = to_attrs
 
-            unless options[:merge]
-              foreign_keys_delta[:delete] ||= {}
-              foreign_keys_delta[:delete][foreign_key_name_or_tables] = from_attrs
+              unless options[:merge]
+                foreign_keys_delta[:delete] ||= {}
+                foreign_keys_delta[:delete][foreign_key_name_or_tables] = from_attrs
+              end
             end
           end
         else
@@ -561,11 +566,16 @@ module Ridgepole
           from_normalized = normalize_check_constraint(from_attrs)
           to_normalized = normalize_check_constraint(to_attrs)
           if from_normalized != to_normalized && !ignorable_validate_diff?(from_normalized, to_normalized)
-            check_constraints_delta[:add] ||= {}
-            check_constraints_delta[:add][name] = to_attrs
+            if validate_only_diff?(from_normalized, to_normalized)
+              check_constraints_delta[:validate] ||= {}
+              check_constraints_delta[:validate][name] = to_attrs
+            else
+              check_constraints_delta[:add] ||= {}
+              check_constraints_delta[:add][name] = to_attrs
 
-            check_constraints_delta[:delete] ||= {}
-            check_constraints_delta[:delete][name] = from_attrs
+              check_constraints_delta[:delete] ||= {}
+              check_constraints_delta[:delete][name] = from_attrs
+            end
           end
         else
           check_constraints_delta[:add] ||= {}
@@ -601,6 +611,19 @@ module Ridgepole
       return false unless to_options[:validate] == false && !from_options.key?(:validate)
 
       from_attrs == to_attrs.merge(options: to_options.except(:validate))
+    end
+
+    # Reverse of ignorable_validate_diff?: DB has a NOT VALID constraint (validate: false)
+    # and the DSL implies validated (:validate missing or true). Emit VALIDATE CONSTRAINT
+    # instead of DROP + re-ADD so the full-table scan runs under SHARE UPDATE EXCLUSIVE
+    # (concurrent DML allowed) rather than ACCESS EXCLUSIVE lock.
+    def validate_only_diff?(from_attrs, to_attrs)
+      from_options = from_attrs[:options] || {}
+      to_options = to_attrs[:options] || {}
+      return false unless from_options[:validate] == false && to_options[:validate] != false
+
+      from_attrs.merge(options: from_options.except(:validate)) ==
+        to_attrs.merge(options: to_options.except(:validate))
     end
 
     def scan_exclusion_constraints_change(from, to, table_delta)
