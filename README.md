@@ -10,7 +10,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 [![codecov](https://codecov.io/gh/ridgepole/ridgepole/graph/badge.svg)](https://codecov.io/gh/ridgepole/ridgepole)
 
 > [!TIP]
-> Also developing similar declarative schema tools — single Go binary, plain SQL as the schema definition:
+> Also developing similar declarative schema tools — single Go binary, plain SQL as the schema definition. Give it a try.
 >
 > * [pistachio](https://github.com/winebarrel/pistachio): for PostgreSQL
 
@@ -18,6 +18,9 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 > The order of columns when exporting has changed in Rails 8.1. https://github.com/rails/rails/pull/53281
 >
 > If you do not want to sort the columns, use `--disable-sort-columns` option.
+
+<details>
+<summary>Note</summary>
 
 > [!note]
 > * ridgepole v3.2.0
@@ -47,6 +50,8 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 >   * cf. https://github.com/rails/rails/issues/43909
 >   * cf. https://github.com/rails/rails/commit/c2a6f618d22cca4d9b7be7fa7652e7aac509350c#diff-55f41513f027a3d219629f475f03c2d1105ca55c5093d691e1b3dc4710c6cc0b
 > * SQLite does not support.
+
+</details>
 
 ## Installation
 
