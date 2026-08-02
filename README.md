@@ -13,7 +13,6 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 > Also developing similar declarative schema tools — single Go binary, plain SQL as the schema definition:
 >
 > * [pistachio](https://github.com/winebarrel/pistachio): for PostgreSQL
-> * [myschema](https://github.com/winebarrel/myschema): for MySQL
 
 > [!warning]
 > The order of columns when exporting has changed in Rails 8.1. https://github.com/rails/rails/pull/53281
