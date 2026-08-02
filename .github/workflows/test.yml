@@ -95,6 +95,10 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
           flags: ${{ matrix.ruby }},${{ matrix.gemfile }},${{ matrix.env }}
+          # NOTE: Install the CLI from PyPI. The default binary download verifies its
+          # GPG signature with a public key fetched from keybase.io, which hangs and
+          # then fails the job when keybase.io is unavailable.
+          use_pypi: true
       - name: Upload test results to Codecov
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
@@ -103,6 +107,7 @@ jobs:
           fail_ci_if_error: true
           flags: ${{ matrix.ruby }},${{ matrix.gemfile }},${{ matrix.env }}
           files: ./junit_format/rspec_xml
+          use_pypi: true
       # NOTE: This check isn't very useful and slows down processing, so I'll comment it out.
       # - name: Build and install gem
       #   run: |
