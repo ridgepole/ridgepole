@@ -1,4 +1,4 @@
-# Ridgepole
+![](https://github.com/user-attachments/assets/e446e211-054a-43d8-978b-c52ae6f1ea93)
 
 Ridgepole is a tool to manage DB schema.
 
