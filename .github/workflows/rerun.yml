@@ -1,0 +1,23 @@
+name: rerun
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  actions: write
+  pull-requests: read
+
+jobs:
+  rerun:
+    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/rerun') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Re-run failed jobs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.issue.number }}
+        run: |
+          head_sha=$(gh api "/repos/${REPO}/pulls/${PR}" --jq '.head.sha')
+          run_id=$(gh api "/repos/${REPO}/actions/workflows/test.yml/runs?head_sha=${head_sha}&per_page=1" --jq '.workflow_runs[0].id')
+          gh api -X POST "/repos/${REPO}/actions/runs/${run_id}/rerun-failed-jobs"
