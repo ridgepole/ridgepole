@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-describe 'Ridgepole::Client#diff -> migrate', condition: [[:mysql80]] do
+describe 'Ridgepole::Client#diff -> migrate', condition: :mysql80 do
   subject { client }
 
   context 'when add_index contains expression' do
