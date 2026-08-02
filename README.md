@@ -285,6 +285,26 @@ create_table "users", force: :cascade do |t|
 end
 ```
 
+## Functional Index (MySQL)
+
+MySQL 8.0.13 or later supports functional key parts, also known as expression
+indexes. MySQL normalizes these expressions when storing them, and Ridgepole
+compares the normalized expression with the one in your Schemafile. To avoid
+repeated diffs, use the expression produced by `ridgepole --export` in your
+Schemafile.
+
+```ruby
+create_table "users", force: :cascade do |t|
+  t.datetime "deleted_at"
+  t.string   "email", null: false
+  t.string   "name", null: false
+
+  t.index "(lower(`name`))", name: "index_users_on_lower_name"
+  t.index "(case when (`deleted_at` is null) then `email` else NULL end)",
+          name: "index_users_on_active_email", unique: true
+end
+```
+
 ## Execute
 ```ruby
 create_table "authors", force: :cascade do |t|
