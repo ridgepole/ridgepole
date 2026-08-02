@@ -22,7 +22,6 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 <details>
 <summary>Note</summary>
 
-> [!note]
 > * ridgepole v3.2.0
 >   * Use `udiff` instead of `diffy` (cf. https://github.com/ridgepole/ridgepole/pull/657)
 > * ridgepole v3.1.0
