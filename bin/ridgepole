@@ -290,7 +290,7 @@ begin
 
       differ, _out = delta.migrate if differ
 
-      logger.info('No change') if differ
+      logger.info('No change') unless differ
     elsif delta.differ?
       differ = noop_migrate(delta, options)
       exit_code = 1 if differ
