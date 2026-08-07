@@ -293,6 +293,18 @@ describe 'ridgepole' do
       MSG
     end
 
+    specify 'with-apply' do
+      out, status = run_cli(args: ['-c', conf, '-d', conf, conf, '--with-apply'])
+
+      expect(status.success?).to be_truthy
+      expect(out).to match_fuzzy <<-MSG
+        Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, #{{ dry_run: false, debug: false, color: false }}])
+        Ridgepole::Client.diff([#{conn_spec_str('ridgepole_test')}, #{conn_spec_str('ridgepole_test')}, #{{ dry_run: false, debug: false, color: false }}])
+        Ridgepole::Delta#differ?
+        No change
+      MSG
+    end
+
     context 'when differ true' do
       let(:differ) { true }
 
@@ -314,6 +326,18 @@ describe 'ridgepole' do
           Ridgepole::Delta#migrate
           # create_table :table do
           # end
+        MSG
+      end
+
+      specify 'with-apply' do
+        out, status = run_cli(args: ['-c', conf, '-d', conf, conf, '--with-apply'])
+
+        expect(status.success?).to be_truthy
+        expect(out).to match_fuzzy <<-MSG
+          Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, #{{ dry_run: false, debug: false, color: false }}])
+          Ridgepole::Client.diff([#{conn_spec_str('ridgepole_test')}, #{conn_spec_str('ridgepole_test')}, #{{ dry_run: false, debug: false, color: false }}])
+          Ridgepole::Delta#differ?
+          Ridgepole::Delta#migrate
         MSG
       end
     end
