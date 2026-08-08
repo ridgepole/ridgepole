@@ -2,6 +2,10 @@
 
 ## 3.2
 
+### 3.2.4 (2026/08/08)
+
+- Fix inverted "No change" log in `--diff --with-apply`. [pull#730](https://github.com/ridgepole/ridgepole/pull/730)
+
 ### 3.2.3 (2026/08/01)
 
 - Emit `validate_constraint` when DB is NOT VALID and DSL implies validated. [pull#718](https://github.com/ridgepole/ridgepole/pull/718)
