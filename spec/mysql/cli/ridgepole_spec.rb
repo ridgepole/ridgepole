@@ -391,6 +391,31 @@ describe 'ridgepole' do
         end
       end
 
+      specify '.yml and schemafile' do
+        Tempfile.open(["#{File.basename __FILE__}.#{$PROCESS_ID}", '.yml']) do |conf_file|
+          conf_file.puts <<-YAML
+            adapter: mysql2
+            database: ridgepole_test_for_conf_file
+          YAML
+          conf_file.flush
+
+          Tempfile.open(["#{File.basename __FILE__}.#{$PROCESS_ID}", '.schema']) do |schema_file|
+            schema_file.puts 'create_table "clubs", force: :cascade do |t| end'
+            schema_file.flush
+
+            out, status = run_cli(args: ['-c', conf, '-d', conf_file.path, schema_file.path])
+
+            expect(status.success?).to be_truthy
+
+            expect(out).to match_fuzzy <<-MSG
+              Ridgepole::Client#initialize([#{conn_spec_str('ridgepole_test')}, #{{ dry_run: false, debug: false, color: false }}])
+              Ridgepole::Client.diff([{"adapter"=>"mysql2", "database"=>"ridgepole_test_for_conf_file"}, #{schema_file.path}, #{{ dry_run: false, debug: false, color: false }}])
+              Ridgepole::Delta#differ?
+            MSG
+          end
+        end
+      end
+
       specify '.yml (development)' do
         Tempfile.open(["#{File.basename __FILE__}.#{$PROCESS_ID}", '.yml']) do |conf_file|
           conf_file.puts <<-YAML
