@@ -2,6 +2,10 @@
 
 ## 3.2
 
+### 3.2.5 (2026/08/11)
+
+- Fix `--with-apply` validation to require `--config`. [pull#733](https://github.com/ridgepole/ridgepole/pull/733)
+
 ### 3.2.4 (2026/08/08)
 
 - Fix inverted "No change" log in `--diff --with-apply`. [pull#730](https://github.com/ridgepole/ridgepole/pull/730)
