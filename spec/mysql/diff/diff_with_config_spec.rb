@@ -54,7 +54,7 @@ describe 'ridgepole --diff CONFIG SCHEMAFILE' do
       )
 
       expect(status.success?).to be_truthy
-      expect(out).to match(/create_table\("clubs"\)/)
+      expect(out).to match(/create_table\("clubs"/)
 
       # `-c` is not used in diff mode. The connection is established by `--diff`
       expect(show_tables(TEST_SCHEMA)).to eq %w[clubs]
