@@ -168,7 +168,7 @@ ARGV.options do |opt|
 
   opt.parse!
 
-  if !mode || (%i[apply export].include?(mode) && !config) || (options[:with_apply] && !config)
+  if !mode || (%i[apply export].include?(mode) && !config) || (diff_with_apply && !config)
     puts opt.help
     exit 1
   end

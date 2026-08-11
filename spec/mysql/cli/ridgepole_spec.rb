@@ -305,6 +305,14 @@ describe 'ridgepole' do
       MSG
     end
 
+    specify 'with-apply without config' do
+      out, status = run_cli(args: ['-d', conf, conf, '--with-apply'])
+
+      expect(status.success?).to be_falsey
+      expect(out).to include('-c, --config CONF_OR_FILE')
+      expect(out).to include('--with-apply')
+    end
+
     context 'when differ true' do
       let(:differ) { true }
 
