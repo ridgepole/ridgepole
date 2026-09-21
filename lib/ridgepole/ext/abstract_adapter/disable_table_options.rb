@@ -16,13 +16,27 @@ module Ridgepole
         def table_options(table_name)
           options = super
 
-          if options && @__without_table_options
-            options.delete(:options)
-            options.delete(:charset)
-            options.delete(:collation)
+          if @__without_table_options
+            # NOTE: Since Rails 8.2, `table_options` also accepts an array of table names
+            #       and then returns a hash of options keyed by table name.
+            if table_name.is_a?(Array)
+              options.each_value { |table_option| delete_table_options!(table_option) }
+            else
+              delete_table_options!(options)
+            end
           end
 
           options
+        end
+
+        private
+
+        def delete_table_options!(options)
+          return unless options
+
+          options.delete(:options)
+          options.delete(:charset)
+          options.delete(:collation)
         end
       end
     end
