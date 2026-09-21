@@ -2,6 +2,10 @@
 
 ## 3.2
 
+### 3.2.6 (Unreleased)
+
+- Support the batched `table_options` API in Rails 8.2. [pull#740](https://github.com/ridgepole/ridgepole/pull/740)
+
 ### 3.2.5 (2026/08/11)
 
 - Fix `--with-apply` validation to require `--config`. [pull#733](https://github.com/ridgepole/ridgepole/pull/733)
