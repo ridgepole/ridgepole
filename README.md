@@ -8,6 +8,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 [![Gem Version](https://badge.fury.io/rb/ridgepole.svg)](https://badge.fury.io/rb/ridgepole)
 [![test](https://github.com/ridgepole/ridgepole/actions/workflows/test.yml/badge.svg)](https://github.com/ridgepole/ridgepole/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/ridgepole/ridgepole/graph/badge.svg)](https://codecov.io/gh/ridgepole/ridgepole)
+[![Greptile: The War on Bugs](https://www.greptile.com/badge.svg)](https://www.greptile.com/?utm_source=oss_badge&utm_medium=readme&utm_campaign=greptile_for_open_source)
 
 > [!TIP]
 > Also developing similar declarative schema tools — single Go binary, plain SQL as the schema definition. Give it a try.
