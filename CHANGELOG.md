@@ -2,6 +2,10 @@
 
 ## 3.2
 
+### 3.2.7 (2026/10/16)
+
+- Pass `column:` to `validate_foreign_key` for unnamed foreign keys. [pull#750](https://github.com/ridgepole/ridgepole/pull/750)
+
 ### 3.2.6 (2026/10/15)
 
 - Pass `column:` to `remove_foreign_key` for unnamed foreign keys. [pull#746](https://github.com/ridgepole/ridgepole/pull/746)
