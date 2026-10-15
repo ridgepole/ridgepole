@@ -604,9 +604,12 @@ remove_foreign_key(#{table_name.inspect}, #{target})
     def append_validate_foreign_key(table_name, attrs, buf)
       attrs_options = attrs[:options] || {}
       fk_name = attrs_options[:name]
+      fk_column = attrs_options[:column]
 
       target = if fk_name
                  "name: #{fk_name.inspect}"
+               elsif fk_column
+                 "#{attrs.fetch(:to_table).inspect}, column: #{fk_column.inspect}"
                else
                  attrs.fetch(:to_table).inspect
                end
