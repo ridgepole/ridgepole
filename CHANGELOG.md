@@ -4,6 +4,7 @@
 
 ### 3.2.6 (Unreleased)
 
+- Pass `column:` to `remove_foreign_key` for unnamed foreign keys. [pull#746](https://github.com/ridgepole/ridgepole/pull/746)
 - Support the batched `table_options` API in Rails 8.2. [pull#740](https://github.com/ridgepole/ridgepole/pull/740)
 
 ### 3.2.5 (2026/08/11)
