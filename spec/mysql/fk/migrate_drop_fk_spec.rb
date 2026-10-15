@@ -216,6 +216,140 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
+  context 'when drop fk with column and fk with default column references the same table' do
+    let(:tables_dsl) do
+      erbh(<<-ERB)
+        create_table "child", force: :cascade do |t|
+          t.integer "parent_id"
+          t.integer "other_parent_id"
+          t.index ["other_parent_id"], name: "other_par_id"
+          t.index ["parent_id"], name: "par_id"
+        end
+
+        create_table "parent", id: :integer, force: :cascade do |t|
+        end
+      ERB
+    end
+
+    let(:actual_dsl) do
+      tables_dsl + <<-RUBY
+        add_foreign_key "child", "parent"
+        add_foreign_key "child", "parent", column: "other_parent_id"
+      RUBY
+    end
+
+    let(:expected_dsl) do
+      tables_dsl + <<-RUBY
+        add_foreign_key "child", "parent"
+      RUBY
+    end
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_ruby actual_dsl
+      expect(delta.script).to match_fuzzy <<-RUBY
+        remove_foreign_key("child", "parent", column: "other_parent_id")
+      RUBY
+      delta.migrate
+      expect(subject.dump).to match_ruby expected_dsl
+    }
+  end
+
+  context 'when drop fk with default column and fk with column references the same table' do
+    let(:tables_dsl) do
+      erbh(<<-ERB)
+        create_table "child", force: :cascade do |t|
+          t.integer "parent_id"
+          t.integer "other_parent_id"
+          t.index ["other_parent_id"], name: "other_par_id"
+          t.index ["parent_id"], name: "par_id"
+        end
+
+        create_table "parent", id: :integer, force: :cascade do |t|
+        end
+      ERB
+    end
+
+    let(:actual_dsl) do
+      tables_dsl + <<-RUBY
+        add_foreign_key "child", "parent"
+        add_foreign_key "child", "parent", column: "other_parent_id"
+      RUBY
+    end
+
+    let(:expected_dsl) do
+      tables_dsl + <<-RUBY
+        add_foreign_key "child", "parent", column: "other_parent_id"
+      RUBY
+    end
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_ruby actual_dsl
+      expect(delta.script).to match_fuzzy <<-RUBY
+        remove_foreign_key("child", "parent")
+      RUBY
+      delta.migrate
+      expect(subject.dump).to match_ruby expected_dsl
+    }
+  end
+
+  context 'when drop column with fk and fk with default column references the same table' do
+    let(:tables_dsl) do
+      erbh(<<-ERB)
+        create_table "child", force: :cascade do |t|
+          t.integer "parent_id"
+          t.integer "other_parent_id"
+          t.index ["other_parent_id"], name: "other_par_id"
+          t.index ["parent_id"], name: "par_id"
+        end
+
+        create_table "parent", id: :integer, force: :cascade do |t|
+        end
+      ERB
+    end
+
+    let(:actual_dsl) do
+      tables_dsl + <<-RUBY
+        add_foreign_key "child", "parent"
+        add_foreign_key "child", "parent", column: "other_parent_id"
+      RUBY
+    end
+
+    let(:expected_dsl) do
+      erbh(<<-ERB)
+        create_table "child", force: :cascade do |t|
+          t.integer "parent_id"
+          t.index ["parent_id"], name: "par_id"
+        end
+
+        create_table "parent", id: :integer, force: :cascade do |t|
+        end
+
+        add_foreign_key "child", "parent"
+      ERB
+    end
+
+    before { subject.diff(actual_dsl).migrate }
+    subject { client }
+
+    it {
+      delta = subject.diff(expected_dsl)
+      expect(delta.differ?).to be_truthy
+      expect(subject.dump).to match_ruby actual_dsl
+      delta.migrate
+      expect(subject.dump).to match_ruby expected_dsl
+    }
+  end
+
   context 'when drop fk when drop table without name' do
     let(:dsl) do
       erbh(<<-ERB)
