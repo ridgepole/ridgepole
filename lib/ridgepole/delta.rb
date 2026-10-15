@@ -586,9 +586,14 @@ add_foreign_key(#{table_name.inspect}, #{to_table.inspect}, **#{attrs_options.in
     def append_remove_foreign_key(table_name, attrs, buf, _options)
       attrs_options = attrs[:options] || {}
       fk_name = attrs_options[:name]
+      fk_column = attrs_options[:column]
 
+      # Without `column:`, Active Record removes the foreign key on the default column
+      # even if another foreign key to the same table is the one to be removed.
       target = if fk_name
                  "name: #{fk_name.inspect}"
+               elsif fk_column
+                 "#{attrs.fetch(:to_table).inspect}, column: #{fk_column.inspect}"
                else
                  attrs.fetch(:to_table).inspect
                end
