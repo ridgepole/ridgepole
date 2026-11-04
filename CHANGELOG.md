@@ -2,7 +2,7 @@
 
 ## 3.2
 
-### 3.2.8 (Unreleased)
+### 3.2.8 (2026/11/04)
 
 - On PostgreSQL, add `validate: false` check constraints after `create_table` so that they stay NOT VALID on new tables. [pull#758](https://github.com/ridgepole/ridgepole/pull/758)
 
