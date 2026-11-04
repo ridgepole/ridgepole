@@ -2,6 +2,10 @@
 
 ## 3.2
 
+### 3.2.8 (Unreleased)
+
+- On PostgreSQL, add `validate: false` check constraints after `create_table` so that they stay NOT VALID on new tables. [pull#758](https://github.com/ridgepole/ridgepole/pull/758)
+
 ### 3.2.7 (2026/10/16)
 
 - Pass `column:` to `validate_foreign_key` for unnamed foreign keys. [pull#750](https://github.com/ridgepole/ridgepole/pull/750)
