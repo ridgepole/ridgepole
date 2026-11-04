@@ -257,10 +257,16 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
         append_add_index(table_name, index_name, index_attrs, buf, true)
       end
 
-      unless (check_constraints = attrs[:check_constraints] || {}).empty?
-        check_constraints.each_value do |check_constraint_attrs|
-          append_add_check_constraint(table_name, check_constraint_attrs, buf, true)
-        end
+      # PostgreSQL ignores NOT VALID on constraints defined inline in CREATE TABLE and marks them
+      # validated, so add 'validate: false' check constraints via ALTER TABLE after CREATE TABLE
+      # to keep them NOT VALID as declared in the DSL.
+      # cf. https://github.com/rails/rails/pull/53735
+      not_valid_check_constraints, check_constraints = (attrs[:check_constraints] || {}).values.partition do |check_constraint_attrs|
+        check_constraint_attrs.dig(:options, :validate) == false
+      end
+
+      check_constraints.each do |check_constraint_attrs|
+        append_add_check_constraint(table_name, check_constraint_attrs, buf, true)
       end
 
       unless (exclusion_constraints = attrs[:exclusion_constraints] || {}).empty?
@@ -285,6 +291,10 @@ end
             append_add_index(table_name, index_name, index_attrs, buf)
           end
         end
+      end
+
+      not_valid_check_constraints.each do |check_constraint_attrs|
+        append_add_check_constraint(table_name, check_constraint_attrs, buf)
       end
 
       unless (foreign_keys = attrs[:foreign_keys] || {}).empty?

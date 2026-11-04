@@ -602,7 +602,8 @@ module Ridgepole
     # 'validate: false' (NOT VALID) is a strategy for ALTER TABLE ADD CONSTRAINT to avoid
     # ACCESS EXCLUSIVE lock on large tables. NOT VALID state itself is persisted by the DB,
     # but PostgreSQL ignores NOT VALID for constraints created inline within CREATE TABLE, so
-    # whether the resulting constraint is NOT VALID depends on how it was created. Restoring
+    # whether the resulting constraint is NOT VALID depends on how it was created (tables
+    # created before ridgepole added them via ALTER TABLE have them validated). Restoring
     # NOT VALID via DROP + ADD has no benefit, so ignore the diff when the DB dump lacks
     # :validate and the DSL specifies validate: false.
     def ignorable_validate_diff?(from_attrs, to_attrs)
