@@ -259,10 +259,12 @@ create_table(#{table_name.inspect}, #{inspect_options_include_default_proc(optio
 
       # PostgreSQL ignores NOT VALID on constraints defined inline in CREATE TABLE and marks them
       # validated, so add 'validate: false' check constraints via ALTER TABLE after CREATE TABLE
-      # to keep them NOT VALID as declared in the DSL.
+      # to keep them NOT VALID as declared in the DSL. MySQL has no NOT VALID, so keep them inline:
+      # a separate ALTER TABLE would also receive --alter-extra (e.g. ALGORITHM=INPLACE is not
+      # supported for adding a check constraint).
       # cf. https://github.com/rails/rails/pull/53735
       not_valid_check_constraints, check_constraints = (attrs[:check_constraints] || {}).values.partition do |check_constraint_attrs|
-        check_constraint_attrs.dig(:options, :validate) == false
+        Ridgepole::ConnectionAdapters.postgresql? && check_constraint_attrs.dig(:options, :validate) == false
       end
 
       check_constraints.each do |check_constraint_attrs|

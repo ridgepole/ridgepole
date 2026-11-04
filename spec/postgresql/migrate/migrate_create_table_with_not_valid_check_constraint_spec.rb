@@ -7,6 +7,11 @@ describe 'Ridgepole::Client#diff -> migrate' do
     SQL
   end
 
+  # Rails does not dump `validate: false` for check constraints before 7.1
+  def dump_validate_option?
+    ActiveRecord.gem_version >= Gem::Version.new('7.1.0')
+  end
+
   # Rails dumps NOT VALID check constraints outside `create_table` since 7.2.3 / 8.0.1
   # cf. https://github.com/rails/rails/pull/53735
   def dump_not_valid_check_constraint_outside_create_table?
@@ -15,7 +20,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
       (version >= Gem::Version.new('7.2.3') && version < Gem::Version.new('8.0.0'))
   end
 
-  context 'when create table with NOT VALID check constraint', condition: '>= 7.1.0' do
+  context 'when create table with NOT VALID check constraint' do
     subject { client }
 
     let(:dsl) do
@@ -38,8 +43,16 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
           add_check_constraint "clubs", "value > 0", name: "value_check", validate: false
         ERB
-      else
+      elsif dump_validate_option?
         dsl
+      else
+        erbh(<<-ERB)
+          create_table "clubs", force: :cascade do |t|
+            t.bigint "value", null: false
+            t.check_constraint "value < 100", name: "value_upper_check"
+            t.check_constraint "value > 0", name: "value_check"
+          end
+        ERB
       end
     end
 
@@ -63,7 +76,7 @@ describe 'Ridgepole::Client#diff -> migrate' do
     }
   end
 
-  context 'when create table with NOT VALID check constraint (bulk_change)', condition: '>= 7.1.0' do
+  context 'when create table with NOT VALID check constraint (bulk_change)' do
     subject { client(bulk_change: true) }
 
     let(:dsl) do
@@ -84,8 +97,15 @@ describe 'Ridgepole::Client#diff -> migrate' do
 
           add_check_constraint "clubs", "value > 0", name: "value_check", validate: false
         ERB
-      else
+      elsif dump_validate_option?
         dsl
+      else
+        erbh(<<-ERB)
+          create_table "clubs", force: :cascade do |t|
+            t.bigint "value", null: false
+            t.check_constraint "value > 0", name: "value_check"
+          end
+        ERB
       end
     end
 
