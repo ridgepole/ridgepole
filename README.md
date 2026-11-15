@@ -14,6 +14,7 @@ It defines DB schema using [Rails DSL](http://guides.rubyonrails.org/migrations.
 > Also developing similar declarative schema tools — single Go binary, plain SQL as the schema definition. Give it a try.
 >
 > * [pistachio](https://github.com/winebarrel/pistachio): for PostgreSQL
+> * [hazel](https://github.com/winebarrel/hazel): for SQLite
 
 > [!warning]
 > The order of columns when exporting has changed in Rails 8.1. https://github.com/rails/rails/pull/53281
